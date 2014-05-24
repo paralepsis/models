@@ -1,5 +1,6 @@
 use <holeCutout.scad>
 use <hole.scad>
+use <baseTexture220x90.scad>
 
 height=60;
 depth=25;
@@ -8,9 +9,44 @@ width=40;
 /* Overlay rough build volume for reference */
 % translate([0,0,155/2]) cube(size=[240, 153, 155], center=true);
 
-translate([9,-28,0]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
+// translate([9,-28,5]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
-render() barrierWall();
+completeModel();
+
+module completeModel() {
+	translate([0,20,0])
+	difference() {
+		union() {
+			barrierWall();
+			render() base();
+		}
+		translate([0,0,-10]) cube(size=[240, 153, 20],center=true);	
+	}
+}
+
+module base() {
+	$fs=0.3;
+	translate([0,-25,-2])
+		intersection() {	
+			hull() {
+				translate([-98,-40]) cylinder(r=5,h=40,center=true);
+				translate([-98,40]) cylinder(r=5,h=40,center=true);
+				translate([98,-40]) cylinder(r=5,h=40,center=true);
+				translate([98,40]) cylinder(r=5,h=40,center=true);
+			}
+			scale([.93,1,1]) translate([-110,-45,0]) baseTexture220x90();
+		}
+}
+
+
+module simpleBarrierWall() {
+	translate([-2*width - 1.95,0,0]) texasBarrier();
+	translate([-1 * width - 1.1,0,0]) rotate([0,0,2]) texasBarrier();
+	translate([0, 0,0]) damagedBarrier1();
+	translate([width + 0.75,0,0]) rotate([0,0,-2]) texasBarrier();
+	translate([width + 0.75-5,0,5]) rotate([90,5,23]) brokenBarrier1Top();
+	translate([2*width + 1.75,0,0]) rotate([0,0,180]) texasBarrier();
+}
 
 module barrierWall() {
 	translate([-2*width - 1.95,0,0]) brokenBarrier3();
