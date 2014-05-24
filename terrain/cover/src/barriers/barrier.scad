@@ -6,19 +6,23 @@ depth=25;
 width=40;
 
 /* Overlay rough build volume for reference */
-//% translate([0,0,155/2]) cube(size=[240, 153, 155], center=true);
+% translate([0,0,155/2]) cube(size=[240, 153, 155], center=true);
 
-translate([40,-25,0]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
+translate([9,-28,0]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
 render() barrierWall();
 
 module barrierWall() {
-	translate([-2 * width - 2.1,0,0]) rotate([0,0,2]) damagedBarrier2();
-	translate([-1 * width - 1.1, 0,0]) damagedBarrier1();
-	rotate([0,0,-2]) brokenBarrier1();
-	translate([-5,0,5]) rotate([90,5,23]) brokenBarrier1Top();
-	translate([width + 0.75,0,0]) rotate([0,0,180]) brokenBarrier2();
+	translate([-2*width - 1.95,0,0]) brokenBarrier3();
+	translate([-1 * width - 1.1,0,0]) rotate([0,0,2]) damagedBarrier2();
+	translate([0, 0,0]) damagedBarrier1();
+	translate([width + 0.75,0,0]) rotate([0,0,-2]) brokenBarrier1();
+	translate([width + 0.75-5,0,5]) rotate([90,5,23]) brokenBarrier1Top();
+	translate([2*width + 1.75,0,0]) rotate([0,0,180]) brokenBarrier2();
 }
+
+
+/******** DEFORMED BARRIER MODULES ********/
 
 module brokenBarrier1() {
 	difference() {
@@ -48,10 +52,19 @@ module brokenBarrier2() {
 	}
 }
 
+module brokenBarrier3() {
+	difference() {
+		texasBarrier();
+		translate([40,-11,55]) rotate([0,190,4]) holeCutout();
+		translate([0,0,height/2+35]) cube([width+2,depth,height-20],center=true);
+
+	}
+}
+
 module damagedBarrier1() {
 	difference() {
 		texasBarrier();
-		translate([-17,25,17]) rotate([95,5,0]) hole();
+		translate([-13,25,17]) rotate([95,5,0]) hole();
 	}
 }
 
@@ -64,6 +77,8 @@ module damagedBarrier2() {
 
 //render() brokenBarrier1();
 //render() translate([-5,0,5])rotate([90,5,23]) brokenBarrier1Top();
+
+/******** TEXAS BARRIER MODULE ********/
 
 module texasBarrier() {
 difference() {
