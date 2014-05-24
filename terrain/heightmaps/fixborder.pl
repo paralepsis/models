@@ -3,11 +3,13 @@
 # fixborder.pl -- normalize border of height map to a fixed height
 
 use Getopt::Long;
+use List::Util qw(min);
 
 $opt_border = 5;
 $opt_height = 5;
+$opt_fuzzy = 0;
 
-GetOptions('border=f'=>\$opt_border, 'height=f'=>\$opt_height);
+GetOptions('border=f'=>\$opt_border, 'height=f'=>\$opt_height, 'fuzzy=i' =>\$opt_fuzzy);
 
 $cols = -1;
 
@@ -17,40 +19,32 @@ while($_ = <>) {
 	$cols = @row;
 	# print "Setting columns to ", $cols, "\n";
     }
-    elsif ($cols != @row) {
+    elsif (scalar @row != 0 && $cols != @row) {
 	die "inconsistent number of elements in rows.\n";
     }
 
     $heightmap[$rows++] = [ @row ];
 }
 
-for ($i = 0; $i < $opt_border; $i++) {
-    for ($j = 0; $j < $cols; $j++) {
-	$heightmap[$i][$j] = ($opt_height * ($opt_border - $i) +
-	                      $heightmap[$i][$j] * $i) / $opt_border;
-    }
-}
-
-for ($i = $rows - $opt_border; $i < $rows; $i++) {
-    for ($j = 0; $j < $cols; $j++) {
-	$heightmap[$i][$j] = ($heightmap[$i][$j] * ($rows - $i-1) +
-	                       $opt_height * ($opt_border - ($rows-$i-1))) 
-	                       / $opt_border;
-    }
-}
+# for ($i = 0; $i < $opt_border; $i++) {
+#     for ($j = 0; $j < $cols; $j++) {
+# 	if ($j > $opt_border && $j < $cols - $opt_border) {
+# 	    $heightmap[$i][$j] = ($opt_height * ($opt_border - $i) +
+# 				  $heightmap[$i][$j] * $i) / $opt_border;
+# 	}
+#     }
+# }
 
 for ($i = 0; $i < $rows; $i++) {
-    for ($j = 0; $j < $opt_border; $j++) {
-	$heightmap[$i][$j] = ($opt_height * ($opt_border - $j) +
-	                      $heightmap[$i][$j] * $j) / $opt_border;
-    }
-}
+    for ($j = 0; $j < $cols; $j++) {
+	$proximity = $cols;
+	$proximity = min($i, $j, $rows - $i, $cols - $j);
 
-for ($i = 0; $i < $rows; $i++) {
-    for ($j = $cols - $opt_border; $j < $cols; $j++) {
-	$heightmap[$i][$j] = ($heightmap[$i][$j] * ($cols - $j-1) +
-	                       $opt_height * ($opt_border - ($cols-$j-1))) 
-	                       / $opt_border;
+	if ($proximity < $opt_border + rand($opt_fuzzy)) {
+	    $heightmap[$i][$j] = sqrt(($heightmap[$i][$j]**2 * ($proximity)
+				  + $opt_height**2 * (($opt_border - $proximity)))
+				  / $opt_border);
+	}
     }
 }
 

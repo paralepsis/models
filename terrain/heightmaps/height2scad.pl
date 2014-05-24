@@ -8,7 +8,8 @@ $opt_min = 0.00001;
 $opt_max = 9999999;
 
 GetOptions('xdim=f' => \$opt_xdim, 'ydim=f' => \$opt_ydim,
-	   'min=f' => \$opt_min, 'max=f' => \$opt_max);
+	   'min=f' => \$opt_min, 'max=f' => \$opt_max,
+	   'module=s' =>\$opt_module);
 
 $rows = 0;
 $cols = -1;
@@ -40,10 +41,13 @@ while ($_ = <>) {
 if (!defined $opt_xdim) { $opt_xdim = $cols; }
 if (!defined $opt_ydim) { $opt_ydim = $rows; }
 
+if (defined $opt_module) {
+    print "module ", $opt_module, "() {\n";
+}
+
 #
 # Dump the polyhedron
 #
-
 print "   polyhedron( points = [\n";
 
 #
@@ -159,3 +163,7 @@ for ($i = 0; $i < $rows-1; $i++) {
 }
 
 print "      ]);\n";
+
+if (defined $opt_module) {
+    print "}\n";
+}
