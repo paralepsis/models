@@ -1,13 +1,12 @@
 
-
 /* NOTE: yDim calculations are goofed because I am not accounting for the additional space
  *       taken up along the Y dimension resulting from the back wall bit.
  */
 
 translate([34,48,5]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
-xDim = 100;
-yDim = 100;
+xDim = 0;
+yDim = 0;
 
 wallThick = 7;
 wallHeight = 65;
@@ -24,119 +23,130 @@ widthAroundNotch = (backWallThick - (2 * notchFudge + notchWidth)) / 2;
 
 epsilon = 0.001;
 
-/******** CONSTRUCT BUILDING ********/
+building(dims = b1Dims, windows = b1Windows, doors = b1Doors);
 
-/* Exterior is a vector holding dimensions of the building [X, Y, height].
+translate([-35,0,0]) stairs();
+
+/* stairs() - build a set of stairs with a landing at the top
+ *
+ * Note: stairsLength includes the top and bottom landings.
  */
+module stairs(stairsLength=100,
+			stairWidth=35, 
+			stairsHeight=65, 
+			stairLength = 22, 
+			floorThick=4, 
+			topLandingLength = 0, 
+			bottomLandingLength = 10)
+{
+	incut = 4; // Amount that stairs are incut at the bottom
+
+	stairCt = floor((stairsLength - topLandingLength - floorThick - bottomLandingLength) / (stairLength - incut));
+	stairHt = (stairsHeight - floorThick) / stairCt;
+
+	echo(stairCt,stairHt);
+
+
+	rotate([90,0,90])	linear_extrude(height = stairWidth) {
+		for (i = [1 : stairCt]) {
+			polygon(points = [[(i-1)*stairLength + bottomLandingLength,
+							 0], 
+						    [(i-1)*stairLength + bottomLandingLength, 
+							(i-1) * stairHt + floorThick],
+						    [-1 * incut + (i-1)*stairLength + bottomLandingLength, 
+							i * stairHt + floorThick], 
+						    [i * stairLength + bottomLandingLength, 
+							i * stairHt + floorThick],
+						    [i * stairLength + bottomLandingLength, 
+							0]],
+				    paths = [[0,1,2,3,4,0]]);
+		}
+	}
+
+	translate([0, stairLength * stairCt + bottomLandingLength, 0])
+		cube([stairWidth,
+			  max(topLandingLength, 
+				 stairsLength - stairCt * stairLength - bottomLandingLength),
+			  stairsHeight]);
+	
+}
+
+/******** DEFINE BUILDING ********/
+
+/* Dims is a vector holding dimensions of the building 
+ * [X, Y, height, wall thickness, floor/roof thickness].
+ */
+b1Dims = [100, // xdim
+	     100, // ydim
+	     65, // height
+	     7, // wall thickness
+	     4]; // floor/roof thickness
+
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 
  */
-/* 127mm
-windows = [[[0, 40, 0], [0,0,-90]],
-		 [[0, 90, 0], [0,0,-90]],
-		 [[90,xDim - wallThick,0], [0,0,0]],
-		];
-*/
-windows = [[[0, 30, 0], [0,0,-90]],
-		 [[0, 70, 0], [0,0,-90]],
-		 [[70,xDim - wallThick,0], [0,0,0]],
-		];
+b1Windows = [[[0, 30, 0], [0,0,-90]],
+		    [[0, 70, 0], [0,0,-90]],
+		    [[70,93,0], [0,0,0]],
+		   ];
 
 /* Doors is a 3D array holding translate : rotate : boolean tuples, one per
  * door.
  * Booleans are [ doFrame, unused, unused ].
  */
-doors = [[[30, xDim - wallThick, 0], [0,0,0], [1,0,0]],
-		[[yDim - wallThick, 50, 0], [0,0,-90], [0,0,0]],
-        ];
+b1Doors = [[[30, 93, 0], [0,0,0], [1,0,0]],
+	   	  [[93, 50, 0], [0,0,-90], [0,0,0]],
+          ];
 
-building();
+/******** CONSTRUCT BUILDING ********/
 
-module building() {
-	difference() {
-		/* Main Structures */
-		union() {
+module building(dims = [0,0,0,0], windows = [], doors = []) {
+	assign(xDim = dims[0],
+		  yDim = dims[1], 
+		  wallHeight = dims[2],
+		  wallThick = dims[3], 
+		  floorThick = dims[4])
+	{
+		difference() {
+			/* Main Structures */
+			union() {
+				linear_extrude(height=wallHeight)
+					buildingWalls(xDim = xDim, yDim = yDim);
+				translate([wallThick,wallThick + notchFudge,0])
+					tiledFloor(roofXDim = xDim - 2 * wallThick,
+							  roofYDim = yDim - 2 * wallThick - notchFudge,
+							  thick = floorThick);
+			}
+			/* Subtract Back Wall */
+			linear_extrude(height=wallHeight)
+				buildingBackWall(xDim = xDim, yDim = yDim, fudge=false);
 
-			translate([wallThick,backWallThick + notchFudge,0]) tiledFloor();
+			/* Subtract Windows and Doors */
+			for (win = windows) {
+				translate(win[0]) rotate(win[1]) window(doWindow=true);
+			}
+			/* Subtract Doors */
+			for (door = doors) {
+				translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
+			}
+		} /* difference */
 
-/*
-			translate([0,widthAroundNotch + notchFudge,0])
-				linear_extrude(height=wallHeight) buildingWalls();
-*/
-			translate([0,0,0])
-				linear_extrude(height=wallHeight) buildingWalls();
-		}
-		/* Subtract Back Wall */
-		linear_extrude(height=wallHeight) buildingBackWall(fudge=false);
-
-		/* Subtract Windows and Doors */
+		/* Add back in windows, door frames, and back wall */
 		for (win = windows) {
-			echo(win);
-			translate(win[0]) rotate(win[1]) window(doWindow=true);
+			translate(win[0]) rotate(win[1]) window(doWindow=false);
 		}
-		/* Subtract Doors */
 		for (door = doors) {
-			echo(door);
-			translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
+			translate(door[0]) rotate(door[1]) door(doDoor=false, doFrame = door[2][0]);
 		}
-	}
-
-	/* Add back in windows, door frames, and back wall */
-	for (win = windows) {
-		translate(win[0]) rotate(win[1]) window(doWindow=false);
-	}
-	for (door = doors) {
-		translate(door[0]) rotate(door[1]) door(doDoor=false, doFrame = door[2][0]);
-	}
-	linear_extrude(height=wallHeight) buildingBackWall(fudge=true);
+		linear_extrude(height=wallHeight)
+			buildingBackWall(xDim = xDim, yDim = yDim, fudge=true);
+	} /* assign */
 }
 
 
 /******** WALL MODULES ********/
 
-/*
-
-Major Structure Polygon (outdated):
-
-1 ______________________________________ 2
-  | __________________________________ |
-  | | 7                            6 | |
-  | |                                | |
-  | |                                | |
-  | |                                | |
-  | |  8                             | |
-  | |_   9                        5 _| |
-  |___|                            |___|
- 0     10                         4      3
-*/
-
 module buildingWalls(xDim = xDim, yDim = yDim) {
-
-/*
-	wallsYDim = yDim - (notchWidth + notchFudge);
-
-	polygon(
-		points = [[0,0], [0,wallsYDim], [xDim,wallsYDim], [xDim,0],
-				  [xDim - wallThick - notchLen, 0],
-				  [xDim - wallThick - notchLen, notchWidth],
-				  [xDim - wallThick, notchWidth],
-				  [xDim - wallThick, wallsYDim - wallThick],
-				  [wallThick, wallsYDim - wallThick],
-				  [wallThick, notchWidth],
-				  [wallThick + notchLen, notchWidth],
-				  [wallThick + notchLen, 0]],
-		paths = [[0,1,2,3,4,5,6,7,8,9,10,11,12,0]]);
-
-			wallsYDim = yDim;
-
-	polygon(
-		points = [[0,0], [0,wallsYDim], [xDim,wallsYDim], [xDim,0],
-				  [xDim - wallThick, 0],
-				  [xDim - wallThick, wallsYDim - wallThick],
-				  [wallThick, wallsYDim - wallThick],
-				  [wallThick, 0]],
-		paths = [[0,1,2,3,4,5,6,7,0]]);
-*/
 	difference() {
 		square(xDim, yDim);
 		translate([wallThick, wallThick, 0]) square(xDim - 2*wallThick, yDim - 2*wallThick);
@@ -275,3 +285,13 @@ module door(doorWidth=32, doorHeight=45, doDoor=true, doFrame=true)
 			cube([doorWidth, wallThick + epsilon, doorHeight]);
 	}
 }
+
+/*
+ * Local variables:
+ *  mode: C
+ *  c-indent-level: 4
+ *  c-basic-offset: 4
+ * End:
+ *
+ * vim: ts=8 sts=4 sw=4 expandtab
+ */
