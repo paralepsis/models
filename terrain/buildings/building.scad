@@ -25,51 +25,8 @@ epsilon = 0.001;
 
 building(dims = b1Dims, windows = b1Windows, doors = b1Doors);
 
-translate([-35,0,0]) stairs();
+// rotate([0,0,90]) translate([-35,-100,0]) stairs();
 
-/* stairs() - build a set of stairs with a landing at the top
- *
- * Note: stairsLength includes the top and bottom landings.
- */
-module stairs(stairsLength=100,
-			stairWidth=35, 
-			stairsHeight=65, 
-			stairLength = 22, 
-			floorThick=4, 
-			topLandingLength = 0, 
-			bottomLandingLength = 10)
-{
-	incut = 4; // Amount that stairs are incut at the bottom
-
-	stairCt = floor((stairsLength - topLandingLength - floorThick - bottomLandingLength) / (stairLength - incut));
-	stairHt = (stairsHeight - floorThick) / stairCt;
-
-	echo(stairCt,stairHt);
-
-
-	rotate([90,0,90])	linear_extrude(height = stairWidth) {
-		for (i = [1 : stairCt]) {
-			polygon(points = [[(i-1)*stairLength + bottomLandingLength,
-							 0], 
-						    [(i-1)*stairLength + bottomLandingLength, 
-							(i-1) * stairHt + floorThick],
-						    [-1 * incut + (i-1)*stairLength + bottomLandingLength, 
-							i * stairHt + floorThick], 
-						    [i * stairLength + bottomLandingLength, 
-							i * stairHt + floorThick],
-						    [i * stairLength + bottomLandingLength, 
-							0]],
-				    paths = [[0,1,2,3,4,0]]);
-		}
-	}
-
-	translate([0, stairLength * stairCt + bottomLandingLength, 0])
-		cube([stairWidth,
-			  max(topLandingLength, 
-				 stairsLength - stairCt * stairLength - bottomLandingLength),
-			  stairsHeight]);
-	
-}
 
 /******** DEFINE BUILDING ********/
 
@@ -77,7 +34,7 @@ module stairs(stairsLength=100,
  * [X, Y, height, wall thickness, floor/roof thickness].
  */
 b1Dims = [100, // xdim
-	     100, // ydim
+	     127, // ydim
 	     65, // height
 	     7, // wall thickness
 	     4]; // floor/roof thickness
@@ -85,17 +42,17 @@ b1Dims = [100, // xdim
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 
  */
-b1Windows = [[[0, 30, 0], [0,0,-90]],
-		    [[0, 70, 0], [0,0,-90]],
-		    [[70,93,0], [0,0,0]],
+b1Windows = [[[93, 42, 0], [0,0,-90]],
+		    [[93, 88, 0], [0,0,-90]],
+		    [[50,120,0], [0,0,0]],
 		   ];
 
 /* Doors is a 3D array holding translate : rotate : boolean tuples, one per
  * door.
  * Booleans are [ doFrame, unused, unused ].
  */
-b1Doors = [[[30, 93, 0], [0,0,0], [1,0,0]],
-	   	  [[93, 50, 0], [0,0,-90], [0,0,0]],
+b1Doors = [[[0, 50, 0], [0,0,-90], [0,0,0]],
+		  [[40,0,0], [0,0,0], [1,0,0]],
           ];
 
 /******** CONSTRUCT BUILDING ********/
@@ -121,7 +78,7 @@ module building(dims = [0,0,0,0], windows = [], doors = []) {
 			linear_extrude(height=wallHeight)
 				buildingBackWall(xDim = xDim, yDim = yDim, fudge=false);
 
-			/* Subtract Windows and Doors */
+			/* Subtract Windows */
 			for (win = windows) {
 				translate(win[0]) rotate(win[1]) window(doWindow=true);
 			}
@@ -131,15 +88,29 @@ module building(dims = [0,0,0,0], windows = [], doors = []) {
 			}
 		} /* difference */
 
-		/* Add back in windows, door frames, and back wall */
+		/* Add in back wall, subtract out doors and windows again */
+		difference() {
+			linear_extrude(height=wallHeight)
+				buildingBackWall(xDim = xDim, yDim = yDim, fudge=true);
+
+			/* Subtract Windows */
+			for (win = windows) {
+				translate(win[0]) rotate(win[1]) window(doWindow=true);
+			}
+			/* Subtract Doors */
+			for (door = doors) {
+				translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
+			}
+		}
+
+		/* Add back in windows and door frames */
 		for (win = windows) {
 			translate(win[0]) rotate(win[1]) window(doWindow=false);
 		}
 		for (door = doors) {
 			translate(door[0]) rotate(door[1]) door(doDoor=false, doFrame = door[2][0]);
 		}
-		linear_extrude(height=wallHeight)
-			buildingBackWall(xDim = xDim, yDim = yDim, fudge=true);
+
 	} /* assign */
 }
 
@@ -148,33 +119,13 @@ module building(dims = [0,0,0,0], windows = [], doors = []) {
 
 module buildingWalls(xDim = xDim, yDim = yDim) {
 	difference() {
-		square(xDim, yDim);
-		translate([wallThick, wallThick, 0]) square(xDim - 2*wallThick, yDim - 2*wallThick);
+		square([xDim, yDim]);
+		translate([wallThick, wallThick, 0]) square([xDim - 2*wallThick, yDim - 2*wallThick]);
 	}
 }
 
 
 module buildingBackWall(xDim = xDim, yDim = yDim, fudge = true) {
-/*
-polygon(
-	points = [[0,0], [xDim,0], [xDim, widthAroundNotch],
-			  [xDim - wallThick - notchLen - notchFudge, widthAroundNotch],
-			  [xDim - wallThick - notchLen - notchFudge, 
-			   backWallThick - widthAroundNotch],
-			  [xDim - wallThick - notchFudge, 
-			   backWallThick - widthAroundNotch],
-			  [xDim - wallThick - notchFudge, backWallThick],
-			  [wallThick + notchFudge, backWallThick],
-			  [wallThick + notchFudge,
-			   backWallThick - widthAroundNotch],
-			  [wallThick + notchLen + notchFudge, 
-			   backWallThick - widthAroundNotch],
-			  [wallThick + notchLen + notchFudge, widthAroundNotch],
-			  [0, widthAroundNotch]],
-	paths = [[0,1,2,3,4,5,6,7,8,9,10,11,0]]);
-*/
-
-// widthAroundNotch = (backWallThick - (2 * notchFudge + notchWidth)) / 2;
 
 assign(bwFudge = (fudge) ? notchFudge : 0,
 	  backWallThick = wallThick,
@@ -285,6 +236,82 @@ module door(doorWidth=32, doorHeight=45, doDoor=true, doFrame=true)
 			cube([doorWidth, wallThick + epsilon, doorHeight]);
 	}
 }
+
+/******** STAIR MODULES ********/
+
+/* stairs() - build a set of stairs with a landing at the top
+ *
+ * Note: 
+ * - stairsLength includes the top and bottom landings.
+ * - bottom landing will be respected, top landing may grow.
+ * - railing will extend above height of top of stairs by sidewallHt.
+ * - height doesn't do anything special to take a roof into account.
+ * - incut is considered as part of stairLength
+ */
+module stairs(stairsLength=100,
+			stairWidth=35, 
+			stairsHeight=65, 
+			stairLength = 19, 
+			floorThick=4, 
+			topLandingLength = 0, 
+			bottomLandingLength = 0,
+			sidewallHt = 20,
+			doSidewall = true,
+			doEndwall = true)
+{
+	incut = 5; // Amount that stairs are incut at the bottom
+
+	/* See if additional space is needed at top landing. */
+	endwallSpace = (doEndwall) ? wallThick : 0;
+	addtlTopLanding = max(endwallSpace,
+					    topLandingLength + endwallSpace - stairLength);
+
+	stairCt = floor((stairsLength - addtlTopLanding - bottomLandingLength - incut) / stairLength);
+	stairHt = (stairsHeight - floorThick) / stairCt;
+	topLandingRealLength = stairsLength - stairCt * stairLength - bottomLandingLength;
+
+	rotate([90,0,90])	linear_extrude(height = stairWidth) {
+		for (i = [1 : stairCt]) {
+			translate([incut,0,0])
+			polygon(points = [[(i-1)*stairLength + bottomLandingLength,
+							 0], 
+						    [(i-1)*stairLength + bottomLandingLength, 
+							(i-1) * stairHt + floorThick],
+						    [-1 * incut + (i-1)*stairLength + bottomLandingLength, 
+							i * stairHt + floorThick], 
+						    [i * stairLength + bottomLandingLength, 
+							i * stairHt + floorThick],
+						    [i * stairLength + bottomLandingLength, 
+							0]],
+				    paths = [[0,1,2,3,4,0]]);
+		}
+	}
+
+	/* Fill in region for top landing */
+	translate([0, stairsLength - topLandingRealLength, 0])
+		cube([stairWidth,
+			  topLandingRealLength,
+			  stairsHeight]);
+
+	if (doSidewall) {
+		/* Add the sidewall */
+		rotate([90,0,90]) linear_extrude(height = wallThick) {
+			polygon(points = [[max(bottomLandingLength - incut,0),0],
+				    			[max(bottomLandingLength - incut, 0), 
+							 sidewallHt + floorThick + stairHt],
+							[stairLength * (stairCt-1) + bottomLandingLength,
+							 sidewallHt + stairsHeight],
+							[stairsLength, 
+							 sidewallHt + stairsHeight],
+							[stairsLength, 0]],
+				    paths = [[0,1,2,3,4,5,0]]);
+		}
+	}
+	if (doEndwall) {
+		translate([0,stairsLength - wallThick,0]) cube([stairWidth, wallThick, stairsHeight + sidewallHt]);
+	}
+}
+
 
 /*
  * Local variables:
