@@ -189,7 +189,7 @@ module tiledFloor(roofXDim = xDim - 2 * wallThick,
  */
 module window(windowWidth=30,windowHeight=20,doWindow=true)
 {
-	heightFromFloor = 21;
+	heightFromFloor = 25;
 	frameHeight = 3;
 	frameWidth = windowWidth + 4;
 	frameThick = wallThick + 3;

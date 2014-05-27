@@ -1,6 +1,14 @@
 use <building.scad>
 
-building(dims = b3Dims, windows = b3Windows, doors = b3Doors);
+rotate([0,0,90]) building(dims = b3Dims, windows = b3Windows, doors = b3Doors);
+
+/* Brim */
+
+translate ([-130, -3, 0]) difference() {
+	cube([133, 106, 0.3]);
+	translate([3.5,3.5,0]) cube([126, 99, 0.3]);
+}
+
 
 /* Dims is a vector holding dimensions of the building 
  * [X, Y, height, wall thickness, floor/roof thickness].
