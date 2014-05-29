@@ -5,12 +5,11 @@
 
 translate([34,48,5]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
-xDim = 0;
-yDim = 0;
-
 wallThick = 7;
 wallHeight = 65;
 roofThick = 4;
+earThick = 0.3;
+
 
 notchLen = 3; // amount notch protrudes back perpendicular to wall to which it is attached
 notchWidth = 2; // width of the notch protrusion
@@ -31,13 +30,14 @@ building(dims = b1Dims, windows = b1Windows, doors = b1Doors);
 /******** DEFINE BUILDING ********/
 
 /* Dims is a vector holding dimensions of the building 
- * [X, Y, height, wall thickness, floor/roof thickness].
+ * [X, Y, height, wall thickness, floor/roof thickness, do ears].
  */
 b1Dims = [100, // xdim
 	     127, // ydim
 	     65, // height
 	     7, // wall thickness
-	     4]; // floor/roof thickness
+	     4, // floor/roof thickness
+		1]; // do ears on corners (boolean)
 
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 
@@ -57,22 +57,38 @@ b1Doors = [[[0, 50, 0], [0,0,-90], [0,0,0]],
 
 /******** CONSTRUCT BUILDING ********/
 
-module building(dims = [0,0,0,0], windows = [], doors = []) {
+module building(dims = [0,0,0,0,0,0], windows = [], doors = []) {
 	assign(xDim = dims[0],
 		  yDim = dims[1], 
 		  wallHeight = dims[2],
 		  wallThick = dims[3], 
-		  floorThick = dims[4])
+		  floorThick = dims[4],
+		  doEars = dims[5])
 	{
 		difference() {
 			/* Main Structures */
 			union() {
+				/* walls */
 				linear_extrude(height=wallHeight)
 					buildingWalls(xDim = xDim, yDim = yDim);
+
+				/* floor */
 				translate([wallThick,wallThick + notchFudge,0])
 					tiledFloor(roofXDim = xDim - 2 * wallThick,
 							  roofYDim = yDim - 2 * wallThick - notchFudge,
 							  thick = floorThick);
+
+				/* ears */
+				if (doEars) {
+					translate([0,0,earThick/2])
+						cylinder(r=wallThick, h=earThick,center=true);
+					translate([xDim,0,earThick/2])
+						cylinder(r=wallThick, h=earThick,center=true);
+					translate([0,yDim,earThick/2])
+						 cylinder(r=wallThick, h=earThick,center=true);
+					translate([xDim,yDim,earThick/2])
+						cylinder(r=wallThick, h=earThick,center=true);
+				}
 			}
 			/* Subtract Back Wall */
 			linear_extrude(height=wallHeight)
@@ -117,15 +133,16 @@ module building(dims = [0,0,0,0], windows = [], doors = []) {
 
 /******** WALL MODULES ********/
 
-module buildingWalls(xDim = xDim, yDim = yDim) {
+module buildingWalls(xDim = 0, yDim = 0) {
 	difference() {
 		square([xDim, yDim]);
-		translate([wallThick, wallThick, 0]) square([xDim - 2*wallThick, yDim - 2*wallThick]);
+		translate([wallThick, wallThick, 0])
+			square([xDim - 2*wallThick, yDim - 2*wallThick]);
 	}
 }
 
 
-module buildingBackWall(xDim = xDim, yDim = yDim, fudge = true) {
+module buildingBackWall(xDim = 0, yDim = 0, fudge = true) {
 
 assign(bwFudge = (fudge) ? notchFudge : 0,
 	  backWallThick = wallThick,
@@ -166,9 +183,9 @@ polygon(
 
 /******** FLOOR MODULES ********/
 
-module tiledFloor(roofXDim = xDim - 2 * wallThick,
-                  roofYDim = yDim - (wallThick + backWallThick + notchFudge), 
-                  thick=roofThick)
+module tiledFloor(roofXDim = 0,
+                  roofYDim = 0, 
+                  thick = 0)
 {
     cube([roofXDim,roofYDim,thick-0.5], center=false);
 	intersection() {
@@ -187,7 +204,7 @@ module tiledFloor(roofXDim = xDim - 2 * wallThick,
  *			 with center back edge at  [x=0, y=0]
  *
  */
-module window(windowWidth=30,windowHeight=20,doWindow=true)
+module window(windowWidth=30, windowHeight=20, doWindow=true)
 {
 	heightFromFloor = 25;
 	frameHeight = 3;
