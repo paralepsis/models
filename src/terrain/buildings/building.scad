@@ -163,12 +163,12 @@ Back Wall Polygon:
 
 polygon(
 	points = [[0,0], [xDim,0], [xDim, widthAroundNotch],
-			  [xDim - wallThick - notchLen - bwFudge, widthAroundNotch],
-			  [xDim - wallThick - notchLen - bwFudge, 
-			   backWallThick - widthAroundNotch],
-			  [xDim - wallThick - bwFudge, 
-			   backWallThick - widthAroundNotch],
-			  [xDim - wallThick - bwFudge, backWallThick],
+			  [xDim - wallThick - notchLen - bwFudge, widthAroundNotch], // 3
+			  [xDim - wallThick - notchLen - bwFudge, // 4
+			   backWallThick - widthAroundNotch], // 5
+			  [xDim - wallThick - bwFudge,  // 6
+			   backWallThick - widthAroundNotch], // 7
+			  [xDim - wallThick - bwFudge, backWallThick], // 8
 			  [wallThick + bwFudge, backWallThick],
 			  [wallThick + bwFudge,
 			   backWallThick - widthAroundNotch],
