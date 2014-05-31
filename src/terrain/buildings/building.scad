@@ -8,7 +8,7 @@ translate([34,48,5]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/mar
 wallThick = 7;
 wallHeight = 65;
 roofThick = 4;
-earThick = 0.3;
+earThick = 0.6;
 
 
 notchLen = 3; // amount notch protrudes back perpendicular to wall to which it is attached
@@ -81,13 +81,13 @@ module building(dims = [0,0,0,0,0,0], windows = [], doors = []) {
 				/* ears */
 				if (doEars) {
 					translate([0,0,earThick/2])
-						cylinder(r=wallThick, h=earThick,center=true);
+						cylinder(r=wallThick+3, h=earThick,center=true);
 					translate([xDim,0,earThick/2])
-						cylinder(r=wallThick, h=earThick,center=true);
+						cylinder(r=wallThick+3, h=earThick,center=true);
 					translate([0,yDim,earThick/2])
-						 cylinder(r=wallThick, h=earThick,center=true);
+						 cylinder(r=wallThick+3, h=earThick,center=true);
 					translate([xDim,yDim,earThick/2])
-						cylinder(r=wallThick, h=earThick,center=true);
+						cylinder(r=wallThick+3, h=earThick,center=true);
 				}
 			}
 			/* Subtract Back Wall */
