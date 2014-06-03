@@ -25,7 +25,7 @@ module corRoof(xDim = 100, yDim = 80, angle = 5) {
 
 	difference() {
 		union() {
-			translate([xDim, 0, 0]) rotate([0,-90,0]) linear_extrude(h=xDim)
+			translate([xDim, 0, 0]) rotate([0,-90,0]) linear_extrude(height=xDim)
 				polygon(points = [[zOff,0], [zOff,yDim], [height, yDim], [0,0]],
 						paths = [[0,1,2,3,0]]);
 
@@ -41,7 +41,7 @@ module corRoof(xDim = 100, yDim = 80, angle = 5) {
 		}
 
 		/* cut angled slice off front end */
-		translate([xDim, 0, 0])  rotate([0,-90,0]) linear_extrude(h=xDim) 
+		translate([xDim, 0, 0])  rotate([0,-90,0]) linear_extrude(height=xDim) 
 			polygon(points = [[0,0], [zOff, 0], [zOff,-1* zOff / tan(90 - angle)]],
 				paths = [[0,1,2,0]]);
 
