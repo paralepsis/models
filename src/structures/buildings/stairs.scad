@@ -5,17 +5,46 @@
  * This software is released under the Creative Commons 
  * Attribution-ShareAlike 4.0 International Public License.
  */
+/******** GLOBALS ********/
 
 /******** STAIR MODULES ********/
 
 stairs2(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10);
 stairsSidewall(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10);
 
-module stairs2(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10) 
+module easyStairs(stairsLen, stairsHt, stairsWidth)
+{
+    ct = floor(stairsHt / 7); // 6 is a decent height for a stair
+    stairHt = stairsHt / ct;
+    incutLen = 12;
+
+    stairLen = (stairsLen - incutLen) / ct;
+
+    stairs(stairLen = stairLen, stairHt = stairHt, stairWidth = stairsWidth,
+	   stairCt = ct, incutLen = incutLen);
+}
+
+module stairs(stairLen=12,
+	      stairHt=7,
+	      stairWidth = 30,
+	      stairCt = 5,
+	      incutLen = 12)
+{
+    rotate([90,0,90]) stairsOnly(stairLen=stairLen, stairHt=stairHt,
+				 stairWidth = stairWidth, stairCt = stairCt,
+				 incutLen = incutLen);
+    translate([stairWidth,0,0]) rotate([90,0,90])
+	stairsSidewall(stairLen=stairLen, stairHt=stairHt,
+		       stairWidth = stairWidth, stairCt = stairCt,
+		       incutLen = incutLen);
+}
+
+module stairsOnly(stairLen=10, stairHt=7, stairWidth = 30, stairCt = 5, incutLen = 10) 
 {
        for (i = [0 : stairCt - 1]) {
        	   translate([i * (stairLen), i * stairHt, 0])
-              stair(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10);
+	       stair(stairLen=stairLen, stairHt=stairHt,
+		     stairWidth = stairWidth, incutLen = incutLen);
     }
 }	      
 
@@ -30,7 +59,7 @@ module stairsSidewall(stairLen = 0, stairHt = 0, stairWidth = 0, stairCt = 0, in
 }
 
 module stair() {
-       incutHt = 4;
+       incutHt = 5;
        bar = 2;
 
         linear_extrude(height=stairWidth)
@@ -43,6 +72,8 @@ module stair() {
 		      paths = [[0,1,2,3,4,5,0]]);
 }
 
+/******** OLD VERSION OF CODE ********/
+
 /* stairs() - build a set of stairs with a landing at the top
  *
  * Note: 
@@ -52,7 +83,8 @@ module stair() {
  * - height doesn't do anything special to take a roof into account.
  * - incut is considered as part of stairLength
  */
-module stairs(stairsLength=100,
+
+module OLDstairs(stairsLength=100,
 	      stairWidth=35, 
 	      stairsHeight=65, 
 	      stairLength = 19, 
@@ -116,7 +148,6 @@ module stairs(stairsLength=100,
 	    cube([stairWidth, wallThick, stairsHeight + sidewallHt]);
     }
 }
-
 
 /*
  * Local variables:
