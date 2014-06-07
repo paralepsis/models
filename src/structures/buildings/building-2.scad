@@ -30,7 +30,6 @@ translate([0,0,65]) {
 }
 
 /* Exterior Stairs */
-// translate([152.4,0,0]) stairs(stairCt=8,stairHt=9);
 translate([152.4,0,0,]) {
     easyStairs(stairsLen = 80,
 	       extraTopLanding = 20,
