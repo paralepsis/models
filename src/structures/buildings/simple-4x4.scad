@@ -1,5 +1,6 @@
 use <building.scad>
 
+// mirror([1,0,0]) building(b1Dims, b1Windows, b1Doors);
 building(b1Dims, b1Windows, b1Doors);
 
 /* Dims is a vector holding dimensions of the building 
@@ -9,7 +10,8 @@ b1Dims = [100, // xdim
 	     100, // ydim
 	     65, // height
 	     7, // wall thickness
-	     4]; // floor/roof thickness
+	     4, // floor/roof thickness
+	     1]; // ears 
 
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 
