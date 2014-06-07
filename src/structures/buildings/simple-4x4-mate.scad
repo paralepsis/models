@@ -17,7 +17,8 @@ b3Dims = [100, // xdim
 	     127, // ydim
 	     65, // height
 	     7, // wall thickness
-	     4]; // floor/roof thickness
+	     4, // floor/roof thickness
+	     0]; // ears
 
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 
