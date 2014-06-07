@@ -12,9 +12,9 @@ corRoof();
  *
  * Note, angle is in the Y dimension.
  */
-module corRoof(xDim = 100, yDim = 80, angle = 5) {
+module corRoof(xDim = 102, yDim = 80, angle = 5) {
 	corRad = 1;
-	$fn = 10;
+	$fn = 30;
 	height = tan(angle) * yDim;
 	topLength = yDim / cos(angle);
 
