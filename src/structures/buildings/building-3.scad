@@ -13,8 +13,9 @@ use <stairs.scad>
 
 myFloorThickness = 4;
 myWallThickness = 7;
+myHeight = 66;
 
-translate([34,48,5]) rotate([0,0,180]) 
+translate([90,118,70]) rotate([0,0,180]) 
 	color("red") import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
 /* First Floor */
@@ -32,7 +33,7 @@ difference() {
 }
 
 /*  Second Floor */
-translate([0,0,65]) {
+translate([0,0,myHeight]) {
     building(dims = f2Dims,
 	     windows = f2Windows, 
 	     doors = f2Doors,
@@ -40,24 +41,32 @@ translate([0,0,65]) {
 }
 
 /* Custom patio for this building */
-translate([0,100,65]) {
+translate([0,100,myHeight]) {
     cube([127,40,myFloorThickness], center=false); // Floor
 }
-translate([0,100,65+myFloorThickness]) {
+translate([0,100,myHeight+myFloorThickness]) {
     cube([myWallThickness, 40, 20], center=false);
 }
-translate([0,140 - myWallThickness, 65+myFloorThickness]) {
+translate([0,140 - myWallThickness, myHeight+myFloorThickness]) {
     cube([127, myWallThickness, 20], center=false);
 }
-translate([127-myWallThickness,100,65+myFloorThickness]) {
+translate([127-myWallThickness,100,myHeight+myFloorThickness]) {
     cube([myWallThickness, 40, 20], center=false);
 }
 
 /* Roof */
-translate([-4, 0 - 4, 2 * 65]) {
+translate([-4, 0 - 4, 2 * myHeight]) {
     corRoof(xDim = 127 + 8, yDim = 100 + 8, angle = 4);
 }
 
+/* Stairs */
+/*
+translate([-1 * 35, 50, 0]) stairWell(swLen = 80,
+	  swHeight = myHeight,
+	  stairsWidth = 35,
+	  floorThick = myFloorThickness,
+	  sidewallThick = myWallThickness);
+*/
 
 /******** First Floor Parameters ********/
 
@@ -66,7 +75,7 @@ translate([-4, 0 - 4, 2 * 65]) {
  */
 f1Dims = [127, // xdim
 	     100, // ydim
-	     65, // height
+	     myHeight, // height
 	     myWallThickness, // wall thickness
 	     myFloorThickness, // floor/roof thickness
 	     1]; // ears
@@ -75,9 +84,8 @@ f1Dims = [127, // xdim
  * 
  */
 f1Windows = [[[0, 30, 0], [0,0,-90]],
-		    [[0, 70, 0], [0,0,-90]],
-		    [[90,93,0], [0,0,0]],
-		   ];
+	     [[90,93,0], [0,0,0]],
+	     ];
 
 /* Doors is a 3D array holding translate : rotate : boolean tuples, one per
  * door.
@@ -93,7 +101,7 @@ f1Doors = [[[40, 93, 0], [0,0,0], [1,0,0]],
  */
 f2Dims = [127, // xdim
 	  100, // ydim
-	  65, // height
+	  myHeight, // height
 	  myWallThickness, // wall thickness
 	  myFloorThickness, // floor/roof thickness
 	  1]; // ears
