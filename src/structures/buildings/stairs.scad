@@ -14,15 +14,58 @@ stairs2(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10);
 stairsSidewall(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10);
 */
 
+stairwell(swLen = 80,
+	  swHeight = 66,
+	  stairsWidth = 35,
+	  floorThick = 4,
+	  sidewallThick = 7);
+
+module stairwell(swLen,
+		 swHeight,
+		 stairsWidth,
+		 floorThick = 4,
+		 sidewallThick = 7)
+{
+    ct = floor(swHeight/7);
+    stairHt = swHeight / ct;
+    incutLen = 12;
+    sidewallHt = 20;
+
+    stairLen = (swLen - incutLen) / ct;
+
+    stairs(stairLen = stairLen,
+	   stairHt = stairHt,
+	   stairWidth = stairsWidth,
+	   stairCt = ct / 2,
+	   incutLen = incutLen,
+	   sidewallThick = sidewallThick);
+
+    /* position second half of stairwell above first */
+    rotate([0,0,180]) {
+	/*	translate([0,
+		   -1 * (stairLen * (ct-1)),
+		   (ct / 2 - 1) * stairHt + floorThick])
+	*/
+	{
+	    stairs(stairLen = stairLen,
+		   stairHt = stairHt,
+		   stairWidth = stairsWidth,
+		   stairCt = ct / 2,
+		   incutLen = incutLen,
+		   sidewallThick = sidewallThick);
+	}
+    }
+}
+
 module easyStairs(stairsLen,
 		  extraTopLanding = 0,
-		  stairsHt,
+		  swHeight,
 		  stairsWidth,
 		  floorThick = 4,
 		  sidewallThick = 5)
 {
     ct = floor(stairsHt / 7); // 6 is a decent height for a stair
-    stairHt = stairsHt / ct;
+    stairHt = swHeight / ct;
     incutLen = 12;
     sidewallHt = 20;
 
