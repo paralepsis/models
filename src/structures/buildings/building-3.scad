@@ -24,12 +24,11 @@ difference() {
 	     windows = f1Windows, 
 	     doors = f1Doors,
 	     doEars = false);
-/*
+
     difference() {
 	translate([124,34,-14]) rotate([0,-25,90]) scale([.8,1,1]) wallBreach();
 	cube([300,200,8],center=true);
     }
-*/
 }
 
 /*  Second Floor */
@@ -40,18 +39,21 @@ translate([0,0,myHeight]) {
 	     doEars = false);
 }
 
-/* Custom patio for this building */
+/* Custom patio for this building
+ *
+ * Note: little "-7" and "+3" adjustments to walls are to get the slight
+ * lip on the underside to match up with the stairs.
+ */
+
 translate([0,100,myHeight]) {
     cube([127,40,myFloorThickness], center=false); // Floor
 }
-translate([0,100,myHeight+myFloorThickness]) {
-    cube([myWallThickness, 40, 20], center=false);
+
+translate([0,140 - myWallThickness, myHeight+myFloorThickness - 7]) {
+    cube([127, myWallThickness, 20 + myFloorThickness + 3], center=false);
 }
-translate([0,140 - myWallThickness, myHeight+myFloorThickness]) {
-    cube([127, myWallThickness, 20], center=false);
-}
-translate([127-myWallThickness,100,myHeight+myFloorThickness]) {
-    cube([myWallThickness, 40, 20], center=false);
+translate([127-myWallThickness,100,myHeight+myFloorThickness - 7]) {
+    cube([myWallThickness, 40, 20 + myFloorThickness + 3], center=false);
 }
 
 /* Roof */
@@ -60,13 +62,27 @@ translate([-4, 0 - 4, 2 * myHeight]) {
 }
 
 /* Stairs */
-/*
-translate([-1 * 35, 50, 0]) stairWell(swLen = 80,
-	  swHeight = myHeight,
-	  stairsWidth = 35,
-	  floorThick = myFloorThickness,
-	  sidewallThick = myWallThickness);
-*/
+translate([0,45,0]) {
+    mirror([1,0,0])
+    easyStairs(stairsLen = 75,
+	       extraTopLanding = 20,
+	       stairsHt = 70,
+	       stairsWidth = 35,
+	       sidewallThick = 7);
+}
+
+/* Extra little corner next to stairs, calculated from:
+ *   StairsLen = 75
+ *   ct = 10
+ *   incutLen = 12
+ *   sidewallThick = 7
+ */
+translate([0,45 + 3*(75 - 12)/10,0]) rotate([90,0,90]) linear_extrude(height = 7) {
+    polygon(points=[[5 * (75 - 12)/10, 5 * 70 / 10],
+		    [10 * (75 - 12) / 10, 10 * 70 / 10],
+		    [5 * (75 - 12) / 10, 10 * 70 / 10]],
+	    paths = [[0,1,2,0]]);
+}
 
 /******** First Floor Parameters ********/
 
