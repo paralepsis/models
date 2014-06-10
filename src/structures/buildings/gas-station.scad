@@ -53,8 +53,11 @@ module island() {
 	translate([80,0,0]) cylinder(h=5, r=15);
 	cylinder(h=5, r=15);
     }
-    translate([0,-7.5,0]) pump();
-    translate([55,-7.5,0]) pump();
+    translate([5,-7.5,0]) pump();
+    translate([50,-7.5,0]) pump();
+
+    translate([82,0,0]) cylinder(h=15,r=3);
+    translate([-2,0,0]) cylinder(h=15,r=3);
 }
 
 module pump() {
