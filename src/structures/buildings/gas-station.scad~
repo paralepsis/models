@@ -1,0 +1,54 @@
+/* gas-station.scad
+ *
+ * Copyright (C) Robert B. Ross, 2014
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
+
+use <building.scad>
+
+xDim = 150;
+yDim = 120;
+cutPos = 40;
+wallThick = 7;
+myWallHt = 70;
+
+// Note: sort of a hack on this position because I was too lazy
+//       to work out the trigonometry.
+// insidePtOffset = wallThick / tan(45);
+insidePtOffset = 3.5;
+
+difference() {
+	stationExterior();
+	stationInterior();
+}
+
+module stationExterior() {
+	linear_extrude(height = myWallHt) {
+		polygon(points = [[0,0], [xDim, 0], [xDim, yDim],
+				[xDim - cutPos - 30, yDim],
+		  		[0, cutPos]],
+			paths = [[0,1,2,3,4]]);
+	}
+}
+
+module stationInterior() {
+	linear_extrude(height = myWallHt) {
+		polygon(points = [[wallThick, wallThick], [xDim - wallThick, wallThick],
+				[xDim - wallThick, yDim - wallThick],
+				[xDim - cutPos - 30 + insidePtOffset, yDim - wallThick],
+				[wallThick, cutPos - insidePtOffset]],
+			paths = [[0,1,2,3,4]]);
+	}
+}
+
+/*
+ * Local variables:
+ *  mode: C
+ *  c-indent-level: 4
+ *  c-basic-offset: 4
+ * End:
+ *
+ * vim: ts=8 sts=4 sw=4 expandtab
+ */

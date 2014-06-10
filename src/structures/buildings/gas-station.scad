@@ -33,18 +33,29 @@ completeGasStation();
 
 module completeGasStation() {
     mainBuilding();
-    translate([xDim,0,0]) garage();
+    translate([0,0,myWallHt]) mainBuildingRoof();
+
+    translate([xDim,0,0]) garage(xDim = xDim, yDim = yDim + 10);
+    translate([xDim,0,myWallHt]) garageRoof(xDim = xDim, yDim = yDim + 10);
     translate([0,yDim + 100, 0]) island();
 }
 
-module garage() {
+module garage(xDim, yDim) {
     difference() {
 	building(dims = garageDims,
 		 windows = garageWindows,
 		 doors = garageDoors,
 		 doEars = false, tiledFloor = false);
-	translate([20, yDim + 10 - myWallThick, myFloorThick])
+	translate([20, yDim - myWallThick, myFloorThick])
 	    cube([110,8,50]);
+    }
+}
+
+module garageRoof(xDim, yDim) {
+    difference() {
+	cube([xDim, yDim, myFloorThick + 10]);
+	translate([myWallThick, myWallThick, myFloorThick])
+	    cube([xDim - 2 * myWallThick, yDim - 2 * myWallThick, 20]);
     }
 }
 
@@ -65,6 +76,14 @@ module pump() {
     translate([0,0,35]) cube([25, 15, 4]); // top
     translate([2.5,2.5,5]) cube([4,10,30]); // left side
     translate([18.5,2.5,5]) cube([4,10,30]); // right side
+}
+
+module mainBuildingRoof() {
+    /* simple roof with plain roof surface */
+    difference() {
+	stationExterior(height = 24);
+	translate([0,0,4]) stationInterior(height = 24);
+    }
 }
 
 module mainBuilding() {
