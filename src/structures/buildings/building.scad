@@ -71,7 +71,12 @@ b1Doors = [[[0, 50, 0], [0,0,-90], [0,0,0]],
 
 /******** CONSTRUCT BUILDING ********/
 
-module building(dims = [0,0,0,0,0,0], windows = [], doors = [], doEars = true) {
+module building(dims = [0,0,0,0,0,0],
+		windows = [],
+		doors = [],
+		doEars = true,
+		tiledFloor = true)
+{
     assign(xDim = dims[0],
 	   yDim = dims[1], 
 	   wallHeight = dims[2],
@@ -85,10 +90,18 @@ module building(dims = [0,0,0,0,0,0], windows = [], doors = [], doEars = true) {
 		    buildingWalls(xDim = xDim, yDim = yDim);
 		
 		/* floor */
-		translate([wallThick,wallThick + notchFudge,0])
-		    tiledFloor(roofXDim = xDim - 2 * wallThick,
-			       roofYDim = yDim - 2 * wallThick - notchFudge,
-			       thick = floorThick);
+		if (tiledFloor) {
+		    translate([wallThick,wallThick + notchFudge,0])
+			tiledFloor(roofXDim = xDim - 2 * wallThick,
+				   roofYDim = yDim - 2 * wallThick - notchFudge,
+				   thick = floorThick);
+		}
+		else {
+		    translate([wallThick, wallThick + notchFudge, 0])
+			cube([xDim - 2 * wallThick,
+			      yDim - 2 * wallThick - notchFudge,
+			      floorThick], center=false);
+		}
 
 		/* ears */
 		if (doEars) {
