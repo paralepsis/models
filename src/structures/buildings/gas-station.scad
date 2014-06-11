@@ -24,8 +24,8 @@ insidePtOffset = 3.5;
 /* Overlay rough build volume for reference */
 // % translate([270,70,155/2]) cube(size=[240, 153, 155], center=true);
 
-// translate([200,70,4]) import("/Users/rross/Downloads/VAZ-21213.STL");
-translate([50, 190, 0]) rotate([0,0,180]) color("red") import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
+// translate([195,70,4]) import("/Users/rross/projects/3dprint/urban/VAZ-21213.STL");
+// translate([240, 120, 5]) rotate([0,0,180]) color("red") import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
 completeGasStation();
 
@@ -42,13 +42,30 @@ module completeGasStation() {
 
 module garage(xDim, yDim) {
     difference() {
+	/* main structure */
 	building(dims = garageDims,
 		 windows = garageWindows,
 		 doors = garageDoors,
 		 doEars = false, tiledFloor = false);
+
+	/* garage door openings */
 	translate([20, yDim - myWallThick, myFloorThick])
-	    cube([110,8,50]);
+	    cube([55,8,55]);
+	translate([20+55+10, yDim - myWallThick, myFloorThick])
+	    cube([55,8,55]);
     }
+
+    /* garage door bits */
+    translate([20+55+10 - 2, yDim - myWallThick - 1.2, myFloorThick+ 55 - 8])
+	cube([55+4,2.0,8]);
+    translate([20+55+10 - 2, yDim - myWallThick - 0.8, myFloorThick+ 55 - 9])
+	cube([55+4,1.2,1]);
+    translate([20+55+10 - 2, yDim - myWallThick - 1.2, myFloorThick+ 55 - 19])
+	cube([55+4,2.0,10]);
+
+    translate([20 - 2, yDim - myWallThick - 1.2, myFloorThick+ 55 - 10])
+	cube([55+4,2.0,10]);
+
 }
 
 module garageRoof(xDim, yDim) {
@@ -92,7 +109,7 @@ module mainBuilding() {
 	stationInterior(height = myWallHt);
 
 	/* door */
-	translate([110, 120 - myWallThick, 0]) door(doDoor = true, doFrame = false);
+	translate([115, 120 - myWallThick, 0]) door(doDoor = true, doFrame = false);
 	translate([150, 30, 0]) rotate([0,0,90]) door(doDoor = true, doFrame = false);
 
 	/* big windows in the front */
