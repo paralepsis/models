@@ -18,12 +18,13 @@ module corRoof(xDim = 102, yDim = 80, angle = 5) {
     height = tan(angle) * yDim;
     topLength = yDim / cos(angle);
 
-    /* zOff is an offset such that the cutout cylinders will leave some material
-     * near the x axis. The "+ 1" leaves approximately 1mm of height at x=0.
+    /* zOff is an offset such that the cutout cylinders will leave some 
+     * material near the x axis. The "+ 1" leaves approximately 1mm of
+     * height at x=0.
      */
     zOff = -1 * (0.7 * corRad * cos(angle)) - 1;
 
-    difference() {
+    translate([0,0,-1 * zOff]) difference() {
 	union() {
 	    translate([xDim, 0, 0]) rotate([0,-90,0]) linear_extrude(height=xDim)
 		polygon(points = [[zOff,0], [zOff,yDim], [height, yDim], [0,0]],
