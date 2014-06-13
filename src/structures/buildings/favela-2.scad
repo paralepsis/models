@@ -1,4 +1,4 @@
-/* building-2.scad
+/* favela-2.scad
  *
  * Copyright (C) Robert B. Ross, 2014
  *
