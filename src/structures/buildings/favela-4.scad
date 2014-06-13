@@ -14,19 +14,28 @@ myHeight = 65;
 
 module wholeBuilding() {
     /* First Floor */
-    building(dims = firstFloorDims,
-    	 windows = firstFloorWindows,
-    	 doors = firstFloorDoors,
-    	 doEars = 0,
-    	 doBackWall = 0);
+    difference() {
+        building(dims = firstFloorDims,
+        	 windows = firstFloorWindows,
+        	 doors = firstFloorDoors,
+        	 doEars = 0,
+        	 doBackWall = 0);
+
+        /* roughen floor edge */
+        translate([-15,70,0]) rotate([0,0,-10]) floorRoughen();
+    }
     
     
     /* Second Floor */
-    translate([0,0,65]) secondFloor();
+    translate([0,0,65]) difference() {
+	secondFloor();
+    	translate([18,92,2]) rotate([0,0,-15]) floorRoughen();
+    }
     
     /* Roof */
-    translate([78, -4, 2 * myHeight]) {
-        corRoof(xDim = 80, yDim = 108, angle = 4);
+    translate([0,0, 2 * myHeight]) difference() {
+        translate([78, -4, 0]) corRoof(xDim = 80, yDim = 108, angle = 4);
+    	translate([65,114,8]) rotate([0,0,-28]) floorRoughen();
     }
 }
     
@@ -35,14 +44,11 @@ difference() {
     translate([-10,-140,55]) rotate([0,30,40]) color("red") cube([150,200, 190]);
 
     /* work over the floors */
-    translate([-15,70,0]) rotate([0,0,-10]) floorRoughen();
-    translate([15,95,myHeight+2]) rotate([0,0,-15]) floorRoughen();
-    translate([65,114,2*myHeight+8]) rotate([0,0,-28]) floorRoughen();
 
     /* work over the front wall */
     translate([-15,40,-60]) rotate([0,-90,-99]) holeCutout();
     translate([-18,110,-5]) rotate([0,7,0]) scale([1,1,1.2]) rotate([0,-90,180]) holeCutout();
-    translate([20,95,56]) cube([10,10,10]); // cut off a little stray bit
+    // translate([20,95,56]) cube([10,10,10]); // cut off a little stray bit
 }
 
 
