@@ -13,52 +13,64 @@ use <stairs.scad>
 myWallThickness = 7;
 myFloorThickness = 4;
 
-/* First Floor Room A */
-building(dims = firstFloorADims,
-	 windows = firstFloorAWindows,
-	 doors = firstFloorADoors,
-	 doEars = false);
+wholeBuilding();
 
-/* First Floor Room B */
-translate([100,0,0])
+module wholeBuilding() {
+    justFirstFloor();
+    translate([0,0,65]) justSecondFloor();
+    translate([100,0,0]) rotate([0,0,90]) justStairs();
+    translate([108 + 100 - 4, 0 - 4, 2 * 65]) justRoof();
+}
+
+/******** INDIVIDUAL COMPONENT BUILD MODULES ********/
+
+module justFirstFloor() {
+    /* First Floor Room A */
+    building(dims = firstFloorADims,
+	     windows = firstFloorAWindows,
+	     doors = firstFloorADoors,
+	     doEars = false);
+
+    /* First Floor Room B */
+    translate([100,0,0])
 	building(dims = firstFloorBDims,
 		 windows = firstFloorBWindows,
 		 doors = firstFloorBDoors,
 		 doEars = false);
+}
 
-/* Second Floor Room A */
-translate([100,0,65])
+module justSecondFloor() {
+    /* Second floor room A */
+    translate([100,0,0])
 	building(dims = secFloorADims,
 		 windows = secFloorAWindows,
 		 doors = secFloorADoors,
 		 doEars = false);
 
-/* Exterior Stairs */
-translate([100,0,0]) rotate([0,0,90]) mirror([1,0,0]) {
-    easyStairs(stairsLen = 80,
-	       extraTopLanding = 20,
-	       stairsHt = 69,
-	       stairsWidth = 35,
-	       sidewallThick = myWallThickness);
-}
-
-/* Roof */
-translate([108 + 100 - 4, 0 - 4, 2 * 65]) {
-    rotate([0,0,90]) corRoof(xDim = 127 + 8, yDim = 100 + 8, angle = 4);
-}
-
-/* Custom patio for this building */
-translate([0,0,65]) {
+    /* Custom second floor patio for this building */
     cube([100,100,myFloorThickness], center=false); // Floor
+
+    translate([0,0,myFloorThickness]) {
+	cube([myWallThickness, 100, 20], center=false);
+    }
+    translate([0,100 - myWallThickness, myFloorThickness]) {
+	cube([100, myWallThickness, 20], center=false);
+    }
+    translate([39.5,0,myFloorThickness]) {
+	cube([60.5, myWallThickness, 20], center=false);
+    }
 }
-translate([0,0,65+myFloorThickness]) {
-    cube([myWallThickness, 100, 20], center=false);
+
+module justStairs() {
+    mirror([1,0,0]) easyStairs(stairsLen = 80,
+			       extraTopLanding = 20,
+			       stairsHt = 69,
+			       stairsWidth = 35,
+			       sidewallThick = myWallThickness);
 }
-translate([0,100 - myWallThickness, 65+myFloorThickness]) {
-    cube([100, myWallThickness, 20], center=false);
-}
-translate([39.5,0,65+myFloorThickness]) {
-    cube([60.5, myWallThickness, 20], center=false);
+
+module justRoof() {
+    rotate([0,0,90]) corRoof(xDim = 127 + 8, yDim = 100 + 8, angle = 4);
 }
 
 /******** FIRST FLOOR ROOM A ********/
