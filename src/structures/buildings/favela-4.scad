@@ -29,7 +29,8 @@ module wholeBuilding() {
     /* Second Floor */
     translate([0,0,65]) difference() {
 	secondFloor();
-    	translate([18,92,2]) rotate([0,0,-15]) floorRoughen();
+    	scale([1,1.05,1]) translate([18,92,2]) rotate([0,0,-15])
+	    floorRoughen();
     }
     
     /* Roof */
