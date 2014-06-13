@@ -75,6 +75,7 @@ module building(dims = [0,0,0,0,0,0],
 		windows = [],
 		doors = [],
 		doEars = true,
+		doBackWall = true,
 		tiledFloor = true)
 {
     assign(xDim = dims[0],
@@ -115,9 +116,17 @@ module building(dims = [0,0,0,0,0,0],
 			cylinder(r=earRadius, h=earThick,center=true);
 		}
 	    }
-	    /* Subtract Back Wall */
-	    linear_extrude(height=wallHeight)
-		buildingBackWall(xDim = xDim, yDim = yDim, fudge=false);
+            if (doBackWall) {
+	        /* Subtract Back Wall */
+	        linear_extrude(height=wallHeight)
+		    buildingBackWall(xDim = xDim, yDim = yDim, fudge=false);
+            }
+	    else {
+		translate([wallThick, 0, roofThick])
+		    cube([xDim - 2 * wallThick,
+                          wallThick,
+                          wallHeight - roofThick]);
+	    }
 	    
 	    /* Subtract Windows */
 	    for (win = windows) {
@@ -128,20 +137,22 @@ module building(dims = [0,0,0,0,0,0],
 		translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
 	    }
 	} /* difference */
-	
-	/* Add in back wall, subtract out doors and windows again */
-	difference() {
-	    linear_extrude(height=wallHeight)
-		buildingBackWall(xDim = xDim, yDim = yDim, fudge=true);
+
+        if (doBackWall) {	
+	    /* Add in back wall, subtract out doors and windows again */
+	    difference() {
+	        linear_extrude(height=wallHeight)
+		    buildingBackWall(xDim = xDim, yDim = yDim, fudge=true);
 	    
-	    /* Subtract Windows */
-	    for (win = windows) {
-		translate(win[0]) rotate(win[1]) window(doWindow=true);
-	    }
-	    /* Subtract Doors */
-	    for (door = doors) {
-		translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
-	    }
+	        /* Subtract Windows */
+	        for (win = windows) {
+	    	    translate(win[0]) rotate(win[1]) window(doWindow=true);
+	        }
+	        /* Subtract Doors */
+	        for (door = doors) {
+		    translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
+	        }
+            }
 	}
 	
 	/* Add back in windows and door frames */
