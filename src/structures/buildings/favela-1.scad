@@ -15,6 +15,8 @@ myFloorThickness = 4;
 
 wholeBuilding();
 
+/******** MODULE FOR CONSTRUCTING COMPLETE MODEL ********/
+
 module wholeBuilding() {
     justFirstFloor();
     translate([0,0,65]) justSecondFloor();
@@ -24,44 +26,64 @@ module wholeBuilding() {
 
 /******** INDIVIDUAL COMPONENT BUILD MODULES ********/
 
-module justFirstFloor() {
+/* NOTES:
+ * - These components should all sit on the XY plane as-is, to facilitate
+ *   printing of individual components.
+ * - The roof will need to be rotated and perhaps given some supports to
+ * - keep it attached to the build plate during extended print.
+ */
+
+module justFirstFloor(doEars = false) {
     /* First Floor Room A */
     building(dims = firstFloorADims,
 	     windows = firstFloorAWindows,
 	     doors = firstFloorADoors,
-	     doEars = false);
+	     doEars = doEars);
 
     /* First Floor Room B */
     translate([100,0,0])
 	building(dims = firstFloorBDims,
 		 windows = firstFloorBWindows,
 		 doors = firstFloorBDoors,
-		 doEars = false);
+		 doEars = doEars);
 }
 
-module justSecondFloor() {
+/* justSecondFloor()
+ *
+ * NOTES:
+ * - Needs ears for patio.
+ */
+module justSecondFloor(doEars = false) {
     /* Second floor room A */
     translate([100,0,0])
 	building(dims = secFloorADims,
 		 windows = secFloorAWindows,
 		 doors = secFloorADoors,
-		 doEars = false);
+		 doEars = doEars);
 
     /* Custom second floor patio for this building */
-    cube([100,100,myFloorThickness], center=false); // Floor
+    difference() {
+	union() {
+	    cube([100,100,myFloorThickness], center=false); // Floor
 
-    translate([0,0,myFloorThickness]) {
-	cube([myWallThickness, 100, 20], center=false);
-    }
-    translate([0,100 - myWallThickness, myFloorThickness]) {
-	cube([100, myWallThickness, 20], center=false);
-    }
-    translate([39.5,0,myFloorThickness]) {
-	cube([60.5, myWallThickness, 20], center=false);
+	    translate([0,0,myFloorThickness]) {
+		cube([myWallThickness, 100, 20], center=false);
+	    }
+	    translate([0,100 - myWallThickness, myFloorThickness]) {
+		cube([100, myWallThickness, 20], center=false);
+	    }
+	    translate([39.5,0,myFloorThickness]) {
+		cube([60.5, myWallThickness, 20], center=false);
+	    }
+	}
+	/* remove the little bit next to the removable wall */
+	translate([100 - 0.5, 0, 0])
+	    cube([0.5, myWallThickness-3, 20 + myFloorThickness],
+		 center=false);
     }
 }
 
-module justStairs() {
+module justStairs(doEars = false) {
     mirror([1,0,0]) easyStairs(stairsLen = 80,
 			       extraTopLanding = 20,
 			       stairsHt = 69,
@@ -69,7 +91,7 @@ module justStairs() {
 			       sidewallThick = myWallThickness);
 }
 
-module justRoof() {
+module justRoof(doEars = false) {
     rotate([0,0,90]) corRoof(xDim = 127 + 8, yDim = 100 + 8, angle = 4);
 }
 
