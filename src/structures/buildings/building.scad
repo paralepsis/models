@@ -76,6 +76,7 @@ module building(dims = [0,0,0,0,0,0],
 		doors = [],
 		doEars = true,
 		doBackWall = true,
+		doRemovableBackWall = true,
 		tiledFloor = true)
 {
     assign(xDim = dims[0],
@@ -116,17 +117,19 @@ module building(dims = [0,0,0,0,0,0],
 			cylinder(r=earRadius, h=earThick,center=true);
 		}
 	    }
-            if (doBackWall) {
+
+            if (doBackWall && doRemovableBackWall) {
 	        /* Subtract Back Wall */
 	        linear_extrude(height=wallHeight)
 		    buildingBackWall(xDim = xDim, yDim = yDim, fudge=false);
             }
-	    else {
+	    else if (!doBackWall) {
 		translate([wallThick, 0, roofThick])
 		    cube([xDim - 2 * wallThick,
                           wallThick,
                           wallHeight - roofThick]);
 	    }
+	    /* else leave the back wall in place */
 	    
 	    /* Subtract Windows */
 	    for (win = windows) {
