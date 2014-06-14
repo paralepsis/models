@@ -28,11 +28,8 @@ notchFudge = 0.5; // amount of material to cut away around the notch
 
 /* marine -- this simply drops a Space Marine in the model for reference.
  */
-translate([34,48,5]) rotate([0,0,180]) color("red")
-import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
-
-minSafeWidth = 2.5; // don't let back wall corners get smaller than this
-
+// translate([34,48,5]) rotate([0,0,180]) color("red")
+//  import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
 /******** BUILD SOMETHING ********/
 building(dims = b1Dims, windows = b1Windows, doors = b1Doors);
@@ -41,7 +38,7 @@ building(dims = b1Dims, windows = b1Windows, doors = b1Doors);
 
 newstairs();
 
-/******** DEFINE BUILDING ********/
+/******** DEFINE EXAMPLE BUILDING ********/
 
 /* Dims is a vector holding dimensions of the building 
  * [X, Y, height, wall thickness, floor/roof thickness, do ears].
@@ -92,17 +89,33 @@ module building(dims = [0,0,0,0,0,0],
 		    buildingWalls(xDim = xDim, yDim = yDim);
 		
 		/* floor */
-		if (tiledFloor) {
+		if (tiledFloor && doRemovableBackWall) {
 		    translate([wallThick,wallThick + notchFudge,0])
 			tiledFloor(roofXDim = xDim - 2 * wallThick,
 				   roofYDim = yDim - 2 * wallThick - notchFudge,
 				   thick = floorThick);
 		}
-		else {
+		else if (tiledFloor) /* and no removable back wall */ {
+		    translate([wallThick,wallThick,0])
+			tiledFloor(roofXDim = xDim - 2 * wallThick,
+				   roofYDim = yDim - 2 * wallThick,
+				   thick = floorThick);
+		}
+		else if (!tiledFloor && doRemovableBackWall) {
+		    /* plain floor (no tiles) */
 		    translate([wallThick, wallThick + notchFudge, 0])
 			cube([xDim - 2 * wallThick,
 			      yDim - 2 * wallThick - notchFudge,
-			      floorThick], center=false);
+			      floorThick],
+			      center=false);
+		}
+		else /* not tiled, not removable back wall */ {
+		    /* plain floor (no tiles) */
+		    translate([wallThick, wallThick, 0])
+			cube([xDim - 2 * wallThick,
+			      yDim - 2 * wallThick,
+			      floorThick],
+			      center=false);
 		}
 
 		/* ears */
