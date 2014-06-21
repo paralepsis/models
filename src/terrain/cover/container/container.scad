@@ -13,7 +13,7 @@ longEdgeSide = 2.8;
 cornerPostWidth = 4;
 myHeight = 50;
 myWidth = 50;
-myLength = 94;
+myLength = 93;
 miscThick = 0.8; // thickness of bottom, doors, etc.
 epsilon = 0.001;
 
@@ -97,10 +97,10 @@ module door(height = 40, width = 40) {
 	/* door panels */
 	translate([0.8,0,0])
 	    cube([miscThick, width, height]);
-	translate([0, 0.2, 0.2])
-	    cube([miscThick + 0.8, width / 2 - 0.4, height - 0.4]);
-	translate([0, width / 2 + 0.2, 0.2])
-	    cube([miscThick + 0.8, width / 2 - 0.4, height - 0.4]);
+	translate([0, 0.6, 0.4])
+	    cube([miscThick + 0.8, width / 2 - 0.8, height - 0.8]);
+	translate([0, width / 2 + 0.2, 0.4])
+	    cube([miscThick + 0.8, width / 2 - 0.8, height - 0.8]);
 	
 	/* locking mechanism */
 	translate([0, 4/6 * width, 0]) cylinder(h = height, r = 0.6);
@@ -113,7 +113,7 @@ module door(height = 40, width = 40) {
 module metalSide(height = 45, length = 90) {
     thickness = 0.8;
     flatLen = 3.0;
-    pointOffset = 2.0;
+    pointOffset = 1.5;
 
     singlePanelLength = flatLen + 2 * pointOffset;
 
