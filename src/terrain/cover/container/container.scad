@@ -7,6 +7,8 @@
  *
  */
 
+$fn = 20;
+
 longEdgeSide = 2.8;
 cornerPostWidth = 4;
 myHeight = 50;
@@ -15,12 +17,14 @@ myLength = 94;
 miscThick = 0.8; // thickness of bottom, doors, etc.
 epsilon = 0.001;
 
-
 translate([0,-40,0]) rotate([0,0,180]) color("red")
 import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
-// container();
-topOnly();
+translate([0, 0,0]) door(width = myWidth - 2 * cornerPostWidth, height = myHeight - (miscThick + longEdgeSide));
+
+container();
+// topOnly();
+// bottomOnly();
 
 /******** MODULES FOR SPLITTING OUT PARTS ********/
 module topOnly() {
@@ -62,11 +66,17 @@ module container(height = myHeight,
     translate([0, width, 0]) mirror([0, 1, 0])
 	metalSide(height = height, length = length);
 
+    /* back wall (no door) */
+    translate([length, 0, 0]) rotate([0,0,90])
+	metalSide(height = height, length = width);
+
     /* bottom (very simple) */
     cube([length, width, miscThick], center=false);
     cube([length, longEdgeSide, longEdgeSide], center=false);
     translate([0, width - longEdgeSide, 0])
 	cube([length, longEdgeSide, longEdgeSide], center=false);
+    translate([length - longEdgeSide, 0, 0])
+	cube([longEdgeSide, width, longEdgeSide]);
 
     /* corners */
     cube([4,4,height], center=false);
@@ -78,7 +88,28 @@ module container(height = myHeight,
 	cube([cornerPostWidth, cornerPostWidth, height], center=false);
 }
 
+/******** COMPONENT AND "DIFF" MODELS ********/
 
+/* door()
+ */
+module door(height = 40, width = 40) {
+    translate([0,cornerPostWidth, miscThick]) {
+	/* door panels */
+	translate([0.8,0,0])
+	    cube([miscThick, width, height]);
+	translate([0, 0.2, 0.2])
+	    cube([miscThick + 0.8, width / 2 - 0.4, height - 0.4]);
+	translate([0, width / 2 + 0.2, 0.2])
+	    cube([miscThick + 0.8, width / 2 - 0.4, height - 0.4]);
+	
+	/* locking mechanism */
+	translate([0, 4/6 * width, 0]) cylinder(h = height, r = 0.6);
+	translate([0, 2/6 * width, 0]) cylinder(h = height, r = 0.6);
+    }
+}
+
+/* metalSide() -- corrugated metal wall with a flat backside
+ */
 module metalSide(height = 45, length = 90) {
     thickness = 0.8;
     flatLen = 3.0;
@@ -107,18 +138,25 @@ module metalSide(height = 45, length = 90) {
  * Note: This leaves the corners on the main body
  */
 module topCut(height = myHeight, length = myLength, width = myWidth) {
+    cutPostWidth = cornerPostWidth + epsilon;
+
     difference() {
 	translate([-4, -4, height - longEdgeSide - epsilon])
 	    cube([length + 8, width + 8, 6]);
 
 	/* corners removed, copied construction from above */
-	cube([cornerPostWidth,cornerPostWidth,height + epsilon], center=false);
-	translate([0, width - cornerPostWidth, 0])
-	    cube([cornerPostWidth, cornerPostWidth, height + epsilon], center=false);
-	translate([length - cornerPostWidth, 0,0])
-	    cube([cornerPostWidth, cornerPostWidth, height + epsilon], center=false);
+	translate([-1 * epsilon, -1 * epsilon, 0]) 
+	    cube([cutPostWidth,cutPostWidth,height + epsilon],
+		 center=false);
+	translate([-1 * epsilon, width - cornerPostWidth, 0])
+	    cube([cutPostWidth, cutPostWidth, height + epsilon],
+		 center=false);
+	translate([length - cornerPostWidth, -1 * epsilon, 0])
+	    cube([cutPostWidth, cutPostWidth, height + epsilon],
+		 center=false);
 	translate([length - cornerPostWidth, width - cornerPostWidth, 0])
-	    cube([cornerPostWidth, cornerPostWidth, height + epsilon], center=false);
+	    cube([cutPostWidth, cutPostWidth, height + epsilon],
+		 center=false);
     }
 }
 
