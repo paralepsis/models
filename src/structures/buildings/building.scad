@@ -150,7 +150,8 @@ module building(dims = [0,0,0,0,0,0],
 	    }
 	    /* Subtract Doors */
 	    for (door = doors) {
-		translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
+		translate(door[0]) rotate(door[1])
+		    door(doDoor=true, doFrame = door[2][0]);
 	    }
 	} /* difference */
 
@@ -166,7 +167,8 @@ module building(dims = [0,0,0,0,0,0],
 	        }
 	        /* Subtract Doors */
 	        for (door = doors) {
-		    translate(door[0]) rotate(door[1]) door(doDoor=true, doFrame = door[2][0]);
+		    translate(door[0]) rotate(door[1])
+			door(doDoor=true, doFrame = door[2][0]);
 	        }
             }
 	}
@@ -176,7 +178,8 @@ module building(dims = [0,0,0,0,0,0],
 	    translate(win[0]) rotate(win[1]) window(doWindow=false);
 	}
 	for (door = doors) {
-	    translate(door[0]) rotate(door[1]) door(doDoor=false, doFrame = door[2][0]);
+	    translate(door[0]) rotate(door[1])
+		door(doDoor=false, doFrame = door[2][0]);
 	}	
     } /* assign */
 }
@@ -212,7 +215,8 @@ module buildingBackWall(xDim = 0, yDim = 0, fudge = true) {
 	*/
 
 	polygon(points = [[0,0], [xDim,0], [xDim, widthAroundNotch],
-			  [xDim - wallThick - notchLen - bwFudge, widthAroundNotch], // 3
+			  [xDim - wallThick - notchLen - bwFudge,
+			   widthAroundNotch], // 3
 			  [xDim - wallThick - notchLen - bwFudge, // 4
 			   backWallThick - widthAroundNotch], // 5
 			  [xDim - wallThick - bwFudge,  // 6
@@ -314,7 +318,9 @@ module door(doorWidth=32, doorHeight=45, doDoor=true, doFrame=true)
 
     /* Door itself */
     if (doDoor) {
-	translate([-1 * doorWidth/2, 0 - epsilon/2, heightFromFloor + roofThick])
+	translate([-1 * doorWidth/2,
+		   0 - epsilon/2,
+		   heightFromFloor + roofThick])
 	    cube([doorWidth, wallThick + epsilon, doorHeight]);
     }
 }
