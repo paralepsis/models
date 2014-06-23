@@ -4,6 +4,9 @@
  *
  * This software is released under the Creative Commons 
  * Attribution-ShareAlike 4.0 International Public License.
+ *
+ * TODO:
+ * - Clean up the globals.
  */
 
 /******** GLOBAL PARAMETERS ********/
@@ -25,18 +28,6 @@ earRadius = wallThick + 4; // radius (mm) of corners ears
 notchLen = 3; // length of the notch (mm) parallel to back wall
 notchWidth = 2; // thickness of the notch (mm) in the back wall
 notchFudge = 0.5; // amount of material to cut away around the notch
-
-/* marine -- this simply drops a Space Marine in the model for reference.
- */
-// translate([34,48,5]) rotate([0,0,180]) color("red")
-//  import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
-
-/******** BUILD SOMETHING ********/
-building(dims = b1Dims, windows = b1Windows, doors = b1Doors);
-
-// rotate([0,0,90]) translate([-35,-100,0]) stairs();
-
-newstairs();
 
 /******** DEFINE EXAMPLE BUILDING ********/
 
