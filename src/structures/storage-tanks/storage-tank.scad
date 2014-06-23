@@ -10,13 +10,15 @@
 tankHt = 100;
 tankRad = 50;
 tankThick = 1.6;
-$fn=360; // NOTE: COMMENT OUT WHEN EDITING TO SPEED RENDERING
+$fn=360; // NOTE: COMMENT OUT WHEN EDITING TO SPEED RENDERING, 360 is crazy
 
 /******** BUILD SOMETHING ********/
 tank();
-//tankTop();
+// tankTop();
 //marine();
 // tankControls();
+
+// tankPipe();
 
 /******** MODULES ********/
 
@@ -103,11 +105,10 @@ module tankControls() {
 }
 
 module tankPipes() {
-	//rotate([0,0,-14]) tankPipe();
 	rotate([0,0,14])  tankPipe();
 }
 
-module tankPipe(pipeRad=8, pipeHt=20) {
+module tankPipe(pipeRad=8, pipeHt=20, brim=true) {
 	translate([0,tankRad+pipeHt-1,0]) {
 		translate([0,-1 * pipeHt,pipeHt]) rotate([-90,0,0]) {
 			cylinder(r=1.4 * pipeRad, h=2);
@@ -118,7 +119,15 @@ module tankPipe(pipeRad=8, pipeHt=20) {
 		}
 		cylinder(r=pipeRad, h=pipeHt);
 		translate([0,0,pipeHt]) sphere(r=pipeRad);
-		translate([0,0,pipeHt]) rotate([90,0,0]) cylinder(r=pipeRad, h=pipeHt);
+		translate([0,0,pipeHt]) rotate([90,0,0])
+		    cylinder(r=pipeRad, h=pipeHt);
+
+		/* brim */
+		if (brim) {
+		    cylinder(r=pipeRad+2, h=2);
+		    translate([-1 * (pipeRad + 2), -1 * pipeHt, 0])
+			cube([2*pipeRad+4,pipeHt,2], center=false);
+		}
 	}
 }
 
