@@ -13,9 +13,9 @@ tankThick = 1.6;
 $fn=360; // NOTE: COMMENT OUT WHEN EDITING TO SPEED RENDERING, 360 is crazy
 
 /******** BUILD SOMETHING ********/
-tank();
-// tankTop();
-//marine();
+color("grey") tank();
+color("grey") tankTop();
+marine();
 // tankControls();
 
 // tankPipe();
