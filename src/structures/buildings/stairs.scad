@@ -6,21 +6,9 @@
  * Attribution-ShareAlike 4.0 International Public License.
  */
 /******** GLOBALS ********/
+epsilon = 0.001;
 
 /******** STAIR MODULES ********/
-
-/*
-stairs2(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10);
-stairsSidewall(stairLen=10, stairHt=6, stairWidth = 30, stairCt = 5, incutLen = 10);
-*/
-
-/*
-stairwell(swLen = 80,
-	  swHeight = 66,
-	  stairsWidth = 35,
-	  floorThick = 4,
-	  sidewallThick = 7);
-*/
 
 module stairwell(swLen,
 		 swHeight,
@@ -112,10 +100,12 @@ module stairs(stairLen=12,
     rotate([90,0,90]) stairsOnly(stairLen=stairLen, stairHt=stairHt,
 				 stairWidth = stairWidth, stairCt = stairCt,
 				 incutLen = incutLen);
-    translate([stairWidth,0,0]) rotate([90,0,90])
-	stairsSidewall(stairLen=stairLen, stairHt=stairHt,
-		       stairWidth = stairWidth, stairCt = stairCt,
-		       incutLen = incutLen, sidewallWidth = sidewallThick);
+    if (sidewallThick > 0) {
+	translate([stairWidth - epsilon,0,0]) rotate([90,0,90])
+	    stairsSidewall(stairLen=stairLen, stairHt=stairHt,
+			   stairWidth = stairWidth, stairCt = stairCt,
+			   incutLen = incutLen, sidewallWidth = sidewallThick);
+    }
 }
 
 module stairsOnly(stairLen=10,
@@ -126,7 +116,7 @@ module stairsOnly(stairLen=10,
 {
     for (i = [0 : stairCt - 1]) {
 	translate([i * (stairLen), i * stairHt, 0])
-	    stair(stairLen=stairLen, stairHt=stairHt,
+	    stair(stairLen=stairLen + epsilon, stairHt=stairHt,
 		  stairWidth = stairWidth, incutLen = incutLen);
     }
 }	      
@@ -139,7 +129,7 @@ module stairsSidewall(stairLen = 0,
 		      sidewallWidth = 5, 
 		      sidewallHt = 20)
 {
-    linear_extrude(height = sidewallWidth)
+    linear_extrude(height = sidewallWidth + epsilon)
 	polygon(points = [[0,0], [0, sidewallHt + stairHt],
 			  [(stairCt - 1) * stairLen, sidewallHt + stairCt * stairHt],
 			  [stairCt * stairLen + incutLen, sidewallHt + stairCt * stairHt],
@@ -151,14 +141,15 @@ module stairsSidewall(stairLen = 0,
 module stair() {
     incutHt = 5;
     bar = 2;
+    myEpsilon = 0;
 
     linear_extrude(height=stairWidth)
 	polygon(points = [[incutLen,0],
 			  [incutLen,incutHt], 
 			  [0, incutHt],
 			  [0, stairHt],
-			  [stairLen+incutLen, stairHt],
-			  [stairLen+incutLen, 0]],
+			  [stairLen+incutLen+myEpsilon, stairHt],
+			  [stairLen+incutLen+myEpsilon, 0]],
 		paths = [[0,1,2,3,4,5,0]]);
 }
 

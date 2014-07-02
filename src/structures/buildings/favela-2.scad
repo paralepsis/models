@@ -9,37 +9,68 @@
 use <building.scad>
 use <stairs.scad>
 use <roof.scad>
+use <ceiling-shim.scad>
 
 /*
 translate([169,78,69]) rotate([0,0,180]) color("red")
 import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 */
 
+// firstFloor();
+// secondFloor();
+// myStairs();
+// myRoof();
+// roofOnly();
+stairsOnly();
+
+/* Roof Shim */
+// ceilingShim(xDim=100,yDim=100);
+
+/* Upper Room Shim */
+// ceilingShim(xDim=152.4,yDim=100);
+
+module roofOnly() {
+    rotate([-94,0,0]) translate([0,-104,-130]) myRoof();
+}
+
 /* First Floor */
-building(firstFloorDims,
-	 firstFloorWindows,
-	 firstFloorDoors,
-	 doEars = 0);
+module firstFloor() {
+    building(firstFloorDims,
+	     firstFloorWindows,
+	     firstFloorDoors,
+	     doEars = false);
+}
 
 /* Second Floor */
-translate([0,0,65]) {
-    secFloorBuilding(secondFloorDims,
-		     secondFloorWindows,
-		     secondFloorDoors,
-		     doEars = 0);
+module secondFloor() {
+    translate([0,0,65]) {
+	secFloorBuilding(secondFloorDims,
+			 secondFloorWindows,
+			 secondFloorDoors,
+			 doEars = false);
+    }
 }
 
 /* Exterior Stairs */
-translate([152.4,0,0,]) {
-    easyStairs(stairsLen = 80,
-	       extraTopLanding = 20,
-	       stairsHt = 69,
-	       stairsWidth = 35,
-	       sidewallThick = 7);
+
+module stairsOnly() {
+    rotate([0,90,0]) translate([-152.4 - 35 - 7,0.0]) myStairs();
+}
+
+module myStairs() {
+    translate([152.4,0,0]) {
+	easyStairs(stairsLen = 80,
+		   extraTopLanding = 20,
+		   stairsHt = 69,
+		   stairsWidth = 35,
+		   sidewallThick = 7);
+    }
 }
 
 /* Roof */
-translate([-4,-4,65*2]) corRoof(xDim = 100+8, yDim = 100+8, angle=4);
+module myRoof() {
+    translate([-4,-4,65*2]) corRoof(xDim = 100+8, yDim = 100+8, angle=4);
+}
 
 /******** FIRST FLOOR PARAMETERS ********/
 
@@ -115,11 +146,11 @@ module secFloorBuilding(dims = [0,0,0,0,0],
 		    if (doEars) {
 			translate([0,0,earThick/2])
 			    cylinder(r=wallThick, h=earThick,center=true);
-			translate([xDim,0,earThick/2])
+			translate([152.4,0,earThick/2])
 			    cylinder(r=wallThick, h=earThick,center=true);
 			translate([0,yDim,earThick/2])
 			    cylinder(r=wallThick, h=earThick,center=true);
-			translate([xDim,yDim,earThick/2])
+			translate([152.4,yDim,earThick/2])
 			    cylinder(r=wallThick, h=earThick,center=true);
 		    }
 		}
