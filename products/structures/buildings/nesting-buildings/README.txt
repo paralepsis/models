@@ -25,6 +25,14 @@ Building 1:
   near a corner. This was removed with MeshLab.
 - All model components were centered with Pleasant3D.
 
+Building 2:
+- The corresponding source models are in
+  src/structures/buildings/favela-3.scad.
+- This version adds a window on the left side of the building.
+- All model components have been passed through NetFabb Basic.
+- There are two versions of the building core, with and without ears.
+- All model components were centered with Pleasant3D.
+
 Building 3:
 - The corresponding source model is in
   src/structures/buildings/favela-ruins-1.scad.
