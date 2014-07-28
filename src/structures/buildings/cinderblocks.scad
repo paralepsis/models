@@ -10,7 +10,7 @@
  */
 use <damage.scad>
 
-mortarRad = 0.5;
+mortarRad = 0.3;
 
 module quickCinderblockPatch(myAngle = 0, myScale=0.6, adjust=0) {
     render() cbPatch(adjust=adjust) rotate([0,myAngle,0])
@@ -34,7 +34,7 @@ module cbPatch(adjust=0) {
 module cinderblockPattern() {
     height = 120;
     width = 145;
-    cinderblockHeight = 6;
+    cinderblockHeight = 4;
     cinderblockWidth = 2 * cinderblockHeight;
 
     for (row = [0 : floor(height / cinderblockHeight)]) {
