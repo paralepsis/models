@@ -4,13 +4,17 @@ use <barrel.scad>
 
 // translate([40,10,0]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
-testing();
-
-
+final();
 
 module final() {
-	barrels();
-	texturedBeveledBase();
+	difference() {
+	translate([0,0,-2]) {
+		barrels();
+		texturedBaseInterior();
+	}
+	translate([0,0,-3]) baseExtrusion(height=3);
+	}
+	// texturedBeveledBase();
 }
 
 module testing() {
@@ -24,7 +28,7 @@ module testing() {
 /********* BARREL MODULES *********/
 
 module barrels() {
-	xyz = [[7.5,30.1,5.3], [22.5,30.1,4.8], [60,30,6],
+	xyz = [[9.5,30.1,5.0], [22.5,30.1,4.8], [60,30,6],
 		  [68.5,19,5], [78,12,5]];
 
 	for (loc = xyz) {
