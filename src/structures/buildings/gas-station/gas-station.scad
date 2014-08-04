@@ -6,7 +6,7 @@
  * Attribution-ShareAlike 4.0 International Public License.
  */
 
-use <building.scad>
+use <../building.scad>
 
 xDim = 150;
 yDim = 120;
