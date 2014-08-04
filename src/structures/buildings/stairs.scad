@@ -57,7 +57,7 @@ module easyStairs(stairsLen,
 		  floorThick = 4,
 		  sidewallThick = 5)
 {
-    ct = floor(stairsHt / 7); // 6 is a decent height for a stair
+    ct = floor(stairsHt / 9); // 6 is a decent height for a stair
     stairHt = stairsHt / ct;
     incutLen = 12;
     sidewallHt = 20;
@@ -73,8 +73,10 @@ module easyStairs(stairsLen,
 
     /* Tack on additional landing space */
     if (extraTopLanding > 0) {
-	translate([0, stairsLen, stairsHt - floorThick])
-	    cube([stairsWidth, extraTopLanding, floorThick]);
+        // Note: a little epsilon was necessary for OpenSCAD to build.
+        //
+	translate([0, stairsLen - 0.001, stairsHt - floorThick])
+	    cube([stairsWidth, extraTopLanding + 0.001, floorThick]);
 	translate([stairsWidth, stairsLen, (ct - 1) * stairHt])
 	    cube([sidewallThick,
 		  extraTopLanding,
@@ -139,7 +141,7 @@ module stairsSidewall(stairLen = 0,
 }
 
 module stair() {
-    incutHt = 5;
+    incutHt = 7;
     bar = 2;
     myEpsilon = 0;
 
