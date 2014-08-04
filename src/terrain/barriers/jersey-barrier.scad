@@ -1,12 +1,9 @@
-/* jersey.scad -- Jersey barrier
+/* jersey-barrier.scad -- Jersey barrier, set of eight, four with damage.
  *
  * Copyright (C) Robert B. Ross, 2014
  *
  * This software is released under the Creative Commons 
  * Attribution-ShareAlike 4.0 International Public License.
- *
- * TODO:
- * - Clean up the globals.
  */
 use <holeCutout.scad>
 use <holeCutout2.scad>
