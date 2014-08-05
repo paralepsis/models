@@ -16,6 +16,7 @@ myHeight = 65;
 
 /* Whole Building */
 wholeBuilding();
+// marine();
 
 /* First Floor Only */
 // wholeBuilding(secondFloor = 0, roof = 0);
@@ -25,6 +26,12 @@ wholeBuilding();
 
 /* Roof Only */
 // translate([-78 ,-104,-2 * myHeight]) wholeBuilding(firstFloor = 0, secondFloor = 0);
+
+/******** QUICK MARINE FOR TESTING/SIZING ********/
+module marine() {
+    translate([99,80,69]) rotate([0,0,180])
+        color("red") import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
+}
 
 /******** MODULES TO BUILD THE COMPLETE BUILDING ********/
 
