@@ -8,7 +8,7 @@
  * TODO:
  * - Clean up the globals.
  */
-use <damage.scad>
+use <damage/damage.scad>
 
 mortarRad = 0.3;
 

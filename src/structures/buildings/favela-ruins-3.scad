@@ -6,7 +6,7 @@
  * Attribution-ShareAlike 4.0 International Public License.
  */
 use <building.scad>
-use <bigSlice.scad>
+use <damage/bigSlice.scad>
 use <cinderblocks.scad>
 
 /******** GENERATE THE BUILDING ********/

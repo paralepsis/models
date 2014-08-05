@@ -8,7 +8,7 @@
 
 use <building.scad>
 use <roof.scad>
-use <holeCutout.scad>
+use <damage/holeCutout.scad>
 
 myHeight = 65;
 

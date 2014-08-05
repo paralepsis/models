@@ -7,7 +7,7 @@
  */
 
 use <building.scad>
-use <damage.scad>
+use <damage/damage.scad>
 use <roof.scad>
 use <stairs.scad>
 use <ceiling-shim.scad>
