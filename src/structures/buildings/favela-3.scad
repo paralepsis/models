@@ -23,14 +23,14 @@ module marine() {
 
 firstFloor();
 // secondFloor();
+// stairs();
 // patio();
 
 /* Second Floor and Roof Shims */
 // ceilingShim(xDim=100,yDim=127);
 
-// roof(doEars=false);
+translate([0,0,-1 * myHeight]) roof(doEars=false);
 
-stairs();
 
 /******** BUILDING COMPONENT MODULES ********/
 
@@ -140,7 +140,7 @@ f1Dims = [127, // xdim
  * 
  */
 f1Windows = [[[0, 30, 0], [0,0,-90]],
-	     // [[0, 70, 0], [0,0,-90]], // this one is removed for 2 story
+	     [[0, 70, 0], [0,0,-90]], // this one is removed for 2 story
 	     [[90,93,0], [0,0,0]],
 	     ];
 
