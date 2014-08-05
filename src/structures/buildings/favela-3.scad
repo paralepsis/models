@@ -30,6 +30,8 @@ firstFloor();
 
 // roof(doEars=false);
 
+stairs();
+
 /******** BUILDING COMPONENT MODULES ********/
 
 /* First Floor */
@@ -138,7 +140,7 @@ f1Dims = [127, // xdim
  * 
  */
 f1Windows = [[[0, 30, 0], [0,0,-90]],
-	     [[0, 70, 0], [0,0,-90]], // this one is removed for 2 story
+	     // [[0, 70, 0], [0,0,-90]], // this one is removed for 2 story
 	     [[90,93,0], [0,0,0]],
 	     ];
 
