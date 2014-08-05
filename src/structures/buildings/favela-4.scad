@@ -24,7 +24,7 @@ wholeBuilding();
 // translate([0,0,-1 * myHeight]) wholeBuilding(firstFloor = 0, roof = 0);
 
 /* Roof Only */
-// rotate([-94,0,0]) translate([-78 ,-104,-2 * myHeight]) wholeBuilding(firstFloor = 0, secondFloor = 0);
+// translate([-78 ,-104,-2 * myHeight]) wholeBuilding(firstFloor = 0, secondFloor = 0);
 
 /******** MODULES TO BUILD THE COMPLETE BUILDING ********/
 
@@ -49,7 +49,8 @@ module almostWholeBuilding(firstFloor = 1, secondFloor = 1, roof = 1) {
 		     windows = firstFloorWindows,
 		     doors = firstFloorDoors,
 		     doEars = 0,
-		     doBackWall = 0);
+		     doBackWall = 0,
+		     doRemovableBackWall = 0);
 
 	    /* roughen floor edge */
 	    translate([-15,70,0]) rotate([0,0,-10]) floorRoughen();
@@ -85,7 +86,8 @@ module secondFloor() {
 		 windows = secondFloorWindows,
 		 doors = secondFloorDoors,
    		 doEars = 0,
-		 doBackWall = 0);
+		 doBackWall = 0,
+		 doRemovableBackWall = 0);
 }
 
 /* Dims is a vector holding dimensions of the building 

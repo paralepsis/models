@@ -21,14 +21,14 @@ module marine() {
 	color("red") import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 }
 
-// firstFloor();
+firstFloor();
 // secondFloor();
 // patio();
 
 /* Second Floor and Roof Shims */
 // ceilingShim(xDim=100,yDim=127);
 
-roof(doEars=true);
+// roof(doEars=false);
 
 /******** BUILDING COMPONENT MODULES ********/
 
@@ -38,7 +38,7 @@ module firstFloor() {
 	building(dims = f1Dims,
 		 windows = f1Windows, 
 		 doors = f1Doors,
-		 doEars = true);
+		 doEars = false);
 	
 	difference() {
 	    translate([124,34,-14]) rotate([0,-25,90]) scale([.8,1,1])
@@ -138,6 +138,7 @@ f1Dims = [127, // xdim
  * 
  */
 f1Windows = [[[0, 30, 0], [0,0,-90]],
+	     [[0, 70, 0], [0,0,-90]], // this one is removed for 2 story
 	     [[90,93,0], [0,0,0]],
 	     ];
 

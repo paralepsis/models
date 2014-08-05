@@ -1,14 +1,27 @@
+/* favela-ruins-1.scad
+ *
+ * Copyright (C) Robert B. Ross, 2014
+ *
+ * This software is released under the Creative Commons 
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
 use <building.scad>
 use <bigCube.scad>
+use <cinderblocks.scad>
 
-difference() {
+/******** GENERATE THE BUILDING ********/
+
+render() difference() {
     building(b1Dims, b1Windows, b1Doors,
                 doBackWall = false,
                 doRemovableBackWall = false,
 		doEars = false);
 
+    /* deform the building */
     translate([0,55,0]) rotate([-130,0,-35]) translate([-128.5,-128.5,-300]) bigCube();
 }
+
+/******** BUILDING ARRAY DEFINITIONS ********/
 
 /* Dims is a vector holding dimensions of the building 
  * [X, Y, height, wall thickness, floor/roof thickness].
@@ -30,3 +43,14 @@ b1Windows = [[[93, 70, 0], [0,0,-90]]];
  */
 b1Doors = [[[40, 93, 0], [0,0,0], [1,0,0]],
           ];
+
+
+/*
+ * Local variables:
+ *  mode: C
+ *  c-indent-level: 4
+ *  c-basic-offset: 4
+ * End:
+ *
+ * vim: ts=8 sts=4 sw=4 expandtab
+ */
