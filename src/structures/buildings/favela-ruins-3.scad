@@ -1,4 +1,4 @@
-/* favela-ruins-1.scad
+/* favela-ruins-3.scad
  *
  * Copyright (C) Robert B. Ross, 2014
  *

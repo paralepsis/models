@@ -24,15 +24,15 @@ render() translate([0,0,62]) building(f2Dims, f2Windows, f2Doors,
     }
 
     /* damage */
-    //translate([121.5,350,60]) rotate([135,0,0]) rotate([0,0,90]) bigSlice2();
-    //translate([327,111.5,130]) rotate([0,-145,0]) bigSlice2();
-    //translate([-50,-13,382]) rotate([213,0,-20]) bigCube();
+    translate([121.5,350,60]) rotate([135,0,0]) rotate([0,0,90]) bigSlice2();
+    translate([327,111.5,130]) rotate([0,-145,0]) bigSlice2();
+    translate([-50,-13,382]) rotate([213,0,-20]) bigCube();
 
     /* cinderblock patch */
+    translate([0,75,50]) rotate([0,0,-90]) quickCinderblockPatch(myAngle=0);
+    translate([119,23,64]) rotate([0,0,90]) quickCinderblockPatch(myAngle=0);
 
 }
-%    translate([0,75,50]) rotate([0,0,-90]) quickCinderblockPatch(myAngle=0);
-% quickCinderblockPatch(myAngle=90);
 
 //    % translate([121.5,70,265]) rotate([190,0,0]) rotate([0,0,90]) bigSlice2();
 

@@ -5,7 +5,7 @@
 */
 
 module bigSlice2() {
-   polyhedron( points = [
+   scale([1,1.05,1]) polyhedron( points = [
       [0.000, 0.000, 152.826],
       [0.000, 0.000, 0.0],
       [1.004, 0.000, 153.344],

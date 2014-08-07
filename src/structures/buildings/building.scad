@@ -16,7 +16,7 @@
 wallThick = 7;    // thickness (mm) of exterior walls
 wallHeight = 65;  // height (mm) of exterior walls
 roofThick = 4;    // height (mm) of roof and/or floors
-epsilon = 0.001;  // occasionally used to ensure that things overlap
+epsilon = 0.01;  // occasionally used to ensure that things overlap
 
 /* ear parameters -- control how corners are tacked down to build plate
  */
@@ -208,11 +208,11 @@ module buildingBackWall(xDim = 0, yDim = 0, fudge = true) {
 	polygon(points = [[0,0], [xDim,0], [xDim, widthAroundNotch],
 			  [xDim - wallThick - notchLen - bwFudge,
 			   widthAroundNotch], // 3
-			  [xDim - wallThick - notchLen - bwFudge, // 4
+			  [xDim - wallThick - notchLen - bwFudge,
+			   backWallThick - widthAroundNotch], // 4
+			  [xDim - wallThick - bwFudge,
 			   backWallThick - widthAroundNotch], // 5
-			  [xDim - wallThick - bwFudge,  // 6
-			   backWallThick - widthAroundNotch], // 7
-			  [xDim - wallThick - bwFudge, backWallThick], // 8
+			  [xDim - wallThick - bwFudge, backWallThick], // 6
 			  [wallThick + bwFudge, backWallThick],
 			  [wallThick + bwFudge,
 			   backWallThick - widthAroundNotch],
