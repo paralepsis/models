@@ -7,37 +7,53 @@
  */
 use <building.scad>
 use <damage/bigSlice2.scad>
+use <damage/bigSlice.scad>
 use <damage/bigCube.scad>
 use <cinderblocks.scad>
 
-difference() {
-    union() {
-render() building(f1Dims, f1Windows, f1Doors,
-	 doBackWall = true,
-	 doRemovableBackWall = true,
-	 doEars = false);
+cached = 0;
 
-render() translate([0,0,62]) building(f2Dims, f2Windows, f2Doors,
-	 doBackWall = false,
-	 doRemovableBackWall = false,
-	 doEars = false);
-    }
-
-    /* damage */
-    translate([121.5,350,60]) rotate([135,0,0]) rotate([0,0,90]) bigSlice2();
-    translate([327,111.5,130]) rotate([0,-145,0]) bigSlice2();
-    translate([-50,-13,382]) rotate([213,0,-20]) bigCube();
-
-    /* cinderblock patch */
-    translate([0,75,50]) rotate([0,0,-90]) quickCinderblockPatch(myAngle=0);
-    translate([119,23,64]) rotate([0,0,90]) quickCinderblockPatch(myAngle=0);
-
+if (cached) {
+    import("./favela-ruins-4-cache.stl");
 }
+else {
+    difference() {
+        union() {
+	    difference() {
+		render() building(f1Dims, f1Windows, f1Doors,
+				  doBackWall = true,
+				  doRemovableBackWall = true,
+				  doEars = false);
+		translate([0,-8,270]) rotate([0,180,0]) translate([-150,0,0])
+		    bigSlice();
+		translate([73,1,62]) rotate([0,0,0])
+		    quickCinderblockPatch2(myAngle=60);
+	    }
 
-//    % translate([121.5,70,265]) rotate([190,0,0]) rotate([0,0,90]) bigSlice2();
-
-
-// rotate([0,180,0]) bigSlice();
+	    difference() {
+		render() translate([0,0,62])
+		    building(f2Dims, f2Windows, f2Doors,
+			     doBackWall = false,
+			     doRemovableBackWall = false,
+			     doEars = false);
+		translate([200,-210,61.5]) rotate([90,0,173]) bigSlice();
+	    }
+	}
+    
+        /* damage */
+        translate([121.5,350,60]) rotate([135,0,0]) rotate([0,0,90]) bigSlice2();
+        translate([327,111.5,130]) rotate([0,-145,0]) bigSlice2();
+        translate([-50,-13,382]) rotate([213,0,-20]) bigCube();
+    
+        /* cinderblock patch */
+        translate([1,75,50]) rotate([0,0,-90]) quickCinderblockPatch(myAngle=0);
+        translate([119,23,64]) rotate([0,0,90]) quickCinderblockPatch(myAngle=0);
+	translate([-24,119,70]) rotate([0,0,180])
+	    quickCinderblockPatch2(adjust=4,myAngle=30);
+	translate([1,135,70]) rotate([0,0,-90])
+	    quickCinderblockPatch2(adjust=0,myAngle=30);
+    }
+}
 
 /******** BUILDING ARRAY DEFINITIONS ********/
 
