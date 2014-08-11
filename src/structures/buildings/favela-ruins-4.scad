@@ -11,15 +11,19 @@ use <damage/bigSlice.scad>
 use <damage/bigCube.scad>
 use <cinderblocks.scad>
 
-cached = 0;
+cached = 1;
+firstFloor = 0;
+secondFloor = 1;
 
 if (cached) {
-    import("./favela-ruins-4-cache.stl");
+    import("./favela-ruins-4-fl1.stl");
+    import("./favela-ruins-4-fl2.stl");
+    % translate([-6,-6,62]) cube([140,140,0.5]);
 }
 else {
     difference() {
         union() {
-	    difference() {
+	    if (firstFloor) difference() {
 		render() building(f1Dims, f1Windows, f1Doors,
 				  doBackWall = true,
 				  doRemovableBackWall = true,
@@ -30,7 +34,7 @@ else {
 		    quickCinderblockPatch2(myAngle=60);
 	    }
 
-	    difference() {
+	    if (secondFloor) difference() {
 		render() translate([0,0,62])
 		    building(f2Dims, f2Windows, f2Doors,
 			     doBackWall = false,
