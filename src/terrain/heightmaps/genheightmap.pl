@@ -14,6 +14,7 @@ GetOptions('rows=i' => \$opt_rows,
 	   'height=f' => \$opt_height,
 	   'wave=f{2}' => \@opt_wave,
 	   'peak=f{2}' => \@opt_peak,
+	   'sin=f' => \$opt_sin,
 	   'random=f' => \$opt_random,
 	   'xgrad=f{2}' => \@opt_xgrad);
 
@@ -22,15 +23,26 @@ for ($i = 0; $i < $opt_rows; $i++) {
 	if (defined $opt_random) {
             $bonus = rand($opt_random);	
 	}
+	elsif (defined $opt_sin) {
+	    $dist = sqrt(abs($opt_rows/2 - $i)**2 + abs($opt_cols/2 - $j)**2);
+	    $max = sqrt(($opt_rows/2)**2 + ($opt_cols/2)**2);
 
-	if (defined $opt_xgrad[0]) {
+	    printf "%0.3f ", $opt_sin * cos($dist * 3.14159 / $max);
+
+	    # printf "%0.3f ", $opt_sin * (sin(($i * 3.14159) / ($opt_rows-1))
+	    #	+ sin(($j * 3.14159) / ($opt_cols-1))) / 2;
+	}
+
+	elsif (defined $opt_xgrad[0]) {
 	    printf "%0.3f ", $opt_xgrad[0] * ((($opt_cols-1) - $j) / ($opt_cols-1)) + $opt_xgrad[1] * (1 - ((($opt_cols-1) - $j) / ($opt_cols-1))) + $bonus;
 	}
+
 	elsif (defined $opt_wave[0]) {
 	    printf "%0.3f ", $opt_wave[0] * (abs((($opt_cols -1)/2 - ($j))) / (($opt_cols-1)/2)) +
 				$opt_wave[1] * (1 - (abs((($opt_cols-1)/2 - ($j))) / (($opt_cols-1)/2))) +
                                 $bonus;
 	}
+
 	elsif (defined $opt_peak[0]) {
 	    $proximity = (($j < $opt_cols / 2) ? $j : $opt_cols - $j - 1) +
 			 (($i < $opt_rows / 2) ? $i : $opt_rows - $i - 1);
