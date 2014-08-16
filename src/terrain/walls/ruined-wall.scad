@@ -74,7 +74,8 @@ module deformedWall(wallLen = 208) {
     difference() {
 	intersection() {
 	    cube([wallLen, 7, 65]);
-	    translate([-48,-0.5, -100]) t100h8();
+	    translate([-48,-0.5, -100]) h100t8();
+	    // translate([-48,-0.5, -100]) t100h8();
 	}
 	translate([107,0,3])quickDoorOpening();
     }
