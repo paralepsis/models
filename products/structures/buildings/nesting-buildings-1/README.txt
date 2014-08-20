@@ -44,3 +44,10 @@ Building 4:
   src/structures/buildings/favela-ruins-2.scad.
 - Model has been passed through NetFabb Basic.
 - Model was centered with Pleasant3D.
+
+Building 5:
+- The corresponding source model is in
+  src/structures/buildings/favela-ruins-2.scad.
+- This version is meant to be used as a second story for Building 3.
+- Model has been passed through NetFabb Basic.
+- Model was centered with Pleasant3D.
