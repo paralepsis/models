@@ -7,9 +7,12 @@
  */
 use <building.scad>
 use <damage/bigCube.scad>
+use <damage/bigSlice2.scad>
 use <cinderblocks.scad>
 
-mirror([1,0,0]) 
+// translate([-1,1,0]) rotate([0,0,90]) translate([0,0,-62]) import("/Users/rross/git/models/products/structures/buildings/nesting-buildings-1/building-3.stl");
+
+// mirror([1,0,0]) 
 render() difference() {
     translate([-50,-50,0]) render () building(b1Dims, b1Windows, b1Doors,
                 doBackWall = false,
@@ -17,11 +20,18 @@ render() difference() {
 		doEars = false);
 
     /* deform building */
-    rotate([-145,0,45]) translate([-118.5,-128.5,-290]) bigCube();
-    rotate([0,0,90]) {
-      translate([49,-14.5,-8.5]) rotate([0,0,90])
+    translate([0,3,0]) rotate([-145,0,45]) translate([-118.5,-128.5,-290]) bigCube();
+
+    /* additional cuts for stacking on top of nested building set 1 #3 */
+    translate([8,0,0]) rotate([0,0,7]) translate([136,70,-6])
+	rotate([90,00,270]) bigSlice2();
+    translate([141,41,20]) rotate([0,260,0]) bigSlice2();
+
+    /* cinderblock patch */
+    if (1) rotate([0,0,90]) {
+      translate([49,-14.5,-0.5]) rotate([0,0,90])
           quickCinderblockPatch(adjust=4);
-      translate([113.5,49,-8.5]) rotate([0,0,180])
+      translate([113.5,49,-0.5]) rotate([0,0,180])
           quickCinderblockPatch(adjust=0); // was -1
     }
 }
