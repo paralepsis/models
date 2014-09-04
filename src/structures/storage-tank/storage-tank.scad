@@ -4,21 +4,26 @@
  *
  * This software is released under the Creative Commons
  * Attribution-ShareAlike 4.0 International Public License.
+ *
+ * Notes:
+ * - Original model had tankRad of 50 and a roundTop().
  */
 
 /******** GLOBALS ********/
 tankHt = 100;
-tankRad = 50;
+tankRad = 40;
 tankThick = 1.6;
 $fn=360; // NOTE: COMMENT OUT WHEN EDITING TO SPEED RENDERING, 360 is crazy
+// $fn=60; // NOTE: COMMENT OUT WHEN EDITING TO SPEED RENDERING, 360 is crazy
 
 /******** BUILD SOMETHING ********/
-color("grey") tank();
-color("grey") tankTop();
-marine();
-// tankControls();
 
-// tankPipe();
+rotate([0,0,-55]) {
+    color("grey") tank();
+//    color("grey") flatTop();
+}
+
+// marine();
 
 /******** MODULES ********/
 
@@ -59,7 +64,7 @@ module tank() {
 	}
 }
 
-module tankTop() {
+module roundTop() {
 	sphereRad = tankRad/sin(atan(tankRad/tankHt));
 	difference() {
 		sphere(r=sphereRad);
@@ -67,10 +72,24 @@ module tankTop() {
 			cube([sphereRad*2,sphereRad*2,tankHt + sphereRad], center=false);
 	}
 
+	/* little access port on top */
 	translate([tankRad/3,-1 * tankRad/3,tankHt]) {
 		cylinder(r=tankRad/5,h=sphereRad - tankHt);
 		for (i = [0 : 8]) {
 			rotate([0,0,45 * i]) translate([tankRad/5 - 2, 0, 0]) cylinder($fn=6,r=1, h=sphereRad - tankHt + 0.6);
+		}
+	}
+}
+
+module flatTop() {
+	translate([0,0,tankHt]) cylinder(r=tankRad,h=tankThick);
+
+	/* little access port on top */
+	translate([tankRad/3,-1 * tankRad/3,tankHt+tankThick - 0.01]) {
+		cylinder(r=10,h=1);
+		for (i = [0 : 8]) {
+			rotate([0,0,45 * i]) translate([8, 0, 0])
+				cylinder($fn=6,r=1, h=1.5);
 		}
 	}
 }
@@ -111,7 +130,7 @@ module tankPipes() {
 module tankPipe(pipeRad=8, pipeHt=20, brim=true) {
 	translate([0,tankRad+pipeHt-1,0]) {
 		translate([0,-1 * pipeHt,pipeHt]) rotate([-90,0,0]) {
-			cylinder(r=1.4 * pipeRad, h=2);
+			cylinder(r=1.4 * pipeRad, h=4, center=true);
 			for (i = [0 : 8]) {
 				rotate([0,0,45 * i]) translate([1.2 * pipeRad, 0, 0]) 
 					cylinder($fn=6,r=1, h=2 + 0.6);
