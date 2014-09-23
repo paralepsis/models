@@ -35,23 +35,28 @@ part = "bottom"; // [bottom, top, pin]
 
 /* [Hidden] */
 
-// $fn=50;
+$fn=120;
 extRad = 20; // in mm
 outerPostRad = 4;
 innerPostRad = 2;
 
-if (Maneuver_1[0] == "2") {
-    echo("Speed 3");
+/* MakerBot scheme for creating multiple STLs involves a "part" variable. */
+if (1) {
+    if (part == "bottom") { dialBottom(); }
+    else if (part == "top") { dialTop(); }
+    else if (part == "pin") { pin(); }
 }
-
-if (part == "bottom") { dialBottom(); }
-else if (part == "top") { dialTop(); }
-else if (part == "pin") { pin(); }
-
-// rotate([0,0,360/16*1]) translate([0,0,2.1]) dialTop();
-
-// translate([0,0,20]) rotate([180,0,0]) pin();
-
+else {
+    /* cut-away view */
+    difference() {
+	union() {
+	    dialBottom();
+	    rotate([0,0,360/16*1]) translate([0,0,2.1]) dialTop();
+	    translate([0,0,5.5]) rotate([180,0,0]) pin();
+	}
+	translate([0,0,-0.01]) cube([40,40,40], center=false);	
+    }
+}
 
 /******** DIAL MODULES ********/
 
@@ -59,7 +64,7 @@ module dialBottom() {
     difference() {
 	union() {
 	    cylinder(r=extRad,h=2);
-	    cylinder(r=outerPostRad, h=4.9);
+	    cylinder(r=outerPostRad, h=4.2);
 	}
 	translate([0,0,1]) cylinder(r=innerPostRad, h=7);
 	translate([-0.2,0,2]) cube([0.4, outerPostRad+0.01, 7+0.01]);
@@ -70,11 +75,11 @@ module dialBottom() {
 module dialTop() {
     difference() {
 	union() {
-	    cylinder(r=extRad,h=3);
+	    cylinder(r=extRad,h=2.3);
 	}
 	union() {
 	    cylinder(r=outerPostRad, h=7);
-	    cylinder(r=extRad - 2, h=1.5);
+	    cylinder(r=extRad - 2, h=1.2);
 	    translate([0,7,0.01]) linear_extrude(height=3.02)
 		polygon(points = [[-2,1], [-4,11], [4,11], [2,1]],
 			paths = [[0,1,2,3,0]]);
@@ -84,7 +89,7 @@ module dialTop() {
 
 module pin() {
     cylinder(r=outerPostRad+2, h=1);
-    cylinder(r=innerPostRad, h=5);
+    cylinder(r=innerPostRad, h=4);
 }
 
 /******** MANEUVER MODULES ********/
@@ -129,8 +134,8 @@ module maneuver(m) {
 /******** ARROW MODULES ********/
 
 module straightIcon() {
-    straightPoints = [[-0.6,0], [-0.6,3], [-1.4,3], [0,4.4],
-		      [1.4,3], [0.6,3], [0.6,0]];
+    straightPoints = [[-0.8,0], [-0.8,3], [-1.6,3], [0,4.6],
+		      [1.6,3], [0.8,3], [0.8,0]];
     straightPath = [[0,1,2,3,4,5,6,0]];
 
     translate([0,14,0]) linear_extrude(height=3) {
