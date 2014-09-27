@@ -32,7 +32,7 @@ Maneuver_14 = "4S"; // [0X: Stop, 1L: 1 Left Turn, 1l: 1 Left Bank, 1S: 1 Straig
 Maneuver_15 = "5S"; // [0X: Stop, 1L: 1 Left Turn, 1l: 1 Left Bank, 1S: 1 Straight, 1r: 1 Right Bank, 1R: 1 Right Turn, 1K: 1 K-Turn, 2L: 2 Left Turn, 2l: 2 Left Bank, 2S: 2 Straight, 2r: 2 Right Bank, 2R: 2 Right Turn, 2K: 2 K-Turn, 3L: 3 Left Turn, 3l: 3 Left Bank, 3S: 3 Straight, 3r: 3 Right Bank, 3R: 3 Right Turn, 3K: 3 K-Turn, 4S: 4 Straight, 4K: 4 K-Turn, 5S: 5 Straight, 5K: 5 K-Turn ]
 Maneuver_16 = "5K"; // [0X: Stop, 1L: 1 Left Turn, 1l: 1 Left Bank, 1S: 1 Straight, 1r: 1 Right Bank, 1R: 1 Right Turn, 1K: 1 K-Turn, 2L: 2 Left Turn, 2l: 2 Left Bank, 2S: 2 Straight, 2r: 2 Right Bank, 2R: 2 Right Turn, 2K: 2 K-Turn, 3L: 3 Left Turn, 3l: 3 Left Bank, 3S: 3 Straight, 3r: 3 Right Bank, 3R: 3 Right Turn, 3K: 3 K-Turn, 4S: 4 Straight, 4K: 4 K-Turn, 5S: 5 Straight, 5K: 5 K-Turn ]
 
-part = "bottom"; // [bottom, top, pin]
+part = "pin"; // [bottom, top, pin]
 
 /* [Hidden] */
 
@@ -40,7 +40,7 @@ $fn=120;
 extRad = 20; // in mm
 outerPostRad = 4;
 innerPostRad = 2;
-myScale=1;
+myScale=1.1;
 
 /* MakerBot scheme for creating multiple STLs involves a "part" variable. */
 if (1) {
@@ -53,8 +53,8 @@ else {
     difference() {
 	union() {
 	    dialBottom();
-	    rotate([0,0,360/16*8]) translate([0,0,4.4]) rotate([180,0,0]) dialTop();
-	    translate([0,0,5.5]) rotate([180,0,0]) pin();
+	    rotate([0,0,360/16*8]) translate([0,0,5.4]) rotate([180,0,0]) dialTop();
+	    translate([0,0,6.5]) rotate([180,0,0]) pin();
 	}
 	translate([0,-40,-0.01]) cube([40,40,40], center=false);	
     }
@@ -65,13 +65,13 @@ else {
 module dialBottom() {
     difference() {
 	union() {
-	    cylinder(r=extRad,h=2);
-	    cylinder(r=outerPostRad, h=4.2);
+	    cylinder(r=extRad,h=3);
+	    cylinder(r=outerPostRad, h=5.2);
 	}
-	translate([0,0,1]) cylinder(r=innerPostRad, h=7);
-	translate([-0.2,0,2]) cube([0.4, outerPostRad+0.01, 7+0.01]);
+	translate([0,0,2]) cylinder(r=innerPostRad, h=7);
+	translate([-0.2,0,3]) cube([0.4, outerPostRad+0.01, 7+0.01]);
     }
-    maneuvers();
+    translate([0,0,1]) maneuvers();
 }
 
 module dialTop() {
@@ -83,15 +83,17 @@ module dialTop() {
 	    translate([0,0,-0.01]) cylinder(r=outerPostRad, h=7);
 	    translate([0,0,1.2]) cylinder(r=extRad - 2, h=1.21);
 	    translate([0,7,-0.01]) linear_extrude(height=3.02)
-		polygon(points = [[-2,1], [-4,11], [4,11], [2,1]],
+		polygon(points = [[-2,0], [-4,11], [4,11], [2,0]],
 			paths = [[0,1,2,3,0]]);
 	}
     }
 }
 
 module pin() {
+    pinSlop = 0.15; // pin won't actually fit if precisely same diameter as hole.
+
     cylinder(r=outerPostRad+2, h=1);
-    cylinder(r=innerPostRad, h=4);
+    cylinder(r=innerPostRad - pinSlop, h=4);
 }
 
 /******** MANEUVER MODULES ********/
