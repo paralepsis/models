@@ -40,7 +40,7 @@ $fn=120;
 extRad = 20; // in mm
 outerPostRad = 4;
 innerPostRad = 2;
-myScale=1.2;
+myScale=1;
 
 /* MakerBot scheme for creating multiple STLs involves a "part" variable. */
 if (1) {
@@ -108,7 +108,8 @@ module maneuvers() {
 
 module maneuver(m) {
     // translate([-1.3,9,0]) scale([0.5,0.5,3]) drawtext(m[0]);
-    translate([-1.3,8.5,1.5]) scale([0.4,0.4,3]) write(m[0]);
+    translate([-1.3,8.5,1.5]) scale([0.4,0.4,1]) linear_extrude(height=1.5)
+	write(m[0]);
 
     translate([0,-1,0]) {
 	if (m[1] == "L") {
