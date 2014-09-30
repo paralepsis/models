@@ -22,4 +22,8 @@ Building 2:
 - The corresponding source model is:
   src/structures/buildings/favela-ruins-3.scad
 
+Building 3:
+- The corresponding source model is:
+  src/structures/buildings/favela-ruins-4.scad
+
 
