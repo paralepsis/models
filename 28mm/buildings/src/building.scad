@@ -39,7 +39,7 @@ b1Dims = [100, // xdim
 	  65, // height
 	  7, // wall thickness
 	  4, // floor/roof thickness
-	  0]; // unused
+	  0]; // additional floor tile spacing
 
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 
@@ -71,7 +71,8 @@ module building(dims = [0,0,0,0,0,0],
 	   yDim = dims[1], 
 	   wallHeight = dims[2],
 	   wallThick = dims[3], 
-	   floorThick = dims[4]) {
+	   floorThick = dims[4],
+	   tileSpacing = dims[5]) {
 	difference() {
 	    /* Main Structures */
 	    union() {
@@ -84,13 +85,13 @@ module building(dims = [0,0,0,0,0,0],
 		    translate([wallThick,wallThick + notchFudge,0])
 			tiledFloor(roofXDim = xDim - 2 * wallThick,
 				   roofYDim = yDim - 2 * wallThick - notchFudge,
-				   thick = floorThick);
+				   thick = floorThick, spacing = tileSpacing);
 		}
 		else if (tiledFloor) /* and no removable back wall */ {
 		    translate([wallThick,wallThick,0])
 			tiledFloor(roofXDim = xDim - 2 * wallThick,
 				   roofYDim = yDim - 2 * wallThick,
-				   thick = floorThick);
+				   thick = floorThick, spacing = tileSpacing);
 		}
 		else if (!tiledFloor && doRemovableBackWall) {
 		    /* plain floor (no tiles) */
@@ -232,7 +233,7 @@ module buildingBackWall(xDim = 0, yDim = 0, fudge = true) {
  */
 module tiledFloor(roofXDim = 0,
                   roofYDim = 0, 
-                  thick = 0)
+                  thick = 0, spacing = 0)
 {
     /* create a base floor slightly lower than specified thickness */
     cube([roofXDim,roofYDim,thick-0.5], center=false);
@@ -242,7 +243,8 @@ module tiledFloor(roofXDim = 0,
 	cube([roofXDim, roofYDim, thick]);
 	for (i = [0:(floor(roofXDim / 10)+1)]) {
 	    for (j = [0:(floor(roofYDim/10)+1)]) {
-		translate([10*i,10*j,0]) cube([9.6,9.6,thick], center=false);
+		translate([10*i,10*j,0])
+		    cube([9.6-spacing,9.6-spacing,thick], center=false);
 	    }
 	}
     }

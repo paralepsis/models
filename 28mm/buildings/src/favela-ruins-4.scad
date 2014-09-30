@@ -9,11 +9,12 @@ use <building.scad>
 use <damage/bigSlice2.scad>
 use <damage/bigSlice.scad>
 use <damage/bigCube.scad>
+use <damage/holeCutout2.scad>
 use <cinderblocks.scad>
 
-cached = 1;
-firstFloor = 0;
-secondFloor = 1;
+cached = 0;
+firstFloor = 1;
+secondFloor = 0;
 
 if (cached) {
     import("./favela-ruins-4-fl1.stl");
@@ -41,6 +42,10 @@ else {
 			     doRemovableBackWall = false,
 			     doEars = false);
 		translate([200,-210,61.5]) rotate([90,0,173]) bigSlice();
+    		intersection() {
+  	    	    translate([-30,-24,68]) scale([1.1,1.2,1]) rotate([-90,0,0]) holeCutout2();
+	       	    translate([143,-33,68]) scale([1.1,1.2,1]) rotate([-90,0,0]) mirror([1,0,0]) holeCutout2();
+	        }
 	    }
 	}
     
@@ -68,7 +73,8 @@ f1Dims = [120, // xdim
 	     120, // ydim
 	     62, // height
 	     7, // wall thickness
-	     4]; // floor/roof thickness
+	     4, // floor/roof thickness
+	     0.4]; // additional tile spacing
 
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 
@@ -93,7 +99,8 @@ f2Dims = [120, // xdim
 	     120, // ydim
 	     62, // height
 	     7, // wall thickness
-	     4]; // floor/roof thickness
+	     4, // floor/roof thickness
+	     0.4]; // additional tile spacing
 
 /* Windows is a 3D array holding translate : rotate pairs, one per window.
  * 

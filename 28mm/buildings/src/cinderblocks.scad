@@ -12,20 +12,16 @@ use <damage/damage.scad>
 
 mortarRad = 0.3;
 
-module quickCinderblockPatch(myAngle = 0, myScale=0.6, adjust=0) {
-    render() cbPatch(adjust=adjust) rotate([0,myAngle,0])
-	scale([myScale,1,myScale]) translate([75,-5,70]) wallBreach();
+quickCinderblockPatch2();
+
+module quickCinderblockPatch2(myAngle = 0, myScale=0.6, adjust=0) {
+    render() newCbPatch(adjust=adjust) rotate([0,myAngle,0])
+	scale([myScale,1,myScale]) translate([0,-5,0]) wallBreach();
 }
 
-/* cbPatch() -- create a patch with a cinderblock pattern on the side,
- *              aligned such that the cinderblock pattern is on the XZ
- *              plane. 
- *
- * NOTE: CHILD SHOULD BE ALIGNED WITH SURFACE ON XZ PLANE.
- */
-module cbPatch(adjust=0) {
+module newCbPatch(adjust=0) {
     intersection() {
-	translate([adjust,0,0]) cinderblockPattern();
+	translate([adjust,0,0]) translate([-145/2, 0, -120/2]) cinderblockPattern();
 	translate([0,mortarRad, 0]) children(0);
     }
     children(0);
@@ -46,6 +42,27 @@ module cinderblockPattern() {
 	    }
 	}
     }
+}
+
+/******** OLD VERSION BELOW, DO NOT MODIFY ********/
+
+module quickCinderblockPatch(myScale=0.6, adjust=0) {
+    render() cbPatch(adjust=adjust) rotate([0,myAngle,0])
+	scale([myScale,1,myScale]) translate([75,-5,70]) wallBreach();
+}
+
+/* cbPatch() -- create a patch with a cinderblock pattern on the side,
+ *              aligned such that the cinderblock pattern is on the XZ
+ *              plane. 
+ *
+ * NOTE: CHILD SHOULD BE ALIGNED WITH SURFACE ON XZ PLANE.
+ */
+module cbPatch(adjust=0) {
+    intersection() {
+	translate([adjust,0,0]) cinderblockPattern();
+	translate([0,mortarRad, 0]) children(0);
+    }
+    children(0);
 }
 
 /*
