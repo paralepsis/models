@@ -23,6 +23,7 @@ rotate([0,0,120]) fin();
 
 module body() {
     scale([1.2,1.2,1.2]) {
+	/* main body */
 	color("grey") scale([1.2,1.2,1]) difference() {
 	    cylinder($fn=3, h=6,r=6);
 	    translate([4,-2,-0.01]) cube([2,4,9.1]);
@@ -37,6 +38,7 @@ module body() {
 	    rotate([0,0,270]) bodyDetail1();
 	}
 
+	/* cockpit */
 	rotate([0,0,0]) {
 	    color("black") translate([0,0,8]) cylinder($fn=8, r1=3.3,r2=2.9,h=5);
 	    
@@ -47,17 +49,21 @@ module body() {
 	    color("black") translate([0,0,13]) cylinder($fn=8,r1=2.9,r2=1.2,h=0.6);
 	}
 
-
+	rotate([0,0,30]) translate([3.5,0,8]) cylinder($fn=20,r=0.4,h=2);
+	rotate([0,0,-30]) translate([3.5,0,8]) cylinder($fn=20,r=0.4,h=2);
     }
 }
 
 module bodyDetail1() {
     translate([-0.5,3,0]) cube([1,1.5,3]);
     translate([-1.7/2,0.55,-0.6]) rotate([0,0,0]) cube([1.7,3.8,2]);
+
+    translate([0.2,2.2,1.4]) cube([0.4,2,5]);
+    translate([-0.6,2.2,1.4]) cube([0.4,2,5]);
 }
 
 module fin() {
-    translate([-5.3,0,0.2]) rotate([0,-90,90]) {
+    translate([-5.5,0,0.2]) rotate([0,-90,90]) {
 	color("grey") {
 	/* main fin */
 	translate([0,0,-0.4])
@@ -67,19 +73,19 @@ module fin() {
 
 	/* fin connection to body */
 	translate([0,0,-0.6]) cube([37,1.2,1.2]);
-	translate([-0.2,-1.2,-1.5]) cube([8,1.31,3]);
-	translate([7,-2.3,-0.6]) rotate([0,0,30]) cube([2,2,1.2]);
+	translate([-0.2,-1.4,-1.5]) cube([8,1.51,3]);
+	translate([7,-2.4,-0.6]) rotate([0,0,30]) cube([2,2,1.2]);
 	}
 
 	/* fin detail */
 	color("black") {
 	translate([0,0,-0.6]) linear_extrude(height=1.2)
-	    polygon(points=[[2,2], [4,7], [8.2,7], [8.2,2]],
+	    polygon(points=[[2,2], [4,7], [7.0,7], [7.0,2]],
 		    paths=[[0,1,2,3,0]]);
 	
 	translate([0,0,-0.6]) linear_extrude(height=1.2)
-	    polygon(points=[[9.2,7], [28.5,2], [9.2,2]],
-		    paths = [[0,1,2,0]]);
+	    polygon(points=[[8.5,7], [9.2,7], [28.5,2], [8.5,2]],
+		    paths = [[0,1,2,3,0]]);
 	}
     }
 }
@@ -92,13 +98,13 @@ module connector(internals=true) {
 
     $fn=20;
 
-    translate([bigRad+0.8,0,0]) difference() {
+    color("grey") translate([bigRad+0.8,0,0]) difference() {
         cylinder(r1=bigRad+0.8,r2=bigRad+0.8,h=littleRad+littleHt + bigHt + 1);
 	if (internals) {
 	    translate([0,0,bigHt]) {
 		translate([0,0,littleHt]) sphere(r=littleRad);
-		cylinder(r=littleRad, h=littleHt);
-		translate([0,0,-1*bigHt]) cylinder(r=bigRad, h = bigHt);
+		translate([0,0,-0.01]) cylinder(r=littleRad, h=littleHt+0.01);
+		translate([0,0,-1*bigHt-0.01]) cylinder(r=bigRad, h = bigHt+0.01);
 	    }
         }
     }
