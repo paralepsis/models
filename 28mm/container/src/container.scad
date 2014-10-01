@@ -14,13 +14,11 @@ cornerPostWidth = 4;
 myHeight = 50;
 myWidth = 50;
 myLength = 93;
-miscThick = 0.8; // thickness of bottom, doors, etc.
+miscThick = 0.9; // thickness of bottom, doors, etc.
 epsilon = 0.001;
 
 translate([0,-40,0]) rotate([0,0,180]) color("red")
 import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
-
-translate([0, 0,0]) door(width = myWidth - 2 * cornerPostWidth, height = myHeight - (miscThick + longEdgeSide));
 
 container();
 // topOnly();
@@ -86,6 +84,12 @@ module container(height = myHeight,
 	cube([cornerPostWidth, cornerPostWidth, height], center=false);
     translate([length - cornerPostWidth, width - cornerPostWidth, 0])
 	cube([cornerPostWidth, cornerPostWidth, height], center=false);
+
+    /* door */
+    translate([0, 0,0])
+        door(width = myWidth - 2 * cornerPostWidth,
+	     height = myHeight - (miscThick + longEdgeSide));
+
 }
 
 /******** COMPONENT AND "DIFF" MODELS ********/
@@ -115,20 +119,19 @@ module metalSide(height = 45, length = 90) {
     flatLen = 3.0;
     pointOffset = 1.5;
 
-    singlePanelLength = flatLen + 2 * pointOffset;
+    singlePanelLength = 2*flatLen + 2*pointOffset;
 
     for (i = [ 0 : floor(length / singlePanelLength) - 1 ]) {
 	translate([i * singlePanelLength, 0, 0])
 	    linear_extrude(height = height) {
 	    polygon(points = [[0,0],
-			      [0,thickness + pointOffset],
-			      [flatLen, thickness + pointOffset],
-			      [flatLen + pointOffset, thickness + pointOffset],
-			      [flatLen + 2 * pointOffset, thickness + pointOffset],
-			      [flatLen + 2 * pointOffset, 0],
+			      [flatLen, 0],
 			      [flatLen + pointOffset, pointOffset],
-			      [flatLen, 0]],
-		    paths = [[0,1,2,3,4,5,6,7,0]]);
+			      [2*flatLen + pointOffset, pointOffset],
+			      [2*flatLen + 2*pointOffset, 0],
+			      [2*flatLen + 2*pointOffset, pointOffset + thickness],
+			      [0,pointOffset + thickness]],
+		    paths = [[6,5,4,3,2,1,0,6]]);
 	}
     }
 }
@@ -157,29 +160,6 @@ module topCut(height = myHeight, length = myLength, width = myWidth) {
 	translate([length - cornerPostWidth, width - cornerPostWidth, 0])
 	    cube([cutPostWidth, cutPostWidth, height + epsilon],
 		 center=false);
-    }
-}
-
-/******** UNUSED, TWO-SIDED CORRuGATED WALL ********/
-
-module metalWall(height = 45, length = 90) {
-    thickness = 0.8;
-    flatLen = 3.0;
-    pointOffset = 2.0;
-
-    singlePanelLength = flatLen + 2 * pointOffset;
-
-    for (i = [ 0 : floor(length / singlePanelLength) - 1 ]) {
-	translate([i * singlePanelLength, 0, 0])
-	    linear_extrude(height = height) {
-	    polygon(points = [[0,0], [0,thickness], [flatLen, thickness],
-			      [flatLen + pointOffset, thickness + pointOffset],
-			      [flatLen + 2 * pointOffset, thickness],
-			      [flatLen + 2 * pointOffset, 0],
-			      [flatLen + pointOffset, pointOffset],
-			      [flatLen, 0]],
-		    paths = [[0,1,2,3,4,5,6,7,0]]);
-	}
     }
 }
 
