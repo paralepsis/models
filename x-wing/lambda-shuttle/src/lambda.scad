@@ -97,27 +97,27 @@ module body() {
 }
 
 module topFin() {
-    translate([-0.4,-35,8.98])
+    translate([-0.35,-35,8.98])
 	rotate([90,0,90]) {
-	linear_extrude(height=0.8) 
+	linear_extrude(height=0.7) 
    	   polygon(points=[[2,0], [38,0], [32,40], [15,40], [-3,8]],
 		   paths = [[0,1,2,3,4,0]]);
 
 	/* panels */
-	translate([0,0,-0.4]) {
-	    linear_extrude(height=1.6)
+	translate([0,0,-0.35]) {
+	    linear_extrude(height=1.4)
 		polygon(points=[[2.2,1], [-2,8], [20,8], [20,1]],
 			paths = [[0,1,2,3,0]]);
 
-	    linear_extrude(height=1.6)
+	    linear_extrude(height=1.4)
 		polygon(points=[[-0.8,9], [16,39], [20,39], [20,9]],
 			paths = [[0,1,2,3,0]]);
 
-	    linear_extrude(height=1.6)
+	    linear_extrude(height=1.4)
 		polygon(points=[[21,1], [21,12], [35.3,12], [37,1]],
 			paths = [[0,1,2,3,0]]);
 
-	    linear_extrude(height=1.6)
+	    linear_extrude(height=1.4)
 		polygon(points=[[21,13], [21,39], [31.1,39], [35,13]],
 			paths = [[0,1,2,3,0]]);
 	}
@@ -142,28 +142,28 @@ module sideFin() {
 
 module detachedSideFin() {
     /* main fin */
-    linear_extrude(height=0.8)
+    linear_extrude(height=0.7)
 	polygon(points = [[0,0], [0,40], [17,40], [30,0]],
 		paths = [[0,1,2,3,0]]);
 
     /* panels */
-    translate([0,0,-0.4]) {
-	linear_extrude(height=1.6)
+    translate([0,0,-0.35]) {
+	linear_extrude(height=1.4)
 	    polygon(points=[[1.5,10], [1.5,39], [10,39], [10,10]],
 		    paths=[[0,1,2,3,0]]);
 
-	linear_extrude(height=1.6)
+	linear_extrude(height=1.4)
 	    polygon(points=[[12,10], [12,39], [16,39], [25,10]],
 		    paths =[[0,1,2,3,0]]);
  
-	linear_extrude(height=1.6)
+	linear_extrude(height=1.4)
 	    polygon(points =[[1.5,1], [1.5,9], [25.5,9], [28,1]],
 		    paths = [[0,1,2,3,0]]);
     }
 
     /* small angled bit */
     rotate([-30,0,0]) {
-	linear_extrude(height=0.8)
+	linear_extrude(height=0.7)
 	    polygon(points = [[0,0], [0,-8], [30,-8], [30,0]],
 		    paths = [[0,1,2,3,0]]);
 
