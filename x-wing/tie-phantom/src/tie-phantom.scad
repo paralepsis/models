@@ -9,7 +9,7 @@
  *
  */
 
-raft = true;
+raft = false;
 
 difference() {
     union() {
@@ -78,7 +78,7 @@ module bodyDetail1() {
 }
 
 module fin() {
-    translate([-5.5,0,0.2]) rotate([0,-90,90]) {
+    translate([-5.5,0,0.2]) scale([1.2,1.0,1.0]) rotate([0,-90,90]) {
 	color("grey") {
 	/* main fin */
 	translate([0,0,-0.4])
@@ -87,7 +87,7 @@ module fin() {
 		    paths = [[0,1,2,3,4,0]]);
 
 	/* fin connection to body */
-	translate([0,0,-0.6]) cube([37,1.2,1.2]);
+	translate([0,0,-0.6]) cube([37,1.0,1.2]);
 	translate([-0.2,-1.4,-1.5]) cube([8,1.51,3]);
 	translate([7,-2.4,-0.6]) rotate([0,0,30]) cube([2,2,1.2]);
 	}
@@ -95,11 +95,11 @@ module fin() {
 	/* fin detail */
 	color("black") {
 	translate([0,0,-0.6]) linear_extrude(height=1.2)
-	    polygon(points=[[2,2], [4,7], [7.0,7], [7.0,2]],
+	    polygon(points=[[2,1.2], [4,7], [7.0,7], [7.0,1.2]],
 		    paths=[[0,1,2,3,0]]);
 	
 	translate([0,0,-0.6]) linear_extrude(height=1.2)
-	    polygon(points=[[8.5,7], [9.2,7], [28.5,2], [8.5,2]],
+	    polygon(points=[[8.5,7], [9.2,7], [31.5,1.2], [8.5,1.2]],
 		    paths = [[0,1,2,3,0]]);
 	}
     }
