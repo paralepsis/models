@@ -11,7 +11,7 @@
 
 $fn=40;
 pipSlop = 0.3; // Pips end up being a little too close together
-pipPos = 20 - 7.4 - 2.65/2 - pipSlop;
+pipPos = 20 - 7.4 - 2.65/2 + pipSlop;
 insideSlop = 0.8; // Space for ID token is often short if printed exactly.
 
 /* main base with pips */
@@ -37,16 +37,16 @@ difference() {
 
 /* center cylinder with cut-outs */
 difference() {
-    cylinder(r1=15.7/2, r2=15.6/2-0.2,h=9.86); // was 15.6
+    cylinder(r1=15.8/2, r2=15.8/2-0.1,h=9.86); // was 15.7
 
     translate([0,0,3.95]) cylinder(r=6.1/2,h=9.86-3.95+0.2);
 
     /* accounting for plastic behavior */
-    translate([0,0,3.95]) scale([1.0,1.1,1.0]) cylinder(r=6.1/2,h=2.01);
+    translate([0,0,3.95]) scale([1.0,1.1,1.0]) cylinder(r=6.1/2,h=3.01);
 
     /* room for identifiers */
-    translate([-16/2,3.52/2,3.95+2]) cube([16,2.18,9.86-3.95+0.2]);
-    mirror([0,1,0]) translate([-16/2,3.52/2,3.95+2]) cube([16,2.18,9.86-3.95+0.2]);
+    translate([-16/2,3.52/2,3.95+3]) cube([16,2.18,9.86-3.95+0.2]);
+    mirror([0,1,0]) translate([-16/2,3.52/2,3.95+3]) cube([16,2.18,9.86-3.95+0.2]);
 
     // translate([-0.75,-3,3.95+2]) cube([1.5,6,9.86-3.95+0.2]);
 }
