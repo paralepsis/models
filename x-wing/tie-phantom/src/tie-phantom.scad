@@ -9,17 +9,32 @@
  *
  */
 
-
+raft = true;
 
 difference() {
-    body();
-    translate([7,0,0]) rotate([0,-90,0]) connector(internals=false);
+    union() {
+        translate([0,0,0.7]) phantom();
+        if (raft) {
+            hull() {
+	        for (i=[0:2]) rotate([0,0,120*i+60]) translate([11.5,0,0])
+	            cylinder(r=3,h=0.3);
+            }
+        }
+    }
+    translate([0,0,-5]) cube([60,60,5],center=true);
 }
-translate([7,0,0]) rotate([0,-90,0]) connector();
 
-fin();
-rotate([0,0,240]) fin();
-rotate([0,0,120]) fin();
+module phantom() {
+    difference() {
+        body();
+        translate([7,0,0]) rotate([0,-90,0]) connector(internals=false);
+    }
+    translate([7,0,0]) rotate([0,-90,0]) connector();
+
+    fin();
+    rotate([0,0,240]) fin();
+    rotate([0,0,120]) fin();
+}
 
 module body() {
     scale([1.2,1.2,1.2]) {
