@@ -1,9 +1,8 @@
 /*
  * Changes from Guido's original version:
  * - converted outline code to use iterator for simplicity of modification
- * - adjusted inside cylinder of eye from 9.5 rad to 9.2 rad to help with build
- * - adjusted inside cylinder of cornea from 3.5 rad to 3.1 rad to help with build
- * - re-scaled token (at bottom of file) by 0.8x in all dimensions
+ * - adjusted inside cylinder of eye from 9.5 to 9.2 rad to help with build
+ * - adjusted inside cylinder of cornea from 3.5 to 3.1 rad to help with build
  */
 
 module focus() {
@@ -15,7 +14,7 @@ for (i=[0:1]) {
 			cylinder(h = 2.5, r = 12, $fn = 90);
 			translate([0, 0, -0.5]) cylinder(h = 10, r = 9.2, $fn = 80);
 		}
-		translate([-100, -100., -100]) cube([100, 200, 200]);
+		translate([-100, -100.00, -100]) cube([100, 200, 200]);
 	}
 }
 
@@ -50,6 +49,6 @@ difference() {
 
 }
 
-scale([0.8,0.8,0.8]) focus();
+focus();
 
 // cube(10, 10, 10);
