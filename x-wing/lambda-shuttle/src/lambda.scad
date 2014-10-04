@@ -209,6 +209,9 @@ module detachedSideFin() {
 	    }
 	}
     }
+
+    /* joint support */
+    translate([0,0.1,0.45]) scale([1,1.3,0.9]) rotate([0,90,0]) cylinder($fn=20,h=30,r=0.5);
 }
 
 /* connectorInternals() 
