@@ -9,15 +9,33 @@
  *
  */
 
+raft = true;
+
 /* 74mm total length */
 
 /* for reference */
 // translate([50,0,0]) import("/Users/rross/git/models/x-wing/tie-fighter/products/tie-fighter.stl");
 
+/* put the whole thing together */
 difference() {
     lambda();
     translate([0,0,-3]) cube([60,120,6], center=true);
+    connectorInternals();
 }
+
+if (raft) {
+    /* generate a raft and ears */
+    translate([-14, -36, 0]) cylinder($fn=20, h=0.3, r=4);
+    translate([14, -36, 0]) cylinder($fn=20, h=0.3, r=4);
+    hull() {
+        translate([-6, -62, 0]) cylinder($fn=20, h=0.3, r=4);
+        translate([6, -62, 0]) cylinder($fn=20, h=0.3, r=4);
+        translate([-7, -42, 0]) cylinder($fn=20, h=0.3, r=4);
+        translate([7, -42, 0]) cylinder($fn=20, h=0.3, r=4);
+    }
+}
+
+/******** LAMBDA MODULES ********/
 
 module lambda() {
     translate([0,0,6*1.2]) scale([1.2,1.2,1.2]) {
@@ -140,6 +158,16 @@ module sideFin() {
     detachedSideFin();
 }
 
+/* detachedSideFin() 
+ *
+ * Notes:
+ * - The small angled bit has been adjusted to have a length (8.2 values in
+ *   polygon) that intersects with the body of the Lambda, for printing in
+ *   this fixed position. If you want to have separable side fins, then you
+ *   should change these back to 8.0 and diff them out of the body (actually
+ *   you would probably need to thicken the cylinders too...would be worth a
+ *   parameter to this module).
+ */
 module detachedSideFin() {
     /* main fin */
     linear_extrude(height=0.7)
@@ -164,7 +192,7 @@ module detachedSideFin() {
     /* small angled bit */
     rotate([-30,0,0]) {
 	linear_extrude(height=0.7)
-	    polygon(points = [[0,0], [0,-8], [30,-8], [30,0]],
+	    polygon(points = [[0,0], [0,-8.4], [30,-8.4], [30,0]],
 		    paths = [[0,1,2,3,0]]);
 
 	/* cylinder gun emplacements */
@@ -180,6 +208,29 @@ module detachedSideFin() {
 		}
 	    }
 	}
+    }
+}
+
+/* connectorInternals() 
+ *
+ * Notes:
+ * - I want the big radius to be 5.98/2, but on first print this actually ended
+ *   up at 5.5/2. Thus the adjustment there.
+ * - Similarly, I want the little radius to be 3.65/2, but on first print this 
+ *   actually ended up at 3.2/2. Thus the adjustment.
+ */
+module connectorInternals() {
+    littleRad = (3.65+0.4)/2;
+    littleHt  = 5.2;
+    bigRad    = (5.98+0.5)/2;
+    bigHt     = 3.3; // was 4 originally
+
+    $fn=20;
+
+    translate([0,-20,bigHt]) {
+        translate([0,0,littleHt]) sphere(r=littleRad);
+        translate([0,0,-0.01]) cylinder(r=littleRad, h=littleHt+0.01);
+        translate([0,0,-1*bigHt-0.01]) cylinder(r=bigRad, h = bigHt+0.01);
     }
 }
 
