@@ -13,6 +13,8 @@ $fn=40;
 pipSlop = 0.4; // Pips end up being a little too close together
 pipPos = 20 - 7.4 - 2.65/2 + pipSlop;
 insideSlop = 0.8; // Space for ID token is often short if printed exactly.
+cylinderAspect = 1.06; // warping the central cylinder in the Y dimension to
+                       // hold the ID token in place better.
 
 /* main base with pips */
 difference() {
@@ -37,9 +39,15 @@ difference() {
 
 /* center cylinder with cut-outs */
 difference() {
-    cylinder(r1=11.62/2, r2=11.6/2-0.2,h=9.86); // was 11.52
+    scale([1,cylinderAspect,1]) cylinder(r1=11.62/2, r2=11.6/2-0.1,h=9.86);
 
     translate([0,0,3.95]) cylinder(r=3.45/2,h=9.86-3.95+0.2);
+
+    /* accounting for plastic behavior */
+    translate([0,0,3.95]) scale([1.0,1.1,1.0]) cylinder(r=3.5/2,h=2.01);
+
+
+    /* room for identifiers */
     translate([-11.5/2,3.52/2,3.95+2]) cube([11.5,2.22,9.86-3.95+0.2]);
     mirror([0,1,0]) translate([-11.5/2,3.52/2,3.95+2]) cube([11.5,2.22,9.86-3.95+0.2]); // was 2.18
 
