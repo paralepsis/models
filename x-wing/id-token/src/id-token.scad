@@ -14,61 +14,76 @@
  */
 
 /* [Global] */
-Pilot_Skill    = 4; // [0:11]
-Primary_Weapon = 3; // [0:5]
+Pilot_Skill    = 7; // [0:11]
+Primary_Weapon = 4; // [0:5]
 Agility        = 2; // [0:5]
-Hull           = 3; // [0:14]
+Hull           = 2; // [0:14]
 Shield         = 2; // [0:10]
-Text           = "Soontir"; 
+Text           = "Whisper"; 
 
 /* [Hidden] */
 $fn=30;
-width=34.3;
+width=34.15;
 height=39.75;
-cylRad = 11.62/2;
+cylRad = 11.62/2+0.6;
 
 id();
 
-module id() {
+module id(myHeight = height, myWidth = width, myText = Text, myRad = cylRad,
+          myHull = Hull)
+{
     difference() {
         union() {
             /* main body */
-            cube([width,height,2.22]);
+            cube([myWidth,myHeight,2.22]);
 
             /* values */
             translate([6,15,0]) cylinder(h=2.5,r=5);
-            translate([4,11.5,1.5]) scale([0.7,0.7,1])
+            translate([0,11.5,1.5]) scale([0.7,0.7,1])
                 linear_extrude(height=1.5) write(ints[Pilot_Skill]);
-            translate([5,2.5,1.5]) scale([0.5,0.5,1])
+            translate([2,2.5,1.5]) scale([0.5,0.5,1])
                 linear_extrude(height=1.5) write(ints[Primary_Weapon]);
-            translate([12,2.5,1.5]) scale([0.5,0.5,1])
+            translate([8,2.5,1.5]) scale([0.5,0.5,1])
                 linear_extrude(height=1.5) write(ints[Agility]);
-            translate([19,2.5,1.5]) scale([0.5,0.5,1])
-                linear_extrude(height=1.5) write(ints[Hull]);
-            translate([26,2.5,1.5]) scale([0.5,0.5,1])
+            translate([17,2.5,1.5]) scale([0.5,0.5,1])
+                linear_extrude(height=1.5) write(ints[myHull]);
+            translate([23,2.5,1.5]) scale([0.5,0.5,1])
                 linear_extrude(height=1.5) write(ints[Shield]);
 
             /* string name */
             translate([12,9,1.5]) scale([0.4,0.4,1])
-                linear_extrude(height=1.5) write(Text);
+                linear_extrude(height=1.5) write(myText);
 
             /* firing arc */
-            translate([width/2,height/2, 2.22]) rotate(atan(height/width))
-	        translate([0,-0.2,0]) cube([sqrt(height*height + width*width)/2 - 1, 0.4, 0.6]);
-            translate([width/2,height/2, 2.22]) rotate(180-atan(height/width))
-	        translate([0,-0.2,0]) cube([sqrt(height*height + width*width)/2 - 1, 0.4, 0.6]);
+            translate([myWidth/2,myHeight/2, 2.20]) rotate(atan(myHeight/myWidth))
+	        translate([0,-0.2,0]) cube([sqrt(myHeight*myHeight + myWidth*myWidth)/2 - 1, 0.5, 0.6]);
+            translate([myWidth/2,myHeight/2, 2.20]) rotate(180-atan(myHeight/myWidth))
+	        translate([0,-0.2,0]) cube([sqrt(myHeight*myHeight + myWidth*myWidth)/2 - 1, 0.5, 0.6]);
         }
 
 	/* take out the center hole */
-        translate([width/2, height/2,-0.01]) cylinder(r=cylRad, h=4);
+        translate([myWidth/2, myHeight/2,-0.02]) cylinder(r=myRad, h=4);
+    }
+}
+
+/******** PARAMETER SWEEP CODE FOR TUNING ********/
+
+module paramSweep() {
+    for (i = [0:4]) {
+        for (j = [0:2]) {
+            translate([40*i, 45*j, 0])
+	        id(myHeight=height - 0.5 + 0.5 * j,
+	           myWidth = width - 1.0 + 0.3*i, myText = "",
+	           myRad = cylRad - 0.5 + 0.1 * (i + 5*j), myHull = i + 5*j);
+        }
     }
 }
 
 /******** INTS TABLE ********/
 
 /* Note: There must be a better way to do this! */
-ints = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
-        "13", "14" ];
+ints = [" 0", " 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9", "10",
+        "11", "12", "13", "14", "15", "16" ];
 
 /******** BEGIN SPIFF SANS MODULES ********/
 
