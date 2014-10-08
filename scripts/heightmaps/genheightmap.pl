@@ -23,11 +23,12 @@ for ($i = 0; $i < $opt_rows; $i++) {
 	if (defined $opt_random) {
             $bonus = rand($opt_random);	
 	}
-	elsif (defined $opt_sin) {
+
+	if (defined $opt_sin) {
 	    $dist = sqrt(abs($opt_rows/2 - $i)**2 + abs($opt_cols/2 - $j)**2);
 	    $max = sqrt(($opt_rows/2)**2 + ($opt_cols/2)**2);
 
-	    printf "%0.3f ", $opt_sin * cos($dist * 3.14159 / $max);
+	    printf "%0.3f ", $opt_sin * cos($dist * 3.14159 / $max) + $opt_height;
 
 	    # printf "%0.3f ", $opt_sin * (sin(($i * 3.14159) / ($opt_rows-1))
 	    #	+ sin(($j * 3.14159) / ($opt_cols-1))) / 2;
