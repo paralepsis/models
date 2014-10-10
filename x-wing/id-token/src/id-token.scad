@@ -35,30 +35,38 @@ module id(myHeight = height, myWidth = width, myText = Text, myRad = cylRad,
     difference() {
         union() {
             /* main body */
-            cube([myWidth,myHeight,2.22]);
+            color("black") cube([myWidth,myHeight,2.22]);
 
             /* values */
-            translate([6,15,0]) cylinder(h=2.5,r=5);
+            translate([6,15,0]) color("black") cylinder(h=2.5,r=5);
             translate([0,11.5,1.5]) scale([0.7,0.7,1])
+		color("orange")
                 linear_extrude(height=1.5) write(ints[Pilot_Skill]);
             translate([2,2.5,1.5]) scale([0.5,0.5,1])
+		color("red")
                 linear_extrude(height=1.5) write(ints[Primary_Weapon]);
             translate([8,2.5,1.5]) scale([0.5,0.5,1])
+		color("green")
                 linear_extrude(height=1.5) write(ints[Agility]);
             translate([17,2.5,1.5]) scale([0.5,0.5,1])
+		color("yellow")
                 linear_extrude(height=1.5) write(ints[myHull]);
             translate([23,2.5,1.5]) scale([0.5,0.5,1])
+		color("blue")
                 linear_extrude(height=1.5) write(ints[Shield]);
 
             /* string name */
             translate([12,9,1.5]) scale([0.4,0.4,1])
+		color("white")
                 linear_extrude(height=1.5) write(myText);
 
             /* firing arc */
             translate([myWidth/2,myHeight/2, 2.20]) rotate(atan(myHeight/myWidth))
-	        translate([0,-0.2,0]) cube([sqrt(myHeight*myHeight + myWidth*myWidth)/2 - 1, 0.5, 0.6]);
+	        translate([0,-0.2,0]) color("red")
+		cube([sqrt(myHeight*myHeight + myWidth*myWidth)/2 - 1, 0.5, 0.6]);
             translate([myWidth/2,myHeight/2, 2.20]) rotate(180-atan(myHeight/myWidth))
-	        translate([0,-0.2,0]) cube([sqrt(myHeight*myHeight + myWidth*myWidth)/2 - 1, 0.5, 0.6]);
+	        translate([0,-0.2,0]) color("red")
+		cube([sqrt(myHeight*myHeight + myWidth*myWidth)/2 - 1, 0.5, 0.6]);
         }
 
 	/* take out the center hole */
