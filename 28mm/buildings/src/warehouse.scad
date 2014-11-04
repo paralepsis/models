@@ -7,44 +7,34 @@
  *
  */
 
-use <building.scad>
+// use <building.scad>
 
-translate([270,70,155/2]) cube(size=[240, 153, 155], center=true);
+doCinderblocks = 1;
 
-building(b1Dims, b1Windows, b1Doors);
+% translate([240/2 - 10,70,155/2]) cube(size=[240, 153, 155], center=true);
 
-/* Dims is a vector holding dimensions of the building 
- * [X, Y, height, wall thickness, floor/roof thickness].
- */
-b1Dims = [127, // xdim
-	     100, // ydim
-	     65, // height
-	     7, // wall thickness
-	     4]; // floor/roof thickness
+/* bottom cinderblock wall section */
+difference() {
+    cube([304, 248, 40 - 0.3], center=false);
+    translate([7,7,-0.2]) cube([304 - 14, 248 - 14, 40.4], center=false);
 
-/* Windows is a 3D array holding translate : rotate pairs, one per window.
- * 
- */
-b1Windows = [[[0, 30, 0], [0,0,-90]],
-		    [[0, 70, 0], [0,0,-90]],
-		    [[90,93,0], [0,0,0]],
-		   ];
+    if (doCinderblocks) {
+	/* cinderblock pattern on exterior */
+	//cinderblockPattern();
+	//translate([0,248,0]) cinderblockPattern();
+	//translate([304,0,0]) rotate([0,0,90]) translate([-4,0,0]) cinderblockPattern();
+    }
+}
+rotate([0,0,90]) translate([-4,0,0]) cinderblockPattern(skip=1,width=256);
 
-/* Doors is a 3D array holding translate : rotate : boolean tuples, one per
- * door.
- * Booleans are [ doFrame, unused, unused ].
- */
-b1Doors = [[[40, 93, 0], [0,0,0], [1,0,0]],
-	   	  [[120, 50, 0], [0,0,-90], [0,0,0]],
-          ];
 
 /* cinderblockPattern()
  *
  * Note: taken from cinderblocks.scad
  */
-module cinderblockPattern() {
-    height = 120;
-    width = 145;
+module cinderblockPattern(skip=0,width=308) {
+    height = 36;
+    mortarRad = 0.3;
     cinderblockHeight = 4;
     cinderblockWidth = 2 * cinderblockHeight;
 
@@ -52,8 +42,9 @@ module cinderblockPattern() {
         translate([0, 0, row * cinderblockHeight]) {
             rotate([0, 90, 0]) cylinder($fn=15, r=mortarRad, h=width);
 
-            for (col = [ 0 : floor(width / cinderblockWidth) - 1]) {
-                translate([col * cinderblockWidth + (row % 2) * cinderblockWidth / 2, 0, 0]) cylinder($fn=15, r=mortarRad, h=cinderblockHeight);
+            for (col = [ skip : floor(width / cinderblockWidth) - 1]) {
+		translate([col * cinderblockWidth + (row % 2) * cinderblockWidth / 2, 0, 0])
+		    cylinder($fn=15, r=mortarRad, h=cinderblockHeight);
             }
         }
     }
