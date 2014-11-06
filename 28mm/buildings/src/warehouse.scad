@@ -20,12 +20,12 @@ difference() {
 
     if (doCinderblocks) {
 	/* cinderblock pattern on exterior */
-	//cinderblockPattern();
-	//translate([0,248,0]) cinderblockPattern();
-	//translate([304,0,0]) rotate([0,0,90]) translate([-4,0,0]) cinderblockPattern();
+	cinderblockPattern();
+	translate([0,248,0]) cinderblockPattern();
+	rotate([0,0,90]) translate([-4,0,0]) cinderblockPattern(skip=1,width=256);
+	translate([304,0,0]) rotate([0,0,90]) translate([-4,0,0]) cinderblockPattern();
     }
 }
-rotate([0,0,90]) translate([-4,0,0]) cinderblockPattern(skip=1,width=256);
 
 
 /* cinderblockPattern()
@@ -42,7 +42,8 @@ module cinderblockPattern(skip=0,width=308) {
         translate([0, 0, row * cinderblockHeight]) {
             rotate([0, 90, 0]) cylinder($fn=15, r=mortarRad, h=width);
 
-            for (col = [ skip : floor(width / cinderblockWidth) - 1]) {
+	    /* note: this has been hacked to leave off end verticals */
+            for (col = [ skip : floor(width / cinderblockWidth) - 1 - (row%2)]) {
 		translate([col * cinderblockWidth + (row % 2) * cinderblockWidth / 2, 0, 0])
 		    cylinder($fn=15, r=mortarRad, h=cinderblockHeight);
             }
