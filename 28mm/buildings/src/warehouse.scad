@@ -9,7 +9,7 @@
 
 // use <building.scad>
 
-doCinderblocks = 1;
+doCinderblocks = 0;
 
 % translate([240/2 - 10,70,155/2]) cube(size=[240, 153, 155], center=true);
 
@@ -24,9 +24,39 @@ difference() {
 	translate([0,248,0]) cinderblockPattern(width=304);
 	rotate([0,0,90]) translate([0,0,-4]) cinderblockPattern(height=40,width=248);
 	translate([304,0,0]) rotate([0,0,90]) translate([0,0,-4]) cinderblockPattern(height=40,width=248);
-	}
+    }
 }
 
+/* top corrugated metal walls */
+translate([2,2,39]) metalSide(height=40, length=300);
+
+/******** SUPPORT MODULES ********/
+
+/* metalSide() -- corrugated metal wall with a flat backside
+ *
+ * Note: taken from container.scad
+ */
+module metalSide(height = 45, length = 90) {
+    thickness = 1.5;
+    flatLen = 6.0;
+    pointOffset = 0.8;
+
+    singlePanelLength = 1.2*flatLen;
+
+    for (i = [ 0 : floor(length / singlePanelLength) - 1 ]) {
+	translate([i * singlePanelLength, 0, 0])
+	    linear_extrude(height = height) {
+	    polygon(points = [[0,0],
+			      [flatLen, 0],
+			      [flatLen, pointOffset],
+			      [1.2*flatLen, pointOffset],
+			      [1.2*flatLen, 0],
+			      [1.2*flatLen, pointOffset+ thickness],
+			      [0, pointOffset + thickness]],
+		    paths = [[6,5,4,3,2,1,0,6]]);
+	}
+    }
+}
 
 /* cinderblockPattern()
  *
