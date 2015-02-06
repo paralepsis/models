@@ -10,7 +10,7 @@ module shell(radius)
   difference()
   {
     hexagon(radius*1.2); // base
-    scale([1, 1, 1.1]) hexagon(radius*0.85); // hole
+    scale([1, 1, 1.1]) hexagon(radius*0.98); // hole, rad was * 0.85
   }
 }
  
@@ -37,7 +37,7 @@ module translate_to_hex(x_coord, y_coord, hex_width)
 {
   translate([x_coord*hex_width*1.75, y_coord*hex_width*2+column_to_offset(x_coord, hex_width), 0])
   {
-    child(0);
+    children(0);
   }
 }
  
