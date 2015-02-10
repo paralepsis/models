@@ -9,7 +9,7 @@ module shell(radius)
 {
   difference()
   {
-    hexagon(radius*1.2); // base
+    hexagon(radius*1.4); // base, was 1.2
     scale([1, 1, 1.1]) hexagon(radius*0.98); // hole, rad was * 0.85
   }
 }
@@ -39,6 +39,15 @@ module translate_to_hex(x_coord, y_coord, hex_width)
   {
     children(0);
   }
+}
+
+module replacementLattice(rows, columns, hex_width)
+{
+   translate_to_hex(3,0,hex_width) shell(hex_width);
+   for (x = [1:5]) translate_to_hex(x,1,hex_width) shell(hex_width);
+   for (x = [1:5]) translate_to_hex(x,2,hex_width) shell(hex_width);
+   for (x = [1:5]) translate_to_hex(x,3,hex_width) shell(hex_width);
+   for (x = [2:4]) translate_to_hex(x,4,hex_width) shell(hex_width);
 }
  
 module lattice(rows, columns, hex_width)
