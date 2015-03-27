@@ -17,7 +17,7 @@ module flash() {
 	// translate([-1, -5, 0]) cube([2, 5, 0.5]);
 }
 
-union() scale(1.1) {
+union() scale(0.9) {
 
 for(i = [0:4]) {
 	rotate([0, 0, i * (360 / 5)]) flash();
@@ -30,7 +30,7 @@ difference() {
 
 
 difference() {
-	cylinder(h = 0.75, r = 12, $fn = 80);
+	cylinder(h = 1.75, r = 12, $fn = 80);
 	translate([0, 0, -0.5]) cylinder(h = 10, r = 9, $fn = 80);
 }
 
