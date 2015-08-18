@@ -13,15 +13,15 @@ $opt_scale = 30.0;
 # $opt_skip is used to determine how many rounds of the algorithm to skip,
 # keeping the values in the initial heightmap. This can be used to seed with
 # specific terrain features.
-$opt_skip = -1;
+$opt_skip = 1;
 
-$opt_cols = 129;
+$opt_cols = 1025;
 
 $opt_radius = 50.0;
 
 $opt_seed = time();
 
-$opt_hill = 0;
+$opt_hill = 20;
 
 GetOptions('scale=f' =>\$opt_scale,
            'skip=i' => $opt_skip,
@@ -118,10 +118,11 @@ sub dumpPoly
     $i = $rows / 2;
 
     if ($opt_hill > 0) {
-	printf "linear_extrude(height = %0.3f, center=false, convexity = 10, \$fn= \$cols, scale=0.75)\n\t", $opt_hill;
+	printf "translate([0,0,0.8]) linear_extrude(height = %0.3f, center=false, convexity = 10, \$fn= \$cols, scale=0.75) mypoly();\n\t", $opt_hill - 0.8;
+	printf "linear_extrude(height = 0.81, center=false, convexity = 10, \$fn= \$cols, scale=1) mypoly();\n\t", $opt_hill;
     }
 
-    printf "polygon(points=[";
+    printf "\nmodule mypoly() { polygon(points=[";
     for (my $j = 0; $j < $cols; $j++) {
         $angle = 2*3.14159 * $j / $cols; # radians
 
@@ -131,7 +132,7 @@ sub dumpPoly
 	    $heightmap[$i][$j] * cos($angle), $heightmap[$i][$j] * sin($angle);
     }
 
-    printf "]);\n";
+    printf "]);\n}\n";
 
 }
 
