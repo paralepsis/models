@@ -118,8 +118,8 @@ sub dumpPoly
     $i = $rows / 2;
 
     if ($opt_hill > 0) {
-	printf "translate([0,0,0.8]) linear_extrude(height = %0.3f, center=false, convexity = 10, \$fn= \$cols, scale=0.75) mypoly();\n\t", $opt_hill - 0.8;
-	printf "linear_extrude(height = 0.81, center=false, convexity = 10, \$fn= \$cols, scale=1) mypoly();\n\t", $opt_hill;
+	printf "translate([0,0,0.8]) linear_extrude(height = %0.3f, center=false, convexity = 10, \$fn= %i, scale=0.75) mypoly();\n\t", $opt_hill - 0.8, $cols;
+	printf "linear_extrude(height = 0.81, center=false, convexity = 10, \$fn= %i, scale=1) mypoly();\n\t", $opt_hill, $cols;
     }
 
     printf "\nmodule mypoly() { polygon(points=[";
