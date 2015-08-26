@@ -17,11 +17,11 @@ import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 */
 
 // firstFloor();
-// secondFloor();
+secondFloor();
 // myStairs();
 // myRoof();
 // roofOnly();
-stairsOnly();
+// stairsOnly();
 
 /* Roof Shim */
 // ceilingShim(xDim=100,yDim=100);
@@ -38,7 +38,7 @@ module firstFloor() {
     building(firstFloorDims,
 	     firstFloorWindows,
 	     firstFloorDoors,
-	     doEars = false);
+	     doEars = true);
 }
 
 /* Second Floor */
@@ -47,7 +47,7 @@ module secondFloor() {
 	secFloorBuilding(secondFloorDims,
 			 secondFloorWindows,
 			 secondFloorDoors,
-			 doEars = false);
+			 doEars = true);
     }
 }
 
