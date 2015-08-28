@@ -7,6 +7,7 @@
  *
  * Notes:
  * - Sizes ought to be 4", 3", and 2.5" diameters.
+ * - Heights were 100%, 100%, 85% respectively.
  * - Units for model are mm; 1 in = 25.4 mm
  */
 
@@ -18,7 +19,7 @@ $cutOff = 4.3; /* this is the translation in the Z axis of the cutout,
                 * needs to be 4.3mm for the 2" radius badge.
                 */
 
-badge($rad=2.*$mm);
+scale([2.5/4, 2.5/4, 0.85]) badge($rad=2.*$mm);
 
 module badge($rad=2*$mm) {
     difference() {
