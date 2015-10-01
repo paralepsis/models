@@ -10,32 +10,34 @@ include <greg-frost-bevel-extrude.scad>
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-/* body of window */
-difference() {
-   bevel_outline(3);
-   translate([0,0,1.7]) poly_insidecutout(5);
-}
+module window() {
+   /* body of window */
+   difference() {
+      bevel_outline(3);
+      translate([0,0,1.7]) poly_insidecutout(5);
+   }
 
-/* cover slats */
-for (i=[0:13]) {
-   translate([-9,-13 + 1.9*i,0]) cube([18,1.5,2]);
-}
+   /* cover slats */
+   for (i=[0:13]) {
+      translate([-9,-13 + 1.9*i,0]) cube([18,1.5,2]);
+   }
 
-/* bolts on corners */
-translate([-9.5,-12,0]) cylinder(r=0.5,h=3.3, $fn=10);
-translate([-9.5,-14,0]) cylinder(r=0.5,h=3.3, $fn=10);
-translate([9.5,-12,0]) cylinder(r=0.5,h=3.3, $fn=10);
-translate([9.5,-14,0]) cylinder(r=0.5,h=3.3, $fn=10);
-translate([-9.5,12,0]) cylinder(r=0.5,h=3.3, $fn=10);
-translate([-9.5,14,0]) cylinder(r=0.5,h=3.3, $fn=10);
-translate([9.5,12,0]) cylinder(r=0.5,h=3.3, $fn=10);
-translate([9.5,14,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   /* bolts on corners */
+   translate([-9.5,-12,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   translate([-9.5,-14,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   translate([9.5,-12,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   translate([9.5,-14,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   translate([-9.5,12,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   translate([-9.5,14,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   translate([9.5,12,0]) cylinder(r=0.5,h=3.3, $fn=10);
+   translate([9.5,14,0]) cylinder(r=0.5,h=3.3, $fn=10);
 
-difference() {
-   translate([-5,11,0]) rotate([0,90,0]) cylinder(r=5,h=10,$fn=30);
-   translate([-10,0,-6]) cube([20,20,6]);
-   translate([-10,0,0]) cube([20,12,6]);
-   translate([-10,0,2]) rotate([-10,0,0]) cube([20,12,6]);
+   difference() {
+      translate([-5,11,0]) rotate([0,90,0]) cylinder(r=5,h=10,$fn=30);
+      translate([-10,0,-6]) cube([20,20,6]);
+      translate([-10,0,0]) cube([20,12,6]);
+      translate([-10,0,2]) rotate([-10,0,0]) cube([20,12,6]);
+   }
 }
 
 /* MODULES BELOW -- NOTHING TO EDIT */

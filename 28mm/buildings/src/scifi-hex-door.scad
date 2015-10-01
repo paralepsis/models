@@ -10,24 +10,53 @@ include <greg-frost-bevel-extrude.scad>
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-difference() {
-   union() {
-      bevel_bulkhead(5);
-      poly_outline(3);
+module hexDoor() {
+   /* body of door */
+   difference() {
+      union() {
+         bevel_bulkhead(4.75);
+         hd_poly_outline(3);
+      }
+      translate([0,0,2]) {
+         hd_poly_inset4(5);
+         hd_poly_inset5(5);
+         hd_poly_inset6(5);
+         hd_poly_inset2(5);
+         hd_poly_inset3(5);
+         hd_poly_inset1(5);
+      }
+   
+      translate([-0.4,-31,1.2]) cube([0.8,55,5]);
    }
-   translate([0,0,2]) {
-      poly_inset4(5);
-      poly_inset5(5);
-      poly_inset6(5);
-      poly_inset2(5);
-      poly_inset3(5);
-      poly_inset1(5);
+
+   /* numerals */
+   scale([1.1,1.1,1]) poly_zero(2.5);
+   scale([1.1,1.1,1]) poly_six(2.5);
+
+   /* decorations */
+   translate([-40,5,0]) rotate([0,0,90]) decoration();
+   translate([-40,-7,0]) rotate([0,0,90]) decoration();
+   translate([40,5,0]) rotate([0,0,-90]) decoration();
+   translate([40,-7,0]) rotate([0,0,-90]) decoration();
+}
+
+/* MODULES */
+
+module decoration(rad=6) {
+   difference() {
+      translate([-3,0,0]) rotate([0,90,0]) {
+         difference() {
+            cylinder(r=rad,h=6, $fn=7);
+            translate([0,0,1.95]) cylinder(r=rad+0.1,h=2.1, $fn=7);
+         }
+         cylinder(r=rad-2,h=6, $fn=30);
+      }
+      translate([-0.55*rad,-1.1 * rad,-1*rad - 1]) cube([10,2*rad+1,rad+1]);
+      translate([-0.55*rad,-2.65*rad,0]) cube([10,2*rad+1,rad+1]);
    }
 }
-poly_zero(2.5);
-poly_six(2.5);
 
-module poly_inset4(h)
+module hd_poly_inset4(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
@@ -36,7 +65,7 @@ module poly_inset4(h)
   }
 }
 
-module poly_inset5(h)
+module hd_poly_inset5(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
@@ -77,7 +106,7 @@ module poly_zero(h)
   }
 }
 
-module poly_inset6(h)
+module hd_poly_inset6(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
@@ -86,7 +115,7 @@ module poly_inset6(h)
   }
 }
 
-module poly_inset2(h)
+module hd_poly_inset2(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
@@ -110,7 +139,7 @@ module poly_six(h)
   }
 }
 
-module poly_inset3(h)
+module hd_poly_inset3(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
@@ -119,7 +148,7 @@ module poly_inset3(h)
   }
 }
 
-module poly_outline(h)
+module hd_poly_outline(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
@@ -128,7 +157,7 @@ module poly_outline(h)
   }
 }
 
-module poly_inset1(h)
+module hd_poly_inset1(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {

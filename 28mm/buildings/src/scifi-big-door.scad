@@ -9,30 +9,32 @@
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-difference() {
-   union() {
-      poly_outline(3);
-      poly_box2(4);
-      poly_box1(4);
-      poly_box7(4);
-      poly_box4(4);
-      poly_box6(4);
-      poly_box3(4);
-      poly_box5(4);
+module bigDoor() {
+   difference() {
+      union() {
+         big_poly_outline(3);
+         poly_box2(4);
+         poly_box1(4);
+         poly_box7(4);
+         poly_box4(4);
+         poly_box6(4);
+         poly_box3(4);
+         poly_box5(4);
+      }
+
+      translate([0,0,2]) poly_doorinside(3);
+   
+      translate([0,0,1]) {
+         poly_doordetail4(2);
+         poly_doordetail2(2);
+         poly_doordetail7(2);
+         poly_doordetail3(2);
+         poly_doordetail1(2);
+         poly_doordetail5(2);
+      }
+
+      poly_doorsplit(2);
    }
-
-   translate([0,0,2]) poly_doorinside(3);
-
-   translate([0,0,1]) {
-      poly_doordetail4(2);
-      poly_doordetail2(2);
-      poly_doordetail7(2);
-      poly_doordetail3(2);
-      poly_doordetail1(2);
-      poly_doordetail5(2);
-   }
-
-   poly_doorsplit(2);
 }
 
 
@@ -56,7 +58,7 @@ module poly_doorinside(h)
   }
 }
 
-module poly_outline(h)
+module big_poly_outline(h)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
