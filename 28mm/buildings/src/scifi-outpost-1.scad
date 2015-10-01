@@ -13,28 +13,37 @@ translate([-80,0,0]) {
    cube([50,30,55]);
    translate([0,-0.5, 47]) boltedPanel(width=50);
    translate([50.6,0,47]) rotate([0,0,90]) boltedPanel(width=20);
+
+   translate([36,1,0]) myWindow();
+   translate([13,1,0]) myWindow();
+
+   translate([0, 0, 0]) rotate([0,0,0]) footing();
+   translate([50, 0, 0]) rotate([0,0,90]) footing();
 }
+
 translate([-30,20,0]) {
-   cube([80,10,65]);
-   translate([-10,-0.5, 57]) boltedPanel(width=90);
+   cube([90,10,65]);
+   translate([-10,-0.5, 57]) boltedPanel(width=100);
+
+   translate([40,1.1,25]) rotate([90,0,0]) scale([0.7,0.7,1]) hexDoor();
+   translate([-45/2 + 40,-8.9,0]) cube([45,10,4]);
+
+   translate([90, 0, 0]) rotate([0,0,90]) footing();
 }
 
-translate([10,21.1,25]) rotate([90,0,0]) scale([0.7,0.7,1]) hexDoor();
-translate([-45/2 + 10,11.1,0]) cube([45,10,4]);
-
-translate([-44,1,0]) myWindow();
-translate([-67,1,0]) myWindow();
-// translate([70,11,0]) myWindow();
 
 /* another wall */
-translate([40,20,0]) {
+translate([50,20,0]) {
    cube([10,97,65]);
    translate([10.6,0,57]) rotate([0,0,90]) boltedPanel(width=97, spacing=97/4);
-}
-rotate([0,0,-90]) {
-   translate([-95,50,0]) tankPipe(pipeRad=4,pipeHt=10);
-   translate([-80,50,0]) tankPipe(pipeRad=4,pipeHt=10);
-   translate([-65,50,0]) tankPipe(pipeRad=4,pipeHt=10);
+
+   rotate([0,0,-90]) {
+      translate([-75,10,0]) tankPipe(pipeRad=4,pipeHt=10);
+      translate([-60,10,0]) tankPipe(pipeRad=4,pipeHt=10);
+      translate([-45,10,0]) tankPipe(pipeRad=4,pipeHt=10);
+   }
+
+   translate([10, 97, 0]) rotate([0,0,180]) footing();
 }
 
 /* another wall (left side from front) */
@@ -42,6 +51,7 @@ translate([-80,0,0]) {
    cube([50,75,55]);
    translate([40,75.6,47]) rotate([0,0,180]) boltedPanel(width=40);
    translate([-0.6,75,47]) rotate([0,0,-90]) boltedPanel(width=75,spacing=75/4);
+   translate([0, 75, 0]) rotate([0,0,-90]) footing();
 }
 translate([-40,20,0]) {
    cube([10,97,65]);
@@ -56,16 +66,26 @@ translate([-79,61,0]) rotate([0,0,-90]) {
 
 /* back wall */
 translate([-40,107,0]) {
-   cube([90,10,65]);
-   translate([90,10.6,57]) rotate([0,0,180]) boltedPanel(width=90, spacing=90/4);
-   translate([0 + 14,30,0]) rotate([0,0,180]) angledSupport(height=57);
-   translate([35 + 14,30,0]) rotate([0,0,180]) angledSupport(height=57);
-   translate([70 + 14,30,0]) rotate([0,0,180]) angledSupport(height=57);
-}
+   cube([100,10,65]);
+   translate([100,10.6,57]) rotate([0,0,180]) boltedPanel(width=100);
 
+   translate([0 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
+   translate([35 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
+   translate([70 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
+
+   translate([0, 10, 0]) rotate([0,0,-90]) footing();
+}
 
 /* tower */
 translate([-9,86,65]) tower();
+
+/* roof */
+translate([-30,20,55]) cube([80,97,10]);
+
+
+module footing() {
+   translate([-1, -1,0]) linear_extrude(height=7,scale=0.5) square([5.1,5.1]);
+}
 
 /* MODULES */
 
