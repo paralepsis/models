@@ -4,9 +4,11 @@ include <scifi-hex-door.scad>
 include <scifi-window.scad>
 include <scifi-ladder.scad>
 
-import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
+translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
 // translate([-100,25,0]) color("red") cube([200,1,80]);
 
+/* fill it in */
+translate([-30,30,0]) cube([85,85,53]);
 
 /* front door */
 translate([-80,0,0]) { 
@@ -65,6 +67,10 @@ translate([-80,0,0]) {
    translate([26,43,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
    translate([26,46,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
 
+   translate([13,58,54.9]) cube([12,6,2.0]);
+   translate([21,60,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
+   translate([19,60,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
+
    translate([20,13,54.9]) cube([8,10,1.6]);
    translate([24,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
    translate([22,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
@@ -119,7 +125,13 @@ module tower() {
       translate([-50,-50,20]) cube([100,100,30]);
    }
 
-   translate([-30*1.4,-30*1.4,42]) cube([60*1.4,60*1.4,5]);
+   translate([-30*1.4,-30*1.4,42]) { 
+      cube([60*1.4,60*1.4,7]);
+      translate([0,-0.5,0]) boltedPanel(width=60*1.4,height=7, spacing=84/4);
+      translate([-0.5,60*1.4,0]) rotate([0,0,-90]) boltedPanel(width=60*1.4,height=7, spacing=84/4);
+      translate([60*1.4,60*1.4+0.5,0]) rotate([0,0,180]) boltedPanel(width=60*1.4,height=7, spacing=84/4);
+      translate([60*1.4+0.5,0,0]) rotate([0,0,90]) boltedPanel(width=60*1.4,height=7, spacing=84/4);
+   }
 
    /* majority of angled part */
    difference() {
@@ -160,7 +172,7 @@ module tower() {
    }
 
    /* antenna array */
-   translate([5, -5, 46.8]) {
+   translate([5, -5, 48.8]) {
       translate([0,0,0]) cylinder(r=3,h=20, $fn=20);
       translate([4,0,0]) cylinder(r=2.5,h=41, $fn=20);
       translate([3,3,0]) cylinder(r=1.4,h=63, $fn=20);
