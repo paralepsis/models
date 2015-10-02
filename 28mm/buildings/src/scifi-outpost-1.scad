@@ -80,7 +80,14 @@ translate([-40,107,0]) {
 translate([-9,86,65]) tower();
 
 /* roof */
-translate([-30,20,55]) cube([80,97,10]);
+translate([-30,20,55]) {
+   cube([80,97,10]);
+
+   translate([-10,0,10]) railing(width=100, spacing=20);
+   translate([90,0,10]) rotate([0,0,90]) railing(width=97, spacing=22);
+   translate([-10,34,10]) rotate([0,0,-90]) railing(width=34, spacing=15);
+   translate([90,97,10]) rotate([0,0,180]) railing(width=37, spacing=17);
+}
 
 
 module footing() {
@@ -117,6 +124,37 @@ module tower() {
    /* fill in the angled component interior */
    scale([0.97, 0.97, 1]) translate([0,0,15])
       linear_extrude(height=30,scale=1.4) square([60,60],center=true);
+}
+
+module railing(width=50, depth=5, height=20, spacing=15) {
+   cube([width, depth, 1.2]);
+   translate([0,0,height-1.2]) cube([width, depth, 1.2]);
+
+   railingEndSupport(height=height, left=true);
+   translate([width-3, 0,0]) railingEndSupport(height=height, left=false);
+
+   if ((width-6)/spacing >= 1) {
+      for (i=[1:(width-6)/spacing]) {
+         translate([i * spacing - (width % spacing)/2, 0, 0])
+            railingSupport(height=height);
+      }
+   }
+}
+
+module railingSupport(height=14) {
+   translate([-1.5,0,0]) cube([3,1.2,height]);
+   translate([-0.6,0,0]) cube([1.2,3,height]);
+}
+
+module railingEndSupport(height=14, left=true) {
+   cube([3,1.2,height]);
+
+   if (left) {
+      cube([1.2, 3, height]);
+   }
+   else {
+      translate([1.8, 0, 0]) cube([1.2, 3, height]);
+   }
 }
 
 /* angled support */
