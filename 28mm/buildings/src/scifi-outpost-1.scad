@@ -2,13 +2,13 @@
 
 include <scifi-hex-door.scad>
 include <scifi-window.scad>
-include <scifi-big-door.scad>
+include <scifi-ladder.scad>
 
 import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
 // translate([-100,25,0]) color("red") cube([200,1,80]);
 
-/* front door */
 
+/* front door */
 translate([-80,0,0]) { 
    cube([50,30,55]);
    translate([0,-0.5, 47]) boltedPanel(width=50);
@@ -32,7 +32,7 @@ translate([-30,20,0]) {
 }
 
 
-/* another wall */
+/* another wall (right side from front) */
 translate([50,20,0]) {
    cube([10,97,65]);
    translate([10.6,0,57]) rotate([0,0,90]) boltedPanel(width=97, spacing=97/4);
@@ -44,6 +44,7 @@ translate([50,20,0]) {
    }
 
    translate([10, 97, 0]) rotate([0,0,180]) footing();
+   translate([9.5,17,0]) rotate([0,0,90]) ladder(mult=2);
 }
 
 /* another wall (left side from front) */
@@ -52,17 +53,27 @@ translate([-80,0,0]) {
    translate([40,75.6,47]) rotate([0,0,180]) boltedPanel(width=40);
    translate([-0.6,75,47]) rotate([0,0,-90]) boltedPanel(width=75,spacing=75/4);
    translate([0, 75, 0]) rotate([0,0,-90]) footing();
+
+   translate([1,61,0]) rotate([0,0,-90]) {
+      myWindow();
+      translate([23,0,0]) myWindow();
+      translate([46,0,0]) myWindow();
+   }
+
+   translate([17,35,54.9]) cube([10,17,2.1]);
+   translate([26,40,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
+   translate([26,43,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
+   translate([26,46,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
+
+   translate([20,13,54.9]) cube([8,10,1.6]);
+   translate([24,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
+   translate([22,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
 }
 translate([-40,20,0]) {
    cube([10,97,65]);
    translate([-0.6,97,57]) rotate([0,0,-90]) boltedPanel(width=97, spacing=97/4);
 }
 
-translate([-79,61,0]) rotate([0,0,-90]) {
-   myWindow();
-   translate([23,0,0]) myWindow();
-   translate([46,0,0]) myWindow();
-}
 
 /* back wall */
 translate([-40,107,0]) {
@@ -84,11 +95,16 @@ translate([-30,20,55]) {
    cube([80,97,10]);
 
    translate([-10,0,10]) railing(width=100, spacing=20);
-   translate([90,0,10]) rotate([0,0,90]) railing(width=97, spacing=22);
+   translate([90,30,10]) rotate([0,0,90]) railing(width=67, spacing=22);
    translate([-10,34,10]) rotate([0,0,-90]) railing(width=34, spacing=15);
    translate([90,97,10]) rotate([0,0,180]) railing(width=37, spacing=17);
-}
 
+   translate([-6,5,10]) plates();
+   translate([24,5,10]) plates();
+   translate([54,5,10]) plates();
+   translate([54,35,10]) plates();
+   translate([54,65,10]) plates();
+}
 
 module footing() {
    translate([-1, -1,0]) linear_extrude(height=7,scale=0.5) square([5.1,5.1]);
@@ -118,12 +134,52 @@ module tower() {
       }
    }
 
-   /* vertical sided bottom component */
-   translate([-30,-30]) cube([60,60,15.5]);
-
    /* fill in the angled component interior */
    scale([0.97, 0.97, 1]) translate([0,0,15])
       linear_extrude(height=30,scale=1.4) square([60,60],center=true);
+
+   /* vertical sided bottom component */
+   translate([-30,-30]) {
+      cube([60,60,15.5]);
+      translate([61.9,4,1]) rotate([0,0,90]) vent(width=50,height=13);
+   }
+
+   /* antenna array */
+   translate([5, -5, 45]) {
+      translate([0,0,0]) cylinder(r=3,h=20, $fn=20);
+      translate([4,0,0]) cylinder(r=2.5,h=41, $fn=20);
+      translate([3,3,0]) cylinder(r=1.4,h=63, $fn=20);
+      translate([4,0,0]) rotate([30,90,0]) cylinder(r=1,h=19,$fn=10);
+      translate([0,0,0]) rotate([150,90,0]) cylinder(r=1,h=23,$fn=10);
+      translate([3,0,0]) rotate([270,90,0]) cylinder(r=1,h=25,$fn=10);
+
+      rotate([0,0,-30]) translate([20,-1,0]) cube([5,5,1.2]);
+      rotate([0,0,90]) translate([22,-5,0]) cube([7,5,1.6]);
+      rotate([0,0,-150]) translate([22,-5,0]) cube([6,8,1.3]);
+   }
+
+}
+
+module vent(width=20,depth=2,height=13) {
+   difference() {
+      cube([width, depth, height]);
+      translate([0.5,-0.1,0.5]) cube([width-1,0.4, height-1]);
+      for (i=[0:(height-2)]) {
+         translate([0.5,0.45,0.5+i*1.]) rotate([-30,0,0]) rotate([0,90,0]) cylinder($fn=3,h=width-1, r=0.4);
+      }
+   }
+}
+
+module plates() {
+      translate([15,15]) linear_extrude(height=1,scale=0.95)
+         translate([-15,-15]) square([30,30]);
+
+      for (i=[0:13]) {
+         translate([1.8,1.8 + 2*i,0.4]) cube([26.35, 0.4, 1]);
+      }
+      for (j=[0:13]) {
+         translate([1.8 + 2*j,1.8,0.4]) cube([0.4, 26.35, 1]);
+      }
 }
 
 module railing(width=50, depth=5, height=20, spacing=15) {
@@ -181,15 +237,15 @@ module myWindow() {
 module tankPipe(pipeRad=8, pipeHt=20) {
    translate([0,pipeHt-1,0]) {
       translate([0,-1 * pipeHt,pipeHt]) rotate([-90,0,0]) {
-         cylinder(r=1.4 * pipeRad, h=4, center=true);
+         cylinder(r=1.4 * pipeRad, h=4, center=true, $fn=30);
          for (i = [0 : 8]) {
             rotate([0,0,45 * i]) translate([1.2 * pipeRad, 0, 0])
-               cylinder($fn=6,r=1, h=2 + 0.6);
+               cylinder($fn=6,r=0.7, h=2 + 0.6);
             }
          }
-      cylinder(r=pipeRad, h=pipeHt);
-      translate([0,0,pipeHt]) sphere(r=pipeRad);
-      translate([0,0,pipeHt]) rotate([90,0,0]) cylinder(r=pipeRad, h=pipeHt);
+      cylinder(r=pipeRad, h=pipeHt, $fn=30);
+      translate([0,0,pipeHt]) sphere(r=pipeRad, $fn=30);
+      translate([0,0,pipeHt]) rotate([90,0,0]) cylinder(r=pipeRad, h=pipeHt, $fn=30);
    }
 }
 
