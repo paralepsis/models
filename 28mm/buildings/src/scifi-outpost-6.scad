@@ -1,4 +1,4 @@
-% translate([0,153/2-10,155/2]) cube(size=[240, 153, 155], center=true);
+// % translate([0,153/2-10,155/2]) cube(size=[240, 153, 155], center=true);
 
 include <scifi-hex-door.scad>
 include <scifi-window.scad>
@@ -35,7 +35,7 @@ translate([-30,20,0]) {
 /* another wall (right side from front) */
 translate([50,20,0]) {
    cube([10,97,65]);
-   translate([10.6,0,57]) rotate([0,0,90]) boltedPanel(width=97, spacing=97/4);
+   translate([10.6,0,57]) rotate([0,0,90]) boltedPanel(width=100, spacing=100/4);
 
    rotate([0,0,-90]) {
       translate([-75,10,0]) tankPipe(pipeRad=4,pipeHt=10);
@@ -43,7 +43,7 @@ translate([50,20,0]) {
       translate([-45,10,0]) tankPipe(pipeRad=4,pipeHt=10);
    }
 
-   translate([10, 97, 0]) rotate([0,0,180]) footing();
+   translate([10, 100, 0]) rotate([0,0,180]) footing();
    translate([9.5,17,0]) rotate([0,0,90]) ladder(mult=2);
 }
 
@@ -71,12 +71,12 @@ translate([-80,0,0]) {
 }
 translate([-40,20,0]) {
    cube([10,97,65]);
-   translate([-0.6,97,57]) rotate([0,0,-90]) boltedPanel(width=97, spacing=97/4);
+   translate([-0.6,100,57]) rotate([0,0,-90]) boltedPanel(width=100, spacing=20);
 }
 
 
 /* back wall */
-translate([-40,107,0]) {
+translate([-40,110,0]) {
    cube([100,10,65]);
    translate([100,10.6,57]) rotate([0,0,180]) boltedPanel(width=100);
 
@@ -88,16 +88,16 @@ translate([-40,107,0]) {
 }
 
 /* tower */
-translate([-9,86,65]) tower();
+translate([-9,87,65]) tower();
 
 /* roof */
 translate([-30,20,55]) {
    cube([80,97,10]);
 
    translate([-10,0,10]) railing(width=100, spacing=20);
-   translate([90,30,10]) rotate([0,0,90]) railing(width=67, spacing=22);
+   translate([90,30,10]) rotate([0,0,90]) railing(width=70, spacing=28);
    translate([-10,34,10]) rotate([0,0,-90]) railing(width=34, spacing=15);
-   translate([90,97,10]) rotate([0,0,180]) railing(width=37, spacing=17);
+   translate([90,100,10]) rotate([0,0,180]) railing(width=37, spacing=17);
 
    translate([-6,5,10]) plates();
    translate([24,5,10]) plates();
@@ -118,6 +118,8 @@ module tower() {
       translate([0,0,15]) linear_extrude(height=30,scale=1.4) square([60,60],center=true);
       translate([-50,-50,20]) cube([100,100,30]);
    }
+
+   translate([-30*1.4,-30*1.4,42]) cube([60*1.4,60*1.4,5]);
 
    /* majority of angled part */
    difference() {
@@ -142,10 +144,23 @@ module tower() {
    translate([-30,-30]) {
       cube([60,60,15.5]);
       translate([61.9,4,1]) rotate([0,0,90]) vent(width=50,height=13);
+
+      translate([7,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=15);
+      translate([7+53/2,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=15);
+      translate([60,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=15);
+
+      translate([-0.5,0,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=15);
+      translate([-0.5,53/2,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=15);
+
+      translate([-0.5,53,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=15);
+
+      translate([7,60.5,15]) rotate([0,90,180]) boltedPanel(height=7,width=15);
+      translate([7+53/2,60.5,15]) rotate([0,90,180]) boltedPanel(height=7,width=15);
+      translate([60,60.5,15]) rotate([0,90,180]) boltedPanel(height=7,width=15);
    }
 
    /* antenna array */
-   translate([5, -5, 45]) {
+   translate([5, -5, 46.8]) {
       translate([0,0,0]) cylinder(r=3,h=20, $fn=20);
       translate([4,0,0]) cylinder(r=2.5,h=41, $fn=20);
       translate([3,3,0]) cylinder(r=1.4,h=63, $fn=20);
