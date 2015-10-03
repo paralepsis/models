@@ -7,116 +7,255 @@ include <scifi-ladder.scad>
 translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
 // translate([-100,25,0]) color("red") cube([200,1,80]);
 
-/* fill it in */
-translate([-30,30,0]) cube([85,85,53]);
+// wholeOutpost();
+explodedView();
 
-/* front door */
-translate([-80,0,0]) { 
-   cube([50,30,55]);
-   translate([0,-0.5, 47]) boltedPanel(width=50);
-   translate([50.6,0,47]) rotate([0,0,90]) boltedPanel(width=20);
 
-   translate([36,1,0]) myWindow();
-   translate([13,1,0]) myWindow();
+// printAnnexWalls();
+// printAnnexRoof();
+// printMainWalls();
+// printMainRoof();
+// printTowerWalls();
+// printTowerRoof();
+// printRailings();
 
-   translate([0, 0, 0]) rotate([0,0,0]) footing();
-   translate([50, 0, 0]) rotate([0,0,90]) footing();
+/* COMPLETE CONFIGURATION OPTIONS */
+
+module wholeOutpost() {
+   wholeMain();
+   wholeAnnex();
+   wholeTower();
+   wholeRailings();
 }
 
-translate([-30,20,0]) {
-   cube([90,10,65]);
-   translate([-10,-0.5, 57]) boltedPanel(width=100);
-
-   translate([40,1.1,25]) rotate([90,0,0]) scale([0.7,0.7,1]) hexDoor();
-   translate([-45/2 + 40,-8.9,0]) cube([45,10,4]);
-
-   translate([90, 0, 0]) rotate([0,0,90]) footing();
+module explodedView() {
+  translate([-10,-10,0]) printAnnexWalls();
+  translate([-10,-10,10]) printAnnexRoof();
+  printMainWalls();
+  translate([0,0,10]) printMainRoof();
+  translate([0,0,20]) printTowerWalls();
+  translate([0,0,30]) printTowerRoof();
+  translate([0,0,10]) printRailings();
 }
 
+/* PRINT VERSIONS OF COMPONENTS */
 
-/* another wall (right side from front) */
-translate([50,20,0]) {
-   cube([10,97,65]);
-   translate([10.6,0,57]) rotate([0,0,90]) boltedPanel(width=100, spacing=100/4);
-
-   rotate([0,0,-90]) {
-      translate([-75,10,0]) tankPipe(pipeRad=4,pipeHt=10);
-      translate([-60,10,0]) tankPipe(pipeRad=4,pipeHt=10);
-      translate([-45,10,0]) tankPipe(pipeRad=4,pipeHt=10);
+module printRailings(nr=0) {
+   if (nr==0 || nr==1) translate([-10,0,0]) intersection() { 
+      difference() {
+         wholeRailings();
+         translate([22,38,64]) cube([40,90,22]);
+      }
+      translate([-40,20,64]) rotate([0,0,45]) cube([40,40,22]);
+   }
+      
+   if (nr==0 || nr==2) translate([0,-10,0]) difference() { 
+      difference() {
+         wholeRailings();
+         translate([22,38,64]) cube([40,90,22]);
+      }
+      translate([-40,20,64]) rotate([0,0,45]) cube([40,40,22]);
    }
 
-   translate([10, 100, 0]) rotate([0,0,180]) footing();
-   translate([9.5,17,0]) rotate([0,0,90]) ladder(mult=2);
-}
-
-/* another wall (left side from front) */
-translate([-80,0,0]) {
-   cube([50,75,55]);
-   translate([40,75.6,47]) rotate([0,0,180]) boltedPanel(width=40);
-   translate([-0.6,75,47]) rotate([0,0,-90]) boltedPanel(width=75,spacing=75/4);
-   translate([0, 75, 0]) rotate([0,0,-90]) footing();
-
-   translate([1,61,0]) rotate([0,0,-90]) {
-      myWindow();
-      translate([23,0,0]) myWindow();
-      translate([46,0,0]) myWindow();
+   if (nr==0 || nr==3) translate([0,10,0]) intersection() { 
+      intersection() {
+         wholeRailings();
+         translate([22,38,64]) cube([40,90,22]);
+      }
+      translate([33,93,64]) rotate([0,0,45]) cube([40,40,22]);
    }
 
-   translate([17,35,54.9]) cube([10,17,2.1]);
-   translate([26,40,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
-   translate([26,43,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
-   translate([26,46,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
-
-   translate([13,58,54.9]) cube([12,6,2.0]);
-   translate([21,60,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
-   translate([19,60,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
-
-   translate([20,13,54.9]) cube([8,10,1.6]);
-   translate([24,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
-   translate([22,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
-}
-translate([-40,20,0]) {
-   cube([10,97,65]);
-   translate([-0.6,100,57]) rotate([0,0,-90]) boltedPanel(width=100, spacing=20);
+   if (nr==0 || nr==4) translate([10,0,0]) difference() { 
+      intersection() {
+         wholeRailings();
+         translate([22,38,64]) cube([40,90,22]);
+      }
+      translate([33,93,64]) rotate([0,0,45]) cube([40,40,22]);
+   }
 }
 
-
-/* back wall */
-translate([-40,110,0]) {
-   cube([100,10,65]);
-   translate([100,10.6,57]) rotate([0,0,180]) boltedPanel(width=100);
-
-   translate([0 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
-   translate([35 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
-   translate([70 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
-
-   translate([0, 10, 0]) rotate([0,0,-90]) footing();
+module printTowerWalls() {
+   difference() {
+      wholeTower();
+      translate([-9,87,65]) {
+         translate([-25,-25,-1]) cube([50,50,17]);
+         scale([0.85, 0.85, 1]) translate([0,0,15])
+            linear_extrude(height=30,scale=1.4) square([60,60],center=true);
+         translate([-30*1.4 -1.5,-30*1.4-1.5,42]) cube([60*1.4+3,60*1.4+3 ,70]);
+      }
+   }
 }
 
-/* tower */
-translate([-9,87,65]) tower();
-
-/* roof */
-translate([-30,20,55]) {
-   cube([80,97,10]);
-
-   translate([-10,0,10]) railing(width=100, spacing=20);
-   translate([90,30,10]) rotate([0,0,90]) railing(width=70, spacing=28);
-   translate([-10,34,10]) rotate([0,0,-90]) railing(width=34, spacing=15);
-   translate([90,100,10]) rotate([0,0,180]) railing(width=37, spacing=17);
-
-   translate([-6,5,10]) plates();
-   translate([24,5,10]) plates();
-   translate([54,5,10]) plates();
-   translate([54,35,10]) plates();
-   translate([54,65,10]) plates();
+module printTowerRoof() {
+   intersection() {
+      wholeTower();
+      translate([-57,37,42+65]) cube([100,100,70]);
+   }
 }
+
+module printMainWalls() {
+   difference() {
+      wholeMain();
+      translate([-32.5,27.5,-1]) cube([85,85,61]);
+      translate([-35,25,60]) cube([90,90,10]);
+   }
+}
+
+module printMainRoof() {
+   intersection() {
+      wholeMain();
+      translate([-35,25,60]) cube([90,90,10]);
+   }
+}
+
+module printAnnexWalls() {
+   difference() {
+      wholeAnnex();
+
+      /* corner cutout to make room for main building */
+      translate([-40,20,-1]) cube([11,57,60]);
+
+      /* hollow it out */
+      translate([-76,5,-1]) cube([32,65,60]);
+      translate([-45,5,-1]) cube([11,10,60]);
+
+      /* chop the top */
+      translate([-90, -2, 47]) cube([65,80,15]);
+   }
+}
+
+module printAnnexRoof() {
+   difference() {
+      wholeAnnex();
+
+      /* corner cutout to make room for main building */
+      translate([-40,20,-1]) cube([11,57,60]);
+
+      /* cut off the bottom */
+      translate([-93, -5, -1]) cube([71,90,48]);
+   }
+}
+
+/* WHOLE COMPONENTS */
+
+module wholeAnnex() {
+   translate([-80,0,0]) {
+      cube([50,75,55]);
+      translate([40,75.6,47]) rotate([0,0,180]) boltedPanel(width=40);
+      translate([-0.6,75,47]) rotate([0,0,-90])
+         boltedPanel(width=75,spacing=75/4);
+      translate([0,-0.5, 47]) boltedPanel(width=50);
+      translate([50.6,0,47]) rotate([0,0,90]) boltedPanel(width=20);
+
+      translate([0, 0, 0]) rotate([0,0,0]) footing();
+      translate([50, 0, 0]) rotate([0,0,90]) footing();
+      translate([0, 75, 0]) rotate([0,0,-90]) footing();
+
+      translate([36,1,0]) myWindow();
+      translate([13,1,0]) myWindow();
+
+      translate([1,61,0]) rotate([0,0,-90]) {
+         myWindow();
+         translate([23,0,0]) myWindow();
+         translate([46,0,0]) myWindow();
+      }
+
+      /* rooftop decorations */
+      translate([17,35,54.9]) cube([10,17,2.1]);
+      translate([26,40,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
+      translate([26,43,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
+      translate([26,46,55]) rotate([0,90,0]) cylinder(r=1,h=17,$fn=10);
+
+      translate([13,58,54.9]) cube([12,6,2.0]);
+      translate([21,60,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
+      translate([19,60,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
+
+      translate([20,13,54.9]) cube([8,10,1.6]);
+      translate([24,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
+      translate([22,36,55.1]) rotate([90,0,0]) cylinder(r=0.7,h=17,$fn=10);
+   }
+}
+
+module wholeMain() {
+   /* fill it in */
+   translate([-30,30,0]) cube([85,85,53]);
+
+   /* front door */
+   translate([-30,20,0]) {
+      cube([90,10,65]);
+      translate([-10,-0.5, 57]) boltedPanel(width=100);
+
+      translate([40,1.1,25]) rotate([90,0,0]) scale([0.7,0.7,1]) hexDoor();
+      translate([-45/2 + 40,-8.9,0]) cube([45,10,4]);
+
+      translate([90, 0, 0]) rotate([0,0,90]) footing();
+   }
+
+   /* another wall (right side from front) */
+   translate([50,20,0]) {
+      cube([10,97,65]);
+      translate([10.6,0,57]) rotate([0,0,90])
+         boltedPanel(width=100, spacing=100/4);
+
+      rotate([0,0,-90]) {
+         translate([-75,10,0]) tankPipe(pipeRad=4,pipeHt=10);
+         translate([-60,10,0]) tankPipe(pipeRad=4,pipeHt=10);
+         translate([-45,10,0]) tankPipe(pipeRad=4,pipeHt=10);
+      }
+
+      translate([10, 100, 0]) rotate([0,0,180]) footing();
+      translate([9.5,17,0]) rotate([0,0,90]) ladder(mult=2);
+   }
+
+   translate([-40,20,0]) {
+      cube([10,97,65]);
+      translate([-0.6,100,57]) rotate([0,0,-90])
+         boltedPanel(width=100, spacing=20);
+   }
+
+   /* back wall */
+   translate([-40,110,0]) {
+      cube([100,10,65]);
+      translate([100,10.6,57]) rotate([0,0,180]) boltedPanel(width=100);
+
+      translate([0 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
+      translate([35 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
+      translate([70 + 19,30,0]) rotate([0,0,180]) angledSupport(height=57);
+
+      translate([0, 10, 0]) rotate([0,0,-90]) footing();
+   }
+
+   /* roof */
+   translate([-30,20,55]) {
+      cube([80,97,10]);
+
+      translate([-5,5,10]) plates();
+      translate([25,5,10]) plates();
+      translate([55,5,10]) plates();
+      translate([55,35,10]) plates();
+      translate([55,65,10]) plates();
+   }
+}
+
+module wholeRailings() {
+   translate([-30,20,55]) {
+      translate([-10,0,10]) railing(width=100, spacing=20);
+      translate([90,30,10]) rotate([0,0,90]) railing(width=70, spacing=28);
+      translate([-10,34,10]) rotate([0,0,-90]) railing(width=34, spacing=15);
+      translate([90,100,10]) rotate([0,0,180]) railing(width=37, spacing=17);
+   }
+}
+
+/* BUILDING BLOCK MODULES */
 
 module footing() {
    translate([-1, -1,0]) linear_extrude(height=7,scale=0.5) square([5.1,5.1]);
 }
 
-/* MODULES */
+
+module wholeTower() {
+   translate([-9,87,65]) tower();
+}
 
 module tower() {
    /* bottom of angled part */
