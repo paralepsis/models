@@ -7,17 +7,22 @@ include <scifi-ladder.scad>
 translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
 // translate([-100,25,0]) color("red") cube([200,1,80]);
 
-// wholeOutpost();
-explodedView();
+/* TWO BASIC VIEWS */
+wholeOutpost();
+// explodedView();
 
 
+/* VERSIONS FOR CREATING SEPARATE STL FILES */
 // printAnnexWalls();
 // printAnnexRoof();
 // printMainWalls();
 // printMainRoof();
 // printTowerWalls();
 // printTowerRoof();
-// printRailings();
+// rotate([0,-90,0]) printRailings(nr=1);
+// rotate([90,0,0]) printRailings(nr=2);
+// rotate([-90,0,0]) printRailings(nr=3);
+// rotate([0,90,0]) printRailings(nr=4);
 
 /* COMPLETE CONFIGURATION OPTIONS */
 
