@@ -8,7 +8,7 @@ translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base
 // translate([-100,25,0]) color("red") cube([200,1,80]);
 
 /* TWO BASIC VIEWS */
-wholeOutpost();
+// wholeOutpost();
 // explodedView();
 
 
@@ -16,7 +16,7 @@ wholeOutpost();
 // printAnnexWalls();
 // printAnnexRoof();
 // printMainWalls();
-// printMainRoof();
+printMainRoof();
 // printTowerWalls();
 // printTowerRoof();
 // rotate([0,-90,0]) printRailings(nr=1);
@@ -346,10 +346,10 @@ module plates() {
          translate([-15,-15]) square([30,30]);
 
       for (i=[0:13]) {
-         translate([1.8,1.8 + 2*i,0.4]) cube([26.35, 0.4, 1]);
+         translate([1.7,1.7 + 2*i,0.4]) cube([26.8, 0.8, 1]);
       }
       for (j=[0:13]) {
-         translate([1.8 + 2*j,1.8,0.4]) cube([0.4, 26.35, 1]);
+         translate([1.7 + 2*j,1.7,0.4]) cube([0.8, 26.8, 1]);
       }
 }
 
