@@ -1,3 +1,8 @@
+/* scifi-outpost-6.scad
+ *
+ * Copyright (C) Robert B. Ross
+ */
+
 // % translate([0,153/2-10,155/2]) cube(size=[240, 153, 155], center=true);
 
 include <scifi-hex-door.scad>
@@ -11,12 +16,11 @@ translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base
 // wholeOutpost();
 // explodedView();
 
-
 /* VERSIONS FOR CREATING SEPARATE STL FILES */
 // printAnnexWalls();
 // printAnnexRoof();
-// printMainWalls();
-printMainRoof();
+printMainWalls();
+// printMainRoof();
 // printTowerWalls();
 // printTowerRoof();
 // rotate([0,-90,0]) printRailings(nr=1);
@@ -101,8 +105,11 @@ module printTowerRoof() {
 module printMainWalls() {
    difference() {
       wholeMain();
-      translate([-32.5,27.5,-1]) cube([85,85,61]);
-      translate([-35,25,60]) cube([90,90,10]);
+      translate([-37,23,-1]) cube([94,94,61-9]);
+      translate([94/2 -37,94/2 + 23,61-10.1])
+         linear_extrude(scale=0.90,height=9.1) translate([-94/2,-94/2])
+            square([94,94]);
+      translate([-35,25,60]) cube([90,90,10]); // top, where roof fits
    }
 }
 
@@ -121,8 +128,8 @@ module printAnnexWalls() {
       translate([-40,20,-1]) cube([11,57,60]);
 
       /* hollow it out */
-      translate([-76,5,-1]) cube([32,65,60]);
-      translate([-45,5,-1]) cube([11,10,60]);
+      translate([-77,3,-1]) cube([35,69,60]);
+      translate([-45,3,-1]) cube([12,15,60]);
 
       /* chop the top */
       translate([-90, -2, 47]) cube([65,80,15]);
