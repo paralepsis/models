@@ -19,9 +19,9 @@ translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base
 /* VERSIONS FOR CREATING SEPARATE STL FILES */
 // printAnnexWalls();
 // printAnnexRoof();
-printMainWalls();
+// printMainWalls();
 // printMainRoof();
-// printTowerWalls();
+ printTowerWalls();
 // printTowerRoof();
 // rotate([0,-90,0]) printRailings(nr=1);
 // rotate([90,0,0]) printRailings(nr=2);
@@ -87,7 +87,7 @@ module printTowerWalls() {
    difference() {
       wholeTower();
       translate([-9,87,65]) {
-         translate([-25,-25,-1]) cube([50,50,17]);
+         translate([-25.5,-25.5,-1]) cube([51,51,17]);
          scale([0.85, 0.85, 1]) translate([0,0,15])
             linear_extrude(height=30,scale=1.4) square([60,60],center=true);
          translate([-30*1.4 -1.5,-30*1.4-1.5,42]) cube([60*1.4+3,60*1.4+3 ,70]);
