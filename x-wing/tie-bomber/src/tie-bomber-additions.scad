@@ -13,7 +13,19 @@ bigHt     = 3.3; // was 4 originally
 
 $fn=20;
 
-connectorOutline();
+// connectorOutline();
+// connectorComplete();
+
+customRaft();
+
+module customRaft() {
+   linear_extrude(height=0.3) hull() {
+      translate([-11,7]) circle(r=2);
+      translate([11,7]) circle(r=2);
+      translate([11,-12]) circle(r=2);
+      translate([-11,-12]) circle(r=2);
+   }
+}
 
 module connectorOutline() {
    translate([0,-7,5]) {
@@ -24,7 +36,7 @@ module connectorOutline() {
 module connectorComplete() {
    translate([0,-7,5]) difference() {
       cylinder(r1=bigRad+0.4,r2=bigRad+0.8,h=littleRad+littleHt + bigHt + 1);
-      internals();
+      translate([0,0,-0.05]) internals();
    }
 }
 
