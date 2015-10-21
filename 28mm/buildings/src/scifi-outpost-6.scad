@@ -13,7 +13,7 @@ translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base
 // translate([-100,25,0]) color("red") cube([200,1,80]);
 
 /* TWO BASIC VIEWS */
-// wholeOutpost();
+ wholeOutpost();
 // explodedView();
 
 /* VERSIONS FOR CREATING SEPARATE STL FILES */
@@ -21,7 +21,7 @@ translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base
 // printAnnexRoof();
 // printMainWalls();
 // printMainRoof();
- printTowerWalls();
+// printTowerWalls();
 // printTowerRoof();
 // rotate([0,-90,0]) printRailings(nr=1);
 // rotate([90,0,0]) printRailings(nr=2);
@@ -86,11 +86,11 @@ module printRailings(nr=0) {
 module printTowerWalls() {
    difference() {
       wholeTower();
-      translate([-9,87,65]) {
-         translate([-25.5,-25.5,-1]) cube([51,51,17]);
+      translate([-9,87,65+8]) {
+         translate([-25.5,-25.5,-1-8]) cube([51,51,17+8]);
          scale([0.85, 0.85, 1]) translate([0,0,15])
             linear_extrude(height=30,scale=1.4) square([60,60],center=true);
-         translate([-30*1.4 -1.5,-30*1.4-1.5,42]) cube([60*1.4+3,60*1.4+3 ,70]);
+         translate([-30*1.4 -1.5,-30*1.4-1.5,42-0.05]) cube([60*1.4+3,60*1.4+3 ,70]);
       }
    }
 }
@@ -266,7 +266,7 @@ module footing() {
 
 
 module wholeTower() {
-   translate([-9,87,65]) tower();
+   translate([-9,87,65+8]) tower(); // "+8" is due to new tower height 
 }
 
 module tower() {
@@ -304,23 +304,8 @@ module tower() {
       linear_extrude(height=30,scale=1.4) square([60,60],center=true);
 
    /* vertical sided bottom component */
-   translate([-30,-30]) {
-      cube([60,60,15.5]);
-      translate([61.9,4,1]) rotate([0,0,90]) vent(width=50,height=13);
-
-      translate([7,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=15);
-      translate([7+53/2,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=15);
-      translate([60,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=15);
-
-      translate([-0.5,0,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=15);
-      translate([-0.5,53/2,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=15);
-
-      translate([-0.5,53,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=15);
-
-      translate([7,60.5,15]) rotate([0,90,180]) boltedPanel(height=7,width=15);
-      translate([7+53/2,60.5,15]) rotate([0,90,180]) boltedPanel(height=7,width=15);
-      translate([60,60.5,15]) rotate([0,90,180]) boltedPanel(height=7,width=15);
-   }
+   // translate([-30,-30,0]) towerBottom(tbHeight=15.5);
+   translate([-30,-30,-8]) towerBottom(tbHeight=23.5);
 
    /* antenna array */
    translate([5, -5, 48.8]) {
@@ -335,9 +320,28 @@ module tower() {
       rotate([0,0,90]) translate([22,-5,0]) cube([7,5,1.6]);
       rotate([0,0,-150]) translate([22,-5,0]) cube([6,8,1.3]);
    }
-
 }
 
+module towerBottom(tbHeight=15.5) {
+   cube([60,60,tbHeight]);
+   translate([61.9,4,2]) rotate([0,0,90]) vent(width=50,height=tbHeight-4);
+
+   translate([7,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=tbHeight, spacing=30);
+   translate([7+53/2,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=tbHeight, spacing=30);
+   translate([60,-0.5,0]) rotate([0,-90,0]) boltedPanel(height=7,width=tbHeight, spacing=30);
+
+   translate([-0.5,0,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=tbHeight, spacing=30);
+   translate([-0.5,53/2,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=tbHeight, spacing=30);
+
+   translate([-0.5,53,0]) rotate([-90,-90,0]) boltedPanel(height=7,width=tbHeight, spacing=30);
+
+   translate([7,60.5,tbHeight]) rotate([0,90,180]) boltedPanel(height=7,width=tbHeight, spacing=30);
+   translate([7+53/2,60.5,tbHeight]) rotate([0,90,180]) boltedPanel(height=7,width=tbHeight, spacing=30);
+   translate([60,60.5,tbHeight]) rotate([0,90,180]) boltedPanel(height=7,width=tbHeight, spacing=30);
+}
+
+
+/* VENT */
 module vent(width=20,depth=2,height=13) {
    difference() {
       cube([width, depth, height]);
@@ -348,6 +352,7 @@ module vent(width=20,depth=2,height=13) {
    }
 }
 
+/* FLOOR PLATES */
 module plates() {
       translate([15,15]) linear_extrude(height=1,scale=0.95)
          translate([-15,-15]) square([30,30]);
@@ -427,6 +432,7 @@ module tankPipe(pipeRad=8, pipeHt=20) {
    }
 }
 
+/* BOLTED PANEL */
 module boltedPanel(width=40, depth=0.65, height=8, spacing=20) {
    cube([width, depth, height]);
 
