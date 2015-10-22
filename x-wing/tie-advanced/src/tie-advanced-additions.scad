@@ -13,17 +13,19 @@ bigHt     = 3.3; // was 4 originally
 
 $fn=20;
 
-// connectorOutline();
+connectorOutline();
 // connectorComplete();
 
-customRaft();
+// customRaft();
 
 module customRaft() {
    linear_extrude(height=0.3) hull() {
-      translate([-11,7]) circle(r=2);
-      translate([11,7]) circle(r=2);
-      translate([11,-12]) circle(r=2);
-      translate([-11,-12]) circle(r=2);
+      translate([-11.5,2]) circle(r=2);
+      translate([11.5,2]) circle(r=2);
+      translate([11.5,-2]) circle(r=2);
+      translate([-11.5,-2]) circle(r=2);
+      translate([2,-9]) circle(r=2);
+      translate([-2,-9]) circle(r=2);
    }
 }
 
@@ -33,14 +35,14 @@ module customRaft() {
    is "unioned".
 */
 module connectorOutline() {
-   translate([0,-7,5]) {
+   translate([0,-9,26]) rotate([-90,0,0]) {
       scale([0.998,0.998,1])
          cylinder(r1=bigRad+0.4,r2=bigRad+0.8,h=littleRad+littleHt + bigHt + 1);
    }
 }
 
 module connectorComplete() {
-   translate([0,-7,5]) difference() {
+   translate([0,-9,26]) rotate([-90,0,0]) difference() {
       cylinder(r1=bigRad+0.4,r2=bigRad+0.8,h=littleRad+littleHt + bigHt + 1);
       translate([0,0,-0.05]) internals();
    }
