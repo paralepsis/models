@@ -13,8 +13,8 @@ translate([0,-10,0]) import("/Users/rross/personal/3dprint/marine/marine-on-base
 // translate([-100,25,0]) color("red") cube([200,1,80]);
 
 /* TWO BASIC VIEWS */
- wholeOutpost();
-// explodedView();
+// wholeOutpost();
+explodedView();
 
 /* VERSIONS FOR CREATING SEPARATE STL FILES */
 // printAnnexWalls();
@@ -43,7 +43,7 @@ module explodedView() {
   printMainWalls();
   translate([0,0,10]) printMainRoof();
   translate([0,0,20]) printTowerWalls();
-  translate([0,0,30]) printTowerRoof();
+  translate([0,0,40]) printTowerRoof();
   translate([0,0,10]) printRailings();
 }
 
@@ -98,7 +98,7 @@ module printTowerWalls() {
 module printTowerRoof() {
    intersection() {
       wholeTower();
-      translate([-57,37,42+65]) cube([100,100,70]);
+      translate([-57,37,42+65+8]) cube([100,100,70]);
    }
 }
 
@@ -266,10 +266,10 @@ module footing() {
 
 
 module wholeTower() {
-   translate([-9,87,65+8]) tower(); // "+8" is due to new tower height 
+   translate([-9,87,65+8]) tower(open=0); // "+8" is due to new tower height 
 }
 
-module tower() {
+module tower(open=0) {
    /* bottom of angled part */
    difference() {
       translate([0,0,15]) linear_extrude(height=30,scale=1.4) square([60,60],center=true);
@@ -300,8 +300,10 @@ module tower() {
    }
 
    /* fill in the angled component interior */
-   scale([0.97, 0.97, 1]) translate([0,0,15])
-      linear_extrude(height=30,scale=1.4) square([60,60],center=true);
+   if (!open) {
+      scale([0.97, 0.97, 1]) translate([0,0,15])
+            linear_extrude(height=30,scale=1.4) square([60,60],center=true);
+   }
 
    /* vertical sided bottom component */
    // translate([-30,-30,0]) towerBottom(tbHeight=15.5);
@@ -346,7 +348,7 @@ module vent(width=20,depth=2,height=13) {
    difference() {
       cube([width, depth, height]);
       translate([0.5,-0.1,0.5]) cube([width-1,0.4, height-1]);
-      for (i=[0:(height-2)]) {
+      for (i=[0:(height-1)]) {
          translate([0.5,0.45,0.5+i*1.]) rotate([-30,0,0]) rotate([0,90,0]) cylinder($fn=3,h=width-1, r=0.4);
       }
    }
