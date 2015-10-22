@@ -1,14 +1,8 @@
+/* scifi-window.scad
+ *
+ * Copyright (C) Robert B. Ross.
+ */
 include <greg-frost-bevel-extrude.scad>
-
-// Module names are of the form poly_<inkscape-path-id>().  As a result,
-// you can associate a polygon in this OpenSCAD program with the corresponding
-// SVG element in the Inkscape document by looking for the XML element with
-// the attribute id="inkscape-path-id".
-
-// fudge value is used to ensure that subtracted solids are a tad taller
-// in the z dimension than the polygon being subtracted from.  This helps
-// keep the resulting .stl file manifold.
-fudge = 0.1;
 
 module window() {
    /* body of window */
@@ -36,7 +30,8 @@ module window() {
       translate([-5,11,0]) rotate([0,90,0]) cylinder(r=5,h=10,$fn=30);
       translate([-10,0,-6]) cube([20,20,6]);
       translate([-10,0,0]) cube([20,12,6]);
-      translate([-10,0,2]) rotate([-10,0,0]) cube([20,12,6]);
+      translate([-10,0,3.5]) rotate([-30,0,0]) cube([20,12,10]);
+      // translate([-10,0,2]) rotate([-10,0,0]) cube([20,12,6]); /* original */
    }
 }
 

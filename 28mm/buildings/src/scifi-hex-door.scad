@@ -38,6 +38,8 @@ module hexDoor() {
    translate([-40,-7,0]) rotate([0,0,90]) decoration();
    translate([40,5,0]) rotate([0,0,-90]) decoration();
    translate([40,-7,0]) rotate([0,0,-90]) decoration();
+
+   // translate([-20.8,26.7,3]) sphere($fn=30,r=3.0);
 }
 
 /* MODULES */
