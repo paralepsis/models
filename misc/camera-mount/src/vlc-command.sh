@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Created with help from these two pages in particular:
+# Created with help from these pages in particular:
 #   http://xmodulo.com/live-stream-video-webcam-linux.html
 #   http://www.subsecret.dk/wiki/Transcoding_with_VLC
+#   https://wiki.videolan.org/Documentation:Modules/v4l2/
 
 /usr/bin/cvlc -I dummy --no-interact \
    v4l2:///dev/video0 :v4l2-standard= :live-caching=60 \

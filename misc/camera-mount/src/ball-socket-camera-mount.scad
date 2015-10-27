@@ -1,3 +1,19 @@
+/* ball-socket-camera-mount.scad
+ *
+ * Copyright (C) Robert B. Ross, 2015
+ *
+ * This software is released under the GNU LGPL version 2.1.
+ *
+ * A portion of this design is based off Mason Stone's Customizable
+ * Ball-and-Socket Mount as downloaded on Oct. 21, 2015. That design was
+ * made available under the Creative Commons - Attribution license.
+ *
+ * This design also borrows from the MCAD package, which is licensed under
+ * the LGPL.
+ *
+ *
+ */
+
 // Diameter of Ball
 ballSize = 15;
 
@@ -20,9 +36,9 @@ flangeMountFactor=.27; // placement for flange holes
 
 $fn=30;
 
-// mountPortion();
-// translate([67, 13, 0]) socket();
-translate([0,6.0,0]) lensHood();
+mountPortion();
+translate([67, 13, 0]) socket();
+// translate([0,6.0,0]) lensHood();
 
 
 
@@ -197,7 +213,6 @@ module base()
 module std1032BoltHole(length=30, tolerance = +0.0001)
 {
     radius = 4.78/2 + tolerance; // listed tolerance is .0028 in
-    //capHeight = (.097 * 25.4) + tolerance;
     capHeight = 4.82 + tolerance;
     capRadius = 7.82/2 + tolerance;
 
