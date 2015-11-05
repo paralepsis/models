@@ -3,16 +3,16 @@
 translate([0, 35, 12]) rotate([0,0,80]) color("red")
    import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
 
-$fn=10;
+$fn=6;
 
 // translate([-20,47.5,10]) rotate([74,0,0]) backHatch();
+
 translate([-21.5,-10,10]) compartmentFloor(len=56);
 compartmentWalls();
-
-
-
 translate([-20.45,14,11]) seats();
 translate([20.45,45.4,11]) rotate([0,0,180]) seats();
+
+translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
 
 module seats() {
    for(i=[0:2]) {
@@ -117,10 +117,28 @@ module compartmentWalls(len=56, doors=0) {
       }
 
       difference() {
-         translate([4,16,0.5]) cube([7,3,1]);
-         translate([5.5,17,0.4]) cube([4,1,1.1]);
+         translate([4,18,0.5]) cube([7,3,1]);
+         translate([5.5,19,0.4]) cube([4,1,1.1]);
       }
    }
+}
+
+module commandControls() {
+   translate([0,0,10]) {
+      translate([2.5,4,4]) rotate([0,-14,0]) rotate([90,0,90]) {
+         translate([-1.5,-2.5,-1.6]) cube([18,5.75,2.75],center=false);
+
+         for (i = [0:14]) {
+            for (j = [0:3]) {
+               translate([1.1*i - 0.25,1.1*j - 1.5,0])
+                  cube([0.75,0.75,3.5],center=true);
+            }
+         }
+      }
+   }
+
+   translate([1.7,2,19]) rotate([0,5,5]) cube([1.8,9,7]);
+   translate([1.0,12,19]) rotate([0,5,-5]) cube([1.8,9,7]);
 }
 
 module compartmentFloor(len = 56) {
