@@ -1,19 +1,33 @@
-//% import("../orig/da5id-rhino/rhino-complete-repaired.stl");
+% import("../orig/da5id-rhino/rhino-complete-repaired.stl");
 
+/*
 translate([0, 35, 12]) rotate([0,0,80]) color("red")
    import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
+*/
 
 $fn=6;
 
 // translate([-20,47.5,10]) rotate([74,0,0]) backHatch();
 
+/* REGION TO DIFF OUT OF ORIGINAL MODEL */
+// translate([-21,-9,12]) cube([42,69,31]);
+
+/* INTERIOR */
+/* 
 translate([-21.5,-10,10]) compartmentFloor(len=56);
 compartmentWalls();
 translate([-20.45,14,11]) seats();
 translate([20.45,45.4,11]) rotate([0,0,180]) seats();
-
 translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
+*/
 
+/*
+translate([25.1,-8,13.9]) sideDoorClosed();
+translate([-27.1,-8,13.5]) sideDoorClosed();
+*/
+sideDoorOpenings();
+
+/* MODULES */
 module seats() {
    for(i=[0:2]) {
       translate([0,11.2*i,0]) scale([1.05,1.3,1]) {
@@ -85,8 +99,8 @@ module compartmentWalls(len=56, doors=0) {
          translate([21.5,-10,10]) rotate([90,0,90]) linear_extrude(height=1)
             polygon([[0,0], [len,0], [len+34*cos(74), 34*sin(74)],
                      [0,34*sin(74)]]);
-         translate([22,-10,10]) cube([10,30,30]);
-         translate([-32,-10,10]) cube([10,30,30]);
+         translate([22,-10,10]) cube([10.05,30,30]);
+         translate([-32,-10,10]) cube([10.05,30,30]);
 
       }
       sideDoorOpenings();
@@ -143,10 +157,10 @@ module commandControls() {
 
 module compartmentFloor(len = 56) {
    difference() {
-      cube([43,len,2]);
+      cube([44.,len,2]);
 
       for (j=[0:18]) {
-         translate([3.25 + 2*j,4,1.6]) cube([0.8, len-6, 0.5]);
+         translate([3.3 + 2*j,4,1.6]) cube([0.8, len-6, 0.5]);
       }
    }
 }
