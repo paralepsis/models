@@ -13,19 +13,24 @@ $fn=6;
 // translate([-21,-9,12]) cube([42,69,31]);
 
 /* INTERIOR */
-/* 
-translate([-21.5,-10,10]) compartmentFloor(len=56);
-compartmentWalls();
-translate([-20.45,14,11]) seats();
-translate([20.45,45.4,11]) rotate([0,0,180]) seats();
-translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
-*/
+difference() {
+   completeInterior();
+   translate([-40,-20,6.25])cube([80,80,5]);
+}
 
 /*
 translate([25.1,-8,13.9]) sideDoorClosed();
 translate([-27.1,-8,13.5]) sideDoorClosed();
 */
-sideDoorOpenings();
+//sideDoorOpenings();
+
+module completeInterior() {
+   translate([-21.5,-10,10]) compartmentFloor(len=56.5);
+   compartmentWalls();
+   translate([-20.45,14,11]) seats();
+   translate([20.45,45.4,11]) rotate([0,0,180]) seats();
+   translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
+}
 
 /* MODULES */
 module seats() {
@@ -157,7 +162,7 @@ module commandControls() {
 
 module compartmentFloor(len = 56) {
    difference() {
-      cube([44.,len,2]);
+      translate([0,0,1.25]) cube([44.,len,0.75]);
 
       for (j=[0:18]) {
          translate([3.3 + 2*j,4,1.6]) cube([0.8, len-6, 0.5]);
