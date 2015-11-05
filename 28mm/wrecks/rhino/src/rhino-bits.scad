@@ -1,4 +1,4 @@
-// % import("../orig/da5id-rhino/rhino-complete-repaired.stl");
+//% import("../orig/da5id-rhino/rhino-complete-repaired.stl");
 
 translate([0, 35, 12]) rotate([0,0,80]) color("red")
    import("/Users/rross/personal/3dprint/marine/marine-on-base.stl");
@@ -6,17 +6,17 @@ translate([0, 35, 12]) rotate([0,0,80]) color("red")
 $fn=10;
 
 // translate([-20,47.5,10]) rotate([74,0,0]) backHatch();
-translate([-20.5,-10,10]) compartmentFloor(len=56);
+translate([-21.5,-10,10]) compartmentFloor(len=56);
 compartmentWalls();
 
 
 
-translate([-19.45,14,11]) seats();
-translate([19.45,45.4,11]) rotate([0,0,180]) seats();
+translate([-20.45,14,11]) seats();
+translate([20.45,45.4,11]) rotate([0,0,180]) seats();
 
 module seats() {
    for(i=[0:2]) {
-      translate([0,11.2*i,0]) scale([1.2,1.3,1]) {
+      translate([0,11.2*i,0]) scale([1.05,1.3,1]) {
          /* seat */
          hull() {
             translate([0,0.5,8]) cylinder(r=1,h=2);
@@ -75,22 +75,18 @@ module sideDoorOpenings(thick=20) {
    }
 }
 
-module compartment() {
-   translate([-20,-10,10]) compartmentFloor(len=56);
-}
-
 module compartmentWalls(len=56, doors=0) {
    /* side walls, with door cutouts */
    difference() {
       union() {
-         translate([-22.5,-10,10]) rotate([90,0,90]) linear_extrude(height=2)
+         translate([-22.5,-10,10]) rotate([90,0,90]) linear_extrude(height=1)
             polygon([[0,0], [len,0], [len+34*cos(74), 34*sin(74)],
                      [0,34*sin(74)]]);
-         translate([20.5,-10,10]) rotate([90,0,90]) linear_extrude(height=2)
+         translate([21.5,-10,10]) rotate([90,0,90]) linear_extrude(height=1)
             polygon([[0,0], [len,0], [len+34*cos(74), 34*sin(74)],
                      [0,34*sin(74)]]);
-         translate([21,-10,10]) cube([10,30,30]);
-         translate([-31,-10,10]) cube([10,30,30]);
+         translate([22,-10,10]) cube([10,30,30]);
+         translate([-32,-10,10]) cube([10,30,30]);
 
       }
       sideDoorOpenings();
@@ -129,10 +125,10 @@ module compartmentWalls(len=56, doors=0) {
 
 module compartmentFloor(len = 56) {
    difference() {
-      cube([41,len,2]);
+      cube([43,len,2]);
 
       for (j=[0:18]) {
-         translate([1.7 + 0.25 + 2*j,4,1.6]) cube([0.8, len-6, 0.5]);
+         translate([3.25 + 2*j,4,1.6]) cube([0.8, len-6, 0.5]);
       }
    }
 }
