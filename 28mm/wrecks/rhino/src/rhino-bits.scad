@@ -13,10 +13,7 @@ $fn=6;
 // translate([-21,-9,12]) cube([42,69,31]);
 
 /* INTERIOR */
-difference() {
-   completeInterior();
-   translate([-40,-20,6.25])cube([80,80,5]);
-}
+//completeInterior();
 
 /*
 translate([25.1,-8,13.9]) sideDoorClosed();
@@ -24,12 +21,34 @@ translate([-27.1,-8,13.5]) sideDoorClosed();
 */
 //sideDoorOpenings();
 
+interiorHull();
+
+/* interiorHull() -- cutout for interior that captures all the space that
+ *                   we want to fill with the interior. May need to be
+ *                   shrunk some to be applied appropriately in Blender.
+ */
+module interiorHull() {
+   hull() difference() {
+      union() {
+         compartmentWalls(holes=0,doors=0);
+         // translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
+         translate([-21.5,-10,10]) compartmentFloor(len=56.5);
+      }
+      translate([-40,-20,6.25])cube([80,80,5]);
+   }
+}
+
 module completeInterior() {
-   translate([-21.5,-10,10]) compartmentFloor(len=56.5);
-   compartmentWalls();
-   translate([-20.45,14,11]) seats();
-   translate([20.45,45.4,11]) rotate([0,0,180]) seats();
-   translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
+   difference() {
+      union() {
+         translate([-21.5,-10,10]) compartmentFloor(len=56.5);
+         compartmentWalls();
+         translate([-20.45,14,11]) seats();
+         translate([20.45,45.4,11]) rotate([0,0,180]) seats();
+         translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
+      }
+      translate([-40,-20,6.25])cube([80,80,5]);
+   }
 }
 
 /* MODULES */
@@ -94,7 +113,12 @@ module sideDoorOpenings(thick=20) {
    }
 }
 
-module compartmentWalls(len=56, doors=0) {
+/* compartmentWalls()
+ * holes -- should the model include the component of the body capturing the
+ *          holes from the interior out the side doors?
+ * doors -- should the (interior) side doors be included in the model?
+ */
+module compartmentWalls(len=56,holes=1,doors=0) {
    /* side walls, with door cutouts */
    difference() {
       union() {
@@ -104,11 +128,14 @@ module compartmentWalls(len=56, doors=0) {
          translate([21.5,-10,10]) rotate([90,0,90]) linear_extrude(height=1)
             polygon([[0,0], [len,0], [len+34*cos(74), 34*sin(74)],
                      [0,34*sin(74)]]);
-         translate([22,-10,10]) cube([10.05,30,30]);
-         translate([-32,-10,10]) cube([10.05,30,30]);
-
+         if (holes == 1) {
+            translate([22,-10,10]) cube([10.05,30,30]);
+            translate([-32,-10,10]) cube([10.05,30,30]);
+         }
       }
-      sideDoorOpenings();
+      if (holes == 1) {
+         sideDoorOpenings();
+      }
    }
 
    if (doors) {
