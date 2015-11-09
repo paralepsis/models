@@ -14,16 +14,16 @@ U=2;
 //Thickness of stone
 V=1.7;
 //Height of a stone
-W=1.3;
+W=0.7;
 
 //A way to save the arrangement of stones
 master_seed=14;
 //Higher angles make more wedge-shaped stones, lower angles produce blocks. Reccomend 5-30 (zero crashes).
-maximum_rotation_angle=30;
+maximum_rotation_angle=10;
 //Higher rotation angles might need more compression
 z_compression=0.9;
 //Number of cubes that make up a block
-n=3; 
+n=5; 
 //A way to reduce the abilty of higher n to chop up a block (should be -2 to 0)
 power=0;
 
@@ -40,7 +40,7 @@ for (j=[0:9]) {
    for (i=[0:9]) {
       translate([3.5*i,3.5*j,0]) hull() {
          rock(dimensions,maximum_rotation_angle,31*j+i* master_seed);
-         translate([0.5,0.3,0.3]) rock(dimensions,maximum_rotation_angle,31*j+i* master_seed+3);
+         translate([0.5,0.1,0.1]) rock(dimensions,maximum_rotation_angle,31*j+i* master_seed+3);
       }
    }
 }
