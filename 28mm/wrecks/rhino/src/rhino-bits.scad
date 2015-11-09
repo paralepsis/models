@@ -28,13 +28,17 @@ interiorHull();
  *                   shrunk some to be applied appropriately in Blender.
  */
 module interiorHull() {
-   hull() difference() {
-      union() {
-         compartmentWalls(holes=0,doors=0);
-         // translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
-         translate([-21.5,-10,10]) compartmentFloor(len=56.5);
+   difference() {
+      hull() difference() {
+         union() {
+            compartmentWalls(holes=0,doors=0);
+            // translate([0.3,-11.5,12]) rotate([0,0,90]) commandControls();
+            translate([-21.5,-10,10]) compartmentFloor(len=56.5);
+         }
+         translate([-40,-20,6.25])cube([80,80,5]);
       }
-      translate([-40,-20,6.25])cube([80,80,5]);
+      translate([30,20,40]) rotate([0,45,0]) cube([30,80,10],center=true);
+      translate([-30,20,40]) rotate([0,-45,0]) cube([30,80,10],center=true);
    }
 }
 
@@ -122,10 +126,10 @@ module compartmentWalls(len=56,holes=1,doors=0) {
    /* side walls, with door cutouts */
    difference() {
       union() {
-         translate([-22.5,-10,10]) rotate([90,0,90]) linear_extrude(height=1)
+         translate([-22.4,-10,10]) rotate([90,0,90]) linear_extrude(height=0.9)
             polygon([[0,0], [len,0], [len+34*cos(74), 34*sin(74)],
                      [0,34*sin(74)]]);
-         translate([21.5,-10,10]) rotate([90,0,90]) linear_extrude(height=1)
+         translate([21.4,-10,10]) rotate([90,0,90]) linear_extrude(height=0.9)
             polygon([[0,0], [len,0], [len+34*cos(74), 34*sin(74)],
                      [0,34*sin(74)]]);
          if (holes == 1) {
