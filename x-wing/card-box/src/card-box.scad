@@ -8,6 +8,14 @@
  *
  *   Downloaded on November 9, 2015.
  *
+ * Imperial logo is from Rasek fighter's:
+ *   http://www.thingiverse.com/thing:1114731
+ *
+ *   Star Wars Imperial Logo by Rasekfighter is licensed under the
+ *   Creative Commons - Public Domain Dedication license.
+ *
+ *   Downloaded on November 9, 2015.
+ *
  * Changes:
  * - Reformatted and commented to be a little easier to read.
  * - Adjusted to be "tall" rather than "flat".
@@ -19,18 +27,17 @@
  * - 41 x 63 mm is small FF sleeve size
  */
 
-CARD_SIZE_LONG_EDGE =20;
+CARD_SIZE_LONG_EDGE =16; // this must include the small portion.
 CARD_SIZE_SHORT_EDGE = 66;
 CARD_STACK_HEIGHT = 91;
 WALL_THICKNESS = 2;
 TAB_THICKNESS = 10;
 EXTRA_SPACE = .25;
 
-smCardLongEdge  = 10;
+smCardLongEdge  = 6;
 smCardShortEdge = 43;
 smCardHeight    = 66;
 smCardBoost     = CARD_STACK_HEIGHT - smCardHeight - 2;
-
 
 CARD_LONG_EDGE = CARD_SIZE_LONG_EDGE + (WALL_THICKNESS*2);
 CARD_SHORT_EDGE = CARD_SIZE_SHORT_EDGE + (WALL_THICKNESS*2);
@@ -43,8 +50,13 @@ SPACE_BETWEEN_BOTTOM_AND_LID = LID_OUTSIDE_LONG_THICKNESS + (WALL_THICKNESS*2)+ 
 
 HEIGHT = CARD_STACK_HEIGHT + WALL_THICKNESS;
 
+color("grey") {
+translate([53.5,28.5,38]) rotate([0,90,0]) scale([1.5,1.5,1]) import("./logo-imperial.stl");
+translate([29.2,28.8,38]) rotate([0,90,0]) scale([1.5,1.5,1]) import("./logo-imperial.stl");
+
 boxBottom();
 boxTop();
+}
 
 /* boxBottom() -- this part has the tabs that bend
  */
