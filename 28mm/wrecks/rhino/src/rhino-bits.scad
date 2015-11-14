@@ -1,4 +1,5 @@
-% import("../orig/da5id-rhino/rhino-complete-repaired.stl");
+// % import("../orig/da5id-rhino/rhino-complete-repaired.stl");
+// % import("../orig/da5id-rhino/back-door.stl");
 
 /*
 translate([0, 35, 12]) rotate([0,0,80]) color("red")
@@ -7,7 +8,21 @@ translate([0, 35, 12]) rotate([0,0,80]) color("red")
 
 $fn=6;
 
-// translate([-20,47.5,10]) rotate([74,0,0]) backHatch();
+// translate([-18.5,47.5,10]) rotate([74,0,0]) backHatch();
+// translate([-18.5,55.5,8.4]) rotate([74,0,0]) backHatchDiff();
+
+backHatchRedux();
+
+module backHatchRedux() {
+   // difference() {
+      import("./back-door.stl");
+      translate([-19.5,48.3,10]) rotate([74,0,0]) {
+          backHatch();
+         // backHatchInset();
+         // translate([19,0,0]) backHatchInset();
+      }
+  // }
+}
 
 /* REGION TO DIFF OUT OF ORIGINAL MODEL */
 // translate([-21,-9,12]) cube([42,69,31]);
@@ -21,7 +36,7 @@ translate([-27.1,-8,13.5]) sideDoorClosed();
 */
 //sideDoorOpenings();
 
-interiorHull();
+// interiorHull();
 
 /* interiorHull() -- cutout for interior that captures all the space that
  *                   we want to fill with the interior. May need to be
@@ -79,12 +94,18 @@ module seats() {
    }
 }
 
-module backHatch() {
-   difference() {
-      cube([40,33,2],center=false);
+module backHatchDiff() {
+   cube([37,32.5,10],center=false);
+}
 
-      backHatchInset();
-      translate([20,0,0]) backHatchInset();
+module backHatch(inset=1) {
+   difference() {
+      translate([1,0,0.5]) cube([37,33,1.5],center=false);
+
+      if (inset) {
+         backHatchInset();
+         translate([19,0,0]) backHatchInset();
+      }
    }
 }
 

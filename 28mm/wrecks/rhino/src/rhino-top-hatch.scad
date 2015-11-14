@@ -17,7 +17,7 @@ translate([0,20.5,44]) topHatch();
 module topHatch() {
    scale([0.175,0.175,0.25]) difference() {
       poly_path3343(6);
-      poly_path3342(8);
+      translate([0,0,-0.5]) scale([1,1.01,1]) poly_path3342(8);
    }
 }
 
