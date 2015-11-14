@@ -14,7 +14,7 @@
 
 /* [Base] */
 // Width of base at the bottom (mm)
-base_width = 35; // [25:60]
+base_width = 32; // [25:60]
 // Total height of base (mm)
 base_height = 4; // [2:5]
 // Angle of sidewall (0 degrees is vertical)
