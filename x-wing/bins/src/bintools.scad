@@ -23,13 +23,17 @@ module harborFreightMediumFullHt(locations=[]) {
    solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations) children();
 }
 
-/* solidBottomBox()
+/* solidBottomBox() -- generate a rounded, solid-bottom box with children used to generate slots for holding ships.
+ *
  * locations -- an array of pairs of triples specifying a translation and rotation of the children().
  *              e.g., locations = [[[0,0,0], [0,0,0]],
  *                                 [[5.5, 21.3,0], [0,0,0]],
  *                                 [[-5.5, -21.3, 0],[0,0,0]]];
  *
  * outlineScale -- scaling of the region around the blank. 1.2 is default.
+ *
+ * NOTE: Assumes that children are "upside down" (i.e., the XY plane is meant to be top of box) so that
+ *       models can drop in "bottom up".
  */
 module solidBottomBox(xDim=10,xDim=10,ht=10,locations=[],outlineScale=1.2) {
    offsetFromTop = 0.1; /* amount of space to move the outline from the top of the form; helps keep model clean */
@@ -177,33 +181,3 @@ module roundShapedBox(cornerRad=2,
    }
 }
 
-
-/**************** DEPRECATED ********************/
-module OLDharborFreightMediumFullHt(locations=[],outlineScale=1.2) {
-   offsetFromTop = 0.1; /* amount of space to move the outline from the top of the form; helps keep model clean */
-
-   /* flip right-side up and place on XY plane */
-   translate([0,0,46.5]) rotate([180,0,0]) {
-      /* parallel-sided box, complete bottom */
-      roundShapedBox(xDimTop=54, yDimTop=80, xDimBottom=54,
-                     yDimBottom=80, ht=46.5, wallThick=1.6);
-      translate([0,0,46.5-1.2]) roundBoxBottom(xDim=54,yDim=80,ht=1.2);
-
-      /* spaces to hold ships */
-      difference() {
-         union() {
-            /* base form */
-            for (loc = locations) {
-                translate([0,0,offsetFromTop]) translate(loc[0]) rotate(loc[1])
-                   blankOutline(height=46.5-offsetFromTop, outlineScale=outlineScale) children();
-            }
-         }
-         union() {
-            /* what will be differenced out */
-            for (loc = locations) {
-                translate(loc[0]) rotate(loc[1]) children();
-            }
-         }
-      }
-   }
-}

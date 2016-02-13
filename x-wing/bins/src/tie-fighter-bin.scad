@@ -1,31 +1,25 @@
 include <./bintools.scad>
 
-
 $fn=20;
-
-// triple_tie_fighter_solid_bottom();
-// single_tie_fighter_outline();
-// tieFighterBlank();
-
-harborFreightMediumFullHt(locations=locations) tieFighterBlank();
-
-module single_tie_fighter_outline() {
-   translate([0,0,46.5]) rotate([180,0,0]) {
-      blankCutout(height=46.5 - 0.1, outlineScale=1.2) tieFighterBlank();
-   }
-}
-
 
 /* locations is a pair of triples, translate : rotate pairs
  */
 locations = [[[0,0,0], [0,0,0]],
              [[5.5, 21.3,0], [0,0,0]],
              [[-5.5, -21.3, 0],[0,0,0]]];
-             
 
+harborFreightMediumFullHt(locations=locations) tieFighterBlank();
 
+/* singleTieFighterOutline() -- test piece for outline
+ */
+module singleTieFighterOutline() {
+   translate([0,0,46.5]) rotate([180,0,0]) {
+      blankCutout(height=46.5 - 0.1, outlineScale=1.2) tieFighterBlank();
+   }
+}
 
-
+/* tieFighterBlank() -- OpenSCAD blank in this case
+ */
 module tieFighterBlank() {
    translate([0,0,41/2]) rotate([180,0,0]) {
       // import("../orig/tie-fighter.stl");
@@ -52,8 +46,11 @@ module tieFighterBlank() {
    }
 }
 
+/* panel() -- component of the blank
+ */
 module panel() {
    epsilon = 0.001;
+
    a = [0 - epsilon, 41/2];
    // b = [22.5/2, 41/2];
    b = [34/2, 41/2]; // was 33/2
@@ -61,35 +58,10 @@ module panel() {
    d = [22.5/2, -41/2];
    e = [0 - epsilon, -41/2];
 
-     /* basic panel */
+   /* basic panel */
    rotate([0,0,-90]) rotate([90,0,0]) translate([0,0,-2.75])
    linear_extrude(height=5.5) {
       polygon(points=[a,b,c,d,e],paths=[[0,1,2,3,4,5,0]]);
       mirror([1,0,0]) polygon(points=[a,b,c,d,e],paths=[[0,1,2,3,4,5,0]]);
-   }
-}
-
-/********************* DEPRECATED VERSION FOR REFERENCE *********************/
-
-module triple_tie_fighter_solid_bottom() {
-   translate([0,0,46.5]) rotate([180,0,0]) {
-      //roundShapedBox(xDimTop=52, yDimTop=77, xDimBottom=54,
-      //               yDimBottom=80, ht=46.5, wallThick=1.6);
-      roundShapedBox(xDimTop=54, yDimTop=80, xDimBottom=54,
-                     yDimBottom=80, ht=46.5, wallThick=1.6);
-      translate([0,0,46.5-1.2]) roundBoxBottom(xDim=54,yDim=80,ht=1.2);
-
-      difference() {
-         union() {
-            translate([0,0,0.1]) blankOutline(height=46.5 - 0.1, outlineScale=1.2) tieFighterBlank();
-            translate([5.5,21.3,0.1]) blankOutline(height=46.5 - 0.1, outlineScale=1.2) tieFighterBlank();
-            translate([-5.5,-21.3,0.1]) blankOutline(height=46.5 - 0.1, outlineScale=1.2) tieFighterBlank();
-         }
-         union() {
-            tieFighterBlank();
-            translate([5.5,21.3,0]) tieFighterBlank();
-            translate([-5.5,-21.3,0]) tieFighterBlank();
-         }
-      }
    }
 }
