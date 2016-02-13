@@ -31,8 +31,6 @@ module singleTieFighterOutline() {
  */
 module tieFighterBlank() {
    translate([0,0,41/2]) rotate([180,0,0]) {
-      // import("../orig/tie-fighter.stl");
-
       translate([-14.75,0,0]) panel();
       translate([14.75,0,0]) panel();
 
