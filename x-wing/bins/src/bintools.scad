@@ -1,3 +1,11 @@
+/* bintools.scad
+ *
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
+
 // Harbor Frieght Medium
 // 46.5mm tall
 // 48.6mm tall with legs
@@ -181,3 +189,12 @@ module roundShapedBox(cornerRad=2,
    }
 }
 
+/*
+ * Local variables:
+ *  mode: C
+ *  c-indent-level: 4
+ *  c-basic-offset: 4
+ * End:
+ *
+ * vim: ts=8 sts=4 sw=4 expandtab
+ */

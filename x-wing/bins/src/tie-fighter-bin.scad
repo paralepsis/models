@@ -1,3 +1,11 @@
+/* tie-fighter-bin.scad
+ *
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
+
 include <./bintools.scad>
 
 $fn=20;
@@ -8,7 +16,8 @@ locations = [[[0,0,0], [0,0,0]],
              [[5.5, 21.3,0], [0,0,0]],
              [[-5.5, -21.3, 0],[0,0,0]]];
 
-harborFreightMediumFullHt(locations=locations) tieFighterBlank();
+// harborFreightMediumFullHt(locations=locations) tieFighterBlank();
+tieFighterBlank();
 
 /* singleTieFighterOutline() -- test piece for outline
  */
@@ -65,3 +74,13 @@ module panel() {
       mirror([1,0,0]) polygon(points=[a,b,c,d,e],paths=[[0,1,2,3,4,5,0]]);
    }
 }
+
+/*
+ * Local variables:
+ *  mode: C
+ *  c-indent-level: 4
+ *  c-basic-offset: 4
+ * End:
+ *
+ * vim: ts=8 sts=4 sw=4 expandtab
+ */
