@@ -16,8 +16,8 @@ locations = [[[0,0,0], [0,0,0]],
              [[5.5, 21.3,0], [0,0,0]],
              [[-5.5, -21.3, 0],[0,0,0]]];
 
-// harborFreightMediumFullHt(locations=locations) tieFighterBlank();
-tieFighterBlank();
+harborFreightMediumFullHt(locations=locations) tieFighterBlank();
+// tieFighterBlank();
 
 /* singleTieFighterOutline() -- test piece for outline
  */
