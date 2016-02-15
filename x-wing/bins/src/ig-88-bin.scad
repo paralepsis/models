@@ -8,14 +8,21 @@
 
 include <./bintools.scad>
 
-$fn=20;
+$fn=30;
 
-/* locations is a pair of triples, translate : rotate pairs
- */
-locations = [[[0,0,0], [0,0,0]]];
+// ig88Outline();
+// ig88Blank();
+betterIg88Bin();
 
-ig88Outline();
-// harborFreightLargeHalfHt(locations=[[0,0,0],[0,0,0]]) ig88Blank();
+
+module basicIg88Bin() {
+   harborFreightLargeHalfHt(locations=[[[0,0,0],[0,0,0]]]) ig88Blank();
+}
+
+module betterIg88Bin() {
+   harborFreightLargeHalfHt(locations=[[[0,11,0],[0,0,0]]]) ig88Blank();
+   translate([-40,26,0]) cube([80,2,46.5/2]);
+}
 
 
 module ig88Outline() {
@@ -25,11 +32,11 @@ module ig88Outline() {
 
 module ig88Blank() {
    /* peg hole */
-   cylinder(h=10+7,r=3);
+   cylinder(h=18,r=3.4);
 
    difference() {
       union() {
-         linear_extrude(height=10) {
+         linear_extrude(height=13.25) {
             polygon(points=[[0,19],[4,19],[7,41],[14,41],[14,15],
                             [26,15],[31,-21],[17,-37],[13,-35],
                             [22,-23],[19,0],[12,-5],[5,-30],[0,-30]]);
@@ -40,7 +47,7 @@ module ig88Blank() {
       }
       
       /* differenced out */
-      translate([-16,-30,10]) rotate([-3,0,0]) cube([32,75,10]);
+      translate([-19,-40,13]) rotate([-3,0,0]) cube([38,90,10]);
    }
 }
 
