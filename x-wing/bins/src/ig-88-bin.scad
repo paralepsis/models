@@ -33,7 +33,7 @@ module ig88Outline() {
 module ig88Blank() {
    rotate([0,0,0]) {
       /* peg hole */
-      cylinder(h=18,r=3.4);
+      cylinder(h=18,r=3.6);
 
       difference() {
          union() {
