@@ -18,7 +18,7 @@ include <./bintools.scad>
  */
 
 leftSide();
-translate([5,0,0]) rightSide();
+// translate([5,0,0]) rightSide();
 
 module rightSide() {
    intersection() {
@@ -33,18 +33,17 @@ module leftSide() {
    }
 }
 
+/* Note: abusing roundBoxBottom() to make entire box shape */
 module templateBin() {
    difference() {
       union() {
-         /* abusing roundBoxBottom() to make entire box shape */
          roundBoxBottom(xDim=240, yDim=54, ht=46.5/2);
       }
-      translate([0,0,1.5]) roundBoxBottom(xDim=77, yDim=51, ht=46.5/2);
-      translate([80,0,1.5]) roundBoxBottom(xDim=77, yDim=51, ht=46.5/2);
-      translate([-80,0,1.5]) roundBoxBottom(xDim=77, yDim=51, ht=46.5/2);
-      translate([0,0,24+1.5]) cube([200,40,48],center=true);
+      translate([0,0,1.2]) roundBoxBottom(xDim=76, yDim=50, ht=46.5/2);
+      translate([80,0,1.2]) roundBoxBottom(xDim=76, yDim=50, ht=46.5/2);
+      translate([-80,0,1.2]) roundBoxBottom(xDim=76, yDim=50, ht=46.5/2);
+      translate([0,0,24+1.2]) cube([200,40,48],center=true);
    }
-   // roundBoxBottom(xDim=240,yDim=54,ht=1.2);
 }
 
 /*
