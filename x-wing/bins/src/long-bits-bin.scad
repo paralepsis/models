@@ -34,8 +34,8 @@ include <./bintools.scad>
  */
 
 middle();
-translate([5,0,0]) rightSide();
-translate([-5,0,0]) leftSide();
+// translate([5,0,0]) rightSide();
+// translate([-5,0,0]) leftSide();
 
 module rightSide() {
    intersection() {
@@ -76,24 +76,22 @@ module templateBin() {
       /* center section, for cards */
       difference() {
          translate([0,0,1.5]) roundBoxBottom(xDim=77, yDim=50, ht=46.5/2);
-         translate([0,0,46.5/4+1.5]) cube([77,28, 46.5/2], center=true);
-         translate([0,0,46.5/4+1.5]) cube([54,50, 46.5/2], center=true);
+         translate([0,0,46.5/4+1.8]) cube([77,28, 46.5/2], center=true);
+         translate([0,0,46.5/4+1.8]) cube([54,50, 46.5/2], center=true);
       }
-      translate([0,0,46.5/4+1.5]) cube([68,42, 46.5/2], center=true);
+      /* actual space for the cards 68x46 */
+      translate([0,0,46.5/4+1.8]) cube([68,46, 46.5/2], center=true);
 
       /* card access from the sides */
-      translate([0,-30,12.5+1.5]) rotate([-90,0,0]) cylinder(r=12.5,h=60);
-      translate([0,0,15+12.5+1.5]) cube([25,60,30],center=true);
+      translate([0,-30,12.5+1.8]) rotate([-90,0,0]) cylinder(r=12.5,h=60);
+      translate([0,0,15+12.5+1.8]) cube([25,60,30],center=true);
 
       /* short side */
-      // translate([80,0,1.5]) roundBoxBottom(xDim=77, yDim=51, ht=46.5/2);
       translate([80-39.25/2,0,1.5])
          roundBoxBottom(xDim=36.25, yDim=50, ht=46.5/2);
       translate([80+39.25/2,0,1.5])
          roundBoxBottom(xDim=36.25, yDim=50, ht=46.5/2);
-      // translate([0,0,24+1.5]) cube([200,40,48],center=true);
    }
-   // roundBoxBottom(xDim=240,yDim=54,ht=1.2);
 }
 
 /*

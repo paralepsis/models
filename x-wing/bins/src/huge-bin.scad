@@ -21,9 +21,9 @@ include <bintools.scad>
 
 roundShapedBox(xDimTop=160, yDimTop=109.3, xDimBottom=160,
                yDimBottom=109.3, ht=46.5/2, wallThick=2.0);
-roundBoxBottom(xDim=160,yDim=109.3,ht=1.2);
+roundBoxBottom(xDim=160,yDim=109.3,ht=1.5);
 
-translate([10,-109.3/2,0]) cube([2,109.3,46.5/2]);
+translate([8,-109.3/2,0]) cube([2,109.3,46.5/2]);
 
 /*
  * Local variables:

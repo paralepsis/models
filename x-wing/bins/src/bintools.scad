@@ -45,6 +45,16 @@ module harborFreightLargeHalfHt(locations=[]) {
    solidBottomBox(xDim=80,yDim=109.25,ht=46.5/2,locations=locations) children();
 }
 
+module harborFreightLargeThirdHt(locations=[]) {
+   solidBottomBox(xDim=80,yDim=109.25,ht=46.5/3,locations=locations) children();
+}
+
+module harborFreightLargeTwoThirdHt(locations=[]) {
+   solidBottomBox(xDim=80,yDim=109.25,ht=2*46.5/3,locations=locations) children();
+}
+
+
+
 /* solidBottomBox() -- generate a rounded, solid-bottom box with children used to generate slots for holding ships.
  *
  * locations -- an array of pairs of triples specifying a translation and rotation of the children().

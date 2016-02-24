@@ -6,9 +6,10 @@
  * Attribution-ShareAlike 4.0 International Public License.
  */
 
+$fn=20;
+
 include <./bintools.scad>
 
-$fn=20;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
