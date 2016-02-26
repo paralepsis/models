@@ -14,8 +14,5 @@ include <./bintools.scad>
  */
 locations = [[[0,0,0.1], [0,0,-90]]];
 
-/* Note: Scaling by just a bit in the Z dimension to make up for
- *       inconsistencies in the s-foils on my X-Wings.
- */
 harborFreightMediumHalfHt(locations=locations)
    scale([1,1,15/15]) import("../orig/y-wing-blank.stl");

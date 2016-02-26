@@ -31,6 +31,10 @@ module harborFreightMediumFullHt(locations=[]) {
    solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations) children();
 }
 
+module harborFreightMediumHalfHt(locations=[]) {
+   solidBottomBox(xDim=54,yDim=80,ht=46.5/2,locations=locations) children();
+}
+
 /* harborFreightLargeHalfHt(locations)
  *
  * See above for description of locations variable

@@ -1,17 +1,53 @@
+/* x-wing-bin.scad
+ *
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the GNU General Public License
+ * Version 3.
+ */
+
+$fn=40;
+
 include <./bintools.scad>
 
-// Harbor Frieght Medium
-// 46.5mm tall
-// 48.6mm tall with legs
-// 80mm wide, 77 bottom
-// 54mm length, 52 bottom
+/* locations is a pair of triples, translate : rotate pairs
+ */
+locations = [[[1.1,-15.66,0.1], [0,0,0]],
+             [[1.1, 15.66, 0.1],[0,0,180]]];
 
-$fn=20;
+/* Note: Scaling by just a bit in the Z dimension to make up for
+ *       inconsistencies in the s-foils on my X-Wings.
+ */
+harborFreightMediumHalfHt(locations=locations) scale([1,1,19/18]) import("../orig/x-wing-blank.stl");
 
-double_x_wing_box_solid_bottom(bling=0);
+// doubleXWingBox();
 
 
-module double_x_wing_box_solid_bottom(ht=46.5/2, bling=1) {
+/******* OLD VERSION *******/
+
+module doubleXWingBox(ht=46.5/2) {
+   translate([0,0,ht]) rotate([180,0,0]) difference() {
+      union() {
+         roundShapedBox(xDimTop=54, yDimTop=80, xDimBottom=54,
+                        yDimBottom=80, ht=ht, wallThick=1.6);
+
+         translate([0,0,ht-1.2]) roundBoxBottom(xDim=54,yDim=80,ht=1.2);
+      
+         // NOTE: outline does not *quite* come to top of box in this design!
+         translate([1.1,-15.6,0.1]) blankOutline(height=ht-0.1)
+            import("../orig/x-wing-blank.stl");
+         rotate([0,0,180]) translate([1.1,-15.6,0.1])
+            blankOutline(height=ht-0.1) import("../orig/x-wing-blank.stl");
+      }
+      union() {
+         translate([1.1,-15.6,0]) import("../orig/x-wing-blank.stl");
+         rotate([0,0,180]) translate([1.1,-15.6,0])
+            import("../orig/x-wing-blank.stl");
+      }
+   }
+}
+
+module OLD_double_x_wing_box_solid_bottom(ht=46.5/2, bling=1) {
    translate([0,0,ht]) rotate([180,0,0]) difference() {
       union() {
          roundShapedBox(xDimTop=53, yDimTop=78.5, xDimBottom=54,
@@ -39,6 +75,5 @@ module double_x_wing_box_solid_bottom(ht=46.5/2, bling=1) {
          }
       }
    }
-
 }
 
