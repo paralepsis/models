@@ -12,8 +12,8 @@ include <./bintools.scad>
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[4,-14,0.1], [0,0,-90]],
-             [[-4, 14, 0.1],[0,0,90]]];
+locations = [[[4,-14,0.0], [0,0,-90]],
+             [[-4, 14, 0.0],[0,0,90]]];
 
 harborFreightMediumHalfHt(locations=locations)
    scale([1,1,15/15]) import("../orig/z-95-blank.stl");

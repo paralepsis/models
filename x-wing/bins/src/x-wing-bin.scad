@@ -12,8 +12,8 @@ include <./bintools.scad>
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[1.1,-15.66,0.1], [0,0,0]],
-             [[1.1, 15.66, 0.1],[0,0,180]]];
+locations = [[[1.1,-15.66,0.0], [0,0,0]],
+             [[1.1, 15.66, 0.0],[0,0,180]]];
 
 /* Note: Scaling by just a bit in the Z dimension to make up for
  *       inconsistencies in the s-foils on my X-Wings.

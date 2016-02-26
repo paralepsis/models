@@ -1,4 +1,4 @@
-/* y-wing-bin.scad
+/* a-wing-bin.scad
  *
  * Copyright (C) Robert B. Ross, 2016
  *
@@ -12,7 +12,9 @@ include <./bintools.scad>
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[0,0,0.0], [0,0,-90]]];
+locations = [[[4.75,-23.5,0.0], [0,0,-90]],
+             // [[0,0,0.0], [0,0,90]],
+             [[-4.75,23.5,0.0],[0,0,90]]];
 
 harborFreightMediumHalfHt(locations=locations)
-   scale([1,1,15/15]) import("../orig/y-wing-blank.stl");
+   scale([1,1,15/15]) import("../orig/a-wing-blank.stl");
