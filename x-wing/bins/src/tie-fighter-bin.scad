@@ -6,10 +6,7 @@
  * Attribution-ShareAlike 4.0 International Public License.
  */
 
-$fn=20;
-
 include <./bintools.scad>
-
 
 /* locations is a pair of triples, translate : rotate pairs
  */
@@ -77,9 +74,9 @@ module panel() {
 /*
  * Local variables:
  *  mode: C
- *  c-indent-level: 4
- *  c-basic-offset: 4
+ *  c-indent-level: 3
+ *  c-basic-offset: 3
  * End:
  *
- * vim: ts=8 sts=4 sw=4 expandtab
+ * vim: ts=8 sts=3 sw=3 expandtab
  */
