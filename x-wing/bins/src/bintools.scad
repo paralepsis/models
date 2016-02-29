@@ -6,6 +6,8 @@
  * Attribution-ShareAlike 4.0 International Public License.
  */
 
+$fn=60;
+
 // Harbor Frieght Medium
 // 46.5mm tall
 // 48.6mm tall with legs
@@ -31,8 +33,9 @@ module harborFreightMediumFullHt(locations=[]) {
    solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations) children();
 }
 
-module harborFreightMediumHalfHt(locations=[]) {
-   solidBottomBox(xDim=54,yDim=80,ht=46.5/2,locations=locations) children();
+module harborFreightMediumHalfHt(locations=[],cornerRad=3.75) {
+   solidBottomBox(xDim=54,yDim=80,ht=46.5/2,
+                  locations=locations,cornerRad=cornerRad) children();
 }
 
 /* harborFreightLargeHalfHt(locations)
@@ -71,15 +74,19 @@ module harborFreightLargeTwoThirdHt(locations=[]) {
  * NOTE: Assumes that children are "upside down" (i.e., the XY plane is meant to be top of box) so that
  *       models can drop in "bottom up".
  */
-module solidBottomBox(xDim=10,xDim=10,ht=10,locations=[],outlineScale=1.2) {
+module solidBottomBox(xDim=10, yDim=10, ht=10,
+                      locations=[],outlineScale=1.2,cornerRad=3.75)
+{
    offsetFromTop = 0.1; /* amount of space to move the outline from the top of the form; helps keep model clean */
 
    /* flip right-side up and place on XY plane */
    translate([0,0,ht]) rotate([180,0,0]) {
       /* parallel-sided box, complete bottom */
       roundShapedBox(xDimTop=xDim, yDimTop=yDim, xDimBottom=xDim,
-                     yDimBottom=yDim, ht=ht, wallThick=1.6);
-      translate([0,0,ht-1.2]) roundBoxBottom(xDim=xDim,yDim=yDim,ht=1.2);
+                     yDimBottom=yDim, ht=ht, wallThick=1.6,
+                     cornerRad=cornerRad);
+      translate([0,0,ht-1.2]) roundBoxBottom(xDim=xDim,yDim=yDim,ht=1.2,
+                                             cornerRad=cornerRad);
 
       /* spaces to hold ships */
       difference() {
@@ -138,7 +145,7 @@ module outline(outlineIterations = 30,outlineScale=1.4) {
 
 /* roundBox() - rounded corner box
  */
-module roundBox(cornerRad=2,xDim=10,yDim=10,ht=10,wallThick=1.2) {
+module roundBox(cornerRad=3.75,xDim=10,yDim=10,ht=10,wallThick=1.2) {
    linear_extrude(height=ht) difference() {
       hull() {
          translate([xDim/2-cornerRad,
@@ -165,7 +172,7 @@ module roundBox(cornerRad=2,xDim=10,yDim=10,ht=10,wallThick=1.2) {
 
 /* roundBoxBottom() - rounded corner box bottom
  */
-module roundBoxBottom(cornerRad=2,xDim=10,yDim=10,ht=10) {
+module roundBoxBottom(cornerRad=3.75,xDim=10,yDim=10,ht=10) {
    linear_extrude(height=ht) hull() {
       translate([xDim/2-cornerRad,
                  yDim/2-cornerRad,0]) circle(r=cornerRad);
@@ -183,7 +190,7 @@ module roundBoxBottom(cornerRad=2,xDim=10,yDim=10,ht=10) {
  * Note: In typical use for these bins, the *bottom* of this box ends up
  *       being the top of the bin.
  */
-module roundShapedBox(cornerRad=2,
+module roundShapedBox(cornerRad=3.75,
                       xDimTop=54,
                       yDimTop=80,
                       xDimBottom=52,

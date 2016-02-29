@@ -8,12 +8,9 @@
 
 include <./bintools.scad>
 
-$fn=30;
-
 // ig88Outline();
 // ig88Blank();
 betterIg88Bin();
-
 
 module basicIg88Bin() {
    harborFreightLargeHalfHt(locations=[[[0,0,0],[0,0,0]]]) ig88Blank();
