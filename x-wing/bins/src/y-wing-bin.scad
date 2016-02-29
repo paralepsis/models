@@ -6,8 +6,6 @@
  * Version 3.
  */
 
-$fn=40;
-
 include <./bintools.scad>
 
 /* locations is a pair of triples, translate : rotate pairs
