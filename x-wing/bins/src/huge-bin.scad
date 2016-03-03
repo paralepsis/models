@@ -6,8 +6,6 @@
  * Attribution-ShareAlike 4.0 International Public License.
  */
 
-$fn=40;
-
 include <bintools.scad>
 
 /* Harbor Freight Large
@@ -28,9 +26,9 @@ translate([8,-109.3/2,0]) cube([2,109.3,46.5/2]);
 /*
  * Local variables:
  *  mode: C
- *  c-indent-level: 4
- *  c-basic-offset: 4
+ *  c-indent-level: 3
+ *  c-basic-offset: 3
  * End:
  *
- * vim: ts=8 sts=4 sw=4 expandtab
+ * vim: ts=8 sts=3 sw=3 expandtab
  */

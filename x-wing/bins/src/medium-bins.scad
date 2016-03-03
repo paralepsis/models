@@ -10,8 +10,6 @@
  *       forms for diff()'ing, etc.
  */
 
-$fn=80;
-
 include <./bintools.scad>
 
 /* Harbor Freight Medium
@@ -28,8 +26,8 @@ include <./bintools.scad>
  * 39.25mm length
  */
 
-mediumBin();
-// mediumSplitBin();
+// mediumBin();
+mediumSplitBin();
 
 module mediumBin() {
    roundShapedBox(xDimTop=54, yDimTop=80, xDimBottom=54,
