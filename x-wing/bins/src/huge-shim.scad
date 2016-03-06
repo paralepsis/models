@@ -8,8 +8,8 @@
 
 include <bintools.scad>
 
-radius = 10;
-height = 2;
+width = 10;
+height = 2.1;
 
 // Harbor Freight Medium
 // 80mm wide, 77 bottom
@@ -23,26 +23,24 @@ intersection() {
          hugeFrame();
       }
       union() { 
-         translate([0,0,-0.5]) cylinder(r=8,h=height+1);
-         translate([-80,0,-0.5]) cylinder(r=8,h=height+1);
-         translate([80,0,-0.5]) cylinder(r=8,h=height+1);
-         translate([0,54,-0.5]) cylinder(r=8,h=height+1);
-         translate([0,-54,-0.5]) cylinder(r=8,h=height+1);
+         translate([0,54,-0.5]) cylinder(r=14,h=height+1);
+         translate([0,-54,-0.5]) cylinder(r=14,h=height+1);
       }
    }
-   translate([0,0,-0.5]) roundBoxBottom(cornerRad=20,xDim=80*2,yDim=54*2,ht=10);
+   translate([0,0,-0.5]) roundBoxBottom(cornerRad=30,xDim=80*2,yDim=54*2,ht=10);
 }
    
 module hugeFrame() {
-   roundShapedBox(xDimTop=80*2,yDimTop=54*2,xDimBottom=80*2, yDimBottom=54*2,
-                  ht=height,wallThick=radius,cornerRad=10);
-   translate([0,0,height/2]) cube(center=true, size=[80*2,radius,height]);
-   translate([0,0,height/2]) cube(center=true, size=[radius,54*2,height]);
-   cylinder(r=16,h=height);
-   translate([-80,0,0]) cylinder(r=16,h=height);
-   translate([80,0,0]) cylinder(r=16,h=height);
-   translate([0,54,0]) cylinder(r=16,h=height);
-   translate([0,-54,0]) cylinder(r=16,h=height);
+   difference() {
+      roundBoxBottom(cornerRad=30,xDim=80*2,yDim=54*2,ht=height);
+      translate([0,0,-0.5]) roundBoxBottom(cornerRad=30-8,xDim=(80-width)*2,
+                                           yDim=(54-width)*2,ht=height+1);
+   }
+
+   translate([0,0,height/2]) cube(center=true, size=[80*2,width,height]);
+   translate([0,0,height/2]) cube(center=true, size=[width,54*2,height]);
+   translate([0,54,0]) cylinder(r=24,h=height);
+   translate([0,-54,0]) cylinder(r=24,h=height);
 }
 
 /*
