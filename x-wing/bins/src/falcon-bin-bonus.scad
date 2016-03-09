@@ -1,12 +1,14 @@
-/* falcon-bin.scad
+/* falcon-bin-bonus.scad
  *
  * Copyright (C) Robert B. Ross, 2016
  *
- * This software is released under the Creative Commons
- * Attribution-ShareAlike 4.0 International Public License.
+ * This software is released under the GNU General Public License 
+ * Version 3. 
  */
 
 include <bintools.scad>
+use <../../bases/src/large-base.scad>
+use <x-wing-bin.scad>
 
 /* Harbor Freight Large
  * 46.5mm tall
@@ -20,6 +22,32 @@ include <bintools.scad>
 // simpleFalconBox();
 betterFalconBox();
 // falconOutline();
+
+/* add in E-Wing */
+if (0) {
+   translate([56,-24,0]) rotate([0,0,-90]) difference() {
+      blankOutline(height=46.5-0.1) import("../orig/e-wing-blank.stl");
+      translate([0,0,46.5]) mirror([0,0,1]) import("../orig/e-wing-blank.stl");
+   }
+}
+
+/* add in A-Wing */
+if (0) {
+   translate([62.5,-20,0]) rotate([0,0,0]) difference() {
+      blankOutline(height=46.5-0.1) import("../orig/a-wing-blank-mod.stl");
+      translate([0,0,46.5]) mirror([0,0,1]) import("../orig/a-wing-blank-mod.stl");
+   }
+}
+
+/* add in X-Wing -- can't seem to make this work! */
+if (0) {
+   translate([62.5,-10,0]) rotate([0,0,53.0]) difference() {
+      blankOutline(height=46.5-0.1) import("../orig/x-wing-blank.stl");
+      translate([0,0,46.5]) mirror([0,0,1]) import("../orig/x-wing-blank.stl");
+   }
+}
+
+// translate([-36,0,44]) rotate([180,0,0]) largeBase();
 
 /* betterFalconBox()
  */
@@ -67,9 +95,20 @@ module post(height=20,topRad=4,bottomRad=7) {
  * Note: -17 is a nice translation to get a good cut.
  */
 module falconOutline(height=46.5-0.1) {
+   // linear_extrude(height=46.5-40.1) projection() falconShell();
    translate([0,-1.75,0]) linear_extrude(height=height)
       projection(cut=true) translate([0,0,-17])
       rotate([0,0,90]) import("../orig/falcon-outline-bottom.stl");
+}
+
+/* falconShell()
+ *
+ * Note:
+ * - Height of STL is 40.25mm
+ */
+module falconShell() {
+   rotate([0,0,90]) import("../orig/falcon-outline-bottom.stl");
+   translate([-14.5,1.5,0]) cylinder(r=31,h=2.5);
 }
 
 /*
