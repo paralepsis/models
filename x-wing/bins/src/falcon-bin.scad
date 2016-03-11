@@ -17,20 +17,55 @@ include <bintools.scad>
  * Note: doubling this, half height
  */
 
-// simpleFalconBox();
-betterFalconBox();
-// falconOutline();
+// falconBox();
 
-/* betterFalconBox()
+tiltedFalconBox();
+
+
+module tiltedFalconBox()
+{
+   roundShapedBox(xDimTop=160, yDimTop=109.3, xDimBottom=158,
+                  yDimBottom=107.3, ht=46.5, wallThick=2.0);
+   roundBoxBottom(xDim=158,yDim=107.3,ht=1.5);
+
+   intersection() { 
+      translate([-8.5,2,0]) rotate([0,0,26.2]) tiltedFalconEnclosure();
+      roundBoxBottom(xDim=158,yDim=107.3, ht=46.5-0.1);
+   }
+}
+
+/* tiltedFalconEnclosure()
+ *
+ * Note: ~12 degrees angle?
  */
-module betterFalconBox() {
-   if (1) {
-      roundShapedBox(xDimTop=160, yDimTop=109.3, xDimBottom=160,
-                     yDimBottom=109.3, ht=46.5, wallThick=2.0);
-      roundBoxBottom(xDim=160,yDim=109.3,ht=1.5);
+module tiltedFalconEnclosure()
+{
+   angle = 12;
+   cutPoint = 11.5;
+
+   intersection() {
+      rotate([-1*angle,0,0]) falconEnclosure();
+      // translate([0,3,20 + cutPoint]) cube(center=true, size=[160,100,40]);
+      translate([0,5,20 + cutPoint]) cube(center=true, size=[160,120,40]);
    }
 
-   translate([-12,9.5,0]) rotate([0,0,26.5]) falconEnclosure();
+   linear_extrude(height=cutPoint+0.05) projection(cut=true)
+      translate([0,0,-1*cutPoint]) intersection() {
+         rotate([-1*angle,0,0]) falconEnclosure();
+         translate([0,3,20 + cutPoint]) cube(center=true, size=[160,110,40]);
+      };
+}
+
+/* falconBox() -- this is probably good, but keeps MF flat, so
+ *                the dish is protruding much more than rest of
+ *                craft.
+ */
+module falconBox() {
+   roundShapedBox(xDimTop=160, yDimTop=109.3, xDimBottom=158,
+                  yDimBottom=107.3, ht=46.5, wallThick=2.0);
+   roundBoxBottom(xDim=158,yDim=107.3,ht=1.5);
+
+   translate([-11,8.5,0]) rotate([0,0,26.5]) falconEnclosure();
 }
 
 /* falconEnclosure()
@@ -42,7 +77,8 @@ module betterFalconBox() {
  * - Posts need to be about 6mm tall to keep post and bottom gun off the base.
  */
 module falconEnclosure() {
-   postHeight = (46.5 - 0.1) - 36+6;
+   postHeight = (46.5 - 0.1) - 36+6+1;
+   supportHeight = (46.5 - 0.1) - 36 + 11.5+1;
 
    falconOutline();
 
@@ -52,6 +88,12 @@ module falconEnclosure() {
 
    translate([-23-14,18,0]) post(height=postHeight,topRad=7,bottomRad=8);
    translate([-23-14,-18,0]) post(height=postHeight,topRad=7,bottomRad=8);
+
+   /* front-end support */
+   linear_extrude(height=supportHeight) mirror([0,0,0])
+      polygon(points=[[50,0],[50,23],[68,15],[68,0]]);
+   linear_extrude(height=supportHeight) mirror([0,1,0])
+      polygon(points=[[50,0],[50,23],[68,15],[68,0]]);
 }
 
 module post(height=20,topRad=4,bottomRad=7) {

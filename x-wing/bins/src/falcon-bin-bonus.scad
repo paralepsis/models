@@ -19,18 +19,18 @@ use <falcon-bin.scad>
  * Note: doubling this, half height
  */
 
-betterFalconBox();
+falconBox();
 
 /* add in E-Wing */
-if (1) {
-   translate([56,-24,0]) rotate([0,0,-90]) difference() {
+if (0) {
+   translate([57,-24,0]) rotate([0,0,-90]) difference() {
       blankOutline(height=46.5-0.1) import("../orig/e-wing-blank.stl");
       translate([0,0,46.5]) mirror([0,0,1]) import("../orig/e-wing-blank.stl");
    }
 }
 
 /* add in A-Wing */
-if (0) {
+if (1) {
    translate([62.5,-20,0]) rotate([0,0,0]) difference() {
       blankOutline(height=46.5-0.1) import("../orig/a-wing-blank-mod.stl");
       translate([0,0,46.5]) mirror([0,0,1]) import("../orig/a-wing-blank-mod.stl");
