@@ -11,15 +11,17 @@ include <./bintools.scad>
 
 $fn=160;
 
-// % translate([0,0,-5]) import("/Users/rross/Downloads/1_BWing_Medium.STL");
-
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[0,-5.75,0], [0,0,0]]];
+locations = [[[3,-14,0], [0,0,0]]];
 
+harborFreightLargeFullHt(locations) intersection() {
+   translate([-3,14,0]) roundBoxBottom(cornerRad=3.75,xDim=80-1.6*2,yDim=109.25-1.6*2,ht=46.5);
+   yt2400Blank();
+}
 
 // yt2400Blank();
-yt2400Outline();
+// yt2400Outline();
 
 /*
 difference() {
@@ -37,7 +39,7 @@ module yt2400Outline() {
 }
 
 module yt2400Blank() {
-   blankHeight = 32;
+   blankHeight = 34; /* was 32 */
    
    rotate([180,0,0]) translate([0,0,-blankHeight]) union() {
       yt2400Body();
@@ -49,8 +51,32 @@ module yt2400Blank() {
 /* yt2400Body()
  *
  * Notes:
+ * - overall height is 32, but have to push to full 46.5 (+) 
+ * - depth of main section should be more like 22-23mm
  */
 module yt2400Body() {
+   /* main body */
+   translate([0,0,12]) cylinder(r=35,h=15);
+   translate([-35,-38/2,10]) cube([20,38,17]); /* engine */
+   rotate([0,0,-73]) translate([-39,-11,9]) cube([18,22,20]);
+
+   /* cockpit, etc. */
+   translate([-35+10,-59,20]) rotate([0,90,0]) cylinder(r=8,h=52);
+
+   translate([0,0,12]) linear_extrude(height=15)
+      polygon([[-17,-3], [35,-3], [19,-56], [-17,-56]]);
+
+   /* cutouts */
+   translate([0,0,-48.5+32]) cylinder(r=25,h=48.5); /* interior */
+   translate([0,0,-48.5+32]) linear_extrude(height=48.5)
+      polygon([[-17+10,-3], [35-10,-3], [19-10,-56], [-17+10,-56]]);
+}
+
+/* yt2400BodyOrig()
+ *
+ * Notes:
+ */
+module yt2400BodyOrig() {
    /* main body */
    translate([0,0,12]) cylinder(r=35,h=15);
    translate([0,0,3]) cylinder(r=17,h=9.1);
