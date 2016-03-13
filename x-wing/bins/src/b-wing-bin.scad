@@ -8,13 +8,11 @@
 
 include <./bintools.scad>
 
-// % translate([0,0,-5]) import("/Users/rross/Downloads/1_BWing_Medium.STL");
-
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[0,-4.75,0], [0,0,0]]];
+locations = [[[0,-4.5,0], [0,0,0]]];
 
-harborFreightMediumFullHt(locations=locations) bWingBlank();
+harborFreightMediumFullHt(locations=locations,inset=0.5) bWingBlank();
 
 // bWingBlank();
 
@@ -71,46 +69,6 @@ module bWingBlank() {
       translate([0,-28.5,13]) scale([1,0.8,1]) cylinder(r=4,h=34-12);
    }
 }
-
-/* bWingBlankOrig()
- *
- * Notes:
- * - total height ought to be around 34mm
- */
-module bWingBlankOrig() {
-   rotate([180,0,0]) translate([0,0,-34]) union() {
-      /* backbone */
-      difference() { 
-         translate([0,0,28/2+6]) cube(center=true, [5,55,28]);
-         translate([0,0,1]) rotate([-14,0,0])cube(center=true, [5.5,100,10]);
-      }
-
-      /* mount */
-      translate([0,0,2.5]) rotate([-90,0,0]) cylinder(r=2.5,h=15);
-      translate([-2.5,0,2.5]) cube([5,15,5]);
-
-      /* cockpit */
-      translate([0,13+15,5]) rotate([0,0,0]) cylinder(r=4,h=29);
-
-      /* crosspiece */
-      for (i=[0:1]) {
-         mirror([i,0,0]) {
-            translate([41/2,7+1.5,12]) cylinder(r=2,h=34-12);
-            difference() {
-               translate([0,7,8]) cube([41/2,3,26]);
-               translate([-3,7-0.5,-2.5]) rotate([0,-13,0]) cube([30,4,8]);
-            }
-         }
-      }
-
-      /* engine, etc. */
-      translate([0,12,5]) scale([1,21/10,1])  cylinder(r=6,h=34-5);
-
-      /* bottom */
-      translate([0,-29.5,13]) scale([1,0.8,1]) cylinder(r=3.5,h=34-13);
-   }
-}
-
 
 /*
  * Local variables:
