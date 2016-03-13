@@ -29,8 +29,9 @@ $fn=60;
  *   80mm wide, 77mm bottom
  *   54mm length, 52mm bottom
  */
-module harborFreightMediumFullHt(locations=[]) {
-   solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations) children();
+module harborFreightMediumFullHt(locations=[],inset=0) {
+   solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations,inset=inset)
+      children();
 }
 
 module harborFreightMediumHalfHt(locations=[],cornerRad=3.75) {
@@ -60,9 +61,14 @@ module harborFreightLargeTwoThirdHt(locations=[]) {
    solidBottomBox(xDim=80,yDim=109.25,ht=2*46.5/3,locations=locations) children();
 }
 
+module harborFreightLargeFullHt(locations=[],inset=0) {
+   solidBottomBox(xDim=80,yDim=109.25,ht=46.5,locations=locations,inset=inset)
+      children();
+}
 
 
-/* solidBottomBox() -- generate a rounded, solid-bottom box with children used to generate slots for holding ships.
+/* solidBottomBox() -- generate a rounded, solid-bottom box with children
+ *                     used to generate slots for holding ships.
  *
  * locations -- an array of pairs of triples specifying a translation and rotation of the children().
  *              e.g., locations = [[[0,0,0], [0,0,0]],
@@ -74,7 +80,7 @@ module harborFreightLargeTwoThirdHt(locations=[]) {
  * NOTE: Assumes that children are "upside down" (i.e., the XY plane is meant to be top of box) so that
  *       models can drop in "bottom up".
  */
-module solidBottomBox(xDim=10, yDim=10, ht=10,
+module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,
                       locations=[],outlineScale=1.2,cornerRad=3.75)
 {
    offsetFromTop = 0.1; /* amount of space to move the outline from the top of the form; helps keep model clean */
@@ -82,11 +88,14 @@ module solidBottomBox(xDim=10, yDim=10, ht=10,
    /* flip right-side up and place on XY plane */
    translate([0,0,ht]) rotate([180,0,0]) {
       /* parallel-sided box, complete bottom */
-      roundShapedBox(xDimTop=xDim, yDimTop=yDim, xDimBottom=xDim,
-                     yDimBottom=yDim, ht=ht, wallThick=1.6,
-                     cornerRad=cornerRad);
-      translate([0,0,ht-1.2]) roundBoxBottom(xDim=xDim,yDim=yDim,ht=1.2,
-                                             cornerRad=cornerRad);
+      /* Note: because of the way we're building it, the "top" is the bottom
+       *       from the roundShapedBox perspective.
+       */
+      roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
+                     xDimBottom=xDim, yDimBottom=yDim,
+                     ht=ht, wallThick=1.6, cornerRad=cornerRad);
+      translate([0,0,ht-1.2]) roundBoxBottom(xDim=xDim-inset,yDim=yDim-inset,
+                                             ht=1.2, cornerRad=cornerRad);
 
       /* spaces to hold ships */
       difference() {
@@ -106,7 +115,6 @@ module solidBottomBox(xDim=10, yDim=10, ht=10,
       }
    }
 }
-
 
 /* blankCutout() - extrudes an outline of children() to a given height
  *                 and then difference()s out the children(), leaving

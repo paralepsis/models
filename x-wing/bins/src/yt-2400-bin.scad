@@ -15,7 +15,7 @@ $fn=160;
  */
 locations = [[[3,-14,0], [0,0,0]]];
 
-harborFreightLargeFullHt(locations) intersection() {
+harborFreightLargeFullHt(locations,inset=0.5) intersection() {
    translate([-3,14,0]) roundBoxBottom(cornerRad=3.75,xDim=80-1.6*2,yDim=109.25-1.6*2,ht=46.5);
    yt2400Blank();
 }
