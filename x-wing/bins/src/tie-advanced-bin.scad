@@ -19,7 +19,8 @@ binHeight   = 46.5/2;
 
 // harborFreightMediumHalfHt(locations,inset=0.0) advancedBlank();
 
-harborFreightSmallFullHt([[0,0,0],[0,0,0]],inset=0.0) advancedBlank();
+harborFreightSmallFullHt(locations=[[[0,7.,0],[0,0,0]]],inset=0.0)
+   advancedBlank();
 
 // advancedBlank();
 // advancedOutline();
@@ -44,9 +45,11 @@ module advancedBlank() {
                                                  [16,advancedHeight],
                                                  [0,advancedHeight]]);
 
-         translate([-16.0,-0.01,-0.01]) rotate([-90,0,-90]) linear_extrude(height=32)
+         translate([-16.0,-0.01,-0.01]) rotate([-90,0,-90])
+            linear_extrude(height=32)
             polygon(points=[[17.5,-10],[17.5,-3],[13.5,-3]]);
-         translate([16.0,0.01,-0.01]) rotate([-90,0,90]) linear_extrude(height=32)
+         translate([16.0,0.01,-0.01]) rotate([-90,0,90])
+            linear_extrude(height=32)
             polygon(points=[[17.5,-10],[17.5,-3],[13.5,-3]]);
       }
       translate([0,22-16.5,0]) cylinder(r=5/2,h=3.1);
