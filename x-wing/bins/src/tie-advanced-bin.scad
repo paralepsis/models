@@ -19,34 +19,37 @@ binHeight   = 46.5/2;
 
 // harborFreightMediumHalfHt(locations,inset=0.0) advancedBlank();
 
+harborFreightSmallFullHt([[0,0,0],[0,0,0]],inset=0.0) advancedBlank();
+
 // advancedBlank();
-advancedOutline();
+// advancedOutline();
 
 /* advancedOutline() -- test piece for outline
  */
 module advancedOutline() {
-   translate([0,0,22.5]) rotate([180,0,0]) {
-      blankCutout(height=binHeight - 0.1, outlineScale=1.2) advancedBlank();
+   translate([0,0,23.5]) rotate([180,0,0]) {
+      // blankCutout(height=binHeight - 0.1, outlineScale=1.2) advancedBlank();
+      blankCutout(height=23.5 - 0.1, outlineScale=1.2) advancedBlank();
    }
 }
 
 module advancedBlank() {
-   advancedHeight = 22.5; // total height of the advanced
+   advancedHeight = 23.5; // total height of the advanced
 
    rotate([180,0,0]) translate([0,0,-1*advancedHeight]) union() {
       difference() { 
-         translate([0,34/2,0]) rotate([90,0,0]) linear_extrude(height=34)
+         translate([0,35/2,0]) rotate([90,0,0]) linear_extrude(height=35)
             for(i=[0:1]) mirror([i,0,0]) polygon(points=[[0,0],[0,0],[0,3],
-                                                 [10,3],[15,10],
-                                                 [15,advancedHeight],
+                                                 [10,3],[16,10],
+                                                 [16,advancedHeight],
                                                  [0,advancedHeight]]);
 
-         translate([-15.0,-0.01,-0.01]) rotate([-90,0,-90]) linear_extrude(height=30)
-            polygon(points=[[17,-10],[17,-3],[13,-3]]);
-         translate([15.0,0.01,-0.01]) rotate([-90,0,90]) linear_extrude(height=30)
-            polygon(points=[[17,-10],[17,-3],[13,-3]]);
+         translate([-16.0,-0.01,-0.01]) rotate([-90,0,-90]) linear_extrude(height=32)
+            polygon(points=[[17.5,-10],[17.5,-3],[13.5,-3]]);
+         translate([16.0,0.01,-0.01]) rotate([-90,0,90]) linear_extrude(height=32)
+            polygon(points=[[17.5,-10],[17.5,-3],[13.5,-3]]);
       }
-      translate([0,22-17,0]) cylinder(r=5/2,h=3.1);
+      translate([0,22-16.5,0]) cylinder(r=5/2,h=3.1);
    } /* rotate and translate */
 }
 
