@@ -13,14 +13,14 @@ $fn=160;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[3,-19,0], [0,0,0]],
-              [[-3,19,0],[0,0,0]]];
+locations = [[[2,-18.25,0], [0,0,0]],
+              [[-2,18.25,0],[0,0,0]]];
 binHeight   = 46.5;
 
-// harborFreightMediumFullHt(locations,inset=0.5) defenderBlank();
+harborFreightMediumFullHt(locations,inset=0.5) defenderBlank();
 
 // defenderBlank();
-defenderOutline();
+// defenderOutline();
 
 /* defenderOutline() -- test piece for outline
  */
@@ -35,12 +35,12 @@ module defenderBlank() {
 
    rotate([180,0,0]) translate([0,0,-1*defenderHeight]) union() {
       /* basic hexagonal space to surround ship */
-      cylinder($fn=6,r1=15,r2=22,h=5);
-      translate([0,0,5-0.05]) cylinder($fn=6,r=22,h=defenderHeight-5+0.05);
+      cylinder($fn=6,r1=14.5,r2=23.0,h=5);
+      translate([0,0,5-0.05]) cylinder($fn=6,r=23.0,h=defenderHeight-5+0.05);
 
       /* create additional empty space below the ship */
       translate([0,0,defenderHeight-binHeight])
-         cylinder(r=9,h=binHeight-defenderHeight+0.1);
+         cylinder(r=10,h=binHeight-defenderHeight+0.1);
    } /* rotate and translate */
 }
 

@@ -8,26 +8,36 @@
 
 $fn=60;
 
-// Harbor Frieght Medium
-// 46.5mm tall
-// 48.6mm tall with legs
-// 80mm wide, 77 bottom
-// 54mm length, 52 bottom
+/* Harbor Freight Small
+ * 46.5mm tall
+ * 48.6mm tall with legs
+ * 54mm wide
+ * 39.25mm length
+ */
+
+/* harborFreightSmallFullHt -- see medium versions below for comments.
+ */
+module harborFreightSmallFullHt(locations=[],inset=0) {
+   solidBottomBox(xDim=39.25,yDim=54,ht=46.5,locations=locations,inset=inset)
+      children();
+}
+
+/* Harbor Freight Medium
+ * 46.5mm tall
+ * 48.6mm tall with legs
+ * 80mm wide, 77 bottom
+ * 54mm length, 52 bottom
+ */
 
 /* harborFreightMediumFullHt(locations)
  *
- * locations -- an array of pairs of triples specifying a translation and rotation of the children().
+ * locations -- an array of pairs of triples specifying a translation and
+ *              rotation of the children().
  *              e.g., locations = [[[0,0,0], [0,0,0]],
  *                                 [[5.5, 21.3,0], [0,0,0]],
  *                                 [[-5.5, -21.3, 0],[0,0,0]]];
  *
  * outlineScale -- scaling of the region around the blank. 1.2 is default.
- *
- * Dimensions (from Kariko83)
- *   46.5mm tall
- *   48.6mm tall with legs
- *   80mm wide, 77mm bottom
- *   54mm length, 52mm bottom
  */
 module harborFreightMediumFullHt(locations=[],inset=0) {
    solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations,inset=inset)
@@ -66,6 +76,10 @@ module harborFreightLargeFullHt(locations=[],inset=0) {
       children();
 }
 
+module harborFreightHugeFullHt(locations=[],inset=0) {
+   solidBottomBox(xDim=160,yDim=109.25,ht=46.5,locations=locations,inset=inset)
+      children();
+}
 
 /* solidBottomBox() -- generate a rounded, solid-bottom box with children
  *                     used to generate slots for holding ships.

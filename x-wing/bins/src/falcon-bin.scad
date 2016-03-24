@@ -13,14 +13,9 @@ include <bintools.scad>
  * 48.6mm tall with legs
  * 109.3mm wide
  * 80mm length
- *
- * Note: doubling this, half height
  */
 
-// falconBox();
-
 tiltedFalconBox();
-
 
 module tiltedFalconBox()
 {

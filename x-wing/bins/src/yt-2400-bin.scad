@@ -16,7 +16,8 @@ $fn=160;
 locations = [[[3,-14,0], [0,0,0]]];
 
 harborFreightLargeFullHt(locations,inset=0.5) intersection() {
-   translate([-3,14,0]) roundBoxBottom(cornerRad=3.75,xDim=80-1.6*2,yDim=109.25-1.6*2,ht=46.5);
+   translate([-3,14,0]) roundBoxBottom(cornerRad=3.75,xDim=80-1.6*2,
+                                       yDim=109.25-1.6*2,ht=46.5);
    yt2400Blank();
 }
 
@@ -70,24 +71,6 @@ module yt2400Body() {
    translate([0,0,-48.5+32]) cylinder(r=25,h=48.5); /* interior */
    translate([0,0,-48.5+32]) linear_extrude(height=48.5)
       polygon([[-17+10,-3], [35-10,-3], [19-10,-56], [-17+10,-56]]);
-}
-
-/* yt2400BodyOrig()
- *
- * Notes:
- */
-module yt2400BodyOrig() {
-   /* main body */
-   translate([0,0,12]) cylinder(r=35,h=15);
-   translate([0,0,3]) cylinder(r=17,h=9.1);
-   translate([8,0,7]) cube(center=true,[30,7,14]); /* gun */
-   translate([-35,-38/2,12]) cube([10,38,15]); /* engine */
-
-   rotate([0,0,-75]) translate([-40,-11,9]) cube([15,22,20]);
-
-   translate([-35+10,-58,20]) rotate([0,90,0]) cylinder(r=8,h=52);
-   translate([0,0,12]) linear_extrude(height=15)
-      polygon([[-15,-3], [35,-3], [19,-55], [-15,-55]]);
 }
 
 /*

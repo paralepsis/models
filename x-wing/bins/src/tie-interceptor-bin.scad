@@ -12,7 +12,7 @@ include <./bintools.scad>
 $fn=160;
 
 binHeight   = 46.5;
-interceptorHeight = 24; // total height of the interceptor
+interceptorHeight = 26; // total height of the interceptor
 
 /* locations is a pair of triples, translate : rotate pairs
  */
@@ -22,18 +22,7 @@ locations = [[[1.75,-5.5,0], [0,0,0]],
 // harborFreightMediumFullHt(locations,inset=0.5) interceptorBlank();
 harborFreightSmallFullHt(locations,inset=0.0) interceptorBlank();
 
-
-
-// harborFreightSmallFullHt(locations=[[[0,-6,0],[0,0,0]]],inset=0.0) interceptorBlank();
-
 // interceptorBlank();
-
-/*
-difference() {
-   interceptorOutline();
-   cube([30,30,40]);
-}
-*/
 
 /* interceptorOutline() -- test piece for outline
  */
@@ -52,14 +41,13 @@ module interceptorOutline() {
  * - fits, though :).
  */
 module interceptorBlank() {
-
    intersection() { 
       union() {
          linear_extrude(height=interceptorHeight+1) for(i=[0:1]) mirror([i,0,0])
             polygon(points=[[15.5,-39/2],[15.5,39/2],
                             [11.0,39/2],[8,-6],[0,-6],
                             [0,-39/2]]);
-         translate([0,-38/2+9,0]) cylinder(r=7,h=interceptorHeight+1);
+         translate([0,-38/2+9,0]) cylinder(r=7.5,h=interceptorHeight+1);
       }
 
       rotate([180,0,0]) translate([0,0,-1*interceptorHeight]) union() {
