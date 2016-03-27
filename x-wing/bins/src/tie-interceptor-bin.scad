@@ -21,6 +21,7 @@ locations = [[[1.75,-5.5,0], [0,0,0]],
 
 // harborFreightMediumFullHt(locations,inset=0.5) interceptorBlank();
 harborFreightSmallFullHt(locations,inset=0.0) interceptorBlank();
+//harborFreightSmallFullHt(locations=[[[0,0,0],[0,0,0]]],inset=0.0) interceptorBlank();
 
 // interceptorBlank();
 
