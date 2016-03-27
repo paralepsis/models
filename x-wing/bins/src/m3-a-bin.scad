@@ -16,8 +16,12 @@ locations = [[[5.5,-14.0,0.0], [0,0,-90]],
              // [[0,0,0.0], [0,0,90]],
              [[-5.5,14.0,0.0],[0,0,90]]];
 
-harborFreightMediumHalfHt(locations=locations)
-   scale([1,1,15/15]) import("../orig/m3-a-blank-mod.stl");
+// harborFreightMediumHalfHt(locations=locations)
+//    scale([1,1,15/15]) import("../orig/m3-a-blank-mod.stl");
+
+harborFreightSmallFullHt(locations=[[[0,0.,0],[0,0,0]]],inset=0.0)
+   import("../orig/m3-a-blank-mod.stl");
+
 
 // m3aOutline();
 
