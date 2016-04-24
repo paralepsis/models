@@ -16,15 +16,20 @@ include <./bintools.scad>
 
 $fn=160;
 binHeight   = 46.5;
+angle=0;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
 locations = [[[0,0,0], [0,0,0]]];
 
-// harborFreightHugeFullHt(locations,inset=1) decimatorBlank();
+// harborFreightHugeFullHt(locations,inset=1) angledDecimatorBlank();
 
 // decimatorBlank();
 decimatorOutline();
+
+
+// % linear_extrude(height=2) decimatorShell0();
+// decimatorShell();
 
 /*
 difference() {
@@ -33,35 +38,59 @@ difference() {
 }
 */
 
+module angledDecimatorBlank() {
+   translate([-75,0,0]) rotate([0,5,0]) translate([75,0,0]) decimatorBlank();
+
+   /* TODO: slice a projection and recreate the cutout in the middle */
+}
+
 /* decimatorOutline() -- test piece for outline
  */
 module decimatorOutline() {
-   translate([0,0,33]) rotate([180,0,0]) {
+   translate([0,0,40]) rotate([180,0,0]) {
       blankCutout(height=34.5 - 0.1, outlineScale=1.2) decimatorBlank();
    }
 }
 
-module decimatorBlank() {
-   blankHeight = 24; 
+module decimatorBlank(centerCutout=1) {
+   blankHeight = 40; 
    
+   /* rotate, etc. positions blank upside-down on XY plane */
    rotate([180,0,0]) translate([0,0,-binHeight]) union() {
-      translate([0,0,blankHeight]) linear_extrude(height=blankHeight) decimatorShell();
-      linear_extrude(height=binHeight) decimatorBottom();
+      difference() {
+         translate([0,0,binHeight- (blankHeight-7)])
+            linear_extrude(height=blankHeight-7) decimatorShell();
+         translate([0,0,binHeight-blankHeight]) bottomAngleCutout();
+      }
+      if (centerCutout) linear_extrude(height=binHeight)
+         decimatorBottom();
    } /* rotate, translate, union */
 }
 
+/* 7,11,15 heights from ground along side */
+
+/* decimatorBottom() -- cutout in the middle bottom, I think */
 module decimatorBottom() {
    for (i=[0:1]) mirror([0,i,0]) 
-      polygon(points=[[-73.7,0],[-73.7,20.6],
-                      [28.3,19.75],[28.3,11.25],[34.3,11.25],[40.3,5.25],
-                      [40.3,0]]);
+      polygon(points=[[-75,0],[-75,20.6],
+                      [28.3,18],[30,15],[34.3,11.25],[41,5.25],
+                      [41,0]]);
 }
+
+/* decimatorShell() -- outline, adapted from Slannesh's model */
 module decimatorShell() {
    for (i=[0:1]) mirror([0,i,0]) 
-      polygon(points=[[-73.7,0],[-73.7,20.6],[-49.3,47.2],[-38.5,47.2],
-                      [35.3,38.2],[69.25,25.25],[73.75,25.25],[73.75,19.75],
-                      [28.3,19.75],[28.3,11.25],[34.3,11.25],[40.3,5.25],
-                      [40.3,0]]);
+      polygon(points=[[-75,0],[-75,20.6],[-51,51],[-38.5,50],
+                      [35.3,38.2],[69.25,25.25],[70,24],[70,18],
+                      [28.3,18],[30,15],[34.3,11.25],[41,5.25],
+                      [41,0]]);
+}
+
+module bottomAngleCutout() {
+   translate([-74,0,0]) rotate([0,-8.5,0]) translate([74,0,0])
+   translate([0,52,0]) rotate([90,0,0]) linear_extrude(height=104)
+      polygon(points=[[-74, 7], [-35, 7], [35.3, 11], [76,15],
+                      [76,0], [-73.7,0]]);
 }
 
 /*
