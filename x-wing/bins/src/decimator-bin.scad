@@ -8,7 +8,8 @@
  *   http://www.thingiverse.com/thing:1250010
  *
  * Specifically, the outline of the Decimator was extracted from 
- * Slannesh's model.
+ * Slannesh's model. The outline has been significantly modified from the
+ * original.
  */
 
 
@@ -22,9 +23,9 @@ angle=0;
  */
 locations = [[[2,0,0], [0,0,0]]];
 
-harborFreightHugeFullHt(locations,inset=1) decimatorBlank();
+// harborFreightHugeFullHt(locations,inset=1) decimatorBlank();
 
-// decimatorBlank();
+decimatorBlank();
 // decimatorOutline();
 
 /* decimatorOutline() -- test piece for outline

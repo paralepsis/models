@@ -21,10 +21,10 @@ locations = [[[0,25.5,0], [0,0,90]],
              [[0,0,0], [0,0,90]],
              [[0,-25.5,0], [0,0,90]]];
 
-harborFreightMediumFullHt(locations,inset=1) bomberBlank();
+// harborFreightMediumFullHt(locations,inset=1) bomberBlank();
 
 // bomberOutline();
-// bomberBlank();
+bomberBlank();
 
 /* bomberOutline() -- test piece for outline
  */
