@@ -2,13 +2,16 @@ difference() {
    union() {
       frame();
       surround();
+      linear_extrude(height=1) projection(cut=true) translate([0,0,-0.5]) surround();
    }
 
    translate([-1,-1,-2]) cube([50,50,2]);
 }
 
 module surround() {
-   translate([3,34,0]) rotate([0,0,-56.5]) rotate([-10,0,0]) {
+   translate([7,34,0]) rotate([0,0,-56.5]) rotate([-10,0,0]) {
+
+   % translate([0.5,-7,0]) cube([34,8,20]); // rough camera location/space
       /* front */
       difference() {
          cube([35,2,22]);
