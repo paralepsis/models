@@ -21,9 +21,9 @@ angle=0;
  */
 locations = [[[0,-6.5,0], [0,0,0]]];
 
-harborFreightMediumHalfHt(locations,inset=1) hwkBlank();
+// harborFreightMediumHalfHt(locations,inset=1) hwkBlank();
 
-// hwkBlank();
+hwkBlank();
 // hwkOutline();
 
 /* hwkOutline() -- test piece for outline
@@ -34,15 +34,17 @@ module hwkOutline() {
    }
 }
 
+// 19 height is the real number. 5/7/2016
+// 9mm under nose would be good.
+
 module hwkBlank(centerCutout=1) {
-   blankHeight = 25-1.75; 
+   blankHeight = 19;
    
    /* rotate, etc. positions blank upside-down on XY plane */
    rotate([180,0,0]) translate([0,0,-binHeight]) union() {
-      difference() {
-         translate([0,0,binHeight- (blankHeight-7)])
-            linear_extrude(height=blankHeight-7) hwkShell();
-         translate([0,0,binHeight-blankHeight]) bottomAngleCutout();
+      translate([0,0,binHeight- (blankHeight)]) difference() {
+         linear_extrude(height=blankHeight) hwkShell();
+         bottomAngleCutout();
       }
       if (centerCutout) linear_extrude(height=binHeight) centerCutoutPoly();
    } /* rotate, translate, union */
@@ -51,7 +53,7 @@ module hwkBlank(centerCutout=1) {
 /* hwkShell() -- outline */
 module hwkShell() {
    for (i=[0:1]) mirror([i,0,0]) 
-      polygon(points=[[0,-31.5],[-5.7,-31.5], [-23.1,-31.5],[-24.1,-30.5],
+      polygon(points=[[0,-33.0],[-9,-33.0], [-23.1,-31.5],[-24.1,-30.5],
          [-25.4,-14.6],[-24.5,-13.5],[-8.1,-12.1], [-6.5,-10.2],[-6.5,0.5],
          [-5.5,2.23],[-4.95,16.3],[-2.1,31.5],[0,31.5]]);
 }
@@ -67,7 +69,7 @@ module bottomAngleCutout() {
    width = 60;
 
    rotate([0,0,90]) translate([0,width/2,0]) rotate([90,0,0]) linear_extrude(height=width)
-      polygon(points=[[-32,3], [-10,3], [2,7], [34, 8], [32,0], [-32,0]]);
+      polygon(points=[[-34,0], [-10,0], [2,4], [34, 8], [32,-1], [-32,-1]]);
 }
 
 /* centerCutoutPoly() -- defines a polygon to be cut all the way to the

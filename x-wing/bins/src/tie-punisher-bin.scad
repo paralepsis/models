@@ -5,7 +5,7 @@
  * This software is released under the Creative Commons Attribution
  * Non-Commercial License. It is derived from the model by RonPossible:
  * as downloaded on 4/29/2016 from the following URL:
- * *** TODO ***
+ * http://www.thingiverse.com/thing:1377445
  *
  * Specifically, the outline of the Punisher was extracted from 
  * RonPossible's model.
@@ -21,9 +21,9 @@ angle=0;
  */
 locations = [[[0,9,0], [0,0,0]]];
 
-harborFreightMediumFullHt(locations,inset=1) punisherBlank();
+// harborFreightMediumFullHt(locations,inset=1) punisherBlank();
 
-// punisherBlank();
+punisherBlank();
 // punisherOutline();
 
 /* punisherOutline() -- test piece for outline
@@ -44,7 +44,6 @@ module punisherBlank(centerCutout=1) {
       difference() {
          translate([0,0,binHeight- (blankHeight)])
             linear_extrude(height=blankHeight) punisherShell();
-         translate([0,0,binHeight-blankHeight]) bottomAngleCutout();
       }
       if (centerCutout) linear_extrude(height=binHeight) centerCutoutPoly();
    } /* rotate, translate, union */
@@ -56,22 +55,6 @@ module punisherShell() {
       polygon([[10,0],[10,-15.9],[18.6,-16.5],[24.3,-24.4],[24.3,-27],
                [-3,-27],[-3,-29], [-11.2,-29],[-11.2,-27],[-24.3,-27],
                [-24.3,-24.4],[-18.5,-16.5],[-17.5,-15.9], [-17.5,0]]);
-}
-
-/* bottomAngleCutout() -- defines the "height" of the bottom of the blank,
- *                        where it touches the model.
- *
- * Notes:
- * - "height" in the linear extrude corresponds to the width of the model
- *   in the X dimension.
- */
-module bottomAngleCutout() {
-   width = 80;
-
-   translate([0,0,-1])
-   rotate([0,0,90]) translate([0,width/2,0]) rotate([90,0,0]) linear_extrude(height=width)
-      polygon(points=[[-30,-5],[-30,10],[-27,10], [-18,1], [18,1],
-                      [27, 10], [30,10],[30,-5]]);
 }
 
 /* centerCutoutPoly() -- defines a polygon to be cut all the way to the
