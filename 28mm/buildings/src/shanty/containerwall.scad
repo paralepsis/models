@@ -17,9 +17,12 @@ module metalSide(height = 45, length = 90) {
                               [flatLen + pointOffset, pointOffset],
                               [2*flatLen + pointOffset, pointOffset],
                               [2*flatLen + 2*pointOffset, 0],
-                              [2*flatLen + 2*pointOffset, pointOffset + thickness],
-                              [0,pointOffset + thickness]],
-                    paths = [[6,5,4,3,2,1,0,6]]);
+                              [2*flatLen + 2*pointOffset, pointOffset - thickness],
+                              [2*flatLen + 2*pointOffset, -1* thickness],
+                              [flatLen+2*pointOffset,-1* thickness],
+                              [flatLen+pointOffset,-1*(pointOffset+thickness)],
+                              [pointOffset,-1*(pointOffset+thickness)],
+                              [0,-1*thickness]]);
         }
    }
 }
