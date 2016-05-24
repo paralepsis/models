@@ -15,7 +15,9 @@ width=40;
 
 // translate([9,-28,5]) rotate([0,0,180]) import("/Users/rross/projects/3dprint/marine/marine-on-base.stl");
 
-completeModel2();
+bremerBarrier();
+
+// completeModel2();
 // completeModel1();
 
 /******** COMPLETE MODEL 1 ********/
@@ -35,7 +37,7 @@ module completeModel2() {
 	difference() {
 	union() {
 	    barrierWall2();
-	    base2();
+	    // base2();
 	}
 	translate([0,0,-10]) cube(size=[240, 153, 20],center=true);	
     }
