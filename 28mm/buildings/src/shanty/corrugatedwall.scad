@@ -10,8 +10,12 @@
  *       sided corrugated wall, while the second is flat on the back.
  */
 
+// corWall();
+// corWallFlat();
+
 module corWall(length=100,height=100,period=4, thick=1.6) {
-   linear_extrude(height=height) for (i=[0:(length/period)-1])
+   // NOTE: 0.16 is a fudge. Not sure why it is needed. Too lazy to track.
+   translate([0,-thick+0.16,0]) linear_extrude(height=height) for (i=[0:(length/period)-1])
       translate([i*period,0,0]) scale([period,0.8,1])
          wave(thick=thick);
 }
@@ -49,8 +53,8 @@ module corWallFlat(length = 102, height = 80, angle = 0) {
      */
     zOff = -1 * (0.7 * corRad * cos(angle)) - 1;
 
-    translate([0,2*corRad,0]) rotate([90,0,0]) translate([0,0,-1 * zOff])
-    difference() {
+    // NOTE: Not sure why the 0.15 is there further down, but it is...
+    translate([0,zOff+0.15,0]) rotate([90,0,0]) difference() {
 	union() {
 	    translate([xDim, 0, 0.15]) rotate([0,-90,0]) linear_extrude(height=xDim)
 		polygon(points = [[zOff,0], [zOff,yDim], [height, yDim], [0,0]],
