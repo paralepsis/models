@@ -8,6 +8,8 @@
 
 /* NOTE: Two functions: corWall() and corWallFlat(). Former creates a two-
  *       sided corrugated wall, while the second is flat on the back.
+ *
+ *       Walls are placed with the "back left bottom" corner at the origin.
  */
 
 // corWall();
