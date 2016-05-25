@@ -1,19 +1,35 @@
 myWidth=7;
 widthPoints=7; // cannot modify without editing code
 
-wall();
+woodWall();
 
-module wall() {
-   linear_extrude(height=2.0) for (i=[0:10]) {
-      translate([i*(myWidth+0.5),0,0]) plank(width=myWidth,seed=i);
+/* woodWall()
+ *
+ * NOTE: Back of wall is at y=0, bottom is at z=0, left at x=0.
+ */
+module woodWall(height=60,length=90,crossPiece=0) {
+   /* work out plank widths from length */
+   count = length / (myWidth + 0.5);
+
+   // +1 on Z translation is to account for random perturbations of planks.
+   translate([0,-4,height+1]) rotate([-90,0,0]) union() {
+      linear_extrude(height=2.0) for (i=[0:count]) {
+         translate([i*(myWidth+0.5),0,0]) plank(width=myWidth,length=height,seed=i);
+      }
+
+      translate([myWidth/2,.95*height,1.99]) rotate([0,0,-90])
+         linear_extrude(height=2.0) plank(length=count*(myWidth+0.5),width=myWidth,seed=101);
+      translate([myWidth/2,10,1.99]) rotate([0,0,-90])
+         linear_extrude(height=2.0) plank(length=count*(myWidth+0.5),width=myWidth,seed=101);
+
+      if (crossPiece) {
+         translate([2,17,1.99]) rotate([0,0,-65])
+
+         // translate([2,.3*height,1.99]) rotate([0,0,atan((height-20)/length)])
+            linear_extrude(height=2.0)
+               plank(length=count*(myWidth+0.5),width=myWidth,seed=101);
+      }
    }
-
-   translate([0,65,1.99]) rotate([0,0,-90])
-      linear_extrude(height=2.0) plank(length=81,width=myWidth,seed=101);
-   translate([0,10,1.99]) rotate([0,0,-90])
-      linear_extrude(height=2.0) plank(length=81,width=myWidth,seed=101);
-   translate([0,17,1.99]) rotate([0,0,-63])
-      linear_extrude(height=2.0) plank(length=90,width=myWidth,seed=101);
 }
 
 module plank(width=7,length=70,seed=1) {
