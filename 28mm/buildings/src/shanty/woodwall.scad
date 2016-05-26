@@ -1,5 +1,12 @@
+/* woodwall.scad
+ *
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
+
 myWidth=7;
-widthPoints=7; // cannot modify without editing code
 
 woodWall();
 
@@ -32,7 +39,15 @@ module woodWall(height=60,length=90,crossPiece=0) {
    }
 }
 
+/* plank() -- generates a 2D plank outline of specified width and length
+ *
+ * NOTES:
+ * - Intention is that you linear_extrude this to the desired height.
+ * - The seed parameter can be used to generate different rough ends.
+ */
 module plank(width=7,length=70,seed=1) {
+   widthPoints=7; // cannot modify without editing code
+
    rough = rands(min_value=-1,max_value=1,value_count=2*(widthPoints+1),
                  seed_value=seed);
 
