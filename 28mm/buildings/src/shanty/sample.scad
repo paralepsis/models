@@ -62,10 +62,10 @@ translate([-10,-10,bHeight+9]) rotate([-92.5,0,0]) {
       rotate([90,0,0]) translate([90,70,-1]) scale([0.4,0.5,1]) hole1();
    }
    translate([70,-0.9,43]) rotate([90,25,0]) linear_extrude(height=2.7)
-      plank(length=60,seed=3);
+      plank(length=60,seed=35);
    translate([75,-0.9,33]) rotate([90,32,0]) linear_extrude(height=2.7)
       plank(seed=3);
    translate([61,-0.9,53]) rotate([90,25,0]) linear_extrude(height=2.7)
-      plank(length=63,seed=3);
+      plank(length=63,seed=11);
 }
 
