@@ -8,7 +8,7 @@
 
 myWidth=7;
 
-woodWall();
+woodWall(height=50,crossPiece=1);
 
 /* woodWall()
  *
@@ -30,9 +30,11 @@ module woodWall(height=60,length=90,crossPiece=0) {
          linear_extrude(height=2.0) plank(length=count*(myWidth+0.5),width=myWidth,seed=101);
 
       if (crossPiece) {
-         translate([2,17,1.99]) rotate([0,0,-65])
+         cAngle = atan((height - 5*myWidth)/((count-2)*(myWidth+0.5)));
 
-         // translate([2,.3*height,1.99]) rotate([0,0,atan((height-20)/length)])
+         //translate([2,17,1.99]) rotate([0,0,-65])
+
+         translate([myWidth/2,.3*height,1.99]) rotate([0,0,cAngle-90])
             linear_extrude(height=2.0)
                plank(length=count*(myWidth+0.5),width=myWidth,seed=101);
       }

@@ -19,7 +19,7 @@ module doorOpening(width=32, height=45, thick=7, angle=2, cutout=0) {
    slop = 2;
 
    if (cutout) {
-      translate([0,-thick,0]) cube([width,thick,height+slop]);
+      translate([0,-thick,-0.1]) cube([width,thick+1,height+slop]);
    }
    else {
       translate([-3,-thick,0]) cube([3, thick, height+slop]);
