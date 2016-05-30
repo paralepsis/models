@@ -1,9 +1,18 @@
+/* shanty-1.scad
+ *
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
+
 use <woodwall.scad>
 use <corrugatedwall.scad>
 use <containerwall.scad>
 use <dooropening.scad>
 use <hole-1.scad>
 
+/* define rough dimensions of the building */
 bDepth=90;
 bWidth=120;
 bHeight=55;
@@ -11,9 +20,22 @@ $fn=20;
 
 // % cube([120,100,bHeight]);
 
-almostAll();
-leftWall();
-top();
+if (0) {
+   /* complete building assembled */
+   almostAll();
+   leftWall();
+   top();
+}
+else {
+   /* parted out for printing */
+   almostAll();
+
+   /* put the left wall interior to the building and flat */
+   translate([bDepth+15, bHeight+2+30, 0]) rotate([0,-90,90])
+      translate([2,0,0]) leftWall();
+
+   translate([0,-bDepth+10,bDepth+20]) rotate([92.5,180,180]) translate([0,10,0]) top();
+}
 
 /****** MODULES ******/
 
