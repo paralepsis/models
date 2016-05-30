@@ -1,7 +1,25 @@
+/* accessories.scad
+ *
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
+
 $fn=100;
 
-translate([40,0,13.95]) rotate([180,0,0]) waterStoreBottom();
-waterStoreTop();
+if (1) {
+   /* complete */
+   waterStoreBottom();
+   translate([0,0,13.95]) waterStoreTop();
+}
+else {
+   /* printable */
+   translate([40,0,13.95]) rotate([180,0,0]) waterStoreBottom();
+   waterStoreTop();
+}
+
+/****** MODULES ******/
 
 module waterStoreBottom() {
    scale([1,1,1]) {
