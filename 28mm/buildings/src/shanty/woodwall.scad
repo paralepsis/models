@@ -8,13 +8,13 @@
 
 myWidth=7;
 
-woodWall(height=50,crossPiece=1);
+woodWall(height=50,crossPiece=1,supports=1);
 
 /* woodWall()
  *
  * NOTE: Back of wall is at y=0, bottom is at z=0, left at x=0.
  */
-module woodWall(height=60,length=90,crossPiece=0) {
+module woodWall(height=60,length=90,crossPiece=0,supports=1) {
    /* work out plank widths from length */
    count = length / (myWidth + 0.5);
 
@@ -24,10 +24,12 @@ module woodWall(height=60,length=90,crossPiece=0) {
          translate([i*(myWidth+0.5),0,0]) plank(width=myWidth,length=height,seed=i);
       }
 
-      translate([myWidth/2,.95*height,1.99]) rotate([0,0,-90])
-         linear_extrude(height=2.0) plank(length=count*(myWidth+0.5),width=myWidth,seed=101);
-      translate([myWidth/2,10,1.99]) rotate([0,0,-90])
-         linear_extrude(height=2.0) plank(length=count*(myWidth+0.5),width=myWidth,seed=101);
+      if (supports) {
+         translate([myWidth/2,.95*height,1.99]) rotate([0,0,-90])
+            linear_extrude(height=2.0) plank(length=count*(myWidth+0.5)-2,width=myWidth,seed=101);
+         translate([myWidth/2,10,1.99]) rotate([0,0,-90])
+            linear_extrude(height=2.0) plank(length=count*(myWidth+0.5)-2,width=myWidth,seed=101);
+      }
 
       if (crossPiece) {
          cAngle = atan((height - 5*myWidth)/((count-2)*(myWidth+0.5)));

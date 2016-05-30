@@ -43,12 +43,14 @@ module containerWall(height = 45, length = 90, flat=3.0, ow=1.5, ot=1.5) {
 }
 
 /* containerWall2() -- asymmetric */
-module containerWall2(height = 45, length = 90, flat=4.0, ow=1.5, ot=1.5) {
+module containerWall2(height = 45, length = 90, bigFlat=4.0, littleFlat=1.0,
+                      ow=1.5, ot=1.5)
+{
    thickness = 0.8;
-   reqFlatLen = flat; // requested flat length, possibly adjusted
-   ptOffW = 0.25; // width
-   ptOffT = 1.2; // thick
-   littleFlatLen = 1;
+   reqFlatLen = bigFlat; // requested flat length, possibly adjusted
+   ptOffW = ow; // width
+   ptOffT = ot; // thick
+   littleFlatLen = littleFlat;
 
    origPanelLen = reqFlatLen + 2*ptOffW + littleFlatLen;
    panelCount = floor(length/origPanelLen);
