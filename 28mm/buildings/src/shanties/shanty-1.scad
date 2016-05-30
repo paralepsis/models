@@ -34,7 +34,7 @@ else {
    translate([bDepth+15, bHeight+2+30, 0]) rotate([0,-90,90])
       translate([2,0,0]) leftWall();
 
-   translate([0,-bDepth+10,bDepth+20]) rotate([92.5,180,180]) translate([0,10,0]) top();
+   translate([-15,-bDepth+45,bDepth+20]) rotate([92.5,180,180]) translate([0,10,0]) top();
 }
 
 /****** MODULES ******/
