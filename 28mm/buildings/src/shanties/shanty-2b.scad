@@ -66,8 +66,10 @@ module almostAll() {
 
 /* left wall */
 module leftWall() {
-   translate([2,bDepthB-2,0]) rotate([0,0,-90]) {
-      woodWall(length=bDepthB-4,height=bHeightB-1,supports=0);
+   translate([-2,0,0]) rotate([0,0,90]) {
+      simpleContainerWall(length=bDepthB,height=30);
+      translate([0,0,30]) containerWallFlat(length=bDepthB,height=bHeightB-1-30,
+                        bigFlat=6, littleFlat=0.5,thick=1.2);
    }
    translate([0,8,bHeightB-15]) cube([2,bDepthB-16,7]);
    translate([0,8,7]) cube([2,bDepthB-16,7]);
@@ -78,11 +80,9 @@ module rightWall() {
    difference() {
       /* flipped around, had to move 2mm in X */
       translate([bWidthB+2,bDepthB,0]) rotate([0,0,-90])
-         containerWall2(length=bDepthB,height=bHeightB-0.75,littleFlat=0.1,ow=0.5,ot=1.0);
-      translate([bWidthB-1,30,20]) rotate([1,0,0]) cube([5,23,20]);
+         containerWall(length=bDepthB,height=bHeightB+7,littleFlat=0.1,ow=0.5,ot=1.0);
+      translate([bWidthB-2,35,-0.25]) cube([7,bDepthB-35,55]);
    }
-   translate([bWidthB-2,0,40]) rotate([2,0,0]) translate([0,1,0]) cube([2,bDepthB-5,7]);
-   translate([bWidthB-2,0,8]) rotate([-1,0,0]) translate([0,1,0]) cube([2,bDepthB-5,7]);
 }
 
 /* back wall */
@@ -105,18 +105,20 @@ module backWall() {
 module frontWall() {
    difference() {
       simpleContainerWall(length=bWidthB,height=bHeightB+3);
-      translate([22,0,0]) doorOpening(cutout=1);
+      // translate([22,0,0]) doorOpening(cutout=1);
    
-      /* bullet holes */
-      translate([72,3,32]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-      translate([79,3,23]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-      translate([86,3,35]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-      translate([99,3,36]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-      translate([92,3,39]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-      translate([90,3,26]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-      translate([94,3,16]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+      if (0) { 
+         /* bullet holes */
+         translate([72,3,32]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+         translate([79,3,23]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+         translate([86,3,35]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+         translate([99,3,36]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+         translate([92,3,39]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+         translate([90,3,26]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+         translate([94,3,16]) rotate([90,0,0]) cylinder(r=1.25,h=15);
+      }
    }
-   translate([22,1.5,0]) doorOpening(cutout=0,angle=3);
+   // translate([22,1.5,0]) doorOpening(cutout=0,angle=3);
 }
 
 /* top */
