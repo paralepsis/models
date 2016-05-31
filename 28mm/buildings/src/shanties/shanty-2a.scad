@@ -122,9 +122,9 @@ module frontWall() {
 
 /* top */
 module top() {
-   translate([0,-10,bHeightA+9]) rotate([-93.0,0,0]) {
+   translate([3,-10,bHeightA+9]) rotate([-93.0,0,0]) {
       difference() {
-         corWallFlat(length=bWidthA+9,height=bDepthA+20);
+         corWallFlat(length=bWidthA+6,height=bDepthA+20);
       }
       translate([31,-0.9,53]) rotate([90,135,0]) linear_extrude(height=2.7)
          plank(length=43,seed=11);

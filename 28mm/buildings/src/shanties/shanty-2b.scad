@@ -15,7 +15,7 @@ use <hole-1.scad>
 /* define rough dimensions of the building */
 bDepthB=120;
 bWidthB=90;
-bHeightB=65;
+bHeightB=62;
 $fn=20;
 
 shanty2B();
@@ -91,7 +91,7 @@ module rightWall() {
       /* flipped around, had to move 2mm in X */
       translate([bWidthB+2,bDepthB,0]) rotate([0,0,-90])
          containerWall(length=bDepthB,height=bHeightB+7,littleFlat=0.1,ow=0.5,ot=1.0);
-      translate([bWidthB-2,35,-0.25]) cube([7,bDepthB-35,55]);
+      translate([bWidthB-2,35,-0.25]) cube([7,bDepthB-35,53]);
    }
 }
 
@@ -121,17 +121,10 @@ module frontWall() {
 
 /* top */
 module top() {
+   /* TODO: Simplify this set of translations! */
    translate([-10,-10,bHeightB+4]) rotate([-90,-2.5,0]) {
-      difference() {
-         corWallFlat(length=bWidthB+19,height=bDepthB+20);
-         rotate([90,0,0]) translate([90,70,-1]) scale([0.4,0.5,1]) hole1();
-      }
-      translate([70,-0.9,43]) rotate([90,25,0]) linear_extrude(height=2.7)
-         plank(length=60,seed=35);
-      translate([75,-0.9,33]) rotate([90,32,0]) linear_extrude(height=2.7)
-         plank(seed=3);
-      translate([61,-0.9,53]) rotate([90,25,0]) linear_extrude(height=2.7)
-         plank(length=63,seed=11);
+      translate([0,0,bWidthB+48]) rotate([0,90,0])
+         corWallFlat(length=bDepthB+18,height=bWidthB+20);
    }
 }
 
