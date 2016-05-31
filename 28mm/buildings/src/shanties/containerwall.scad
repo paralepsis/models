@@ -1,4 +1,12 @@
-containerWall2();
+/* containerwall.scad
+ *
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ */
+
+containerWallFlat(bigFlat=6,littleFlat=0.5,thick=1.2);
 
 /* simpleContainerWall() -- corrugated metal wall
  *
@@ -73,6 +81,38 @@ module containerWall2(height = 45, length = 90, bigFlat=4.0, littleFlat=1.0,
                               [flatLen+2*ptOffW,-1* thickness],
                               [flatLen+ptOffW,-1*(ptOffT+thickness)],
                               [ptOffW,-1*(ptOffT+thickness)],
+                              [0,-1*thickness]]);
+        }
+   }
+}
+
+module containerWallFlat(height = 45, length = 90, bigFlat=4.0, littleFlat=1.0,
+                      ow=1.5, ot=1.5,thick=0.8)
+{
+   thickness = thick;
+   reqFlatLen = bigFlat; // requested flat length, possibly adjusted
+   ptOffW = ow; // width
+   ptOffT = ot; // thick
+   littleFlatLen = littleFlat;
+
+   origPanelLen = reqFlatLen + 2*ptOffW + littleFlatLen;
+   panelCount = floor(length/origPanelLen);
+
+   /* tweak panel length to hit overall length target */
+   diff = length - panelCount*origPanelLen;
+   flatLen = reqFlatLen + diff / (panelCount); // two flatLens per panel
+   newPanelLen = flatLen + 2*ptOffW + littleFlatLen;
+
+   for (i = [ 0 : panelCount - 1 ]) {
+      translate([i * newPanelLen, -1*(ptOffT), 0])
+         linear_extrude(height = height) {
+            polygon(points = [[0,0],
+                              [flatLen, 0],
+                              [flatLen + ptOffW, ptOffT],
+                              [flatLen + ptOffW + littleFlatLen, ptOffT],
+                              [flatLen + 2*ptOffW + littleFlatLen, 0],
+                              [flatLen + 2*ptOffW + littleFlatLen, ptOffT - thickness],
+                              [flatLen + 2*ptOffW + littleFlatLen, -1* thickness],
                               [0,-1*thickness]]);
         }
    }
