@@ -66,13 +66,23 @@ module almostAll() {
 
 /* left wall */
 module leftWall() {
-   translate([-2,0,0]) rotate([0,0,90]) {
-      simpleContainerWall(length=bDepthB,height=30);
-      translate([0,0,30]) containerWallFlat(length=bDepthB,height=bHeightB-1-30,
-                        bigFlat=6, littleFlat=0.5,thick=1.2);
+   translate([-2,0,0]) rotate([0,0,90]) difference() {
+      union() {
+         simpleContainerWall(length=bDepthB,height=30);
+         translate([0,0,30]) containerWallFlat(length=bDepthB,
+                                               height=bHeightB-1-30,
+                                               bigFlat=6,
+                                               littleFlat=0.5,thick=1.2);
+      }
+
+      /* difference out door opening */
+      translate([62,0,0]) doorOpening(cutout=1);
    }
    translate([0,8,bHeightB-15]) cube([2,bDepthB-16,7]);
-   translate([0,8,7]) cube([2,bDepthB-16,7]);
+   // translate([0,8,7]) cube([2,bDepthB-16,7]);
+
+   translate([-2,0,0]) rotate([0,0,90]) translate([62,1.5,0])
+      doorOpening(cutout=0,angle=1);
 }
 
 /* right wall */
@@ -87,25 +97,14 @@ module rightWall() {
 
 /* back wall */
 module backWall() {
-   translate([0,bDepthB,0]) {
-      difference() {
-         translate([0,2,0]) corWall(length=bWidthB,height=bHeightB);
-         translate([70,-1,0]) cube([50,5,30]);
-         rotate([90,0,0]) translate([30,2,-3]) scale([0.4,0.5,1]) hole1();
-      }
-      translate([70,2,0]) containerWall(length=50,height=30,flat=5);
-      translate([9,1,0]) difference() {
-         rotate([0,2,0]) cube([43,2,20]);
-         translate([0,-1,-3]) cube([45,5,3]);
-      }
-   }
+   translate([bWidthB,bDepthB,0]) rotate([0,0,180])
+      woodWall(length=bWidthB-4,height=bHeightB,missing1=7);
 }
 
 /* front wall */
 module frontWall() {
    difference() {
       simpleContainerWall(length=bWidthB,height=bHeightB+3);
-      // translate([22,0,0]) doorOpening(cutout=1);
    
       if (0) { 
          /* bullet holes */
@@ -118,7 +117,6 @@ module frontWall() {
          translate([94,3,16]) rotate([90,0,0]) cylinder(r=1.25,h=15);
       }
    }
-   // translate([22,1.5,0]) doorOpening(cutout=0,angle=3);
 }
 
 /* top */
