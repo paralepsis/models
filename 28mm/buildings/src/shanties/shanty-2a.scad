@@ -82,8 +82,8 @@ module rightWall() {
    difference() {
       /* flipped around, had to move 2mm in X */
       translate([bWidthA+2,bDepthA,0]) rotate([0,0,-90])
-         containerWall2(length=bDepthA,height=bHeightA-0.75,littleFlat=0.1,ow=0.5,ot=1.0);
-      translate([bWidthA-1,30,20]) rotate([1,0,0]) cube([5,23,20]);
+         containerWall2(length=bDepthA,height=bHeightA-0.75,littleFlat=1.5,ow=0.5,ot=1.0);
+      // translate([bWidthA-1,42,20]) rotate([1,0,0]) cube([5,23,20]);
    }
    translate([bWidthA-2,0,40]) rotate([2,0,0]) translate([0,1,0]) cube([2,bDepthA-5,7]);
    translate([bWidthA-2,0,8]) rotate([-1,0,0]) translate([0,1,0]) cube([2,bDepthA-5,7]);

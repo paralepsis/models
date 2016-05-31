@@ -1,4 +1,4 @@
-/* crater-2.scad
+/* hole-1.scad
  *
  * Copyright (C) Robert B. Ross, 2015
  *
