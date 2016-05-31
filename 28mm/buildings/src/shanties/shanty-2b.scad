@@ -1,4 +1,4 @@
-/* shanty-1.scad
+/* shanty-2b.scad
  *
  * Copyright (C) Robert B. Ross, 2016
  *
@@ -13,28 +13,31 @@ use <dooropening.scad>
 use <hole-1.scad>
 
 /* define rough dimensions of the building */
-bDepth=90;
-bWidth=120;
-bHeight=55;
+bDepthB=120;
+bWidthB=90;
+bHeightB=65;
 $fn=20;
 
-// % cube([120,100,bHeight]);
+shanty2B();
 
-if (0) {
-   /* complete building assembled */
-   almostAll();
-   leftWall();
-   top();
-}
-else {
-   /* parted out for printing */
-   almostAll();
+/* shanty2B() -- put this half of the building together */
+module shanty2B() {
+   if (1) {
+      /* complete building assembled */
+      almostAll();
+      leftWall();
+      top();
+   }
+   else {
+      /* parted out for printing */
+      almostAll();
+   
+      /* put the left wall interior to the building and flat */
+      translate([bDepthB+15, bHeightB+2+30, 0]) rotate([0,-90,90])
+         translate([2,0,0]) leftWall();
 
-   /* put the left wall interior to the building and flat */
-   translate([bDepth+15, bHeight+2+30, 0]) rotate([0,-90,90])
-      translate([2,0,0]) leftWall();
-
-   translate([-15,-bDepth+48,bDepth+20]) rotate([92.5,180,180]) translate([0,10,0]) top();
+      translate([-15,-bDepthB+48,bDepthB+20]) rotate([92.5,180,180]) translate([0,10,0]) top();
+   }
 }
 
 /****** MODULES ******/
@@ -45,10 +48,10 @@ module almostAll() {
    difference() {
       union() {
          /* cornerposts */
-         translate([0,0,0]) cube([8,8,bHeight+9]);
-         translate([bWidth-8,0,0]) cube([8,8,bHeight+9]);
-         translate([0,bDepth-8,0]) cube([8,8,bHeight+5]);
-         translate([bWidth-8,bDepth-8,0]) cube([8,8,bHeight+5]);
+         translate([0,0,0]) cube([8,8,bHeightB+5]);
+         translate([bWidthB-8,0,0]) cube([8,8,bHeightB+9]);
+         translate([0,bDepthB-8,0]) cube([8,8,bHeightB+5]);
+         translate([bWidthB-8,bDepthB-8,0]) cube([8,8,bHeightB+9]);
 
          // leftWall();
          rightWall();
@@ -63,30 +66,30 @@ module almostAll() {
 
 /* left wall */
 module leftWall() {
-   translate([2,bDepth-2,0]) rotate([0,0,-90]) {
-      woodWall(length=bDepth-4,height=bHeight-1,supports=0);
+   translate([2,bDepthB-2,0]) rotate([0,0,-90]) {
+      woodWall(length=bDepthB-4,height=bHeightB-1,supports=0);
    }
-   translate([0,8,bHeight-15]) cube([2,bDepth-16,7]);
-   translate([0,8,7]) cube([2,bDepth-16,7]);
+   translate([0,8,bHeightB-15]) cube([2,bDepthB-16,7]);
+   translate([0,8,7]) cube([2,bDepthB-16,7]);
 }
 
 /* right wall */
 module rightWall() { 
    difference() {
       /* flipped around, had to move 2mm in X */
-      translate([bWidth+2,bDepth,0]) rotate([0,0,-90])
-         containerWall2(length=bDepth,height=bHeight-0.75,littleFlat=0.1,ow=0.5,ot=1.0);
-      translate([bWidth-1,30,20]) rotate([1,0,0]) cube([5,23,20]);
+      translate([bWidthB+2,bDepthB,0]) rotate([0,0,-90])
+         containerWall2(length=bDepthB,height=bHeightB-0.75,littleFlat=0.1,ow=0.5,ot=1.0);
+      translate([bWidthB-1,30,20]) rotate([1,0,0]) cube([5,23,20]);
    }
-   translate([bWidth-2,0,40]) rotate([2,0,0]) translate([0,1,0]) cube([2,bDepth-5,7]);
-   translate([bWidth-2,0,8]) rotate([-1,0,0]) translate([0,1,0]) cube([2,bDepth-5,7]);
+   translate([bWidthB-2,0,40]) rotate([2,0,0]) translate([0,1,0]) cube([2,bDepthB-5,7]);
+   translate([bWidthB-2,0,8]) rotate([-1,0,0]) translate([0,1,0]) cube([2,bDepthB-5,7]);
 }
 
 /* back wall */
 module backWall() {
-   translate([0,bDepth,0]) {
+   translate([0,bDepthB,0]) {
       difference() {
-         translate([0,2,0]) corWall(length=bWidth,height=bHeight);
+         translate([0,2,0]) corWall(length=bWidthB,height=bHeightB);
          translate([70,-1,0]) cube([50,5,30]);
          rotate([90,0,0]) translate([30,2,-3]) scale([0.4,0.5,1]) hole1();
       }
@@ -101,7 +104,7 @@ module backWall() {
 /* front wall */
 module frontWall() {
    difference() {
-      simpleContainerWall(length=bWidth,height=bHeight+3);
+      simpleContainerWall(length=bWidthB,height=bHeightB+3);
       translate([22,0,0]) doorOpening(cutout=1);
    
       /* bullet holes */
@@ -118,9 +121,9 @@ module frontWall() {
 
 /* top */
 module top() {
-   translate([-10,-10,bHeight+9]) rotate([-92.5,0,0]) {
+   translate([-10,-10,bHeightB+4]) rotate([-90,-2.5,0]) {
       difference() {
-         corWallFlat(length=bWidth+19,height=bDepth+20);
+         corWallFlat(length=bWidthB+19,height=bDepthB+20);
          rotate([90,0,0]) translate([90,70,-1]) scale([0.4,0.5,1]) hole1();
       }
       translate([70,-0.9,43]) rotate([90,25,0]) linear_extrude(height=2.7)

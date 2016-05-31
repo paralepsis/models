@@ -14,14 +14,19 @@ woodWall(height=50,crossPiece=1,supports=1);
  *
  * NOTE: Back of wall is at y=0, bottom is at z=0, left at x=0.
  */
-module woodWall(height=60,length=90,crossPiece=0,supports=1) {
+module woodWall(height=60,length=90,crossPiece=0,supports=1,
+                missing1=-1, missing2=-1)
+{
    /* work out plank widths from length */
    count = length / (myWidth + 0.5);
 
    // +1 on Z translation is to account for random perturbations of planks.
    translate([0,-4,height+1]) rotate([-90,0,0]) union() {
       linear_extrude(height=2.0) for (i=[0:count]) {
-         translate([i*(myWidth+0.5),0,0]) plank(width=myWidth,length=height,seed=i);
+         if (i != missing1 && i != missing2) {
+            translate([i*(myWidth+0.5),0,0]) plank(width=myWidth,
+                                                   length=height,seed=i);
+         }
       }
 
       if (supports) {
