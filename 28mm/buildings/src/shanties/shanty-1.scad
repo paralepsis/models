@@ -18,26 +18,22 @@ bDepth=90;
 bWidth=120;
 bHeight=55;
 $fn=20;
-brim=0;
+
+/* NOTE: The brim takes a *very* long time to calculate. */
+brim=1;
 
 // % cube([120,100,bHeight]);
 
 
-if (1) {
+if (0) {
    /* complete building assembled */
    completeShanty1();
    if (brim) brimGenerator() union() { almostAll(); leftWall(); };
 }
 else {
    /* parted out for printing */
-   almostAll();
-
-   /* put the left wall interior to the building and flat */
-   translate([bDepth+15, bHeight+2+30, 0]) rotate([0,-90,90])
-      translate([2,0,0]) leftWall();
-
-   translate([-15,-bDepth+48,bDepth+20]) rotate([92.5,180,180])
-      translate([0,10,0]) top();
+   printableShanty1();
+   if (brim) brimGenerator() printableShanty1(includeLeftWall=0);
 }
 
 /****** MODULES ******/
@@ -46,6 +42,20 @@ module completeShanty1() {
    almostAll();
    leftWall();
    top();
+}
+
+/* printableShanty1() -- complete shanty-1 laid out for printing */
+module printableShanty1(includeLeftWall=1) {
+   almostAll();
+
+   /* put the left wall interior to the building and flat */
+   if (includeLeftWall) {
+      translate([bDepth+13, bHeight+2+24, 0]) rotate([0,-90,90])
+      translate([2,0,0]) leftWall();
+   }
+
+   translate([-15,-bDepth+42,bDepth+20-2.8]) rotate([92.5,180,180])
+      translate([0,10,0]) top();
 }
 
 /* almostAll() -- all the pieces that ought to be printed as a unit
