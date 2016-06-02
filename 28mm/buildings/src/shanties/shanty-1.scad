@@ -11,20 +11,22 @@ use <corrugatedwall.scad>
 use <containerwall.scad>
 use <dooropening.scad>
 use <hole-1.scad>
+use <brimgenerator.scad>
 
 /* define rough dimensions of the building */
 bDepth=90;
 bWidth=120;
 bHeight=55;
 $fn=20;
+brim=0;
 
 // % cube([120,100,bHeight]);
 
-if (0) {
+
+if (1) {
    /* complete building assembled */
-   almostAll();
-   leftWall();
-   top();
+   completeShanty1();
+   if (brim) brimGenerator() union() { almostAll(); leftWall(); };
 }
 else {
    /* parted out for printing */
@@ -34,10 +36,17 @@ else {
    translate([bDepth+15, bHeight+2+30, 0]) rotate([0,-90,90])
       translate([2,0,0]) leftWall();
 
-   translate([-15,-bDepth+48,bDepth+20]) rotate([92.5,180,180]) translate([0,10,0]) top();
+   translate([-15,-bDepth+48,bDepth+20]) rotate([92.5,180,180])
+      translate([0,10,0]) top();
 }
 
 /****** MODULES ******/
+
+module completeShanty1() {
+   almostAll();
+   leftWall();
+   top();
+}
 
 /* almostAll() -- all the pieces that ought to be printed as a unit
  */
