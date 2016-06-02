@@ -13,20 +13,23 @@ use <hole-1.scad>
 use <hole-2.scad>
 use <bigCube.scad>
 
-/* corner */
-cornerPost();
-frontWall();
-rightWall();
-
-/* base */
-translate([18,35,0]) rotate([0,0,-65]) scale([1.5,1.5,1]) hole1();
+if (0) {
+   /* corner */
+   cornerPost();
+   frontWall();
+   rightWall();
+}
+else {
+   /* base */
+   translate([18,35,0]) rotate([0,0,-65]) scale([1.5,1.5,1]) hole1();
+}
 
 /****** MODULES ******/
 
 module cornerPost() {
    intersection() {
      translate([60,0,0]) cube([8,8,60]);
-     translate([0,0,-25]) scale([1,1,0.2]) bigCube();
+     translate([0,0,-20]) scale([1,1,0.2]) bigCube();
    }
 }
 

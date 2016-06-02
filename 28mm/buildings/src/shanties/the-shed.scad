@@ -20,21 +20,41 @@ $fn=20;
 
 // % cube([120,100,bHeight]);
 
-if (1) {
+if (0) {
    /* complete building assembled */
    almostAll();
    leftWall();
+   rightWall();
    top();
 }
 else {
    /* parted out for printing */
    almostAll();
 
-   /* put the left wall interior to the building and flat */
-   translate([bDepth+15, bHeight+2+30, 0]) rotate([0,-90,90])
-      translate([2,0,0]) leftWall();
+   /* lay the left wall flat */
+   translate([52, bDepth-13, 0]) rotate([0,-90,90])
+   translate([2,0,0]) difference()
+   {
+      leftWall();
 
-   translate([-15,-bDepth+48,bDepth+20]) rotate([92.5,180,180]) translate([0,10,0]) top();
+      /* cornerposts */
+      translate([0,0,0]) cube([8,8,bHeight+7.5]);
+      translate([0,bDepth-8,0]) cube([8,8,bHeight+4]);
+   }
+
+   /* lay the right wall flat */
+   translate([bWidth+39,22,0]) rotate([0,90,90])
+   translate([-bWidth-2,0,0]) difference()
+   {
+      rightWall();
+
+      /* cornerposts */
+      translate([bWidth-8,0,0]) cube([8,8,bHeight+7.5]);
+      translate([bWidth-8,bDepth-8,0]) cube([8,8,bHeight+4]);
+   }
+
+   translate([0,-bDepth+43,bDepth+20]) rotate([92.5,180,180])
+      translate([0,18,0]) top();
 }
 
 /****** MODULES ******/
@@ -54,9 +74,7 @@ module almostAll() {
          translate([8,1,bHeight-1]) cube([bWidth-16, 3, 7]);
          translate([8,bDepth-4,bHeight-5]) cube([bWidth-16, 3, 7]);
 
-         rightWall();
          backWall();
-         frontWall();
       }
 
       /* cleanly difference off the top */
@@ -89,10 +107,6 @@ module backWall() {
       translate([0,2,0]) corWall(length=bWidth,height=bHeight);
       translate([50,0,42]) rotate([90,40,0]) translate([30,2,-3]) scale([0.07,0.3,1]) hole1();
    }
-}
-
-/* front wall */
-module frontWall() {
 }
 
 /* top */

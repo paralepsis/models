@@ -13,13 +13,14 @@ use <hole-1.scad>
 use <hole-2.scad>
 use <bigCube.scad>
 
+// miscHole();
+
 if (1) {
    /* wall */
-   cornerPost1();
-   cornerPost2();
+   cornerPosts();
    frontWall();
 }
-else {
+if (0) {
    /* base */
    base();
 }
@@ -34,17 +35,13 @@ module base() {
 
 /****** MODULES ******/
 
-module cornerPost1() {
+module cornerPosts() {
    rotate([6,0,0]) intersection() {
-     translate([-40,0,0]) cube([8,8,60]);
-     translate([-60,0,-40]) scale([1,1,0.2]) bigCube();
-   }
-}
-
-module cornerPost2() {
-   rotate([6,0,0]) intersection() {
-     translate([60,0,0]) cube([8,8,60]);
-     translate([0,0,-35]) scale([1,1,0.2]) bigCube();
+     union() { 
+        translate([-41,-1,0]) cube([8,8,60]);
+        translate([57,-1,0]) cube([8,8,60]);
+     }
+     translate([-60,-1,-40]) rotate([0,-2,0]) scale([1,1,0.2]) bigCube();
    }
 }
 
@@ -54,4 +51,12 @@ module frontWall() {
       translate([20,-8,-13]) rotate([-90,0,0]) scale([2,1,5]) hole2();
    }
 }
+
+/* miscHole() -- hole I used to make wall-1b */
+module miscHole() {
+   rotate([6,0,0]) {
+      translate([20,-8,-13]) rotate([120,0,0]) scale([1,1,5]) hole2();
+   }
+}
+
 

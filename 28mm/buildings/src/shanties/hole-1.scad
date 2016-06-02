@@ -14,6 +14,8 @@
  *   ./height2scad.pl > craterFloor.scad
  */
 
+hole1();
+
 module hole1() {
    linear_extrude(height = 4.0, center=false, convexity = 10, $fn=1025, scale=1)
       craterPoly();

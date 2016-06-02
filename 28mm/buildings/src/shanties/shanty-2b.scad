@@ -11,6 +11,7 @@ use <corrugatedwall.scad>
 use <containerwall.scad>
 use <dooropening.scad>
 use <hole-1.scad>
+use <hole-2.scad>
 
 /* define rough dimensions of the building */
 bDepthB=120;
@@ -105,18 +106,9 @@ module backWall() {
 module frontWall() {
    difference() {
       simpleContainerWall(length=bWidthB,height=bHeightB+3);
-   
-      if (0) { 
-         /* bullet holes */
-         translate([72,3,32]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-         translate([79,3,23]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-         translate([86,3,35]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-         translate([99,3,36]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-         translate([92,3,39]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-         translate([90,3,26]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-         translate([94,3,16]) rotate([90,0,0]) cylinder(r=1.25,h=15);
-      }
+      translate([43,0,12]) scale([0.6,3,0.5]) rotate([90,180,0]) hole2();
    }
+
 }
 
 /* top */
