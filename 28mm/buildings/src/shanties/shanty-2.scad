@@ -10,4 +10,4 @@ use <shanty-2a.scad>
 use <shanty-2b.scad>
 
 shanty2A();
-translate([-90,-30,0]) shanty2B();
+translate([-92,-30,0]) shanty2B();

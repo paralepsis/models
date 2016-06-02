@@ -106,7 +106,7 @@ module backWall() {
 module frontWall() {
    difference() {
       simpleContainerWall(length=bWidthB,height=bHeightB+3);
-      translate([43,0,12]) scale([0.6,3,0.5]) rotate([90,180,0]) hole2();
+      translate([43,1,10]) scale([0.6,3,0.5]) rotate([90,180,0]) hole2();
    }
 
 }

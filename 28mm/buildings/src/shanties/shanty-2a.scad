@@ -122,7 +122,7 @@ module frontWall() {
 
 /* top */
 module top() {
-   translate([3,-10,bHeightA+9]) rotate([-93.0,0,0]) {
+   translate([1,-10,bHeightA+9]) rotate([-93.0,0,0]) {
       difference() {
          corWallFlat(length=bWidthA+6,height=bDepthA+20);
       }
