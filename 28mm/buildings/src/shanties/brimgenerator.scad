@@ -1,4 +1,4 @@
-/* bintools.scad
+/* brimgenerator.scad
  *
  * Copyright (C) Robert B. Ross, 2016
  *
