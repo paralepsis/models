@@ -8,7 +8,39 @@
 
 myWidth=7;
 
-woodWall(height=50,crossPiece=1,supports=1);
+// woodWall(height=50,crossPiece=1,supports=1);
+
+woodLadder();
+
+
+/* woodLadder()
+ * length - length (height when stood up) of the ladder
+ * width  - width of rungs
+ */
+module woodLadder(length=70,width=24)
+{
+   startSpace=8; // from center of crosspiece to center of crosspiece
+
+   /* do a quick adjustment to achieve desired length */
+   count = floor(length / (startSpace+1));
+   actSpace = startSpace + (length/(startSpace+1)) / (count-1);
+
+   /* rungs */
+   linear_extrude(height=2) for (i=[1:count]) {
+      translate([i*actSpace,0,0])
+      rotate([0,0, rands(min_value=-10,max_value=10,value_count=1,
+                 seed_value=13*i+2)[0]])
+      translate([-2,-1*width/2,0]) plank(width=4,length=width,seed=11*i);
+   }
+
+   /* sides */
+   translate([0,width/2-3,2]) rotate([0,0,-90]) linear_extrude(height=2)
+   translate([-2,0,0]) plank(width=4,length=length,seed=145);
+
+   translate([0,-1*width/2+3,2]) rotate([0,0,-90]) linear_extrude(height=2)
+   translate([-2,0,0]) plank(width=4,length=length,seed=148);
+}
+
 
 /* woodWall()
  *
