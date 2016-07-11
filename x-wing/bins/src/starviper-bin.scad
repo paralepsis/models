@@ -40,8 +40,8 @@ module starviperBlank(centerCutout=1) {
    /* rotate, etc. positions blank upside-down on XY plane */
    rotate([180,0,0]) translate([0,0,-binHeight]) union() {
       difference() {
-         translate([0,0,binHeight- (blankHeight-7)])
-            linear_extrude(height=blankHeight-7) starviperShell();
+         translate([0,0,binHeight-blankHeight])
+            linear_extrude(height=blankHeight) starviperShell();
       }
       if (centerCutout) linear_extrude(height=binHeight) centerCutoutPoly();
    } /* rotate, translate, union */
