@@ -13,7 +13,7 @@
  *
  */
 
-/* [Global] */
+/* [Parameters] */
 Pilot_Skill    = 7; // [0:11]
 Primary_Weapon = 4; // [0:5]
 Agility        = 2; // [0:5]
