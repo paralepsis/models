@@ -16,7 +16,7 @@ binHeight=46.5/2;
  */
 locations = [[[-5,-12.5,0], [0,0,2]]];
 
-if (1) {
+if (0) {
    intersection() {
       hull() harborFreightLargeHalfHt();
       harborFreightLargeHalfHt(locations,inset=0.5) intersection() {
@@ -26,11 +26,7 @@ if (1) {
 }
 else {
    jumpmasterBlank();
-   // jumpmasterOutline();
 }
-
-// jumpmasterBody();
-// % jumpmasterBody00();
 
 /* jumpmasterOutline() -- test piece for outline
  */
@@ -45,10 +41,6 @@ module jumpmasterBlank() {
    
    rotate([180,0,0]) translate([0,0,-blankHeight]) union() {
       jumpmasterBody();
-/*
-      translate([0,0,20]) linear_extrude(height=blankHeight-20) 
-         projection(cut=true) translate([0,0,-20]) jumpmasterBody();
-*/
    } /* rotate, translate, union */
 }
 
@@ -74,30 +66,6 @@ module jumpmasterBody() {
       /* difference out */
       translate([-60,-3,-0.5]) cube([64,16,binHeight+1]);
       translate([-54,-35,-0.5]) cube([20,70,binHeight+1]);
-   }
-}
-/* jumpmasterBody00()
- *
- * Notes:
- */
-module jumpmasterBody00() {
-   difference() {
-      union() {
-         /* main body */
-         translate([0,0,binHeight-17]) cylinder(r=79/2,h=17);
-
-         /* cockpit, etc. */
-         translate([27,-24,binHeight-17]) {
-            linear_extrude(height=17)
-               polygon(points=[[0,0], [15,5], [15,10], [0,15]]);
-         }
-         /* cutouts */
-         translate([0,0,0]) cylinder(r=79/2-7,h=binHeight); /* interior */
-         }
-
-      /* difference out */
-      translate([-60,-3,-0.5]) cube([60,16,binHeight+1]);
-      translate([-50,-35,-0.5]) cube([20,70,binHeight+1]);
    }
 }
 
