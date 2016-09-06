@@ -2,13 +2,8 @@
  *
  * Copyright (C) Robert B. Ross, 2016
  *
- * This software is released under the Creative Commons Attribution
- * License. It is derived from the model by ThisIsDavin
- * as downloaded on 4/29/2016 from the following URL:
- *   http://www.thingiverse.com/thing:1515669
- *
- * Specifically, the outline of the Starviper was extracted from 
- * ThisIsDavin's model.
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
  */
 
 include <./bintools.scad>
@@ -19,12 +14,12 @@ angle=0;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[0,4.5,0]]];
+locations = [[[0,5,0]]];
 
-// harborFreightMediumFullHt(locations,inset=1) misthunterBlank();
+harborFreightMediumFullHt(locations,inset=1) misthunterBlank();
 
 // misthunterBlank(centerCutout=0);
-misthunterOutline();
+// misthunterOutline();
 
 /* misthunterOutline() -- test piece for outline
  */
