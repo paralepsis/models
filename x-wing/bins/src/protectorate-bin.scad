@@ -14,30 +14,30 @@ angle=0;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[1,28.5,0], [0,0,-30]],
-             [[-1,-28.5,0], [0,0,150]]];
+locations = [[[25,17.5,0], [0,0,90]],
+             [[-25,-17.5,0], [0,0,-90]]];
 
-// harborFreightMediumHalfHt(locations,inset=1) protBlank();
+harborFreightMediumHalfHt(locations,inset=1,bottomThick=0.9) protBlank();
 
 // protBlank();
-protOutline();
+// protOutline();
 
 /* protOutline() -- test piece for outline
  */
 module protOutline() {
-   translate([0,0,40]) rotate([180,0,0]) {
+   translate([0,0,14.9]) rotate([180,0,0]) {
       blankCutout(height=15 - 0.1, outlineScale=1.2) protBlank();
    }
 }
 
-module protBlank(centerCutout=0) {
-   blankHeight = 28.5; 
+module protBlank(centerCutout=1, useProfile=1) {
+   blankHeight = 8.0; // this is the height of the region supporting ship
    
    /* rotate, etc. positions blank upside-down on XY plane */
-   rotate([180,0,0]) translate([0,0,-binHeight]) union() {
-      difference() {
-         translate([0,0,binHeight-blankHeight])
-            linear_extrude(height=blankHeight) protShell();
+   union() {
+      translate([0,0,0]) intersection() {
+         linear_extrude(height=blankHeight) protShell();
+         if (useProfile) protProfile(h=blankHeight);
       }
       if (centerCutout) linear_extrude(height=binHeight) protCutoutPoly();
    } /* rotate, translate, union */
@@ -47,10 +47,22 @@ module protBlank(centerCutout=0) {
 module protShell() {
    for (j=[0:1]) mirror([j,0,0])
       polygon(points=[
-                     [-0.1,0], [6,0], [6,1.5], [14,2], [14,6], [21,7],
-                     [21,14], [15,18], [11,42], [6.5,46], [6,35], [5,34],
+                     [-0.1,0], [5,0], [5,2], [14,2.5], [14,6.5], [20.75,7.5],
+                     [20.75,14], [15,18], [11,42], [6.5,46], [6,35], [5,34],
                      [5,33], [-0.1,33]
                      ]);
+}
+
+/* protProfile() - defines the side profile of the blank (not cutout)
+ */
+module protProfile(h=100,w=200)
+{
+   translate([-1*w/2,0,0]) rotate([90,0,90]) linear_extrude(height=w) {
+      polygon(points=[
+                     [0,0], [46,0], [46,3], [8,h], [0,h]
+                     ]);
+   }
+
 }
 
 /* protCutoutPoly() -- defines a polygon to be cut all the way to the
@@ -59,11 +71,9 @@ module protShell() {
  */
 module protCutoutPoly() {
    for (j=[0:1]) mirror([j,0,0])
-      polygon(points=[[-0.1,-0.1], [9.5,-0.1], [9.5,5.16], [14.64,6.23],
-                      [14.64,13],[19.85,12.1],[22,17.05],// [19.7,23.41],
-                      // [19.6,33.5], [19.6,37], [14.95,37], [14.95,33.5],
-                      // [11.07,22.93],
-                     [9.9,22.93], [9.5,25],[-0.1,25]]);
+      polygon(points=[
+                     [-0.1,0], [5,0], [5,2], [5,33], [-0.1,33]
+                     ]);
 }
 
 /*
