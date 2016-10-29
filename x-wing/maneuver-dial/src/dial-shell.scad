@@ -29,7 +29,7 @@ module arm() {
 
 translate([-35,-10,0]) arm();
 body();
-translate([50,0,0]) face();
+translate([50,0,0]) mirror([1,0,0]) face();
 
 // partial_rotate_extrude(bodyRad, 20, 20) translate([43/2,0,0]) square([5,1]);
 
