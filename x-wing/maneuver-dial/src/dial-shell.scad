@@ -11,8 +11,25 @@ $fn=120;
 
 bodyRad=45.5/2+0.8;
 
+module arm() {
+   difference() {
+      union() {
+         translate([-2,-2,0]) cube([4,4,4]);
+         cylinder(r=12/2,h=2);
+         translate([-6,0,0]) cube([12,43/2,1.2]);
+      }
+
+      /* cutout at end */
+      translate([0,13,-0.1]) {
+         cylinder(r=3,h=3);
+         translate([-3,0,0]) cube([6,9,3]);
+      }
+   }
+}
+
+translate([-35,-10,0]) arm();
 body();
-// face();
+translate([50,0,0]) face();
 
 // partial_rotate_extrude(bodyRad, 20, 20) translate([43/2,0,0]) square([5,1]);
 
@@ -23,9 +40,10 @@ module body(h=5) {
       cutout();
    }
 
+   /* center peg */
    difference() {
-      cylinder(h=3.25,r=4);
-      translate([-2.0,-2.0,1]) cube([4,4,10]);
+      cylinder(h=3.15,r=4);
+      rotate([0,0,35]) translate([-2.0,-2.0,1]) cube([4,4,10]);
    }
 }
 
