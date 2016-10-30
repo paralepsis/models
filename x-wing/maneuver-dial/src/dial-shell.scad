@@ -11,10 +11,11 @@ $fn=120;
 
 bodyRad=45.5/2+0.8;
 
-translate([-35,-10,0]) arm();
+translate([85,-10,0]) arm();
 // rotate([0,0,-55]) arm();
 body();
-translate([50,0,0]) mirror([1,0,0]) face();
+translate([50,-25,0]) mirror([1,0,0]) smileyFace();
+translate([50,25,0]) mirror([0,0,0]) tieFace();
 
 module arm(slop=0.1) {
    difference() {
@@ -32,7 +33,7 @@ module arm(slop=0.1) {
    }
 }
 
-module body(h=5.15) {
+module body(h=5.3) {
    difference() {
       cylinder(r=bodyRad,h=h);
       translate([0,0,1]) cylinder(r=bodyRad-0.8,h=h-1+0.1);
@@ -41,12 +42,19 @@ module body(h=5.15) {
 
    /* center peg */
    difference() {
-      cylinder(h=h-2,r=4);
+      cylinder(h=h-2.15,r=4);
       rotate([0,0,35]) translate([-2.0,-2.0,1]) cube([4,4,10]);
    }
 }
 
-module face() {
+module tieFace() {
+   difference() {
+      cylinder(r=bodyRad,h=1);
+      rotate([0,0,-125]) cutout();
+      translate([0,0,-0.1]) rotate([0,0,-10]) scale([0.9,0.9,2]) import("./tie-fighter-outline.stl");
+   }
+}
+module smileyFace() {
    difference() {
       cylinder(r=bodyRad,h=1);
       rotate([0,0,-125]) cutout();
