@@ -11,38 +11,37 @@ $fn=120;
 
 bodyRad=45.5/2+0.8;
 
-module arm() {
+translate([-35,-10,0]) arm();
+// rotate([0,0,-55]) arm();
+body();
+translate([50,0,0]) mirror([1,0,0]) face();
+
+module arm(slop=0.1) {
    difference() {
       union() {
-         translate([-2,-2,0]) cube([4,4,4]);
+         translate([-2+slop/2,-2+slop/2,0]) cube([4-slop,4-slop,4]);
          cylinder(r=12/2,h=2);
-         translate([-6,0,0]) cube([12,43/2,1.2]);
+         translate([-6,0,0]) cube([12,20,1.2]);
       }
 
       /* cutout at end */
-      translate([0,13,-0.1]) {
+      translate([0,12.5,-0.1]) {
          cylinder(r=3,h=3);
-         translate([-3,0,0]) cube([6,9,3]);
+         translate([-3,0,0]) cube([6,10,3]);
       }
    }
 }
 
-translate([-35,-10,0]) arm();
-body();
-translate([50,0,0]) mirror([1,0,0]) face();
-
-// partial_rotate_extrude(bodyRad, 20, 20) translate([43/2,0,0]) square([5,1]);
-
-module body(h=5) {
+module body(h=5.15) {
    difference() {
       cylinder(r=bodyRad,h=h);
-      translate([0,0,1]) cylinder(r=45.5/2,h=h-1+0.1);
+      translate([0,0,1]) cylinder(r=bodyRad-0.8,h=h-1+0.1);
       cutout();
    }
 
    /* center peg */
    difference() {
-      cylinder(h=3.15,r=4);
+      cylinder(h=h-2,r=4);
       rotate([0,0,35]) translate([-2.0,-2.0,1]) cube([4,4,10]);
    }
 }
