@@ -47,16 +47,17 @@ module body(h=5.3) {
    }
 }
 
-module tieFace() {
+module tieFace(h=0.9) {
    difference() {
-      cylinder(r=bodyRad,h=1);
+      cylinder(r=bodyRad,h=h);
       rotate([0,0,-125]) cutout();
       translate([0,0,-0.1]) rotate([0,0,-10]) scale([0.9,0.9,2]) import("./tie-fighter-outline.stl");
    }
 }
-module smileyFace() {
+
+module smileyFace(h=0.9) {
    difference() {
-      cylinder(r=bodyRad,h=1);
+      cylinder(r=bodyRad,h=h);
       rotate([0,0,-125]) cutout();
       translate([0,0,-0.1]) smiley(h=2);
    }
