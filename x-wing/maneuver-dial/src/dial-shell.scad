@@ -19,12 +19,18 @@ wheelThick=2.0;     // thickness of FFG dial wheel
 totalThick=6.3;     // total thickness of the dial
 wallThick=0.8;      // thickness of the walls of the dial
 
+insertInset=2;      // reduction in radius of insert from bodyRad - wallThick
 armSlop = 0.2;
+insertSlop = 0.4;
 
 // arm();
-translate([0,0,0]) tieFace();
+// translate([0,0,0]) tieFace();
 // smileyFace();
-for (j=[1:2]) translate([(j)*2*bodyRad,0,0]) insert(slop=(j+1)*0.2);
+// insert(slop=insertSlop);
+
+// for (j=[1:2]) translate([(j)*2*bodyRad,0,0]) insert(slop=(j+1)*0.2);
+
+insertSlopTest();
 
 /*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
 
@@ -54,8 +60,29 @@ module shell() {
    }
 }
 
-module bodyInsertVolume(inset=2,slop=0) {
-   rad = bodyRad - wallThick - inset - slop;
+module bodyInsertVolume(slop=0) {
+   rad = bodyRad - wallThick - insertInset - slop;
+
+   translate([0,0,shellFaceThick]) difference() {
+      cylinder(r=rad, h=totalThick+0.1);
+
+      /* NOTES:
+       * - +10/-10 angles ensure that the insert only fits one way 
+       * - +0.2 on totalThick simply cleans up the difference
+       * - +slop recenters the cylinder at the position of the "un-slopped"
+       *   version
+       */
+      rotate([0,0,-30+10]) translate([rad+slop,0,-0.1])
+         cylinder(r=3+slop,h=totalThick+0.2);
+      rotate([0,0,90]) translate([rad+slop,0,-0.1])
+         cylinder(r=3+slop,h=totalThick+0.2);
+      rotate([0,0,210-10]) translate([rad+slop,0,-0.1])
+         cylinder(r=3+slop,h=totalThick+0.2);
+   }
+}
+
+module bodyInsertVolumeOld(slop=0) {
+   rad = bodyRad - wallThick - insertInset - slop;
 
    translate([0,0,shellFaceThick]) difference() {
       cylinder(r=rad, h=totalThick+0.1);
@@ -105,6 +132,15 @@ module body() {
 module cutout() {
    translate([0,0,-0.5]) partial_rotate_extrude(70, bodyRad, 100)
       translate([-2,0,0]) square([5,10]);
+}
+
+/*********** TEST PART BELOW ***********/
+
+module insertSlopTest() {
+   render() difference() {
+      bodyInsertVolume();
+      bodyInsertVolume(slop=insertSlop);
+   }
 }
 
 /*************** SMILEY POLYS BELOW ***************/
