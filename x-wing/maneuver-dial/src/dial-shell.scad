@@ -9,15 +9,65 @@
 
 $fn=120;
 
-bodyRad=45.5/2+0.8;
+/* NOTE: All measurements in mm */
 
-translate([85,-10,0]) arm();
-// rotate([0,0,-55]) arm();
-body();
-translate([50,-25,0]) mirror([1,0,0]) smileyFace();
-translate([50,25,0]) mirror([0,0,0]) tieFace();
+bodyRad=45.5/2+0.8; // radius of exterior of shell
 
-module arm(slop=0.1) {
+faceThick=1.8;      // thickness of face with insert
+shellFaceThick=0.9; // thickness of face of shell without insert
+wheelThick=2.0;     // thickness of FFG dial wheel
+totalThick=6.3;     // total thickness of the dial
+wallThick=0.8;      // thickness of the walls of the dial
+
+armSlop = 0.2;
+
+// arm();
+translate([0,0,0]) tieFace();
+// smileyFace();
+for (j=[1:2]) translate([(j)*2*bodyRad,0,0]) insert(slop=(j+1)*0.2);
+
+/*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
+
+module tieFace() {
+   shell() translate([0,0,-0.1]) rotate([0,0,10]) scale([0.9,0.9,2])
+      mirror([1,0,0]) import("./tie-fighter-outline.stl");
+}
+
+module smileyFace(h=0.9) {
+   shell() translate([0,0,-0.1]) mirror([1,0,0]) smiley(h=2);
+}
+
+/*********** BASIC PARTS BELOW ***********/
+
+module insert(slop=0.1) {
+   translate([0,0,-1*shellFaceThick]) intersection() {
+      body();
+      bodyInsertVolume(slop=slop);
+   }
+}
+
+module shell() {
+   difference() {
+      body();
+      bodyInsertVolume();
+      children();
+   }
+}
+
+module bodyInsertVolume(inset=2,slop=0) {
+   rad = bodyRad - wallThick - inset - slop;
+
+   translate([0,0,shellFaceThick]) difference() {
+      cylinder(r=rad, h=totalThick+0.1);
+      rotate([0,0,-30]) translate([rad,0,-0.1]) cylinder(r=3+slop,h=totalThick);
+      rotate([0,0,90]) translate([rad,0,-0.1]) cylinder(r=3+slop,h=totalThick);
+      rotate([0,0,210]) translate([rad,0,-0.1]) cylinder(r=3+slop,h=totalThick);
+   }
+}
+
+/* arm() -- this is the arm that holds the dial in place
+ */
+module arm(slop=armSlop) {
    difference() {
       union() {
          translate([-2+slop/2,-2+slop/2,0]) cube([4-slop,4-slop,4]);
@@ -33,36 +83,25 @@ module arm(slop=0.1) {
    }
 }
 
-module body(h=5.3) {
+/* body() -- this is the basic form.
+ */
+module body() {
    difference() {
-      cylinder(r=bodyRad,h=h);
-      translate([0,0,1]) cylinder(r=bodyRad-0.8,h=h-1+0.1);
-      cutout();
+      cylinder(r=bodyRad,h=totalThick);
+      translate([0,0,faceThick])
+         cylinder(r=bodyRad-wallThick,h=totalThick-faceThick+0.1);
+      rotate([0,0,-125]) cutout();
    }
 
    /* center peg */
    difference() {
-      cylinder(h=h-2.15,r=4);
-      rotate([0,0,35]) translate([-2.0,-2.0,1]) cube([4,4,10]);
+      cylinder(h=faceThick+wheelThick,r=4);
+      translate([-2.0,-2.0,1.8]) cube([4,4,10]);
    }
 }
 
-module tieFace(h=0.9) {
-   difference() {
-      cylinder(r=bodyRad,h=h);
-      rotate([0,0,-125]) cutout();
-      translate([0,0,-0.1]) rotate([0,0,-10]) scale([0.9,0.9,2]) import("./tie-fighter-outline.stl");
-   }
-}
-
-module smileyFace(h=0.9) {
-   difference() {
-      cylinder(r=bodyRad,h=h);
-      rotate([0,0,-125]) cutout();
-      translate([0,0,-0.1]) smiley(h=2);
-   }
-}
-
+/* cutout() -- this simply deals with the cutout in one side 
+ */
 module cutout() {
    translate([0,0,-0.5]) partial_rotate_extrude(70, bodyRad, 100)
       translate([-2,0,0]) square([5,10]);
