@@ -1,7 +1,15 @@
-/* http://www.thingiverse.com/thing:34027
+/* dial-shell.scad
  *
- * GNU LGPL
+ * Copyright (C) Robert B. Ross, 2016
+ *
+ * This software is released under the Creative Commons
+ * Attribution-ShareAlike 4.0 International Public License.
+ *
+ * 
+ *
  */
+
+use <partial-rotate-extrude.scad>
 
 /* NOTES:
    dial is ~44.5mm in diameter, 2mm thick, 8mm dia. hole.
@@ -248,25 +256,6 @@ module poly_path10(h)
                [26.250000,-53.992773]]);
    }
 }
-
-/*************** PARTIAL ROTATE EXTRUDE BELOW ***************/
-
-
-module pie_slice(radius, angle, step) {
-   for(theta = [0:step:angle-step]) {
-      rotate([0,0,0]) linear_extrude(height = radius*2, center=true)
-      polygon(points = [[0,0],[radius*cos(theta+step),radius*sin(theta+step)],
-                        [radius*cos(theta),radius*sin(theta)]]);
-   }
-}
-
-module partial_rotate_extrude(angle, radius, convex) {
-   intersection () {
-      rotate_extrude(convexity=convex) translate([radius,0,0]) children(0);
-      pie_slice(radius*2, angle, angle/5);
-   }
-}
-
 
 /*
  * Local variables:
