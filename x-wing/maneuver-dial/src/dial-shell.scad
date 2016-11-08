@@ -31,16 +31,27 @@ insertInset=2;      // reduction in radius of insert from bodyRad - wallThick
 armSlop = 0.2;
 insertSlop = 0.4;
 
-// arm();
-// translate([0,0,0]) tieFace();
-// smileyFace();
+translate([0,-45,0]) arm();
+translate([20,-45,0]) arm();
+translate([40,-45,0]) arm();
+translate([60,-45,0]) arm();
+translate([80,-45,0]) arm();
+translate([100,-45,0]) arm();
+translate([0,0,0]) tieFace();
+translate([50,0,0]) smileyFace();
+translate([100,0,0]) t70Face();
 // insert(slop=insertSlop);
 
-// for (j=[1:2]) translate([(j)*2*bodyRad,0,0]) insert(slop=(j+1)*0.2);
+// for (j=[1:3]) translate([(j)*2*bodyRad,0,0]) insert(slop=(j+1)*0.1);
 
-insertSlopTest();
+// insertSlopTest();
 
 /*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
+
+module t70Face() {
+   shell() translate([0.8,-1,-0.1]) rotate([0,0,10]) scale([1.52,1.52,2])
+      mirror([1,0,0]) import("./t70-outline.stl");
+}
 
 module tieFace() {
    shell() translate([0,0,-0.1]) rotate([0,0,10]) scale([0.9,0.9,2])
