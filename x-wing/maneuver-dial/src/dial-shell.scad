@@ -5,19 +5,20 @@
  * This software is released under the Creative Commons
  * Attribution-ShareAlike 4.0 International Public License.
  *
- * 
- *
+ * NOTE: partial-rotate-extrude is released under a separate license,
+ *       described in that file.
  */
 
 use <partial-rotate-extrude.scad>
 
-/* NOTES:
-   dial is ~44.5mm in diameter, 2mm thick, 8mm dia. hole.
- */
-
 $fn=120;
 
-/* NOTE: All measurements in mm */
+/* NOTES:
+ * - dial is ~44.5mm in diameter, 2mm thick, 8mm dia. hole
+ * - All measurements in mm 
+ */
+
+/*********** CONFIGURATION PARAMETERS ***********/
 
 bodyRad=45.5/2+0.8; // radius of exterior of shell
 
@@ -27,9 +28,11 @@ wheelThick=2.0;     // thickness of FFG dial wheel
 totalThick=6.3;     // total thickness of the dial
 wallThick=0.8;      // thickness of the walls of the dial
 
-insertInset=2;      // reduction in radius of insert from bodyRad - wallThick
-armSlop = 0.2;
-insertSlop = 0.4;
+insertInset=2;      // red. in radius of insert from (bodyRad - wallThick)
+armSlop = 0.2;      // red. in XY dims of arm from hole to receive it
+insertSlop = 0.3;   // red. in radius of insert from inset cut
+
+/*********** PARTS TO BUILD ***********/
 
 translate([0,-45,0]) arm();
 translate([20,-45,0]) arm();
@@ -40,11 +43,7 @@ translate([100,-45,0]) arm();
 translate([0,0,0]) tieFace();
 translate([50,0,0]) smileyFace();
 translate([100,0,0]) t70Face();
-// insert(slop=insertSlop);
-
-// for (j=[1:3]) translate([(j)*2*bodyRad,0,0]) insert(slop=(j+1)*0.1);
-
-// insertSlopTest();
+// insert();
 
 /*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
 
@@ -64,7 +63,7 @@ module smileyFace(h=0.9) {
 
 /*********** BASIC PARTS BELOW ***********/
 
-module insert(slop=0.1) {
+module insert(slop=insertSlop) {
    translate([0,0,-1*shellFaceThick]) intersection() {
       body();
       bodyInsertVolume(slop=slop);
@@ -97,17 +96,6 @@ module bodyInsertVolume(slop=0) {
          cylinder(r=3+slop,h=totalThick+0.2);
       rotate([0,0,210-10]) translate([rad+slop,0,-0.1])
          cylinder(r=3+slop,h=totalThick+0.2);
-   }
-}
-
-module bodyInsertVolumeOld(slop=0) {
-   rad = bodyRad - wallThick - insertInset - slop;
-
-   translate([0,0,shellFaceThick]) difference() {
-      cylinder(r=rad, h=totalThick+0.1);
-      rotate([0,0,-30]) translate([rad,0,-0.1]) cylinder(r=3+slop,h=totalThick);
-      rotate([0,0,90]) translate([rad,0,-0.1]) cylinder(r=3+slop,h=totalThick);
-      rotate([0,0,210]) translate([rad,0,-0.1]) cylinder(r=3+slop,h=totalThick);
    }
 }
 
