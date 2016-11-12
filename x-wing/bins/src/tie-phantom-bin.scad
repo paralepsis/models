@@ -14,12 +14,15 @@ angle=0;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[0,0,0], [0,0,0]]];
+locations = [[[1,9.5,0], [0,0,0]],
+             [[-1,-9.5,0], [0,0,180]]];
 
-// harborFreightMediumFullHt(locations,inset=1) phantomBlank();
+// harborFreightSmallFullHt(locations,inset=1) phantomBlank();
+
+harborFreightSmallFullHt([[[2,-14.75,0], [0,0,30]]], inset=1) phantomBlank();
 
 // phantomBlank();
-phantomOutline();
+// phantomOutline();
 
 /* phantomOutline() -- test piece for outline
  */
