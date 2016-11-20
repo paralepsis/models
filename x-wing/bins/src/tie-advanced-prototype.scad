@@ -8,6 +8,7 @@
  */
 
 include <./bintools.scad>
+use <tie-phantom-bin.scad>
 
 $fn=160;
 binHeight   = 46.5;
@@ -18,9 +19,25 @@ blankHeight = 30;
 locations = [[[0,5,0], [0,0,0]],
              [[0,-24,0], [0,0,0]]];
 
-harborFreightSmallFullHt(locations,inset=0.5,bottomThick=0.9) intersection() {
-   tapBlank();
-   hull() harborFreightSmallFullHt(locations,inset=0.5,bottomThick=0.9); 
+if (0) {
+   harborFreightSmallFullHt(locations,inset=0.5,bottomThick=0.9)
+   intersection() {
+      tapBlank();
+      hull() harborFreightSmallFullHt(locations,inset=0.5,bottomThick=0.9); 
+   }
+}
+
+/* Combination TAP/Phantom */
+if (1) {
+   intersection() {
+      harborFreightSmallFullHt([[0,0,0],[0,0,0]],inset=0.5,bottomThick=0.9)
+      union() {
+         translate([0,5.5,0]) tapBlank();
+         translate([0,-8,0]) rotate([0,0,90]) phantomBlank();
+      }
+      hull()
+      harborFreightSmallFullHt([[0,0,0],[0,0,0]],inset=0.5,bottomThick=0.9);
+   }
 }
 
 // tapOutline();
