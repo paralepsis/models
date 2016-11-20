@@ -8,38 +8,67 @@
 
 include <./bintools.scad>
 
+binHeight=46.5;
+
 /* locations is a pair of triples, translate : rotate pairs
  */
 locations = [[[0,0,0], [0,0,0]],
-             [[5.5, 21.3,0], [0,0,0]],
-             [[-5.5, -21.3, 0],[0,0,0]]];
+             [[7, 21.3,0], [0,0,0]],
+             [[-7, -21.3, 0],[0,0,0]]];
 
-harborFreightMediumFullHt(locations=locations,inset=0.5) tieFighterBlank();
+/* NOTE: Bin protrudes a bit in this version w/out the intersection() */
+intersection() {
+   harborFreightMediumFullHt(locations=locations,inset=0.5,bottomThick=0.9)
+      tieFighterBlank();
+   hull() harborFreightMediumFullHt(locations=locations,inset=0.5,bottomThick=0.9);
+}
+
 // tieFighterBlank();
 
-/* singleTieFighterOutline() -- test piece for outline
+// tieFighterOutline();
+
+module tieFighterOutline() {
+   translate([0,0,30]) rotate([180,0,0])
+      blankCutout(height=30, outlineScale=1.2) tieFighterBlank();
+}
+
+/* tieFighterBlank() -- new, SF version.
  */
-module singleTieFighterOutline() {
-   translate([0,0,46.5]) rotate([180,0,0]) {
-      blankCutout(height=46.5 - 0.1, outlineScale=1.2) tieFighterBlank();
+module tieFighterBlank() {
+
+   /* redo of panel connectors with room for /SF bits */
+   linear_extrude(height=28) {
+      for (i=[0:1]) mirror([i,0,0])
+         translate([0,-2,0]) polygon(points=[[-0.1,-0.5], [10,-0.5], [10,-2.5],
+                                             [18,-2.5], [18,6.5], [10,6.5],
+                                             [10,4.5],[-0.1,4.5]]);
+   }
+
+   /* cockpit and projection thereof */
+   cylinder(r=6.5,h=41);
+
+   /* back of cockpit */
+   translate([0,-3.5,41/2]) cube([15,7,41], center=true);
+
+   /* panels */
+   translate([0,0,41/2]) rotate([180,0,0]) {
+      translate([-14.75,0,0]) panel();
+      translate([14.75,0,0]) panel();
+
    }
 }
 
-/* tieFighterBlank() -- OpenSCAD blank in this case
+/* tieFighterBlankOrig() -- This is the old, cleaner, pre-SF version.
  */
-module tieFighterBlank() {
+module tieFighterBlankOrig() {
    translate([0,0,41/2]) rotate([180,0,0]) {
       translate([-14.75,0,0]) panel();
       translate([14.75,0,0]) panel();
 
       /* cross-brace (whatever it is called) */
       translate([0,0,41/4-0.5]) cube([33,2.75*2,43/2], center=true);
-
-      // rotate([0,90,0]) translate([0,0,-33/2]) cylinder(r=2.75,h=33);
       rotate([0,95,0]) translate([2,0,-33/2+2]) cylinder(r=2.75,h=10);
       rotate([0,95,180]) translate([2,0,-33/2+2]) cylinder(r=2.75,h=10);
-      // rotate([0,90,0]) translate([0,0,-33/2+1]) cylinder(r2=3.5,r1=2.75,h=10);
-      // rotate([0,-90,0]) translate([0,0,-33/2+1]) cylinder(r2=3.5,r1=2.75,h=10);
 
       /* cockpit and projection thereof */
       translate([0,0,-1]) sphere(r=6.5);
