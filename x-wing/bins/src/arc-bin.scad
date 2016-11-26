@@ -18,7 +18,7 @@ angle=0;
 locations = [[[-28.5,-31,0], [0,0,127]],
              [[28.5,31,0], [0,0,-53]]];
 
-harborFreightLargeHalfHt(locations,inset=0.5) arcBlank();
+harborFreightLargeHalfHt(locations,inset=0.5,bottomThick=0.9) arcBlank();
 
 // arcBlank();
 // arcOutline();
