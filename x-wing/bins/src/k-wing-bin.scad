@@ -12,7 +12,8 @@ include <./bintools.scad>
 binHeight=46.5/2;
 blankHeight=22;
 
-kWingAndXBin();
+kWingBin();
+// kWingAndXBin();
 // kWingOutline();
 // kWingBlank();
 
