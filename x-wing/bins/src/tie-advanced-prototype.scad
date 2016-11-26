@@ -28,7 +28,7 @@ if (0) {
 }
 
 /* Combination TAP/Phantom */
-if (1) {
+if (0) {
    intersection() {
       harborFreightSmallFullHt([[0,0,0],[0,0,0]],inset=0.5,bottomThick=0.9)
       union() {
@@ -41,7 +41,7 @@ if (1) {
 }
 
 // tapOutline();
-// tapBlank();
+tapBlank();
 
 /* tapOutline() -- test piece for outline
  */
