@@ -15,22 +15,25 @@ angle=0;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[-28,-31,0], [0,0,127]],
-             [[28,31,0], [0,0,-53]]];
+locations = [[[-28.5,-31,0], [0,0,127]],
+             [[28.5,31,0], [0,0,-53]]];
 
-// harborFreightLargeHalfHt(locations,inset=1) arcBlank();
+harborFreightLargeHalfHt(locations,inset=0.5) arcBlank();
 
 // arcBlank();
-arcOutline();
+// arcOutline();
 
 /* arcOutline() -- test piece for outline
  */
 module arcOutline() {
    translate([0,0,binHeight]) rotate([180,0,0]) {
-      blankCutout(height=blankHeight, outlineScale=1.2) arcBlank();
+      blankCutout(height=binHeight, outlineScale=1.2) arcBlank();
    }
 }
 
+/* NOTE: Something is amiss with the bits being removed, in terms of
+ *       height, but I'm not going to bother to try to figure it out.
+ */
 module arcBlank() {
    /* rotate, etc. positions blank upside-down on XY plane */
    rotate([180,0,0]) translate([0,0,-binHeight]) union() {
@@ -58,15 +61,15 @@ module arcShell() {
 }
 
 module arcSideSupports() {
-   linear_extrude(height=7+0.1) for (j=[0:1]) mirror([j,0,0])
+   linear_extrude(height=7.5+0.1) for (j=[0:1]) mirror([j,0,0])
       polygon(points=[[37,21], [44,22], [44,29], [42,31], [41,50], [37,50],
                       [37,31]]);
 }
 
 module arcCenterSupports() {
-   linear_extrude(height=3.5+0.1)
+   linear_extrude(height=10+0.1)
       polygon(points=[[13,44], [2,54], [-2,54], [-13,44]]);
-   linear_extrude(height=5+0.1)
+   linear_extrude(height=8+0.1)
       polygon(points=[[13,-2],[13,17],[10,22],[-10,22],[-13,17],[-13,-2]]);
 }
 
