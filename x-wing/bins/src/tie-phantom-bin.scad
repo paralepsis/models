@@ -50,9 +50,9 @@ module phantomShell() {
    rotate([0,0,180]) translate([0,-2.5,0]) square([7,5]);
    rotate([0,0,60]) translate([0,-2.5,0]) square([7,5]);
    rotate([0,0,-60]) translate([0,-2.5,0]) square([7,5]);
-   rotate([0,0,180]) translate([0,-1.25,0]) square([17,2.5]);
-   rotate([0,0,60]) translate([0,-1.25,0]) square([17,2.5]);
-   rotate([0,0,-60]) translate([0,-1.25,0]) square([17,2.5]);
+   rotate([0,0,180]) translate([0,-1.5,0]) square([17,3]);
+   rotate([0,0,60]) translate([0,-1.5,0]) square([17,3]);
+   rotate([0,0,-60]) translate([0,-1.5,0]) square([17,3]);
    rotate([0,0,0]) translate([0,-2.5,0]) square([14,5]);
    difference() {
       circle($fn=3,r=12);
