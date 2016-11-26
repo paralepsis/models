@@ -2,42 +2,46 @@
  *
  * Copyright (C) Robert B. Ross, 2016
  *
- * Outline derived from Graham Bridge's Stanley K-Wing bin:
- *   http://www.thingiverse.com/thing:1292334
+ * This software is released under the GNU General Public License
+ * Version 3.
  *
- * That model was released under CC Attribution-ShareAlike, as is this
- * one.
- *
- * This software is released under the Creative Commons
- * Attribution-ShareAlike 4.0 International Public License.
  */
 
 include <./bintools.scad>
 
 binHeight=46.5/2;
-blankHeight=20; // made up for now
+blankHeight=22;
 
-kWingOutline();
+kWingAndXBin();
+// kWingOutline();
 // kWingBlank();
 
 module kWingBin() {
-   harborFreightLargeHalfHt(locations=[[[0,0,0],[0,0,0]]])
-      import("../products/k-wing-blank.stl");
+   harborFreightLargeHalfHt(locations=[[[2.5,0,0],[0,0,90]]],inset=0.25,
+                            bottomThick=0.9) kWingBlank();
+}
+module kWingAndXBin() {
+   harborFreightLargeHalfHt(locations=[[[0,0,0],[0,0,0]]],inset=0.25,
+                            bottomThick=0.9)
+   union() {
+      translate([2.5,6.25,0]) rotate([0,0,90]) kWingBlank();
+      translate([-14.5,-30,0]) rotate([0,0,180]) import("../orig/x-wing-blank.stl");
+   }
 }
 
 module kWingOutline() {
-   translate([0,0,46.5/2]) rotate([180,0,0]) {
-      blankCutout(height=19 - 0.1, outlineScale=1.2) kWingBlank();
+   translate([0,0,binHeight]) rotate([180,0,0]) {
+      blankCutout(height=binHeight, outlineScale=1.2) kWingBlank();
    }
 }
 
 module kWingBlank() {
    linear_extrude(height=blankHeight) for(i=[0:1]) mirror([i,0,0])
       polygon(points=[[-0.1,-35.75], [5.5,-35.75], [5.5,-32.1], [15.5,-32.1],
-                      [15.5,-27.3], [45.5,-23.95], [45.5,-1.7], [40.5,-1.7],
+                      [15.5,-27.3], [46,-21.95], [46,-1.7], [40.5,-1.7],
                       [40.5,-5.65], [29.5,-5.65], [29.5,-1.5], [22.7,-1.5],
-                      [22.7,-5.65], [12.5,-5.65], [12.5,15.85], [7,17.5],
-                      [5.5,19.5], [5.5,25.27], [-0.1,25.27]]);
+                      [22.7,-5.65], [11.0,-5.65], [11.0,15.85],
+                      [5.5,19.5], [5.5,25], [-0.1,25]]);
 }
 
 /*
