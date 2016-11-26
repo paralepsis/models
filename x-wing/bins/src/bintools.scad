@@ -17,8 +17,9 @@ $fn=60;
 
 /* harborFreightSmallFullHt -- see medium versions below for comments.
  */
-module harborFreightSmallFullHt(locations=[],inset=0) {
-   solidBottomBox(xDim=39.25,yDim=54,ht=46.5,locations=locations,inset=inset)
+module harborFreightSmallFullHt(locations=[],inset=0,bottomThick=1.2) {
+   solidBottomBox(xDim=39.25,yDim=54,ht=46.5,locations=locations,inset=inset,
+                  bottomThick=bottomThick)
       children();
 }
 
@@ -39,13 +40,14 @@ module harborFreightSmallFullHt(locations=[],inset=0) {
  *
  * outlineScale -- scaling of the region around the blank. 1.2 is default.
  */
-module harborFreightMediumFullHt(locations=[],inset=0) {
-   solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations,inset=inset)
+module harborFreightMediumFullHt(locations=[],inset=0,bottomThick=1.2) {
+   solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations,inset=inset,
+                  bottomThick=bottomThick)
       children();
 }
 
-module harborFreightMediumHalfHt(locations=[],cornerRad=3.75) {
-   solidBottomBox(xDim=54,yDim=80,ht=46.5/2,
+module harborFreightMediumHalfHt(locations=[],cornerRad=3.75,bottomThick=1.2,inset=0) {
+   solidBottomBox(xDim=54,yDim=80,ht=46.5/2,bottomThick=bottomThick,inset=inset,
                   locations=locations,cornerRad=cornerRad) children();
 }
 
@@ -59,8 +61,9 @@ module harborFreightMediumHalfHt(locations=[],cornerRad=3.75) {
  *   109.25mm wide
  *   80mm length
  */
-module harborFreightLargeHalfHt(locations=[]) {
-   solidBottomBox(xDim=80,yDim=109.25,ht=46.5/2,locations=locations) children();
+module harborFreightLargeHalfHt(locations=[],inset=0,bottomThick=1.2) {
+   solidBottomBox(xDim=80,yDim=109.25,ht=46.5/2,locations=locations,
+                  inset=inset,bottomThick=bottomThick) children();
 }
 
 module harborFreightLargeThirdHt(locations=[]) {
@@ -95,7 +98,8 @@ module harborFreightHugeFullHt(locations=[],inset=0) {
  *       models can drop in "bottom up".
  */
 module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,
-                      locations=[],outlineScale=1.2,cornerRad=3.75)
+                      locations=[],outlineScale=1.2,cornerRad=3.75,
+                      bottomThick=1.2)
 {
    offsetFromTop = 0.1; /* amount of space to move the outline from the top of the form; helps keep model clean */
 
@@ -108,8 +112,8 @@ module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,
       roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
                      xDimBottom=xDim, yDimBottom=yDim,
                      ht=ht, wallThick=1.6, cornerRad=cornerRad);
-      translate([0,0,ht-1.2]) roundBoxBottom(xDim=xDim-inset,yDim=yDim-inset,
-                                             ht=1.2, cornerRad=cornerRad);
+      translate([0,0,ht-bottomThick]) roundBoxBottom(xDim=xDim-inset,yDim=yDim-inset,
+                                             ht=bottomThick, cornerRad=cornerRad);
 
       /* spaces to hold ships */
       difference() {
