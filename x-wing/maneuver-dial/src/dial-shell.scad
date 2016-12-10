@@ -35,6 +35,7 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 /*********** PARTS TO BUILD ***********/
 
 translate([0,-45,0]) arm();
+/* 
 translate([20,-45,0]) arm();
 translate([40,-45,0]) arm();
 translate([60,-45,0]) arm();
@@ -43,7 +44,10 @@ translate([100,-45,0]) arm();
 translate([0,0,0]) tieFace();
 translate([50,0,0]) smileyFace();
 translate([100,0,0]) t70Face();
-// insert();
+translate([0,0,0]) insert();
+translate([45,0,0]) insert();
+translate([90,0,0]) insert();
+*/
 
 /*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
 
@@ -101,12 +105,18 @@ module bodyInsertVolume(slop=0) {
 
 /* arm() -- this is the arm that holds the dial in place
  */
-module arm(slop=armSlop) {
+module arm(slop=armSlop, fat=1) {
    difference() {
       union() {
          translate([-2+slop/2,-2+slop/2,0]) cube([4-slop,4-slop,4]);
-         cylinder(r=12/2,h=2);
-         translate([-6,0,0]) cube([12,20,1.2]);
+         if (fat) hull() {
+            cylinder(r=16/2,h=2);
+            translate([-6,0,0]) cube([12,20,1.2]);
+         }
+         else {
+            cylinder(r=12/2,h=2);
+            translate([-6,0,0]) cube([12,20,1.2]);
+         }
       }
 
       /* cutout at end */
