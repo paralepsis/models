@@ -36,13 +36,13 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 /*********** PARTS TO BUILD ***********/
 
 translate([0,-45,0]) arm();
-translate([100,0,0]) kFace();
-translate([0,0,0]) arcFace();
-/* 
 translate([20,-45,0]) arm();
 translate([40,-45,0]) arm();
 translate([60,-45,0]) arm();
-translate([80,-45,0]) arm();
+translate([0,0,0]) kFace();
+translate([50,0,0]) arcFace();
+// translate([100,0,0]) t65Face();
+/* 
 translate([100,-45,0]) arm();
 translate([0,0,0]) tieFace();
 translate([50,0,0]) smileyFace();
@@ -58,7 +58,7 @@ module kFace() {
       mirror([1,0,0]) import("./k-wing-outline.stl");
 }
 
-module t65() {
+module t65Face() {
    shell() translate([0.8,-1,-0.1]) rotate([0,0,10]) scale([1.52,1.52,2])
       mirror([1,0,0]) import("./t65-outline.stl");
 }
