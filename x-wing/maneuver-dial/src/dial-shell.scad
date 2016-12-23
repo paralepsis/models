@@ -10,6 +10,7 @@
  */
 
 use <partial-rotate-extrude.scad>
+use <arc-outline.scad>
 
 $fn=120;
 
@@ -35,6 +36,8 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 /*********** PARTS TO BUILD ***********/
 
 translate([0,-45,0]) arm();
+translate([100,0,0]) kFace();
+translate([0,0,0]) arcFace();
 /* 
 translate([20,-45,0]) arm();
 translate([40,-45,0]) arm();
@@ -43,7 +46,6 @@ translate([80,-45,0]) arm();
 translate([100,-45,0]) arm();
 translate([0,0,0]) tieFace();
 translate([50,0,0]) smileyFace();
-translate([100,0,0]) t70Face();
 translate([0,0,0]) insert();
 translate([45,0,0]) insert();
 translate([90,0,0]) insert();
@@ -51,9 +53,14 @@ translate([90,0,0]) insert();
 
 /*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
 
-module t70Face() {
+module kFace() {
+   shell() translate([0.2,1,-0.1]) rotate([0,0,10]) scale([0.32,0.32,2])
+      mirror([1,0,0]) import("./k-wing-outline.stl");
+}
+
+module t65() {
    shell() translate([0.8,-1,-0.1]) rotate([0,0,10]) scale([1.52,1.52,2])
-      mirror([1,0,0]) import("./t70-outline.stl");
+      mirror([1,0,0]) import("./t65-outline.stl");
 }
 
 module tieFace() {
@@ -63,6 +70,11 @@ module tieFace() {
 
 module smileyFace(h=0.9) {
    shell() translate([0,0,-0.1]) mirror([1,0,0]) smiley(h=2);
+}
+
+module arcFace() {
+   shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([1.45,1.45,1.0])
+   arcOutline();
 }
 
 /*********** BASIC PARTS BELOW ***********/
