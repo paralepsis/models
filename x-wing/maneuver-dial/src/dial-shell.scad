@@ -21,7 +21,9 @@ $fn=120;
 
 /*********** CONFIGURATION PARAMETERS ***********/
 
-bodyRad=45.5/2+0.8; // radius of exterior of shell
+// bodyRad=47.1/2; // radius of exterior of shell (was 47.1/2 for first)
+bodyRad=47.1/2+0.2; // radius of exterior of shell (was 47.1/2 for first)
+cutoutInset=2.2; // "deepness" of cutout (was 2.0)
 
 faceThick=1.8;      // thickness of face with insert
 shellFaceThick=0.9; // thickness of face of shell without insert
@@ -160,7 +162,7 @@ module body() {
  */
 module cutout() {
    translate([0,0,-0.5]) partial_rotate_extrude(70, bodyRad, 100)
-      translate([-2,0,0]) square([5,10]);
+      translate([-1*cutoutInset,0,0]) square([5,10]);
 }
 
 /*********** TEST PART BELOW ***********/
