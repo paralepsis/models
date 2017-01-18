@@ -26,7 +26,7 @@ bodyRad=45.5/2+0.8; // radius of exterior of shell
 faceThick=1.8;      // thickness of face with insert
 shellFaceThick=0.9; // thickness of face of shell without insert
 wheelThick=2.0;     // thickness of FFG dial wheel
-totalThick=6.3;     // total thickness of the dial
+totalThick=6.5;     // total thickness of the dial (height)
 wallThick=0.8;      // thickness of the walls of the dial
 
 insertInset=2;      // red. in radius of insert from (bodyRad - wallThick)
