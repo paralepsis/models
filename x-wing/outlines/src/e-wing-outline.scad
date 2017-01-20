@@ -9,7 +9,7 @@
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-module poly_path4201(h)
+module ewingOutline(h=5)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
