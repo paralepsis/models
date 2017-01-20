@@ -9,7 +9,7 @@
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-module poly_path4194(h)
+module tiedefenderOutline(h=5)
 {
   scale([25.4/90, -25.4/90, 1]) union()
   {
@@ -26,5 +26,3 @@ module poly_path4194(h)
     }
   }
 }
-
-poly_path4194(5);
