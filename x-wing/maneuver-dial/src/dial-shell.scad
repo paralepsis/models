@@ -10,7 +10,7 @@
  */
 
 use <partial-rotate-extrude.scad>
-use <arc-outline.scad>
+use <./outlines/arc-outline.scad>
 
 $fn=120;
 
@@ -57,17 +57,17 @@ translate([90,0,0]) insert();
 
 module kFace() {
    shell() translate([0.2,1,-0.1]) rotate([0,0,10]) scale([0.32,0.32,2])
-      mirror([1,0,0]) import("./k-wing-outline.stl");
+      mirror([1,0,0]) import("./outlines/k-wing-outline.stl");
 }
 
 module t65Face() {
    shell() translate([0.8,-1,-0.1]) rotate([0,0,10]) scale([1.52,1.52,2])
-      mirror([1,0,0]) import("./t65-outline.stl");
+      mirror([1,0,0]) import("./outlines/t65-outline.stl");
 }
 
 module tieFace() {
    shell() translate([0,0,-0.1]) rotate([0,0,10]) scale([0.9,0.9,2])
-      mirror([1,0,0]) import("./tie-fighter-outline.stl");
+      mirror([1,0,0]) import("./outlines/tie-fighter-outline.stl");
 }
 
 module smileyFace(h=0.9) {
