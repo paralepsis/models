@@ -11,6 +11,9 @@
 
 use <partial-rotate-extrude.scad>
 use <./outlines/arc-outline.scad>
+use <./outlines/decimator-outline.scad>
+use <./outlines/tie-defender-outline.scad>
+use <./outlines/houndstooth-outline.scad>
 
 $fn=120;
 
@@ -23,7 +26,7 @@ $fn=120;
 
 // bodyRad=47.1/2; // radius of exterior of shell (was 47.1/2 for first)
 bodyRad=47.1/2+0.2; // radius of exterior of shell (was 47.1/2 for first)
-cutoutInset=2.2; // "deepness" of cutout (was 2.0)
+cutoutInset=2.2; // "deepness" of cutout (was 2.0; tried to keep it the same)
 
 faceThick=1.8;      // thickness of face with insert
 shellFaceThick=0.9; // thickness of face of shell without insert
@@ -37,20 +40,17 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 
 /*********** PARTS TO BUILD ***********/
 
-translate([0,-45,0]) arm();
-translate([20,-45,0]) arm();
-translate([40,-45,0]) arm();
-translate([60,-45,0]) arm();
+houndstoothFace();
+/* 
+decimatorFace();
+translate([0,0,0]) tieFace();
+translate([0,0,0]) smileyFace();
+translate([0,0,0]) arm();
+translate([90,0,0]) insert();
 translate([0,0,0]) kFace();
 translate([50,0,0]) arcFace();
-// translate([100,0,0]) t65Face();
-/* 
-translate([100,-45,0]) arm();
-translate([0,0,0]) tieFace();
+translate([100,0,0]) t65Face();
 translate([50,0,0]) smileyFace();
-translate([0,0,0]) insert();
-translate([45,0,0]) insert();
-translate([90,0,0]) insert();
 */
 
 /*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
@@ -77,6 +77,21 @@ module smileyFace(h=0.9) {
 module arcFace() {
    shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([1.45,1.45,1.0])
    arcOutline();
+}
+
+module houndstoothFace() {
+   shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([5.65,5.65,1.0])
+   houndstoothOutline();
+}
+
+module decimatorFace() {
+   shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([5.25,5.25,1.0])
+   decimatorOutline();
+}
+
+module defenderFace() {
+   shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([6,6,1.0])
+   tiedefenderOutline();
 }
 
 /*********** BASIC PARTS BELOW ***********/
