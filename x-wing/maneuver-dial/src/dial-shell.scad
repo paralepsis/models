@@ -40,8 +40,10 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 
 /*********** PARTS TO BUILD ***********/
 
-houndstoothFace();
+imperialFace();
 /* 
+rebelFace();
+houndstoothFace();
 decimatorFace();
 translate([0,0,0]) tieFace();
 translate([0,0,0]) smileyFace();
@@ -87,6 +89,16 @@ module houndstoothFace() {
 module decimatorFace() {
    shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([5.25,5.25,1.0])
    decimatorOutline();
+}
+
+module imperialFace() {
+   shell() mirror([1,0,0]) translate([0,0,-0.1]) scale([1.275,1.275,1.0])
+      mirror([0,0,0]) import("./outlines/imperial-symbol.stl");
+}
+
+module rebelFace() {
+   shell() mirror([1,0,0]) translate([0,0,-0.1]) scale([1.15,1.15,1.0])
+      mirror([0,0,0]) import("./outlines/rebel-symbol.stl");
 }
 
 module defenderFace() {
