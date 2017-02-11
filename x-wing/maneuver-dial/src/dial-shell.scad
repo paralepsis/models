@@ -40,8 +40,12 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 
 /*********** PARTS TO BUILD ***********/
 
-imperialFace();
+insert(minimal=1);
 /* 
+imperialFace();
+yWingFace();
+zFace();
+mandalorianFace();
 rebelFace();
 houndstoothFace();
 decimatorFace();
@@ -56,6 +60,16 @@ translate([50,0,0]) smileyFace();
 */
 
 /*********** CUSTOMIZATIONS OF SHELL BELOW ***********/
+
+module zFace() {
+   shell() translate([0.2,1,-0.1]) rotate([0,0,10]) scale([1,1,1])
+      mirror([1,0,0]) import("./outlines/z95-outline.stl");
+}
+
+module yWingFace() {
+   shell() translate([1.2,2,-0.1]) rotate([0,0,10]) scale([1.15,1.15,1])
+      mirror([1,0,0]) import("./outlines/y-wing-outline.stl");
+}
 
 module kFace() {
    shell() translate([0.2,1,-0.1]) rotate([0,0,10]) scale([0.32,0.32,2])
@@ -92,10 +106,14 @@ module decimatorFace() {
 }
 
 module imperialFace() {
-   shell() mirror([1,0,0]) translate([0,0,-0.1]) scale([1.275,1.275,1.0])
+   shell(minimal=1) mirror([1,0,0]) translate([0,0,-0.1]) scale([1.42,1.42,1.0])
       mirror([0,0,0]) import("./outlines/imperial-symbol.stl");
 }
 
+module mandalorianFace() {
+   shell() mirror([1,0,0]) translate([0,-1,-0.1]) scale([0.95,0.95,2.0])
+      mirror([0,0,0]) import("./outlines/mandalorian-symbol.stl");
+}
 module rebelFace() {
    shell() mirror([1,0,0]) translate([0,0,-0.1]) scale([1.15,1.15,1.0])
       mirror([0,0,0]) import("./outlines/rebel-symbol.stl");
@@ -108,23 +126,24 @@ module defenderFace() {
 
 /*********** BASIC PARTS BELOW ***********/
 
-module insert(slop=insertSlop) {
+module insert(slop=insertSlop, minimal=0) {
    translate([0,0,-1*shellFaceThick]) intersection() {
       body();
-      bodyInsertVolume(slop=slop);
+      bodyInsertVolume(slop=slop,minimal=minimal);
    }
 }
 
-module shell() {
+module shell(minimal=0) {
    difference() {
       body();
-      bodyInsertVolume();
+      bodyInsertVolume(minimal=minimal);
       children();
    }
 }
 
-module bodyInsertVolume(slop=0) {
+module bodyInsertVolume(slop=0,minimal=0) {
    rad = bodyRad - wallThick - insertInset - slop;
+   cylinderRad = minimal ? (1 + slop) : (3 + slop);
 
    translate([0,0,shellFaceThick]) difference() {
       cylinder(r=rad, h=totalThick+0.1);
@@ -136,11 +155,11 @@ module bodyInsertVolume(slop=0) {
        *   version
        */
       rotate([0,0,-30+10]) translate([rad+slop,0,-0.1])
-         cylinder(r=3+slop,h=totalThick+0.2);
+         cylinder(r=cylinderRad,h=totalThick+0.2);
       rotate([0,0,90]) translate([rad+slop,0,-0.1])
-         cylinder(r=3+slop,h=totalThick+0.2);
+         cylinder(r=cylinderRad,h=totalThick+0.2);
       rotate([0,0,210-10]) translate([rad+slop,0,-0.1])
-         cylinder(r=3+slop,h=totalThick+0.2);
+         cylinder(r=cylinderRad,h=totalThick+0.2);
    }
 }
 
