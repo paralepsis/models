@@ -15,8 +15,8 @@ blankHeight = 18.0; // this is the height of the region supporting ship
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-// sLocations = [[[2.25,-29,0], [0,0,23]]];
-sLocations = [[[0,-31,0], [0,0,0]]];
+sLocations = [[[2.25,-29,0], [0,0,23]]];
+// sLocations = [[[0,-31,0], [0,0,0]]];
 
 harborFreightMediumHalfHt(sLocations,inset=1,bottomThick=0.9) sBlank();
 
