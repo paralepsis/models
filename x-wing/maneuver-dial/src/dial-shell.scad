@@ -14,6 +14,12 @@ use <./outlines/arc-outline.scad>
 use <./outlines/decimator-outline.scad>
 use <./outlines/tie-defender-outline.scad>
 use <./outlines/houndstooth-outline.scad>
+use <./outlines/ewing-outline.scad>
+use <./outlines/t70-outline.scad>
+use <./outlines/protectorate-outline.scad>
+use <./outlines/jumpmaster-outline.scad>
+use <./outlines/falcon-outline.scad>
+use <./outlines/yt-2400-outline.scad>
 
 $fn=120;
 
@@ -31,7 +37,7 @@ cutoutInset=2.2; // "deepness" of cutout (was 2.0; tried to keep it the same)
 faceThick=1.8;      // thickness of face with insert
 shellFaceThick=0.9; // thickness of face of shell without insert
 wheelThick=2.0;     // thickness of FFG dial wheel
-totalThick=6.5;     // total thickness of the dial (height)
+totalThick=6.75;     // total thickness of the dial (height) (was 6.5)
 wallThick=0.8;      // thickness of the walls of the dial
 
 insertInset=2;      // red. in radius of insert from (bodyRad - wallThick)
@@ -40,13 +46,20 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 
 /*********** PARTS TO BUILD ***********/
 
-insert(minimal=1);
+yt2400Face();
 /* 
+falconFace();
+jumpmasterFace();
+protectorateFace();
+t70Face();
+ewingFace();
+rebelFace();
+shadowcasterFace();
+insert(minimal=1);
 imperialFace();
 yWingFace();
 zFace();
 mandalorianFace();
-rebelFace();
 houndstoothFace();
 decimatorFace();
 translate([0,0,0]) tieFace();
@@ -90,6 +103,26 @@ module smileyFace(h=0.9) {
    shell() translate([0,0,-0.1]) mirror([1,0,0]) smiley(h=2);
 }
 
+module yt2400Face() {
+   shell() mirror([1,0,0]) translate([0,1,-0.1]) scale([5.60,5.60,1.0])
+   yt2400Outline();
+}
+
+module falconFace() {
+   shell() mirror([1,0,0]) translate([0,1,-0.1]) scale([5.10,5.10,1.0])
+   falconOutline();
+}
+
+module jumpmasterFace() {
+   shell() mirror([1,0,0]) translate([0,1,-0.1]) scale([1.70,1.70,1.0])
+   jumpmasterOutline();
+}
+
+module protectorateFace() {
+   shell() mirror([1,0,0]) translate([0,1,-0.1]) scale([1.70,1.70,1.0])
+   protectorateOutline();
+}
+
 module arcFace() {
    shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([1.45,1.45,1.0])
    arcOutline();
@@ -105,6 +138,11 @@ module decimatorFace() {
    decimatorOutline();
 }
 
+module shadowcasterFace() {
+   shell(minimal=0) mirror([1,0,0]) translate([0,0,-0.1]) scale([1.3,1.3,1.0])
+      mirror([0,0,0]) import("./outlines/shadowcaster-outline.stl");
+}
+
 module imperialFace() {
    shell(minimal=1) mirror([1,0,0]) translate([0,0,-0.1]) scale([1.42,1.42,1.0])
       mirror([0,0,0]) import("./outlines/imperial-symbol.stl");
@@ -117,6 +155,16 @@ module mandalorianFace() {
 module rebelFace() {
    shell() mirror([1,0,0]) translate([0,0,-0.1]) scale([1.15,1.15,1.0])
       mirror([0,0,0]) import("./outlines/rebel-symbol.stl");
+}
+
+module t70Face() {
+   shell() mirror([1,0,0]) translate([0,1,-0.1]) scale([5.25,5.25,1.0])
+   t70Outline();
+}
+
+module ewingFace() {
+   shell() mirror([1,0,0]) translate([0,1,-0.1]) scale([5.25,5.25,1.0])
+   ewingOutline();
 }
 
 module defenderFace() {
