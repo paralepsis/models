@@ -6,6 +6,8 @@
  * Attribution-ShareAlike 4.0 International Public License.
  *
  * Note: This is an ugly one -- not a great example.
+ *
+ * Thanks to RyanVito for his help with this bin!
  */
 
 include <./bintools.scad>
@@ -20,10 +22,10 @@ angle=0;
 locations = [[[20,-39.5,0], [0,0,0]],
              [[-20,39.5,0],[0,0,180]]];
 
-//harborFreightLargeHalfHt(locations,inset=1) uwingBlank();
+harborFreightLargeHalfHt(locations,bottomThick=0.9,inset=0.5) uwingBlank();
 
 // uwingBlank();
-uwingOutline();
+// uwingOutline();
 
 /* uwingOutline() -- test piece for outline
  */
@@ -49,8 +51,8 @@ module uwingBlank(centerCutout=1) {
 module uwingShell() {
    for (i=[0:1]) mirror([i,0,0]) 
       polygon(points=[[-0.1,0],[7,0],[10,-13],[15,-13],[17,-2],[17,13],
-                      [12,13],[14,15],[14,38.5],[12,77],[8,77],[8,45],
-                      [5.5,45],[5.5,50],[3,50],[3,45],[-0.1,45]
+                      [12,13],[14,15],[14,38.5],[13,77],[8,77],[7.5,45],
+                      [5.5,45],[5.5,48],[3,48],[-0.1,48]
                      ]);
 }
 

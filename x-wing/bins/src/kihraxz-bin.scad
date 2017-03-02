@@ -15,9 +15,9 @@ $fn=160;
 kLocations = [[[24.5,17.0,0], [0,0,90]],
              [[-24.5,-17.0,0], [0,0,-90]]];
 
-harborFreightMediumHalfHt(kLocations,inset=1,bottomThick=0.9) kBlank();
+// harborFreightMediumHalfHt(kLocations,inset=1,bottomThick=0.9) kBlank();
 
-// kBlank();
+kBlank();
 // kOutline();
 
 /* kOutline() -- test piece for outline
