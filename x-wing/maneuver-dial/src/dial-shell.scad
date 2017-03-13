@@ -46,8 +46,12 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 
 /*********** PARTS TO BUILD ***********/
 
-yt2400Face();
+
+armTool();
 /* 
+stdInsertTool();
+minInsertTool();
+yt2400Face();
 falconFace();
 jumpmasterFace();
 protectorateFace();
@@ -170,6 +174,41 @@ module ewingFace() {
 module defenderFace() {
    shell() mirror([1,0,0]) translate([0,2,-0.1]) scale([6,6,1.0])
    tiedefenderOutline();
+}
+
+/************* TOOLS BELOW *************/
+
+module armTool() {
+   rotate([180,0,0]) translate([0,0,-20]) difference() {
+      hull() {
+         cylinder(r=11,h=20);
+         translate([0,18,0]) cylinder(r=9,h=20);
+      };
+      // translate([0,0,-0.4]) outline(outlineScale=0.25) arm();
+
+      translate([0,0,-0.4]) scale([1.02,1.02,1]) arm();
+      translate([0,0,-0.4]) scale([1,1,1]) arm();
+      translate([0,0,-0.4]) scale([0.98,0.98,1]) arm();
+      translate([0,0,-0.1]) cylinder(r=3,h=5);
+   }
+}
+
+module minInsertTool()
+{
+   rotate([180,0,0]) translate([0,0,-20]) difference() {
+      cylinder(r=23,h=20);
+      translate([0,0,-0.4]) insert(slop=0,minimal=1);
+      translate([0,0,-0.1]) cylinder(r=4.25,h=5);
+   }
+}
+
+module stdInsertTool()
+{
+   rotate([180,0,0]) translate([0,0,-20]) difference() {
+      cylinder(r=23,h=20);
+      translate([0,0,-0.4]) insert(slop=0,minimal=0);
+      translate([0,0,-0.1]) cylinder(r=4.25,h=5);
+   }
 }
 
 /*********** BASIC PARTS BELOW ***********/
@@ -371,6 +410,18 @@ module poly_path10(h)
                [29.850000,-57.592773],[28.795312,-57.381836],
                [27.862500,-56.730273],[27.023438,-55.609961],
                [26.250000,-53.992773]]);
+   }
+}
+
+/* outline() - generates an outline of an object
+ *
+ * Note: This is intended to be used on a 2D shape, such as one created
+ *       using the projection() operator.
+ */
+module outline(outlineIterations = 10,outlineScale=1.4) {
+   for (i=[0:outlineIterations]) {
+      translate([outlineScale*cos(360*i/outlineIterations),
+                 outlineScale*sin(360*i/outlineIterations),0]) children();
    }
 }
 
