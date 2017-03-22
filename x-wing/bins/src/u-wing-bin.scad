@@ -22,9 +22,9 @@ angle=0;
 locations = [[[20,-39.5,0], [0,0,0]],
              [[-20,39.5,0],[0,0,180]]];
 
-harborFreightLargeHalfHt(locations,bottomThick=0.9,inset=0.5) uwingBlank();
+// harborFreightLargeHalfHt(locations,bottomThick=0.9,inset=0.5) uwingBlank();
 
-// uwingBlank();
+uwingBlank();
 // uwingOutline();
 
 /* uwingOutline() -- test piece for outline
