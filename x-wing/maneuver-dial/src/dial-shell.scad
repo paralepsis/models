@@ -47,8 +47,10 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 /*********** PARTS TO BUILD ***********/
 
 
-armTool();
+insert(minimal=1);
 /* 
+kFace();
+armTool();
 stdInsertTool();
 minInsertTool();
 yt2400Face();
