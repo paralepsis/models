@@ -47,8 +47,10 @@ insertSlop = 0.3;   // red. in radius of insert from inset cut
 /*********** PARTS TO BUILD ***********/
 
 
-insert(minimal=1);
+tieFace();
 /* 
+arcFace();
+insert(minimal=1);
 kFace();
 armTool();
 stdInsertTool();
@@ -68,12 +70,10 @@ zFace();
 mandalorianFace();
 houndstoothFace();
 decimatorFace();
-translate([0,0,0]) tieFace();
 translate([0,0,0]) smileyFace();
 translate([0,0,0]) arm();
 translate([90,0,0]) insert();
 translate([0,0,0]) kFace();
-translate([50,0,0]) arcFace();
 translate([100,0,0]) t65Face();
 translate([50,0,0]) smileyFace();
 */
