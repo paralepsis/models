@@ -34,8 +34,6 @@
 // URL Professional 3D: http://professional3d.de
 // http://www.thingiverse.com/thing:862716
 //
-// Includes Lulzbot Hexagon Hot End openscad design by andreas.thorn@gmail.com -- This model is inaccurate according to lulzbot documentation. Mount is correct.
-// https://www.youmagine.com/designs/hexagon-hotend-visualization
 
 // Which hotend are we importing? Can only use one at a time, Jons uses the same variable
 // and module names and openscad doesn't support conditionally import as far as I can tell.
@@ -48,7 +46,7 @@ use<delta_blower_fans.scad>;
 carriage = "cbot"; // [cbot:C Bot style]
 
 // Which hot end is in use. Ensure you enter height from top of mount to tip of nozzle if you select generic J Head.
-hotend = "e3d_v6_vol"; // [chimera_v6:Chimera Dual V6, chimera_vol:Chimera Dual Volcano, cyclops:Cyclops, e3d_v6:E3D V6, e3d_v6_vol:E3D V6 w/ Volcano, jhead_mkv:J Head Mark V, hexagon:Hexagon, gen_jhead:Generic J Head]
+hotend = "e3d_v6_vol"; // [chimera_v6:Chimera Dual V6, chimera_vol:Chimera Dual Volcano, cyclops:Cyclops, e3d_v6:E3D V6, e3d_v6_vol:E3D V6 w/ Volcano, jhead_mkv:J Head Mark V, gen_jhead:Generic J Head]
 
 // Where should the hot end mount be positioned vertically? Optimized changes the mount height to increase vertical build height as much as possible. Universal keeps the mount height the same for all hot ends allow for easier interchange.
 hotendOpt = "optimize"; // [ optimize:Optimized, universal:Universal]
@@ -503,21 +501,18 @@ chiCBotProbePos = 1; // Mounting position of probe mounts for the E3D Chimera on
 // Variables for J Head Mount
 jHeadWidth = 26;
 jHeadUpperCollarDiameter = upperCollarDiameterAdjustment + 16;
-jHeadUpperCollarHeight = upperCollarHeightAdjustment + (hotend == "hexagon" ? 4.7 :
-							(hotend == "jhead_mkv" ? 4.76 :
-							 3.7));
+jHeadUpperCollarHeight = upperCollarHeightAdjustment + (hotend == "jhead_mkv" ? 4.76 :
+							 3.7);
 jHeadInnerCollarDiameter = innerCollarDiameterAdjustment + 12;
-jHeadInnerCollarHeight =  innerCollarHeightAdjustment + (hotend == "hexagon" ? 4.5 :
-							 (hotend == "jhead_mkv" ? 4.64 :
-							  6));
+jHeadInnerCollarHeight =  innerCollarHeightAdjustment + (hotend == "jhead_mkv" ? 4.64 :
+							  6);
 jHeadLowerCollarDiameter = lowerCollarDiameterAdjustment + 16;
-jHeadLowerCollarHeight = lowerCollarHeightAdjustment + (hotend == "hexagon" ? 4.6 : 3);
+jHeadLowerCollarHeight = lowerCollarHeightAdjustment +  3;
 jHeadMountHeight = jHeadUpperCollarHeight + jHeadInnerCollarHeight + jHeadLowerCollarHeight;
-jHeadHEPosUD = (carriage == "prusai3" ? 14 : (hotendOpt == "universal" ? 21 : (
-						   hotend == "e3d_v6" ? 21 :
-						   (hotend == "jhead_mkv" ? 11 :
-						    (hotend == "generic_jhead" ? 11 :
-						     (hotend == "hexagon" ? 14 : 21))))));
+jHeadHEPosUD = (hotendOpt == "universal" ? 21 :
+               (hotend == "e3d_v6" ? 21 :
+	       (hotend == "jhead_mkv" ? 11 :
+	       (hotend == "generic_jhead" ? 11 : 21))));
 jHeadMountWidth = 36;
 jHeadCollarCornerRadius = 3;
 jHeadMountBoltDiameter = 3.2;
@@ -554,11 +549,6 @@ v6VolNozzleL = [[0,0,-70.5]]; // This must be a vector of vectors. If only one n
 
 // Variables for J Head Mark V
 jheadMkVNozzleL = [[0, 0, -51]]; // This must be a vector of vectors. If only one nozzle, enter x,y,z in [[ ]]
-
-/* [Hexagon Advanced] */
-
-// Variables for Hexagon Hot End
-hexagonNozzleL = [[0, 0, -55]]; // This must be a vector of vectors. If only one nozzle, enter x,y,z in [[ ]]
 
 /* [Generic J Head Advanced] */
 
@@ -601,9 +591,8 @@ heNozzleL = (hotend == "chimera_v6" ? chiV6NozzleL
 		   : (hotend == "e3d_v6" ? v6NozzleL
 		      : (hotend == "e3d_v6_vol" ? v6VolNozzleL
 			 : (hotend == "jhead_mkv" ? jheadMkVNozzleL
-			    : (hotend == "hexagon" ? hexagonNozzleL
 			       : (hotend == "gen_jhead" ? genericJHeadNozzleL
-				  : [[0]])))))))); // This must be a vector of vectors. If only one nozzle, enter x,y,z in [[ ]]
+				  : [[0]]))))))); // This must be a vector of vectors. If only one nozzle, enter x,y,z in [[ ]]
 
 // Variables for BLTouch
 blPlateOuterRadius = 4; // Radius of outer circles of the mount.
@@ -676,7 +665,7 @@ inductMountWidth = inductDiameter + (probeBraceWidth * 2) + (inductMat * 2);
 cBotProbePos = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") ? chiCBotProbePos : jHeadCBotProbePos; // Used the correct location of the probe mount based on hotend type.
 heMountWidth = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
      ? chiMountWidth
-     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead")
+     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? jHeadMountWidth
      : 0;
 cBotTempCarriageWidth = heMountWidth + (cBotCarriageIdlerScrewDiameter * 2) + (cBotCarriageIdlerScrewMat * 4) +
@@ -709,12 +698,12 @@ cBotJHeadAnchorL = [cBotJHeadMountL[0] + (jHeadMountWidth / 2),
 		    cBotJHeadMountL[2] + jHeadMountHeight]; // Position of E3D V6 Mount.
 cBotHEMountL = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
      ? cBotChiMountL
-     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead")
+     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? cBotJHeadMountL
      : 0;
 cBotHEAnchorL = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
      ? cBotChiAnchorL
-     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead")
+     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? cBotJHeadAnchorL
      : 0;
 cBotCableTieHorizontalDistance = (cBotCarriageWidth / (cBotCableTieHorizontalCount + 1));
@@ -727,7 +716,7 @@ tempDuctConnectL = cBotDuctConnectL;
 ductConnectL = (printFanDirection == "left" ? tempDuctConnectL[0] : tempDuctConnectL[1]);
 heMountWidth = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
      ? chiMountWidth
-     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead")
+     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? jHeadMountWidth
      : 0;
 
@@ -747,7 +736,7 @@ cBotProbeMountL = [ realZProbeSide == "right" ?
 		     (cBotCarriageWidth / 2) - ((cBotFanMountDistance / 2) + (cBotFanMountDistance * floor((((cBotCarriageWidth - (cBotCarriageIdlerScrewDiameter * 2) - (cBotCarriageIdlerScrewMat * 4)) / cBotFanMountDistance) / 2) - cBotProbePos /* The number after the - sign before this comment indicates position from edge. */))) - (probeMountWidth / 2),
 		     - cBotCarriageDepth,
 		     heAnchorL[2] + heNozzleL[0][2] + probePlateHeight];
-probeMountL = cBotProbeMount;
+probeMountL = cBotProbeMountL;
 carriageDepth = cBotCarriageDepth;
 echo("probeMountL", probeMountL);
 echo("probeMountWidth", probeMountWidth);
@@ -765,7 +754,7 @@ cBotServoBracketL = [realZProbeSide == "right" ?
 		     - ((servoBracketMat * 2) + servoWidth + ((servoMountPlateHeight - servoHeight) / 2))];
 servoBracketL = cBotServoBracketL;
 servoMountL = [-(servoBracketMat + (servoBracketScrewDiameter / 2)),
-	       -((servoBracketMat * 2) + servoWidth + servoBracketBaseDepth + (carriage == "cbot" ? - servoBracketOffset : 0)),
+	       -((servoBracketMat * 2) + servoWidth + servoBracketBaseDepth - servoBracketOffset),
 	       (servoBracketMat * 2) + servoBracketNutDiameter];
 cBotServoBracketBotScrewL = [realZProbeSide == "right" ?
 			     - cBotFanMountDistance :
@@ -814,7 +803,7 @@ if(carriage == "cbot") {
 		    }
 
 		    // Replace material behind the mount.
-		    if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead") {
+		    if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead") {
 			 translate([(cBotCarriageWidth / 2) - (cBotCenterHoleWidth / 2),
 				    heMountL[1] + jHeadMountDepth + heDepthOffset,
 				    heMountL[2]])
@@ -823,7 +812,7 @@ if(carriage == "cbot") {
 	       }
 
 	       // Carve J Head style mount holes, if needed.
-	       if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead") {
+	       if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead") {
 		    translate(heMountL)
 			 jhead_holes(carriageDepth);
 	       }
@@ -852,7 +841,7 @@ if(carriage == "cbot") {
 	  }
 	       
 	  // J Head style mount
-	  if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead") {
+	  if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead") {
 	       // Ensure the holes are made in the carriage.
 	       difference() {
 		    // Place the J Head style mount
@@ -873,21 +862,11 @@ if(carriage == "cbot") {
 		    rotate([0,180,180])
 		    %e3d();
 	  }
-
-	  // Display Hexagon if needed.
-	  if((cBotWhich == "hotm" || cBotWhich == "all") && (hotend == "hexagon") && (showHE == true)) {
-	       // Place the E3D V6.
-	       translate([heMountL[0] + (jHeadMountWidth / 2),
-			  heMountL[1] + (jHeadMountDepth / 2),
-			  heMountL[2] + hexagonNozzleL[0][2] + 12.7])
-		    rotate([0,0,0])
-		    %hexagon_hotend();
-	  }
      }
      
 
      // J Head style mount collar
-     if((hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "hexagon" || hotend == "gen_jhead") && (cBotWhich == "jhead_col" || cBotWhich == "all")) {
+     if((hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead") && (cBotWhich == "jhead_col" || cBotWhich == "all")) {
 	  translate(explodeParts == 1 ? (heMountL - partsOffset) : heMountL)
 	       jhead_collar(carriageDepth);
      }
@@ -1925,7 +1904,7 @@ module servo_bracket_holes(cbot=false) {
 module servo_mount() {
      // Spin up a cube that we will punch a hole in for servo later.
      cube([(servoBracketMat * 2) + servoBracketScrewDiameter,
-	   (servoBracketMat * 2) + servoWidth + .1 + (carriage == "cbot" ? servoBracketOffset : 0),
+	   (servoBracketMat * 2) + servoWidth + .1 + servoBracketOffset,
 	   servoMountPlateHeight]);
 }
 
@@ -2132,26 +2111,13 @@ module cbot_carriage_side(heSide=false) {
 	echo("heSide", heSide);
 	echo("Number of wheels on carriage", cBotNumberOfCarriageWheels);
    
-	if (cBotNumberOfCarriageWheels == "3")
-		{
-			 difference(){
-				cbot_carriage_base();  // Create the base.
-				
-				union(){
-					cbot_carriage_three_holes();  
-					cBot_cut_other_holes(heSide);
-				}
-			 }	
-		} else
-		{
-		difference(){
-				union(){
-					cbot_carriage_base();
-					cbot_carriage_wheel_bolt_angle_plates();}  // Create the base.
-				{union(){
-					cbot_carriage_holes();  // Then remove the holes.
-					cBot_cut_other_holes(heSide);}
-				}
+	difference(){
+			union(){
+				cbot_carriage_base();
+				cbot_carriage_wheel_bolt_angle_plates();}  // Create the base.
+			{union(){
+				cbot_carriage_holes();  // Then remove the holes.
+				cBot_cut_other_holes(heSide);}
 			}
 		}
 }
