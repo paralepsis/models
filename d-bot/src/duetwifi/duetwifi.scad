@@ -2,8 +2,8 @@
 translate([0,131.07,0]) rotate([0,0,-90]) translate([131.07/2,162.99/2,0]) import("../products/seth_custom_duet_wifi_case-20170314-noside.stl");
 */
 
-if (1) {
-% translate([131.07/2,162.99/2,0]) import("../products/seth_custom_duet_wifi_case-20170314-noside.stl");
+if (0) {
+% translate([131.07/2,162.99/2,0]) import("./seth_custom_duet_wifi_case-20170314-noside.stl");
 }
 /*
 appjaws_duetwifi_and_duex5_enclosure.scad
@@ -64,7 +64,7 @@ airgap=10;                  //space between boards
 bsuppwid=10;                //board support width
 bsize=[100,123,26];         //board size
 bmount=[92,115];            //board mounting holes
-boffset=[27,wall+2*airgap]; //board offset (X,Y)
+boffset=[25,wall+20]; //board offset (X,Y)
 erad=4;                     //enclosure corner radius
 ency=162;            //enclosure length(y)
 encx=131;                   //enclosure width(x)
@@ -88,91 +88,95 @@ fan_pos=[encx/2-bsuppwid,ency/2,-0.1];                              //fan positi
 fan_rad = fan_width/2-2;		                                    //radius of blades
 rings = lookup(fan_width, [40,50,60,80], [4,5,6,8]);                //number of grill rings dependant on fan size
 
+if (1) difference() {
+    myCase();
+    translate([-1,-1,-1]) cube([200,ency/2+3.5,99]);
+}
+if (1) intersection() {
+    myCase();
+    translate([-1,-1,-1]) cube([200,ency/2+3.5,99]);
+}
+
 /* MY HACKING VERSION */
-difference() {
-    union() {
-        base();
+module myCase() {
+    difference() {
+        union() {
+            base();
 
-        /* MOUNTS TO BOARD */
-        translate ([boffset[0]+wall,boffset[1]-1,0]) {
-            cylinder (r=4, h=14);
-            cylinder (r=M4_clear, h=15);
+            /* MOUNTS TO BOARD */
+            for (i=[0:3]) {
+                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],0]) {
+                    cylinder (r=4, h=14);
+                    cylinder (r=M4_clear, h=15);
+                }
+            }
+
+            /* GLUE POINTS */
+            if (1) {
+                translate([0,ency/2, 0]) cube([6,5,fan_dist+airgap/2+bsize[2]+base+wall/2]);
+                translate([0,ency/2, 0]) cube([encx,5,5]);
+                translate([encx-6,ency/2, 0]) cube([6,5,fan_dist+airgap/2+bsize[2]+base+wall/2]);
+            }
         }
-        translate ([boffset[0]+wall+bmount[0],boffset[1]-1,0]) {
-            cylinder (r=4, h=14);
-            cylinder (r=M4_clear, h=15);
+
+        /* ALL THE CUTOUTS */
+        union() {
+            /* FANS */
+            translate([34,ency+fan_dist,fan_width/2+base+1])
+                rotate([90,0,0]) fan_cutout();
+            translate([encx-34,ency+fan_dist,fan_width/2+base+1])
+                rotate([90,0,0]) fan_cutout();
+    
+            /* CONDUIT */
+            translate([encx/2,ency+fan_dist, 14]) rotate([90,0,0]) cylinder(r=7,h=10);
+            translate([encx/2,ency+fan_dist, 32]) rotate([90,0,0]) cylinder(r=7,h=10);
+            translate([18,5, 14]) rotate([90,0,0]) cylinder(r=7,h=10);
+            translate([18,5, 32]) rotate([90,0,0]) cylinder(r=7,h=10);
+
+            /* MOUNTS TO FRAME */
+            translate ([encx-28,10,-1]) cylinder (d=6,h=7);
+            translate ([boffset[0]/2+wall+1,10,-1]) cylinder (d=6,h=7);
+            translate ([10,boffset[1],-1]) cylinder (d=6,h=7);
+            translate ([10,ency-airgap,-1]) cylinder (d=6,h=7);
+            translate ([10,ency/2+airgap,-1]) cylinder (d=6,h=7);
+
+            /* MOUNTS TO BOARD */
+            for (i=[0:3]) {
+                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],fan_dist]) {
+                    cylinder (r=M3_clear, h=12);
+                }
+            }
+    
+            /* GRILL */
+            myGrill();
+            myGrillHole();
         }
-        translate ([boffset[0]+wall+bmount[0],boffset[1]+bmount[1]-1,0]) {
-            cylinder (r=4, h=14);
-            cylinder (r=M4_clear, h=15);
-        }
-        translate ([boffset[0]+wall,boffset[1]+bmount[1]-1,0]) {
-            cylinder (r=4, h=14);
-            cylinder (r=M4_clear, h=15);
-        }
-    }
-
-    // All the cutouts
-    union() {
-        /* FANS */
-        translate([35,ency+fan_dist,fan_width/2+base+1])
-            rotate([90,0,0]) fan_cutout();
-        translate([encx-35,ency+fan_dist,fan_width/2+base+1])
-            rotate([90,0,0]) fan_cutout();
-
-        /* MOUNTS TO FRAME */
-        translate ([encx-28,10,-1]) cylinder (d=6,h=7);
-        translate ([boffset[0]/2+wall+1,10,-1]) cylinder (d=6,h=7);
-        translate ([10,boffset[1],-1]) cylinder (d=6,h=7);
-        translate ([10,ency-airgap,-1]) cylinder (d=6,h=7);
-        translate ([10,ency/2+airgap,-1]) cylinder (d=6,h=7);
-
-        /* MOUNTS TO BOARD */
-        translate ([boffset[0]+wall,boffset[1]-1,fan_dist]) cylinder (r=M3_clear, h=12);
-        translate ([boffset[0]+wall+bmount[0],boffset[1]-1,fan_dist]) cylinder (r=M3_clear, h=12);
-        translate ([boffset[0]+wall+bmount[0],boffset[1]+bmount[1]-1,fan_dist]) cylinder (r=M3_clear, h=12); 
-        translate ([boffset[0]+wall,boffset[1]+bmount[1]-1,fan_dist]) cylinder (r=M3_clear, h=12);
-
     }
 }
 
+module myGrillHole() {
+    hull() {
+        for (i=[2:4]) {
+            translate([wall+32+9*i,0,14]) hull() {
+                translate([0,10,0]) rotate([90,0,0]) cylinder(r=3,h=15);
+                translate([0,10,12]) rotate([90,0,0]) cylinder(r=3,h=15);
+            }
+        }
+    }
+}
+module myGrill() {
+    for (j=[0:1]) {
+        // for (i=[0:floor((encx-2*wall-32)/9)-1]) {
+        for (i=[0,1,5,6,7,8,9]) {
+            translate([wall+32+9*i,0,9+19*j]) hull() {
+                translate([0,10,0]) rotate([90,0,0]) cylinder(r=3,h=15);
+                translate([0,10,9]) rotate([90,0,0]) cylinder(r=3,h=15);
+            }
+        }
+    }
+}
 
 /***************** OLD STUFF *****************/
-if (printbox == true){ fan_dist = (inside == true) ? fan_dist : 5;  
-    if (1) {
-    base();  
-    if (hardware == true) {
-        if (withfan == true){
-        if (inside == true){
-        translate([encx/2-airgap,ency/2+airgap,wall+fan_dist/2]) color("grey") fan();
-        translate([encx/2-airgap,ency/2+airgap,wall+fan_dist/2-base]) color("brown") fanscrews();
-        translate([encx/2-airgap,ency/2+airgap,-grill_depth/2]) rotate([0,180,0]) color("blue") guard();    
-        }
-        else {
-            translate([encx/2-airgap,ency/2+airgap,-fan_depth/2]) color("lightgrey") fan();
-            translate([encx/2-airgap,ency/2+airgap,-fan_depth/2]) color("brown") fanscrews();
-            translate([encx/2-airgap,ency/2+airgap,-fan_depth-grill_depth/2]) rotate([0,180,0]) color("blue") guard();
-        }   } 
-      //fan_dist = (inside == true) ? fan_dist : 5;  
-        translate([boffset[0]+wall-(bsize[0]-bmount[0])/2,boffset[1]-wall-clear,base+fan_dist+1+airgap/2]) color("grey") board();//Duewifi
-            }      
-            
-        if (assembled == true) {
-        translate ([0,0,fan_dist+airgap/2+bsize[2]+2*wall]) rotate ([0,0,0]) lid();//fitted 
-        }   } }         
-    else{
-        if (printlid == true){
-        translate ([encx,0,wall]) rotate ([0,180,0]) lid();//for printing    
-            }
-        else{
-            if (printlidx5 == true){
-            translate ([-14,-14,0]) rotate ([0,0,0]) lidx5();//for printing
-            }
-         else{
-          if (printguard == true){
-             guard();//for printing
-         }   }   }  }
-            
 module fan_cutout() {
     cylinder( h=3*wall, r=fan_width/2-1, center=true);//fan hole
 	for(i = [1: 4])
@@ -189,33 +193,29 @@ module base(){
     difference(){
         roundedcube(encx, ency+airgap, fan_dist+airgap/2+bsize[2]+wall+base,
                     erad);
-
-        difference(){
+        /* INTERIOR VOLUME */
         translate ([wall,wall,base]) roundedcube (encx-2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]+2*wall,erad);           
-
-}
-        translate ([boffset[0]+wall,ency+airgap+wall,base+fan_dist+1+airgap/2]) rotate ([90,0,0]) roundedcube(bmount[0],bsize[2]/2-wall/2,10,erad);//control slot
-        }   
+    }   
 
     /* FOUR CORNERS */
     difference(){
-        translate ([2*wall,2*wall,0]) cylinder (r=5,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
+        translate ([2*wall,2*wall,0]) cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
         translate ([2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder (r=1.35, h=airgap);
     }  
 
     difference(){   
-        translate ([2*wall,ency+airgap-2*wall,0]) cylinder(r=5,h=fan_dist+airgap/2+bsize[2]+base+wall/2);         
+        translate ([2*wall,ency+airgap-2*wall,0]) cylinder(r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2); 
         translate ([2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=airgap);   
     }
 
     difference(){       
-        translate ([encx-2*wall,2*wall,0])cylinder (r=5,h=fan_dist+airgap/2+bsize[2]+base+wall/2);       
+        translate ([encx-2*wall,2*wall,0])cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);       
         translate ([encx-2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=airgap); 
     }
 
     difference(){             
-        translate ([encx-2*wall,ency+airgap-2*wall,0]) cylinder (r=5,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
-        translate ([encx-2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder (r=1.35, h=airgap);
+        translate ([encx-2*wall,ency+airgap-2*wall,0]) cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
+        translate ([encx-2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder(r=1.35,h=airgap);
     }   
 }     
 
