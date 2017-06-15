@@ -78,7 +78,7 @@ grill_space=10;            //space between grill rings
 rings_wid=1.05;             //fan grill rods and rings width
 clear=2;                    //extra clearance
 tol=0.1;                    //small tolerance
-$fn=100;
+$fn=50;
 
 //calculations
 fan_mount_dist = lookup(fan_width, [40,50,60,80], [32,40,50,70]);   //fan mounting hole distance
@@ -107,7 +107,7 @@ module myCase() {
             for (i=[0:3]) {
                 translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],0]) {
                     cylinder (r=4, h=14);
-                    cylinder (r=M4_clear, h=15);
+                    cylinder (d=4, h=15);
                 }
             }
 
@@ -142,8 +142,8 @@ module myCase() {
 
             /* MOUNTS TO BOARD */
             for (i=[0:3]) {
-                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],fan_dist]) {
-                    cylinder (r=M3_clear, h=12);
+                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],5]) {
+                    cylinder (d=3, h=12);
                 }
             }
     
@@ -156,7 +156,7 @@ module myCase() {
 
 module myGrillHole() {
     hull() {
-        for (i=[2:4]) {
+        for (i=[2:6]) {
             translate([wall+32+9*i,0,14]) hull() {
                 translate([0,10,0]) rotate([90,0,0]) cylinder(r=3,h=15);
                 translate([0,10,12]) rotate([90,0,0]) cylinder(r=3,h=15);
@@ -167,7 +167,7 @@ module myGrillHole() {
 module myGrill() {
     for (j=[0:1]) {
         // for (i=[0:floor((encx-2*wall-32)/9)-1]) {
-        for (i=[0,1,5,6,7,8,9]) {
+        for (i=[0,1,7,8,9]) {
             translate([wall+32+9*i,0,9+19*j]) hull() {
                 translate([0,10,0]) rotate([90,0,0]) cylinder(r=3,h=15);
                 translate([0,10,9]) rotate([90,0,0]) cylinder(r=3,h=15);
@@ -200,22 +200,22 @@ module base(){
     /* FOUR CORNERS */
     difference(){
         translate ([2*wall,2*wall,0]) cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
-        translate ([2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder (r=1.35, h=airgap);
+        translate ([2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder (r=1.35, h=10);
     }  
 
     difference(){   
         translate ([2*wall,ency+airgap-2*wall,0]) cylinder(r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2); 
-        translate ([2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=airgap);   
+        translate ([2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=10);   
     }
 
     difference(){       
         translate ([encx-2*wall,2*wall,0])cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);       
-        translate ([encx-2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=airgap); 
+        translate ([encx-2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=10); 
     }
 
     difference(){             
         translate ([encx-2*wall,ency+airgap-2*wall,0]) cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
-        translate ([encx-2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder(r=1.35,h=airgap);
+        translate ([encx-2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder(r=1.35,h=10);
     }   
 }     
 
