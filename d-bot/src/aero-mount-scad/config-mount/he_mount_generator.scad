@@ -18,21 +18,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 //
-// Includes E3D Chimera openscad design by Author: Professional 3D - Jons Collasius from Germany/Hamburg
-// URL Professional 3D: http://professional3d.de
-// http://www.thingiverse.com/thing:1018787
-//
-// Includes E3D Cyclops openscad design by Author: Professional 3D - Jons Collasius from Germany/Hamburg
-// URL Professional 3D: http://professional3d.de
-// http://www.thingiverse.com/thing:1018957
-//
 // Includes E3D V6 openscad design by Author: Professional 3D - Jons Collasius from Germany/Hamburg
 // URL Professional 3D: http://professional3d.de
 // http://www.thingiverse.com/thing:548237
-//
-// Includes E3D V6 w/ Volcano openscad design by Author: Professional 3D - Jons Collasius from Germany/Hamburg
-// URL Professional 3D: http://professional3d.de
-// http://www.thingiverse.com/thing:862716
 //
 
 // Which hotend are we importing? Can only use one at a time, Jons uses the same variable
@@ -46,7 +34,7 @@ use<delta_blower_fans.scad>;
 carriage = "cbot"; // [cbot:C Bot style]
 
 // Which hot end is in use. Ensure you enter height from top of mount to tip of nozzle if you select generic J Head.
-hotend = "e3d_v6_vol"; // [chimera_v6:Chimera Dual V6, chimera_vol:Chimera Dual Volcano, cyclops:Cyclops, e3d_v6:E3D V6, e3d_v6_vol:E3D V6 w/ Volcano, jhead_mkv:J Head Mark V, gen_jhead:Generic J Head]
+hotend = "e3d_v6"; // [e3d_v6:E3D V6, jhead_mkv:J Head Mark V, gen_jhead:Generic J Head]
 
 // Where should the hot end mount be positioned vertically? Optimized changes the mount height to increase vertical build height as much as possible. Universal keeps the mount height the same for all hot ends allow for easier interchange.
 hotendOpt = "optimize"; // [ optimize:Optimized, universal:Universal]
@@ -58,7 +46,7 @@ extruder = "titan"; // [bowden:Bowden, titan:E3D Titan, carl_direct:Carl Feniak 
 fanDuctStyle = "simple"; // [simple:Simple single outlet]
 
 // Which Z Probe type is in use. Select Servo here if you want to if you Servo Bracket selected above, otherwise it won't appear.
-servoInduct = "induct"; // [servo:Servo w/ Arm, induct:Inductive / Capacitive Sensor, bltouch:BL Touch, none:Neither/None]
+servoInduct = "bltouch"; // [servo:Servo w/ Arm, bltouch:BL Touch, none:Neither/None]
 
 // Which side should the z probe be on? Be mindful of clearance with fan mount.
 // If you choose a Prusa i3 style carriage and a titan extruder, this will be overridden to left.
@@ -76,22 +64,7 @@ boltHoleSupportFix = 1; // [ 1:Yes, 0:No]
 // Should the parts be exploded, do this before producing the stl file. You will still receive a single STL file with all the parts, but they will be separated so you can split them up with Cura or NetFabb. Select no if you want to see the parts fit together as they would on the printer. Selecting no will NOT produce a valid STL for printing as the parts will be inseparable.
 explodeParts = 1; // [1:Yes, 0:No]
 
-/* [Prusa i3] */
-
-// Which part should be displayed.
-// xcar = X Carriage mount
-// serv = Servo Bracket
-// fanm = Fan Mount
-// fant = Fan Bracket
-// duct = Fan Duct
-// mag = Magnetic Z Probe mount
-// zpro = Z Probe arm used with servo
-// jhead_col = J Head style collar
-// bltouch = BL Touch mount
-// all = All parts
-
-// Which Prusa i3 part should be exported.
-prusai3Which = "all"; // [hotm:Back Plane & Cold / Hot End  Mount, jhead_col: J Head Style Collar, servo:Servo Bracket, fanm:Fan Mount, fant:Fan Bracket, duct:Fan Duct, zarm:Z Probe Servo Arm, induct:Inductive / Capacitive Sensor, bltouch:BL Touch, all:All Parts ] 
+/* [General] */
 
 // How wide to make the X Carriage back plane.
 xMountWidth = 40;
@@ -120,52 +93,21 @@ xMountHoleWidth = 23;
 // Distance between mounting bolt holes in the vertical direction
 xMountHoleHeight = 23;
 
-// How wide to make the tab the cooling fan hangs off of.
-prusai3FanTabWidth = 8;
-
-// How far out should the tab the cooling fan hangs off of be. Must be above 0.
-prusai3FanTabDepth = 4;
-
-// Degrees the fan mount is rotated in the vertical.
-prusai3FanTabVerticalAngle = 0;
-
-// Degrees the fan mount is rotated in the horizontal. Affects fan duct only.
-prusai3FanTabHorizontalAngle = 0;
-
-// How large to make the bolt hole that the fan bracket will bolt to.
-prusai3FanTabHole = 3.5;
-
-// How much material should be around the fan bracket screw.
-prusai3FanTabMat = 2;
-
-// How wide the nubs on each side of the fan mount tab should be.
-prusai3FanTabNubWidth = 4;
-
-// How deep the fan bracket should be.
-prusai3FanBracketDepth = 3;
-
-// How much vertical offset should be added / removed for a titan mount.
-prusai3TitanVertOffset = 15;
-
 /* [C Bot Carriage] */
 
 // Which part should be displayed.
 // hotm = Carriage side with hot end
 // carrside = Carriage side opposite hot end side. This one is for accessories.
-// serv = Servo Bracket
 // fanm = Fan Mount
 // fant = Fan Bracket
 // duct = Fan Duct
-// mag = Magnetic Z Probe mount
-// zarm = Z Probe arm used with servo
 // jhead_col = J Head style collar
-// induct = Inductive Sensor Mount
 // xbump = X Endstop Bumper
 // bltouch = BL Touch mount
 // all = All parts
 
 // Which C Bot part should be exported.
-cBotWhich = "all"; // [hotm:Carriage with Cold / Hot End  Mount, carrside: Carriage Side, jhead_col:J Head Style Collar, belth:Belt Holder, servo:Servo Bracket, fant:Fan Mount Bracket, fanm:Fan Mount, duct:Fan Duct, zarm:Z Probe Servo Arm, induct:Inductive / Capacitive Sensor, xbump:X Endstop Bumper, bltouch:BL Touch, all:All Parts] 
+cBotWhich = "all"; // [hotm:Carriage with Cold / Hot End  Mount, carrside: Carriage Side, jhead_col:J Head Style Collar, belth:Belt Holder, fant:Fan Mount Bracket, fanm:Fan Mount, duct:Fan Duct, xbump:X Endstop Bumper, bltouch:BL Touch, all:All Parts] 
 
 // Do you want a carriage mount axis limit switch?
 cBotXAxisSwitch = "gen"; // [yl99:YL-99, keyes:Keyes, gen:Generic Mini Switch, none:None]
@@ -418,23 +360,6 @@ zProbeSwitchHeight = 7.5;
 // Distance below nozzle you want the switch to trigger, roughly, depends on switch activation point.
 zProbeSwitchActivationDistance = 5;
 
-/* [Inductive / Capacitive Sensor] */
-
-// Distance between hot end mount and side of induct mount. Only applicable to Prusa i3.
-inductMountDistance = 8;
-
-// Diameter of sensor.
-inductDiameter = 12.6;
-
-// Amount of material around sensor, account for nuts and washers around the sensor.
-inductMat = 5;
-
-// Height of mount plate above nozzle tip. This is over written if universal mount height is selected.
-inductPlateHeight = 25;
-
-// How much extra should be added to the carriage width to provide clearance for the inductive mount bracket.
-inductBracketExtra = 6;
-
 /* [ Generic Probe Mount Variables ] */
 
 // Offset of mount from back of X Carriage back plane.
@@ -471,31 +396,6 @@ xMountBoltDepth = (xMountDepth - xMountNutDepth); // How deep the X Carriage bol
 xMountHoleWidthOffset = (xMountWidth - (xMountHoleWidth /2));
 xMountHoleHeightOffset = (xMountHeight - (xMountHoleHeight /2));
 
-/* [Chimera / Cyclops Advanced] */
-
-// Variables for E3D Chimera / Cyclops
-chiColdHeight = 30;
-chiColdDepth = 16;
-chiScrewHole = 3.2; // Size of hole for screws that mount the Chimera Cold End.
-chiBowdenHole = 8.2; // Size of hole for bowden tube fittings.
-chiHEPosUD = (carriage == "prusai3" ? 15 : 20);
-chiBraceLength = chiColdDepth; // Length of brace for chimera mount in the horizontal. From back plane towards the front.
-chiBraceHeight = (chiColdHeight / 2) - (carriage == "prusai3" ? (chiHEPosUD - (chiColdHeight / 2) < xMountCornerRadius ? xMountCornerRadius - (chiHEPosUD - (chiColdHeight / 2)) : 0) : 0);
-chiWidth = 31; // Width of Chimera is 30, use 31 to account for 3d printer material overage. Use 30.5 for cnc.
-chiMountDepth = (heDepthOffset + 20); // How far out the Chimera mount top plate should be.
-chiMountWidth = (chiBraceThickness * 2) + chiWidth; // The width of the Chimera mount top plate.
-chiScrewHoleHeight = chiMountHeight + .2; // How tall to make the Chimera mount screw holes.
-chiScrewLocs = [[(chiMountWidth / 2) - 8.5, chiMountDepth - (heDepthOffset + 15)],
-		[(chiMountWidth / 2), chiMountDepth - (heDepthOffset + 3)],
-		[(chiMountWidth / 2) + 8.5, chiMountDepth - (heDepthOffset + 15)]]; // X,Y locations for Chimera mount screw holes.
-chiBowdenHoleHeight = chiMountHeight + .2; // How tall to make the Bowden tube fitting holes.
-chiBowdenLocs = [[(chiMountWidth / 2) - 9, chiMountDepth - (heDepthOffset + 6)],
-		 [(chiMountWidth / 2) + 9, chiMountDepth - (heDepthOffset + 6)]]; // X,Y locations for Bowden tube fitting holes.
-chiV6NozzleL = [[6,-6,-49.6],[24,-6,-49.6]]; // Location of Chimera V6 Nozzles in relation to top rear left corner of cold end.
-chiVolNozzleL = [[6,-6,-59.6],[24,-6,-59.6]]; // Location of Chimera Volcano nozzles in relation to the top rear left corner of cold end.
-cycNozzleL = [[15,-6,-50.1]]; // Location of Cyclops nozzle in relation to the top rear left corner of cold end.
-chiCBotProbePos = 1; // Mounting position of probe mounts for the E3D Chimera on the C-Bot carriage.
-
 /* [J Head Mount Advanced */
 
 // Variables for J Head Mount
@@ -524,9 +424,9 @@ jHeadMountScrewVerticalOffset = (jHeadMountHeight / 2);
 jHeadCBotProbePos = 2; // Mounting position of probe mounts for J-Head mount based hotends on the C-Bot carriage.
 
 /* [Hidden] */
-// If the hotend is a chimera / cyclops based one, force extruder to be bowden and fan duct style to be classic..
-realExtruder = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") ? "bowden" : extruder;
-realFanDuctStyle = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") ? "classic" : fanDuctStyle;
+// If the hotend is a chimera based one, force extruder to be bowden and fan duct style to be classic..
+realExtruder = extruder;
+realFanDuctStyle = fanDuctStyle;
 echo("realFanDuctStyle", realFanDuctStyle);
 
 // Depth from center of hotend to face of carriage.
@@ -587,12 +487,11 @@ partsOffset = [0,10,0];
 // Generic Hot End Variables
 heNozzleL = (hotend == "chimera_v6" ? chiV6NozzleL
 	     : (hotend == "chimera_vol" ? chiVolNozzleL
-		: (hotend == "cyclops" ? cycNozzleL
 		   : (hotend == "e3d_v6" ? v6NozzleL
 		      : (hotend == "e3d_v6_vol" ? v6VolNozzleL
 			 : (hotend == "jhead_mkv" ? jheadMkVNozzleL
 			       : (hotend == "gen_jhead" ? genericJHeadNozzleL
-				  : [[0]]))))))); // This must be a vector of vectors. If only one nozzle, enter x,y,z in [[ ]]
+				  : [[0]])))))); // This must be a vector of vectors. If only one nozzle, enter x,y,z in [[ ]]
 
 // Variables for BLTouch
 blPlateOuterRadius = 4; // Radius of outer circles of the mount.
@@ -661,18 +560,14 @@ cBotXBumperHolePos = [10,5]; // Where the hole is in relation to the bottom of t
 
 /* [Hidden] */
 realZProbeSide = (0 && realExtruder == "titan" ? "left" : zProbeSide);
-inductMountWidth = inductDiameter + (probeBraceWidth * 2) + (inductMat * 2);
-cBotProbePos = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") ? chiCBotProbePos : jHeadCBotProbePos; // Used the correct location of the probe mount based on hotend type.
-heMountWidth = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
-     ? chiMountWidth
-     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
+cBotProbePos = (hotend == "chimera_v6" || hotend == "chimera_vol") ? chiCBotProbePos : jHeadCBotProbePos; // Used the correct location of the probe mount based on hotend type.
+heMountWidth =
+     (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? jHeadMountWidth
      : 0;
 cBotTempCarriageWidth = heMountWidth + (cBotCarriageIdlerScrewDiameter * 2) + (cBotCarriageIdlerScrewMat * 4) +
-					     (servoInduct == "servo" ? servoHeight :
-					    (servoInduct == "induct" ? inductMountWidth + inductBracketExtra:
 					     (servoInduct == "bltouch" ? blMountWidth + bltouchBracketExtra:
-					    0)));
+					    0);
 cBotCarriageWidth = (cBotCarriageMinWidth > cBotTempCarriageWidth ? cBotCarriageMinWidth : cBotTempCarriageWidth);
 cBotFanBarWidth = cBotFanTabWidth + (cBotFanTabWidth * 2) + (fanTabNubClear * 2);
 cBotFanScrewL = [printFanSide == "left" ? cBotCarriageWidth - (fanDimensions[0] / 2) :
@@ -682,13 +577,6 @@ cBotFanScrewL = [printFanSide == "left" ? cBotCarriageWidth - (fanDimensions[0] 
 cBotFanScrewOffset = 0;
 cBotTempDuctConnectL = fan_duct_connect(cBotFanScrewL, cBotFanTabHorizontalAngle, cBotRealFanTabVerticalAngle, fanDimensions, fanCenterOffset, fanMountOffset, fanMountThickness, cBotFanTabHole, cBotFanTabMat, fanDuctConnectSize, true);
 cBotDuctConnectL = [cBotTempDuctConnectL[1],cBotTempDuctConnectL[0]];
-cBotChiMountL = [(realZProbeSide == "right" ? (cBotBeltLength + 2) :
-		  (cBotCarriageWidth - (cBotBeltLength + chiMountWidth + 2))),
-		 - (cBotCarriageDepth + chiMountDepth),
-		 chiHEPosUD + heHeightOffset];
-cBotChiAnchorL = [cBotChiMountL[0] + ((chiMountWidth - chiWidth) / 2),
-		  - (cBotCarriageDepth + heDepthOffset),
-		    cBotChiMountL[2]]; // Position of Chimera Mount.
 cBotJHeadMountL = [(realZProbeSide == "right" ? (cBotBeltLength + 2) :
 		  (cBotCarriageWidth - (cBotBeltLength + jHeadMountWidth + 2))),
 		   - (cBotCarriageDepth + jHeadMountDepth + heDepthOffset),
@@ -696,14 +584,12 @@ cBotJHeadMountL = [(realZProbeSide == "right" ? (cBotBeltLength + 2) :
 cBotJHeadAnchorL = [cBotJHeadMountL[0] + (jHeadMountWidth / 2),
 		    - (cBotCarriageDepth + (jHeadMountDepth / 2) + heDepthOffset),
 		    cBotJHeadMountL[2] + jHeadMountHeight]; // Position of E3D V6 Mount.
-cBotHEMountL = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
-     ? cBotChiMountL
-     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
+cBotHEMountL = 
+     (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? cBotJHeadMountL
      : 0;
-cBotHEAnchorL = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
-     ? cBotChiAnchorL
-     : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
+cBotHEAnchorL =
+     (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? cBotJHeadAnchorL
      : 0;
 cBotCableTieHorizontalDistance = (cBotCarriageWidth / (cBotCableTieHorizontalCount + 1));
@@ -714,23 +600,18 @@ heAnchorL =  cBotHEAnchorL;
 fanScrewL = cBotFanScrewL;
 tempDuctConnectL = cBotDuctConnectL;
 ductConnectL = (printFanDirection == "left" ? tempDuctConnectL[0] : tempDuctConnectL[1]);
-heMountWidth = (hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops")
+heMountWidth = (hotend == "chimera_v6" || hotend == "chimera_vol" )
      ? chiMountWidth
      : (hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead")
      ? jHeadMountWidth
      : 0;
 
 // Generic Z Probe variable logic
-probeMountDistance = (servoInduct == "induct" ? inductMountDistance :
-		      (servoInduct == "bltouch" ? blMountDistance :
-		       0));
-probeMountWidth =  (servoInduct == "induct" ? inductMountWidth :
-		    (servoInduct == "bltouch" ? blMountWidth :
-		     0));
-probePlateHeight =  (servoInduct == "induct" ? (hotendOpt == "universal" ? - (heAnchorL[2] + heNozzleL[0][2]) :
-						inductPlateHeight) :
-		     (servoInduct == "bltouch" ? blPlateHeight :
-		      0));
+probeMountDistance = (servoInduct == "bltouch" ? blMountDistance :
+		       0);
+probeMountWidth = (servoInduct == "bltouch" ? blMountWidth :
+		     0);
+probePlateHeight =  (servoInduct == "bltouch" ? blPlateHeight : 0);
 cBotProbeMountL = [ realZProbeSide == "right" ?
 		     (cBotCarriageWidth / 2) + ((cBotFanMountDistance / 2) + (cBotFanMountDistance * floor((((cBotCarriageWidth - (cBotCarriageIdlerScrewDiameter * 2) - (cBotCarriageIdlerScrewMat * 4)) / cBotFanMountDistance) / 2) - cBotProbePos /* The number after the - sign before this comment indicates position from edge */))) - (probeMountWidth / 2) :
 		     (cBotCarriageWidth / 2) - ((cBotFanMountDistance / 2) + (cBotFanMountDistance * floor((((cBotCarriageWidth - (cBotCarriageIdlerScrewDiameter * 2) - (cBotCarriageIdlerScrewMat * 4)) / cBotFanMountDistance) / 2) - cBotProbePos /* The number after the - sign before this comment indicates position from edge. */))) - (probeMountWidth / 2),
@@ -768,11 +649,6 @@ servoBracketBotScrewL = cBotServoBracketBotScrewL;
 servoBracketTopScrewL = cBotServoBracketTopScrewL;
 
 // Variables for Z Probe
-prusai3ZProbeTopL = [realZProbeSide == "right" ?
-		     servoBracketL[0] + servoMountL[0] - zProbeArmOffset:
-		     servoBracketL[0] - servoMountL[0] + zProbeArmOffset,
-		     servoBracketL[1] + servoMountL[1] + servoBracketMat + (servoWidth / 2),
-		     servoBracketL[2] + servoMountL[2] + ((servoMountPlateHeight - servoHeight) / 2) + servoCenterOffset];
 cBotZProbeTopL = [realZProbeSide == "right" ?
 		  servoBracketL[0] + servoMountL[0] - zProbeArmOffset:
 		  servoBracketL[0] - servoMountL[0] + zProbeArmOffset,
@@ -795,14 +671,6 @@ if(carriage == "cbot") {
 		    cbot_carriage_side(true);
 
 		    // Replace material behind the mount.
-		    if(hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") {
-			 translate([(cBotCarriageWidth / 2) - (cBotCenterHoleWidth / 2),
-				    heMountL[1] + chiMountDepth,
-				    heMountL[2]])
-			      cube([cBotCenterHoleWidth, carriageDepth, chiMountHeight]);
-		    }
-
-		    // Replace material behind the mount.
 		    if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead") {
 			 translate([(cBotCarriageWidth / 2) - (cBotCenterHoleWidth / 2),
 				    heMountL[1] + jHeadMountDepth + heDepthOffset,
@@ -818,28 +686,6 @@ if(carriage == "cbot") {
 	       }
 	  }
 		    
-	  // Place the Chimera / Cyclops hot end.
-	  if(hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") {
-	       // Place the hot end mount.
-	       translate(heMountL) {		    
-		    // Place the mount and carve out the wholes.
-		    difference() {
-			 chimera_mount();
-			 
-			 chimera_mount_holes();
-		    }
-		    
-		    // Display cold / hot end model.
-		    if((hotend == "chimera_v6" || hotend == "chimera_vol" || hotend == "cyclops") && (showHE == true)) {
-			 // Place the E3D Chimera fron Jons.
-			 translate([(chiWidth / 2) + chiBraceThickness,
-				    chiColdDepth - 2, // 6 is there to offset the fan in the e3d model, used to line everything up properly
-				    -chiColdHeight])
-			      %e3d();
-		    }
-	       }
-	  }
-	       
 	  // J Head style mount
 	  if(hotend == "e3d_v6" || hotend == "e3d_v6_vol" || hotend == "jhead_mkv" || hotend == "gen_jhead") {
 	       // Ensure the holes are made in the carriage.
@@ -956,29 +802,6 @@ if(carriage == "cbot") {
 	  }
      }
 
-     // Servo Bracket
-     if((cBotWhich == "servo" || cBotWhich == "all") && servoInduct == "servo") {
-	  // Place the Servo Bracket.
-	  translate(explodeParts == 1 ? (servoBracketL - partsOffset) : servoBracketL)
-	       difference() {
-	       servo_bracket(true);
-
-	       servo_bracket_holes(true);
-	  }
-     }
-
-     // Z Probe Arm
-     if((cBotWhich == "zarm" || cBotWhich == "all") && servoInduct == "servo" && servoInduct != "none") {
-	  // Place the Z Probe Arm
-	  translate(explodeParts == 1 ? (zProbeTopL - partsOffset) : zProbeTopL)
-	       rotate([-90,0,0])
-	       difference() {
-	       z_probe_arm(zProbeBottomL);
-	       
-	       z_probe_arm_holes(zProbeBottomL);
-	  }
-     }
-
      // Belt holders.
      if(cBotWhich == "belth" || cBotWhich == "all") {
 	  translate([-15,0,0])
@@ -1013,66 +836,6 @@ module bolt_hole(bdia=xMountBoltDiameter,
 	  // Nut Trap
 	  translate([0,0,bdep])
 	       cylinder(d=ndia,h=ndep + .1,$fn=6);
-     }
-}
-
-// Chimera Cold End Mount
-module chimera_mount(bracePos="below", fanTabAngle, fanTabWidth, fanTabDepth, fanTabHeight, fanTabHole, fanTabHoleMat, fanSide) {
-     // Create the mount top plate and braces for the Chimera mount plate.
-     union() {
-	  // Create the top plate to hang the Chimera from.
-	  hull() {
-	       cube([chiMountWidth, chiMountDepth + .1, chiMountHeight]);
-	  }	       
-	  // Left Brace
-	  hull() {
-	       // Horizontal
-	       translate([0,
-			  (chiMountDepth - chiBraceLength),
-			  bracePos == "below" ? 0 : chiMountHeight - .1])
-		    cube([chiBraceThickness, chiBraceLength + .1, .1]);
-
-	       // Vertical
-	       translate([0,
-			  chiMountDepth,
-			  bracePos == "below" ? -chiBraceHeight : chiMountHeight - .1])
-		    cube([chiBraceThickness, .1, chiBraceHeight + .1]);
-	  }
-	  // Right Brace
-	  hull() {
-	       // Horizontal
-	       translate([chiMountWidth - chiBraceThickness,
-			  (chiMountDepth - chiBraceLength),
-			  bracePos == "below" ? 0 : chiMountHeight - .1])
-		    cube([chiBraceThickness, chiBraceLength + .1, .1]);
-
-	       // Vertical
-	       translate([chiMountWidth - chiBraceThickness,
-			  chiMountDepth,
-			  bracePos == "below" ? -chiBraceHeight : chiMountHeight - .1])
-		    cube([chiBraceThickness, .1, chiBraceHeight + .1]);
-	  }	  
-     }
-}
-
-// Holes for Chimera Cold End Mount and Bowden tubes.
-module chimera_mount_holes() {
-     // Create the holes, which will be remove from the top plate. Could place screw holes in back plane too,
-     // but only useful if mount is rotated 90 degrees in Z. This might be tested as it has advantages for fan placement.
-     for(i = chiScrewLocs) {
-	  // Create the screw hole and move it to the correct location.
-	  translate([i[0], i[1], -.1])
-	       cylinder(r=(chiScrewHole /2),h=chiScrewHoleHeight, $fn=100);
-
-	  // Create an space for the screw head, used to clear space from the fan tab.
-	  translate([i[0], i[1], chiMountHeight])
-	       cylinder(r=3, h=5, 0, $fn=100);
-     }
-     
-     for(i = chiBowdenLocs) {
-	  // Create the screw hole and move it to the correct location.
-	  translate([i[0], i[1], -.1])
-	       cylinder(r=(chiBowdenHole /2),h=chiBowdenHoleHeight, $fn=100);
      }
 }
 
@@ -1899,113 +1662,6 @@ module servo_bracket_holes(cbot=false) {
 		     servoMountL[2]])
 	       servo_mount_holes();
 
-}
-
-module servo_mount() {
-     // Spin up a cube that we will punch a hole in for servo later.
-     cube([(servoBracketMat * 2) + servoBracketScrewDiameter,
-	   (servoBracketMat * 2) + servoWidth + .1 + servoBracketOffset,
-	   servoMountPlateHeight]);
-}
-
-module servo_mount_holes(cbot=false) {
-     // Servo hole
-     translate([-.1,
-		- (servoWidth / 2),
-		(servoMountPlateHeight / 2) - (servoHeight / 2)])
-	  cube([(servoBracketMat * 2) + servoBracketScrewDiameter + .2,
-		servoWidth,
-		servoHeight]);
-     
-     // Servo Screw Holes
-     // Bottom
-     translate([-.1,
-		0,
-		(servoMountPlateHeight / 2) - (servoScrewDistance / 2)])
-	  rotate([-90,0,-90])
-	  cylinder(d=servoScrewDiameter,h=((servoBracketMat * 2) + servoBracketScrewDiameter + .2), $fn=100);
-     
-     // Top
-     translate([-.1,
-		0,
-		(servoMountPlateHeight / 2) + (servoScrewDistance / 2)])
-	  rotate([-90,0,-90])
-	  cylinder(d=servoScrewDiameter,h=((servoBracketMat * 2) + servoBracketScrewDiameter + .2), $fn=100);
-}
-
-// Z Probe Arm
-module z_probe_arm(zpl) {
-     // Create a couple of cylinders, hull them together to create the servo arm.
-     hull() {
-	  // Create the top of the Z Probe Arm
-	  translate([-(zProbeThickness / 2),0,0])
-	       rotate([0,90,0])
-	       cylinder(r=(servoHatTopDiameter / 2) + zProbeArmMat, h=zProbeThickness, $fn=100);
-	  
-	  // Create the bottom of the Z Probe Arm
-	  translate([-(zProbeThickness / 2),0,zpl])
-	       rotate([0,90,0])
-	       cylinder(r=(servoHatTopDiameter / 2) + zProbeArmMat, h=zProbeThickness, $fn=100);
-     }
-
-     // Create the switch mount.
-     hull() {
-	  // Recreate the bottom of the Z Probe Arm so we can hull to it.
-	  translate([-(zProbeThickness / 2),0,zpl])
-	       rotate([0,90,0])
-	       cylinder(r=(servoHatTopDiameter / 2) + zProbeArmMat, h=zProbeThickness, $fn=100);
-
-	  // Create the cylinders for the switch mount.
-	  for(b=[0:1]) {
-	       translate([-(zProbeThickness / 2),
-			  b==0 ? -(zProbeScrewDistance / 2) :
-			  (zProbeScrewDistance / 2),
-			  zpl - (servoHatTopDiameter / 2)])
-		    rotate([0,90,0])
-		    cylinder(r=(zProbeScrewDiameter / 2) + zProbeArmMat, h=zProbeThickness, $fn=100);
-	  }
-     }	       
-}
-
-module z_probe_arm_holes(zpl) {
-     // Create the servo shaft whole.
-     translate([- (zProbeThickness / 2) - .1,0,0])
-	  rotate([0,90,0])
-	  cylinder(r=(servoShaftDiameter / 2), h=zProbeThickness + .2, $fn=100);
-     
-     // Create the servo hat recess.
-     hull() {
-	  // Create the servo hat recess, top first.
-	  translate([((realZProbeSide == "right" && 0) ||
-		      (realZProbeSide == "left" && carriage == "cbot")) ?
-		     - servoHatRecessDepth - .1 :
-		     (zProbeThickness / 2) - servoHatRecessDepth,
-		     0,
-		     0])
-	       rotate([0,90,0])
-	       cylinder(r=(servoHatTopDiameter / 2), h=servoHatRecessDepth + .1, $fn=100);
-	  
-	  // Create the bottom of servo hat recess.
-	  translate([((realZProbeSide == "right" && 0) ||
-		      (realZProbeSide == "left" && carriage == "cbot")) ?
-		     - servoHatRecessDepth - .1 :
-		     (zProbeThickness / 2) - servoHatRecessDepth,
-		     0
-		     ,- (servoHatLength - (servoHatTopDiameter / 2) - (servoHatTipDiameter / 2))])
-	       rotate([0,90,0])
-	       cylinder(r=(servoHatTipDiameter / 2), h=servoHatRecessDepth + .1, $fn=100);
-     }
-
-     // Create the holes that mount the switch.
-     // Create the cylinders for the switch mount.
-     for(b=[0:1]) {
-	  translate([-(zProbeThickness / 2) - .1,
-		     b==0 ? -(zProbeScrewDistance / 2) :
-		     (zProbeScrewDistance / 2),
-		     zpl - (servoHatTopDiameter / 2)])
-	       rotate([0,90,0])
-	       cylinder(r=(zProbeScrewDiameter / 2), h=zProbeThickness + .2, $fn=100);
-     }
 }
 
 // Inductive / Capacitive / BL Touch extension
