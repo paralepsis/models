@@ -64,10 +64,10 @@ airgap=10;                  //space between boards
 bsuppwid=10;                //board support width
 bsize=[100,123,26];         //board size
 bmount=[92,115];            //board mounting holes
-boffset=[25,wall+20]; //board offset (X,Y)
+boffset=[25,wall+15]; //board offset (X,Y)
 erad=4;                     //enclosure corner radius
-ency=162;            //enclosure length(y)
-encx=131;                   //enclosure width(x)
+ency=157;            //enclosure length(y)
+encx=135;                   //enclosure width(x)
 M4_clear=2.2;               //m4 clearance
 M3_clear=1.7;               //m3 clearance bolt
 M3_head_dia=3.4;            //head diameter
@@ -111,6 +111,13 @@ module myCase() {
                 }
             }
 
+            for (i=[0:3]) {
+                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],0]) {
+                    cylinder (r=4, h=14);
+                    cylinder (d=4, h=15);
+                }
+            }
+
             /* GLUE POINTS */
             if (1) {
                 translate([0,ency/2, 0]) cube([6,5,fan_dist+airgap/2+bsize[2]+base+wall/2]);
@@ -134,11 +141,11 @@ module myCase() {
             translate([18,5, 32]) rotate([90,0,0]) cylinder(r=7,h=10);
 
             /* MOUNTS TO FRAME */
-            translate ([encx-28,10,-1]) cylinder (d=6,h=7);
-            translate ([boffset[0]/2+wall+1,10,-1]) cylinder (d=6,h=7);
+            translate ([encx-50,10,-1]) cylinder (d=6,h=7);
+            translate ([boffset[0]/2+wall+25,10,-1]) cylinder (d=6,h=7);
             translate ([10,boffset[1],-1]) cylinder (d=6,h=7);
             translate ([10,ency-airgap,-1]) cylinder (d=6,h=7);
-            translate ([10,ency/2+airgap,-1]) cylinder (d=6,h=7);
+            translate ([10,ency/2+airgap+5,-1]) cylinder (d=6,h=7);
 
             /* MOUNTS TO BOARD */
             for (i=[0:3]) {
@@ -156,8 +163,8 @@ module myCase() {
 
 module myGrillHole() {
     hull() {
-        for (i=[2:6]) {
-            translate([wall+32+9*i,0,14]) hull() {
+        for (i=[3:6]) {
+            translate([wall+30+9.5*i,0,14]) hull() {
                 translate([0,10,0]) rotate([90,0,0]) cylinder(r=3,h=15);
                 translate([0,10,12]) rotate([90,0,0]) cylinder(r=3,h=15);
             }
@@ -167,8 +174,8 @@ module myGrillHole() {
 module myGrill() {
     for (j=[0:1]) {
         // for (i=[0:floor((encx-2*wall-32)/9)-1]) {
-        for (i=[0,1,7,8,9]) {
-            translate([wall+32+9*i,0,9+19*j]) hull() {
+        for (i=[0,1,2,7,8,9]) {
+            translate([wall+30+9.5*i,0,9+19*j]) hull() {
                 translate([0,10,0]) rotate([90,0,0]) cylinder(r=3,h=15);
                 translate([0,10,9]) rotate([90,0,0]) cylinder(r=3,h=15);
             }
