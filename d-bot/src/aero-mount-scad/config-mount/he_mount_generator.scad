@@ -40,10 +40,10 @@ hotend = "e3d_v6"; // [e3d_v6:E3D V6, jhead_mkv:J Head Mark V, gen_jhead:Generic
 hotendOpt = "optimize"; // [ optimize:Optimized, universal:Universal]
 
 // What style of extruder are you using?
-extruder = "titan"; // [bowden:Bowden, titan:E3D Titan, carl_direct:Carl Feniak Direct Drive - Not ready yet.]
+extruder = "none"; // [bowden:Bowden, titan:E3D Titan, carl_direct:Carl Feniak Direct Drive - Not ready yet.]
 
 // What type of fan duct should be made?
-fanDuctStyle = "simple"; // [simple:Simple single outlet]
+fanDuctStyle = "none"; // [simple:Simple single outlet, none:None, fancy:Round one]
 
 // Which Z Probe type is in use. Select Servo here if you want to if you Servo Bracket selected above, otherwise it won't appear.
 servoInduct = "bltouch"; // [servo:Servo w/ Arm, bltouch:BL Touch, none:Neither/None]
@@ -53,7 +53,7 @@ servoInduct = "bltouch"; // [servo:Servo w/ Arm, bltouch:BL Touch, none:Neither/
 zProbeSide = "left"; // [right:Right of hot end., left:Left of hot end.]
 
 // Which side should the fan mount to? Be mindful of Z probe clearance.
-printFanSide = "left"; // [left:Left side of hot end., right:Right side of hot end., none:No print cooling fan.]
+printFanSide = "none"; // [left:Left side of hot end., right:Right side of hot end., none:No print cooling fan.]
 
 // Should the fan outlet point towards the left or the right? Be mindful of Z probe clearance.
 printFanDirection = "right"; // [left:Fan outlet to the left, right:Fan outlet to right]
@@ -526,6 +526,11 @@ cBotBeltLength = 13;
 cBotBeltHeight = 7;
 cBotBeltBottomPos = 7; // Distance from center of carriage side.
 cBotBeltTopPos = 6; // Distance from center of carriage side.
+
+/* NEW BELT PARAMETERS */
+cBotBeltTopExtend = 8;
+cBotBeltBottomExtend = 8;
+
 cBotBeltScrewDiameter = 3.2;
 cBotBeltScrewDistance = 3;
 cBotBeltScrewNutDiameter = 6.5;
@@ -658,8 +663,8 @@ zProbeTopL = cBotZProbeTopL;
 zProbeBottomL = -zProbeTopL[2] + (heAnchorL[2] + heNozzleL[0][2]) + (servoHatTopDiameter / 2) + zProbeArmMat + zProbeSwitchHeight - zProbeSwitchActivationDistance;
 
 // Toggle that controls if fan is shown.
-showFan = true;
-showHE = true;
+showFan = false;
+showHE = false;
 
 ////////// C Bot //////////
 if(carriage == "cbot") {
@@ -781,7 +786,7 @@ if(carriage == "cbot") {
 			 simple_fan_duct(ductConnectL, fanScrewL, heAnchorL, cBotFanTabHorizontalAngle, cBotRealFanTabVerticalAngle, printFanDirection, true);
 			 simple_fan_duct_holes(ductConnectL, fanScrewL, heAnchorL, cBotFanTabHorizontalAngle, cBotRealFanTabVerticalAngle, printFanDirection, true);
 		    }
-	       } else {
+	       } else if (fanDuctStyle == "fancy") {
 		    difference() {
 			 round_fan_duct(ductConnectL, fanScrewL, heAnchorL, cBotFanTabHorizontalAngle, cBotRealFanTabVerticalAngle, printFanDirection, true);
 			 round_fan_duct_holes(ductConnectL, fanScrewL, heAnchorL, cBotFanTabHorizontalAngle, cBotRealFanTabVerticalAngle, printFanDirection, true);
@@ -1769,7 +1774,7 @@ module cbot_carriage_side(heSide=false) {
    
 	difference(){
 			union(){
-				cbot_carriage_base();
+				cbot_carriage_base(heSide);
 				cbot_carriage_wheel_bolt_angle_plates();}  // Create the base.
 			union(){
 				cbot_carriage_holes();  // Then remove the holes.
@@ -1778,7 +1783,7 @@ module cbot_carriage_side(heSide=false) {
 		}
 }
 
-module cbot_carriage_base() {
+module cbot_carriage_base(heSide=false) {
      // Base C Bot XY Carriage side.
      translate([cBotCarriageCornerRadius, 0, cBotCarriageCornerRadius])
 	  hull() 
@@ -1799,6 +1804,37 @@ module cbot_carriage_base() {
 			   rotate([90,0,0])
 			   cylinder(r=cBotCarriageCornerRadius, h=carriageDepth, $fn=100);
 		}
+
+    /* EXTENDED BELT POS -- NOT QUITE RIGHT... */
+    if (heSide == true) hull() {
+        /* top */
+        translate([cBotCarriageCornerRadius-cBotBeltTopExtend,0,
+                   cBotCarriageHeight/2+cBotBeltHeight+cBotBeltTopPos+cBotBeltScrewDistance])
+            rotate([90,0,0]) cylinder(r=cBotCarriageCornerRadius, h=carriageDepth, $fn=100);
+        translate([cBotCarriageCornerRadius-cBotBeltTopExtend,0,
+                   cBotCarriageHeight/2+cBotBeltTopPos-cBotBeltScrewDistance])
+            rotate([90,0,0]) cylinder(r=cBotCarriageCornerRadius, h=carriageDepth, $fn=100);
+
+        /* Note: Assumes corner radius > screw diameter. */
+        translate([0,-carriageDepth,
+                   cBotCarriageHeight/2+cBotBeltTopPos-cBotBeltScrewDistance-cBotCarriageCornerRadius])
+            cube([2,carriageDepth,
+                  cBotBeltHeight+2*(cBotBeltScrewDistance+cBotCarriageCornerRadius)]);
+
+        /* bottom */
+        translate([cBotCarriageWidth - cBotCarriageCornerRadius+cBotBeltBottomExtend,0,
+                   cBotCarriageHeight/2-cBotBeltHeight-cBotBeltBottomPos-cBotBeltScrewDistance])
+            rotate([90,0,0]) cylinder(r=cBotCarriageCornerRadius, h=carriageDepth, $fn=100);
+        translate([cBotCarriageWidth - cBotCarriageCornerRadius+cBotBeltBottomExtend,0,
+                   cBotCarriageHeight/2-cBotBeltBottomPos+cBotBeltScrewDistance])
+            rotate([90,0,0]) cylinder(r=cBotCarriageCornerRadius, h=carriageDepth, $fn=100);
+
+        /* Note: Assumes corner radius > screw diameter. */
+        translate([cBotCarriageWidth - 2*cBotCarriageCornerRadius+cBotBeltBottomExtend-2,-carriageDepth,
+                   cBotCarriageHeight/2-cBotBeltBottomPos-(cBotBeltScrewDistance+cBotCarriageCornerRadius+cBotBeltHeight)])
+            cube([2,carriageDepth,
+                  cBotBeltHeight+2*(cBotBeltScrewDistance+cBotCarriageCornerRadius)]);
+    }
 }
 
 module cbot_carriage_wheel_bolt_angle_plates(){
@@ -1885,12 +1921,27 @@ module cbot_carriage_holes() {
 module cBot_cut_other_holes(heSide=false){
 	// Cut out the belt holder and holes.
     // Top belt cutout
-     translate([-.1, -cBotBeltDepth, ((cBotCarriageHeight / 2) + cBotBeltTopPos)])
+     if (heSide == true) {
+          translate([-.1 - cBotBeltTopExtend, -cBotBeltDepth, ((cBotCarriageHeight / 2) + cBotBeltTopPos)])
 	  cbot_belt_cutout();
+     }
+     else {
+          translate([-.1, -cBotBeltDepth, ((cBotCarriageHeight / 2) + cBotBeltTopPos)])
+	  cbot_belt_cutout();
+     }
+
      // Bottom belt cutout
-     translate([cBotCarriageWidth + .1, -cBotBeltDepth, ((cBotCarriageHeight / 2) - cBotBeltBottomPos)])
+     if (heSide == true) {
+         translate([cBotCarriageWidth + .1 + cBotBeltBottomExtend, -cBotBeltDepth, ((cBotCarriageHeight / 2) - cBotBeltBottomPos)])
 	  rotate([0, 180, 0])
 	  cbot_belt_cutout();
+     }
+     else {
+         translate([cBotCarriageWidth + .1, -cBotBeltDepth, ((cBotCarriageHeight / 2) - cBotBeltBottomPos)])
+	  rotate([0, 180, 0])
+	  cbot_belt_cutout();
+     }
+
      // Don't cut out fan holes on side with hot end.
      if(heSide == false) {
 	  // Cutout mounting holes for the fan mount. This can be easily made repeatable by replace the multipliers with j and i.
@@ -1903,6 +1954,8 @@ module cBot_cut_other_holes(heSide=false){
 	       rotate([-90,0,0])
 	       bolt_hole(cBotBeltScrewDiameter, carriageDepth - cBotBeltScrewNutDepth, cBotBeltScrewNutDiameter, cBotBeltScrewNutDepth);
      }
+
+     if (0) {
      // Carve out some cable tie locations.
      for(j=[cBotCableTieHorizontalDistance : cBotCableTieHorizontalDistance : cBotCarriageWidth - cBotCableTieHorizontalDistance]) {
 	  for(i=[0 : 1 : cBotCableTieVerticalCount - 1]) {
@@ -1920,9 +1973,9 @@ module cBot_cut_other_holes(heSide=false){
 	       }
 	  }
      }
+     }
+
      // Carve out some bolt holes for mounting various things.
-	 
-	 
      for(j=[0 : 1 : ((cBotCarriageWidth / cBotFanMountDistance) / 2) -2]) {
 	  for(i=[1 : 1 : 2]) {
 	       // Left side
