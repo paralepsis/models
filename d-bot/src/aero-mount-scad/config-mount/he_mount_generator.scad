@@ -1771,9 +1771,9 @@ module cbot_carriage_side(heSide=false) {
 			union(){
 				cbot_carriage_base();
 				cbot_carriage_wheel_bolt_angle_plates();}  // Create the base.
-			{union(){
+			union(){
 				cbot_carriage_holes();  // Then remove the holes.
-				cBot_cut_other_holes(heSide);}
+				cBot_cut_other_holes(heSide);
 			}
 		}
 }
@@ -1800,11 +1800,12 @@ module cbot_carriage_base() {
 			   cylinder(r=cBotCarriageCornerRadius, h=carriageDepth, $fn=100);
 		}
 }
+
 module cbot_carriage_wheel_bolt_angle_plates(){
-   // Create angle portion of top left corner.
-     translate([cBotCarriageCornerRadius, 0, cBotCarriageHeight - cBotCarriageCornerRadius])
-	  difference() 
-		{
+   // Create angle portion of top left corner. -- NOW BOTTOM -- RBR
+     // translate([cBotCarriageCornerRadius, 0, cBotCarriageHeight - cBotCarriageCornerRadius])
+     translate([cBotCarriageCornerRadius, 0, cBotCarriageCornerRadius+cBotTopHoleLength])
+	  difference() {
 		  hull() {
 			   rotate([90,0,0])
 				cylinder(r=cBotCarriageCornerRadius, h=cBotTopHoleDepth, $fn=100);
@@ -1818,54 +1819,59 @@ module cbot_carriage_wheel_bolt_angle_plates(){
 			   translate([-cBotCarriageCornerRadius, -carriageDepth - (cBotTopHoleDepth - carriageDepth) - .1, -cBotCarriageCornerRadius - cBotTopHoleLength])
 				cube([(cBotCarriageCornerRadius * 2) + .2, (cBotTopHoleDepth - carriageDepth) + .1, .1]);
 		  }
-		}
-     // Create angle portion of top right corner
-     translate([cBotCarriageWidth - cBotCarriageCornerRadius, 0, cBotCarriageHeight - cBotCarriageCornerRadius])
-	  difference() 
-		{
+ 	}
+     // Create angle portion of top right corner -- NOW BOTTOM -- RBR
+     // translate([cBotCarriageWidth - cBotCarriageCornerRadius, 0, cBotCarriageHeight - cBotCarriageCornerRadius])
+     translate([cBotCarriageWidth - cBotCarriageCornerRadius, 0, cBotCarriageCornerRadius+cBotTopHoleLength])
+	  difference() {
 		  hull() {
 			   rotate([90,0,0])
 				cylinder(r=cBotCarriageCornerRadius, h=cBotTopHoleDepth, $fn=100);
 			   translate([0, 0, -cBotTopHoleLength])
 				rotate([90,0,0])
 				cylinder(r=cBotCarriageCornerRadius, h=cBotTopHoleDepth, $fn=100);
-				}		
+			}		
 		  hull() {
 			   translate([-cBotCarriageCornerRadius, -cBotTopHoleDepth - (cBotTopHoleDepth - carriageDepth) - .1, cBotCarriageCornerRadius])
 				cube([(cBotCarriageCornerRadius * 2) + .2, (cBotTopHoleDepth - carriageDepth) + .1, .1]);
 			   translate([-cBotCarriageCornerRadius, -carriageDepth - (cBotTopHoleDepth - carriageDepth) - .1, -cBotCarriageCornerRadius - cBotTopHoleLength])
 				cube([(cBotCarriageCornerRadius * 2) + .2, (cBotTopHoleDepth - carriageDepth) + .1, .1]);
-				}
+			}
 		}	
 }
 module cbot_carriage_holes() {
-     // Remove the holes for the corners.
+     // Remove the holes for the corners. -- ADJUSTED DEPTHS -- RBR
      // Bottom left.
      translate([cBotCarriageCornerRadius, .1, cBotCarriageCornerRadius])
+	  hull() {
+	  rotate([90,0,0])
+	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
+	  translate([0, 0, cBotTopHoleLength])
+	       rotate([90,0,0])
+	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
+     }
 	  rotate([90, 0, 0])
 	  cylinder(d=cBotCarriageIdlerScrewDiameter, h=carriageDepth + .2, $fn=100);
+
      // Bottom right.
      translate([cBotCarriageWidth - cBotCarriageCornerRadius, .1, cBotCarriageCornerRadius])
-	  rotate([90, 0, 0])
-	  cylinder(d=cBotCarriageIdlerScrewDiameter, h=carriageDepth + .2, $fn=100);
+	  hull() {
+	  rotate([90,0,0])
+	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
+	  translate([0, 0, cBotTopHoleLength])
+	       rotate([90,0,0])
+	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
+     }
+
      // Top left.
      translate([cBotCarriageCornerRadius, .1, cBotCarriageHeight - cBotCarriageCornerRadius])
-	  hull() {
-	  rotate([90,0,0])
-	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
-	  translate([0, 0, -cBotTopHoleLength])
-	       rotate([90,0,0])
-	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
-     }
+	  rotate([90, 0, 0])
+	  cylinder(d=cBotCarriageIdlerScrewDiameter, h=carriageDepth + .2, $fn=100);
+
      // Top right.
      translate([cBotCarriageWidth - cBotCarriageCornerRadius, .1, cBotCarriageHeight - cBotCarriageCornerRadius])
-	  hull() {
-	  rotate([90,0,0])
-	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
-	  translate([0, 0, -cBotTopHoleLength])
-	       rotate([90,0,0])
-	       cylinder(d=cBotCarriageIdlerScrewDiameter, h=cBotTopHoleDepth + .2, $fn=100);
-     }
+	  rotate([90, 0, 0])
+	  cylinder(d=cBotCarriageIdlerScrewDiameter, h=carriageDepth + .2, $fn=100);
 }
 
 module cBot_cut_other_holes(heSide=false){
