@@ -1814,9 +1814,13 @@ module cbot_carriage_wheel_bolt_angle_plates(){
 				cylinder(r=cBotCarriageCornerRadius, h=cBotTopHoleDepth, $fn=100);
 		  }
 		  hull() {
-			   translate([-cBotCarriageCornerRadius, -cBotTopHoleDepth - (cBotTopHoleDepth - carriageDepth) - .1, cBotCarriageCornerRadius])
+			   translate([-cBotCarriageCornerRadius,
+                                      -carriageDepth - (cBotTopHoleDepth - carriageDepth) - .1,
+                                      cBotCarriageCornerRadius])
 				cube([(cBotCarriageCornerRadius * 2) + .2, (cBotTopHoleDepth - carriageDepth) + .1, .1]);
-			   translate([-cBotCarriageCornerRadius, -carriageDepth - (cBotTopHoleDepth - carriageDepth) - .1, -cBotCarriageCornerRadius - cBotTopHoleLength])
+			   translate([-cBotCarriageCornerRadius,
+				      -cBotTopHoleDepth - (cBotTopHoleDepth - carriageDepth) - .1,
+                                      -cBotCarriageCornerRadius - cBotTopHoleLength])
 				cube([(cBotCarriageCornerRadius * 2) + .2, (cBotTopHoleDepth - carriageDepth) + .1, .1]);
 		  }
  	}
@@ -1832,9 +1836,13 @@ module cbot_carriage_wheel_bolt_angle_plates(){
 				cylinder(r=cBotCarriageCornerRadius, h=cBotTopHoleDepth, $fn=100);
 			}		
 		  hull() {
-			   translate([-cBotCarriageCornerRadius, -cBotTopHoleDepth - (cBotTopHoleDepth - carriageDepth) - .1, cBotCarriageCornerRadius])
+			   translate([-cBotCarriageCornerRadius,
+                                      -carriageDepth - (cBotTopHoleDepth - carriageDepth) - .1,
+                                      cBotCarriageCornerRadius])
 				cube([(cBotCarriageCornerRadius * 2) + .2, (cBotTopHoleDepth - carriageDepth) + .1, .1]);
-			   translate([-cBotCarriageCornerRadius, -carriageDepth - (cBotTopHoleDepth - carriageDepth) - .1, -cBotCarriageCornerRadius - cBotTopHoleLength])
+			   translate([-cBotCarriageCornerRadius,
+			       	      -cBotTopHoleDepth - (cBotTopHoleDepth - carriageDepth) - .1,
+                                      -cBotCarriageCornerRadius - cBotTopHoleLength])
 				cube([(cBotCarriageCornerRadius * 2) + .2, (cBotTopHoleDepth - carriageDepth) + .1, .1]);
 			}
 		}	
