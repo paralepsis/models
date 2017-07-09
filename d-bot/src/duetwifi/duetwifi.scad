@@ -9,24 +9,6 @@ if (0) {
 appjaws_duetwifi_and_duex5_enclosure.scad
 modified from the original design by deckingman - thank you
 function "lookup" provided by enif - thank you
-included a choice of the following:-
-Duetwifi no fan
-Duetwifi 40/50/60/80 external fan mount
-Duetwifi 40/50/60/80 internal fan mount
-Duetwifi and duex2/5 no fan
-Duetwifi and duex2/5 40/50/60/80 external fan mount
-Duetwifi and duex2/5 40/50/60/80 internal fan mount
-fan guard 40/50/60/ fan widths
-
-select printbox to print enclosure
-select printlid to print main enclosure lid
-select printlidx5 to print lid for duex5 board
-select printguard to true to print grill
-select nuttrap for the grill to have nut traps or round head bolts
-select expcon to include access to the expansion connector of the duetwifi board
-
-select hardware to view boards and fans in position
-select assembled to view the complete enclosure with lid/s
 
 boards are bolted using M4 15mm bolts 
 The mounting holes are located to fit to a 20 or 40 mm profile at a right hand corner but can easily be changed.
@@ -57,13 +39,19 @@ fan_width = 40;			    //input fan outer dimensions
 fan_depth = 11;             //input fan depth
 fan_blades=5;               //input the number of fan blades
 
+evilSlop=0.5; // This should not be needed, but my halves don't fit quite right if I use
+              // the specified distance between mounting holes, so this tries to fix.
+
+goofUp = 1; // This is here just to let me deal with having goofed the size of this thing.
+            // Should be zero.
+
 //default settings
 base=2.4;                     //enclosure base thickness
 wall=2.8;                   //enclosure wall thickness
 airgap=10;                  //space between boards
 bsuppwid=10;                //board support width
 bsize=[100,123,26];         //board size
-bmount=[92,115];            //board mounting holes
+bmount=[92,115-evilSlop];            //board mounting holes
 boffset=[25,wall+15]; //board offset (X,Y)
 erad=4;                     //enclosure corner radius
 ency=157;            //enclosure length(y)
@@ -88,13 +76,64 @@ fan_pos=[encx/2-bsuppwid,ency/2,-0.1];                              //fan positi
 fan_rad = fan_width/2-2;		                                    //radius of blades
 rings = lookup(fan_width, [40,50,60,80], [4,5,6,8]);                //number of grill rings dependant on fan size
 
-if (1) difference() {
+if (0) difference() {
     myCase();
-    translate([-1,-1,-1]) cube([200,ency/2+3.5,99]);
+    translate([-1,-1,-1]) cube([200,ency/2+3.5+goofUp,99]);
 }
-if (1) intersection() {
+if (0) intersection() {
     myCase();
-    translate([-1,-1,-1]) cube([200,ency/2+3.5,99]);
+    translate([-1,-1,-1]) cube([200,ency/2+3.5+goofUp,99]);
+}
+
+rotate([180,0,0]) translate([21,0,-16]) color("red") myBrace();
+
+module myBrace() {
+   difference() {
+      union() {
+         hull() {
+            translate([0,0,0.2]) cylinder(r=1,h=4.8);
+            translate([75,0,0.2]) cylinder(r=1,h=4.8);
+            translate([0,16.2,0.2]) cylinder(r=1,h=4.8);
+            translate([75,16.2,0.2]) cylinder(r=1,h=4.8);
+         }
+     
+         hull() {
+            translate([75,0,-4]) cylinder(r=1,h=9);
+            translate([75,4,-4]) cylinder(r=1,h=9);
+            translate([10,0,-15]) cylinder(r=1,h=20);
+            translate([10,4,-15]) cylinder(r=1,h=20);
+         }
+     
+         hull() {
+            translate([75,16,-4]) cylinder(r=1,h=9);
+            translate([75,20,-4]) cylinder(r=1,h=9);
+            translate([10,16,-15]) cylinder(r=1,h=20);
+            translate([10,20,-15]) cylinder(r=1,h=20);
+         }
+
+         translate([0,0,-15]) hull() {
+            translate([0,0,0]) cylinder(r=1,h=20);
+            translate([0,35,0]) cylinder(r=1,h=20);
+            translate([10,0,0]) cylinder(r=1,h=20);
+            translate([10,35,0]) cylinder(r=1,h=20);
+         }
+         translate([-1,0,-0.20]) rotate([-90,90,0]) linear_extrude(height=35)
+                  polygon(points=[[-0.1,0],[0,0],[1,1],[8,1],[9,0],[9,-0.1]]);
+      
+
+      }
+
+      /* stuff to remove */
+      union() {
+         translate([19.25,10,0]) cylinder(d=5.2,h=20);
+         translate([64.25,10,0]) cylinder(d=5.2,h=20);
+
+         translate([2.8,10,-4.6]) rotate([0,90,0]) cylinder(d=9,h=10);
+         translate([2.8,28,-4.6]) rotate([0,90,0]) cylinder(d=9,h=10);
+         translate([-10,10,-4.6]) rotate([0,90,0]) cylinder(d=5.2,h=30);
+         translate([-10,28,-4.6]) rotate([0,90,0]) cylinder(d=5.2,h=30);
+      }
+   }
 }
 
 /* MY HACKING VERSION */
@@ -120,9 +159,9 @@ module myCase() {
 
             /* GLUE POINTS */
             if (1) {
-                translate([0,ency/2, 0]) cube([6,5,fan_dist+airgap/2+bsize[2]+base+wall/2]);
-                translate([0,ency/2, 0]) cube([encx,5,5]);
-                translate([encx-6,ency/2, 0]) cube([6,5,fan_dist+airgap/2+bsize[2]+base+wall/2]);
+                translate([0,ency/2+goofUp, 0]) cube([6,5,fan_dist+airgap/2+bsize[2]+base+wall/2]);
+                translate([0,ency/2+goofUp, 0]) cube([encx,5,5]);
+                translate([encx-6,ency/2+goofUp, 0]) cube([6,5,fan_dist+airgap/2+bsize[2]+base+wall/2]);
             }
         }
 
@@ -146,6 +185,12 @@ module myCase() {
             translate ([10,boffset[1],-1]) cylinder (d=6,h=7);
             translate ([10,ency-airgap,-1]) cylinder (d=6,h=7);
             translate ([10,ency/2+airgap+5,-1]) cylinder (d=6,h=7);
+
+            if (0) {
+                translate ([encx-5, ency/4, base+7]) rotate([0,90,0]) cylinder(d=6,h=10);
+                translate ([encx-5, ency/2+airgap+5, base+7]) rotate([0,90,0]) cylinder(d=6,h=10);
+                translate ([encx-5, ency-airgap, base+7]) rotate([0,90,0]) cylinder(d=6,h=10);
+            }
 
             /* MOUNTS TO BOARD */
             for (i=[0:3]) {
