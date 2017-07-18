@@ -1,3 +1,6 @@
+use <bevel.scad>
+use <attach.scad>
+
 $fn=30;
 
 /* zDrop -- gap between bottom of rail and top of switch assembly 
@@ -11,8 +14,39 @@ module zEndstopMount() {
    difference() {
       union() { 
          /* base and connector to frame */
-         translate([-17.5,-2-zDrop,0]) cube([40,36,4]);
-         translate([-17.5,16,0]) cube([40,18,13]);
+         translate([-17.5,-2-zDrop,0]) difference() {
+            e0 = [[0,0,2],[0,0,1],0];
+            n0 = [[0,0,2],[-1,-1,0],0];
+            e1 = [[40,0,2],[0,0,1],0];
+            n1 = [[40,0,2],[1,-1,0],0];
+
+            cube([40,36,4]);
+            bevel(e0,n0,cr=1,cres=10,l=4);
+            bevel(e1,n1,cr=1,cres=10,l=4);
+         }
+         translate([-17.5,16,0]) {
+            e2 = [[20,0,4],[1,0,0],0];
+            n2 = [[20,0,4],[0,-1,1],0];
+            e3 = [[0,18,13/2],[0,0,1],0];
+            n3 = [[0,18,13/2],[-1,1,0],0];
+            e4 = [[40,18,13/2],[0,0,1],0];
+            n4 = [[40,18,13/2],[1,1,0],0];
+            // e5 = [[0,0,13/2],[0,0,1],0];
+            // n5 = [[0,0,13/2],[-1,-1,0],0];
+            // e6 = [[40,0,13/2],[0,0,1],0];
+            // n6 = [[40,0,13/2],[1,-1,0],0];
+
+            difference() {
+               union() {
+                  cube([40,18,13]);
+                  bconcave_corner_attach(e2,n2,l=40,cr=1,cres=10);
+               }
+               bevel(e3,n3,cr=1,cres=10,l=13);
+               bevel(e4,n4,cr=1,cres=10,l=13);
+               // bevel(e5,n5,cr=1,cres=10,l=13);
+               // bevel(e6,n6,cr=1,cres=10,l=13);
+            }
+         }
 
          /* angled bit to fit in v-slot */
          translate([-17.5,18+3.5,13]) rotate([90,0,0]) rotate([0,90,00])
