@@ -9,13 +9,48 @@
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-side();
-mirror([1,0,0]) side();
+bottom();
+translate([0,325,0]) top();
 
-translate([178,0,0]) side();
-translate([178,0,0]) mirror([1,0,0]) side();
+module bottom() {
+   bottomSide();
+   mirror([1,0,0]) bottomSide();
 
-module side() {
+   translate([178,0,0]) bottomSide();
+   translate([178,0,0]) mirror([1,0,0]) bottomSide();
+}
+
+module top() {
+   topSide();
+   mirror([1,0,0]) topSide();
+
+   translate([178,0,0]) topSide();
+   translate([178,0,0]) mirror([1,0,0]) topSide();
+}
+
+module bottomSide() {
+   // poly_thin(h=31);
+   intersection() {
+      translate([0,0,11]) rotate([0,-90,0]) poly_side(h=500);
+      poly_thin(h=41);
+   }
+   
+   translate([0,0,10]) intersection() {
+      translate([0,0,11]) rotate([0,-90,0]) poly_side(h=500);
+      union() { 
+         poly_thick(h=90);
+         translate([-100,0,0]) cube([150,298,90]);
+      }
+      translate([-500,0,79]) rotate([0,90,0]) poly_side(h=500);
+   }
+
+   translate([0,0,70]) intersection() { 
+      poly_thin(h=41);
+      translate([-500,0,30]) rotate([0,90,0]) poly_side(h=500);
+   }
+}
+
+module topSide() {
    // poly_thin(h=31);
    intersection() {
       translate([0,0,11]) rotate([0,-90,0]) poly_side(h=500);
