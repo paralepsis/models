@@ -9,8 +9,12 @@
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-bottom();
-translate([0,325,0]) top();
+import("../../../calibration/products/marine-on-base.stl");
+
+scale([0.55,0.55,0.55]) rotate([90,0,0]) {
+   bottom();
+   translate([0,325,0]) top();
+}
 
 module bottom() {
    bottomSide();
@@ -30,7 +34,7 @@ module top() {
 
 module bottomSide() {
    // poly_thin(h=31);
-   intersection() {
+   translate([0,0,-10]) intersection() {
       translate([0,0,11]) rotate([0,-90,0]) poly_side(h=500);
       poly_thin(h=41);
    }
@@ -44,7 +48,7 @@ module bottomSide() {
       translate([-500,0,79]) rotate([0,90,0]) poly_side(h=500);
    }
 
-   translate([0,0,70]) intersection() { 
+   translate([0,0,80]) intersection() { 
       poly_thin(h=41);
       translate([-500,0,30]) rotate([0,90,0]) poly_side(h=500);
    }
