@@ -40,15 +40,15 @@ module harborFreightSmallFullHt(locations=[],inset=0,bottomThick=1.2) {
  *
  * outlineScale -- scaling of the region around the blank. 1.2 is default.
  */
-module harborFreightMediumFullHt(locations=[],inset=0,bottomThick=1.2) {
-   solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations,inset=inset,
-                  bottomThick=bottomThick)
+module harborFreightMediumFullHt(locations=[],inset=0,filled=0,bottomThick=1.2) {
+   solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations,
+                            inset=inset, bottomThick=bottomThick, filled=filled)
       children();
 }
 
-module harborFreightMediumHalfHt(locations=[],cornerRad=3.75,bottomThick=1.2,inset=0) {
+module harborFreightMediumHalfHt(locations=[],cornerRad=3.75,filled=0,bottomThick=1.2,inset=0) {
    solidBottomBox(xDim=54,yDim=80,ht=46.5/2,bottomThick=bottomThick,inset=inset,
-                  locations=locations,cornerRad=cornerRad) children();
+                  locations=locations,filled=filled,cornerRad=cornerRad) children();
 }
 
 /* harborFreightLargeHalfHt(locations)
@@ -97,7 +97,7 @@ module harborFreightHugeFullHt(locations=[],inset=0) {
  * NOTE: Assumes that children are "upside down" (i.e., the XY plane is meant to be top of box) so that
  *       models can drop in "bottom up".
  */
-module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,
+module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,filled=0,
                       locations=[],outlineScale=1.2,cornerRad=3.75,
                       bottomThick=1.2)
 {
@@ -119,9 +119,17 @@ module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,
       difference() {
          union() {
             /* base form */
-            for (loc = locations) {
-                translate([0,0,offsetFromTop]) translate(loc[0]) rotate(loc[1])
-                   blankOutline(height=ht-offsetFromTop, outlineScale=outlineScale) children();
+            if (filled) {
+               /* Note: just fill with the same shape for the filled version */
+               hull() translate([0,0,bottomThick-0.1]) roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
+                                     xDimBottom=xDim, yDimBottom=yDim,
+                                     ht=ht-bottomThick+0.1, wallThick=1.6, cornerRad=cornerRad);
+            }
+            else {
+               for (loc = locations) {
+                   translate([0,0,offsetFromTop]) translate(loc[0]) rotate(loc[1])
+                      blankOutline(height=ht-offsetFromTop, outlineScale=outlineScale) children();
+               }
             }
          }
          union() {
