@@ -9,10 +9,11 @@
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-import("../../../calibration/products/marine-on-base.stl");
+// import("../../../calibration/products/marine-on-base.stl");
+// translate([45,70,160]) scale([1.2,1.2,1.2]) import("/Users/rross/Downloads/bridge_segment_2.stl");
 
-scale([0.55,0.55,0.55]) rotate([90,0,0]) {
-   bottom();
+scale([0.50,0.50,0.50]) rotate([90,0,0]) {
+  // bottom();
    translate([0,325,0]) top();
 }
 
