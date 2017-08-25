@@ -26,13 +26,17 @@ include <./bintools.scad>
  * 39.25mm length
  */
 
-// mediumBin();
-mediumSplitBin();
+mediumBin();
+// mediumSplitBin();
 
 module mediumBin() {
-   roundShapedBox(xDimTop=54, yDimTop=80, xDimBottom=54,
-                  yDimBottom=80, ht=46.5/2, wallThick=1.6);
-   roundBoxBottom(xDim=53,yDim=78.5,ht=1.2);
+   harborFreightMediumHalfHt(locations=[],inset=0.5,filled=0,cornerRad=3.75,
+                             bottomThick=0.9);
+   if (0) {
+      roundShapedBox(xDimTop=54, yDimTop=80, xDimBottom=54,
+                     yDimBottom=80, ht=46.5/2, wallThick=1.6);
+      roundBoxBottom(xDim=53,yDim=78.5,ht=1.2);
+   }
 }
 
 module mediumSplitBin() {
