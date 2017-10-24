@@ -2,12 +2,23 @@ $fn=50;
 
 oneEighthIn=3.175; // 1/8" to mm
 
-translate([0,0,oneEighthIn+2]) rotate([180,0,0]) difference() {
-   form();
+if (1) translate([0,0,oneEighthIn+2]) rotate([180,0,0]) difference() {
+   formBeveled();
    translate([0,6,0]) boltCutout(gap=1);
 }
-   
 
+module formBeveled() {
+   translate([-15,0,0]) difference() {
+      hull() {
+         translate([2,2,0]) cylinder(r=2,h=2+oneEighthIn);
+         translate([28,2,0]) cylinder(r=2,h=2+oneEighthIn);
+         translate([2,18,0]) cylinder(r=2,h=2+oneEighthIn);
+         translate([28,18,0]) cylinder(r=2,h=2+oneEighthIn);
+      }
+      translate([0,18,-0.1]) cube([30,2,oneEighthIn+0.2]);
+   }
+}
+   
 module form() {
    translate([-15,0,0]) cube([30,18,oneEighthIn+0.1]);
    translate([-15,0,oneEighthIn]) cube([30,20,2]);
