@@ -21,8 +21,21 @@ if (1) difference() {
    assembly(slot=1);
 }
 
-module clipBasicForm() {
+difference() {
+   support();
+   translate([0,0,clipBotThick]) slotForm();
+}
 
+module support() {
+   width = 0.4;
+
+   translate([plateOff-width,plateOff-width,-clipBotThick]) difference() {
+      cube([35 - plateOff+width, 35 - plateOff+width, clipThick]);
+      translate([width,width,-0.1]) cube([35 - plateOff+width, 35 - plateOff+width, clipThick+0.2]);
+   }
+}
+
+module clipBasicForm() {
    translate([0,0,-clipBotThick]) {
       difference() hull() {
          cylinder(r=5,h=clipThick);
@@ -55,9 +68,16 @@ module assembly(slot=0, access=1) {
    color("grey") 
       translate([washerOff, washerOff, 0]) cylinder(d=washerDia,h=nutHt+bedHt);
 
+   if (slot) slotForm();
 
+   if (access) {
+      color("green") 
+         translate([washerOff, washerOff, nutHt + bedHt -0.1]) cylinder(d=washerDia,h=5);
+   }
+}
+module slotForm() {
    /* slot to allow clearing bolt when sliding on */
-   if (slot) color ("grey") {
+   color ("grey") {
       translate([washerOff, washerOff, 0]) {
          rotate([0,0,45]) translate([0,-0.5*washerDia, 0])
             cube([1.4*40+5, washerDia, nutHt+bedHt]);
@@ -66,10 +86,5 @@ module assembly(slot=0, access=1) {
       translate([washerOff, washerOff, 0]) {
          rotate([0,0,45]) translate([0,-0.5*boltDia, -10]) cube([1.4*40+5, boltDia, 10]);
       }
-   }
-
-   if (access) {
-      color("green") 
-         translate([washerOff, washerOff, nutHt + bedHt -0.1]) cylinder(d=washerDia,h=5);
    }
 }
