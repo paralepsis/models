@@ -1,7 +1,7 @@
 
 $fn=40;
 
- translate([0,0,29]) rotate([180,0,0]) cover();
+translate([0,0,29]) rotate([180,0,0]) cover();
 
 module cover() {
    difference() {
@@ -15,10 +15,10 @@ module cover() {
          // add back in a little edge around the inside opening
          if (1) difference() {
             hull() {
-               translate([17,11,23.5]) cylinder(r=1,h=4);
-               translate([17,31,23.5]) cylinder(r=1,h=4);
-               translate([43,11,23.5]) cylinder(r=1,h=4);
-               translate([43,31,23.5]) cylinder(r=1,h=4);
+               translate([16,10,21.5]) cylinder(r=1,h=6);
+               translate([16,32,21.5]) cylinder(r=1,h=6);
+               translate([44,10,21.5]) cylinder(r=1,h=6);
+               translate([44,32,21.5]) cylinder(r=1,h=6);
             }
             hull() {
                translate([18,12,0]) cylinder(r=1,h=40);
@@ -33,18 +33,18 @@ module cover() {
 }
 
 module moreCutouts() {
-   translate([5,48/2,2]) cylinder(d=8,h=33);
-   translate([-3.2,48/2-5+1,2]) cube([8.2,8,33]);
-   translate([58-5,48/2,2]) cylinder(d=8,h=33);
-   translate([58-5,48/2-5+1,2]) cube([8.2,8,33]);
+   translate([5,48/2,3]) cylinder(d=8,h=33);
+   translate([-3.2,48/2-5+1,3]) cube([8.2,8,33]);
+   translate([58-5,48/2,3]) cylinder(d=8,h=33);
+   translate([58-5,48/2-5+1,3]) cube([8.2,8,33]);
 
    hull() {
-      translate([58-5.5,48/2,-0.1]) cylinder(d=4,h=1.7);
-      translate([58-3,48/2,-0.1]) cylinder(d=4,h=1.7);
+      translate([58-5.5,48/2,-0.1]) cylinder(d=4,h=2.7);
+      translate([58-3,48/2,-0.1]) cylinder(d=4,h=2.7);
    }
    hull() {
-      translate([5.5,48/2,-0.1]) cylinder(d=4,h=1.7);
-      translate([3,48/2,-0.1]) cylinder(d=4,h=1.7);
+      translate([5.5,48/2,-0.1]) cylinder(d=4,h=2.7);
+      translate([3,48/2,-0.1]) cylinder(d=4,h=2.7);
    }
 }
 
@@ -52,10 +52,10 @@ module moreCutouts() {
 module mounts(ht=27.5) {
    difference() {
       union() {
-         translate([5,48/2,0]) cylinder(d=10,h=ht);
-         translate([-2,48/2-5,0]) cube([7,10,ht]);
-         translate([58-5,48/2,0]) cylinder(d=10,h=ht);
-         translate([58-5,48/2-5,0]) cube([7,10,ht]);
+         translate([5,48/2,0]) cylinder(d=10.1,h=ht);
+         translate([-2,48/2-5.05,0]) cube([7,10.1,ht]);
+         translate([58-5,48/2,0]) cylinder(d=10.1,h=ht);
+         translate([58-5,48/2-5.05,0]) cube([7,10.1,ht]);
       }
    }
 }
