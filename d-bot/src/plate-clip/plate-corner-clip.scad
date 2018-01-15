@@ -1,13 +1,13 @@
 /* configuration parameters */
 bedHt     = 4.15;
 plateHt   = 3.125;
-plateOff  = 15.5;
+plateOff  = 16.0;
 corkOff   = 8;
 nutHt     = 4;
 washerDia = 8;
 washerOff = 4.75;
 boltDia   = 10;
-clipTopThick = 1.4; 
+clipTopThick = 1.2; 
 clipBotThick = 7.5;
 
 clipThick = bedHt+max(plateHt,nutHt)+clipTopThick+clipBotThick;

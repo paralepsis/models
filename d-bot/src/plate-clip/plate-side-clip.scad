@@ -12,10 +12,10 @@ module formBeveled() {
       hull() {
          translate([2,2,0]) cylinder(r=2,h=2+oneEighthIn);
          translate([28,2,0]) cylinder(r=2,h=2+oneEighthIn);
-         translate([2,18,0]) cylinder(r=2,h=2+oneEighthIn);
-         translate([28,18,0]) cylinder(r=2,h=2+oneEighthIn);
+         translate([2,19.5,0]) cylinder(r=2,h=2+oneEighthIn);
+         translate([28,19.5,0]) cylinder(r=2,h=2+oneEighthIn);
       }
-      translate([0,18,-0.1]) cube([30,2,oneEighthIn+0.2]);
+      translate([0,19.5,-0.1]) cube([30,2,oneEighthIn+0.2]);
    }
 }
    
@@ -25,7 +25,7 @@ module form() {
 }
 
 
-module boltCutout(thick=1.2,gap=0,washer=7.2) {
+module boltCutout(thick=1.2,gap=0,washer=7.0) {
    translate([0,0,-0.1]) {
       hull() {
          cylinder(d=3.2,h=thick);
