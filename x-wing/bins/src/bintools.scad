@@ -40,9 +40,10 @@ module harborFreightSmallFullHt(locations=[],inset=0,bottomThick=1.2) {
  *
  * outlineScale -- scaling of the region around the blank. 1.2 is default.
  */
-module harborFreightMediumFullHt(locations=[],inset=0,filled=0,bottomThick=1.2) {
+module harborFreightMediumFullHt(locations=[],inset=0,filled=0,bottomThick=1.2,wallThick=1.5) {
    solidBottomBox(xDim=54,yDim=80,ht=46.5,locations=locations,
-                            inset=inset, bottomThick=bottomThick, filled=filled)
+                            inset=inset, bottomThick=bottomThick, 
+                            wallThick=wallThick,filled=filled)
       children();
 }
 
@@ -61,9 +62,29 @@ module harborFreightMediumHalfHt(locations=[],cornerRad=3.75,filled=0,bottomThic
  *   109.25mm wide
  *   80mm length
  */
-module harborFreightLargeHalfHt(locations=[],inset=0,bottomThick=1.2) {
+module harborFreightLargeHalfHt(locations=[],inset=0,filled=0,bottomThick=1.2) {
    solidBottomBox(xDim=80,yDim=109.25,ht=46.5/2,locations=locations,
-                  inset=inset,bottomThick=bottomThick) children();
+                  inset=inset,filled=filled,bottomThick=bottomThick) children();
+}
+
+/* stanleyMediumFullHt(locations)
+ *
+ * Dimensions:
+ * - 40 tall (no legs)
+ * - 79.75mm long
+ * - 54.5mm wide at top (52.5 at bottom)
+ * - 3.5mm corner radius
+ * - 1mm inset
+ */
+module stanleyMediumFullHt(locations=[],
+                           cornerRad=3.5,
+                           filled=0,
+                           bottomThick=1.2,
+                           inset=1)
+{
+   solidBottomBox(xDim=54.5,yDim=79.75,ht=40,filled=filled,
+                  bottomThick=bottomThick,inset=inset, cornerRad=cornerRad,
+                  locations=locations) children();
 }
 
 module harborFreightLargeThirdHt(locations=[]) {
@@ -99,7 +120,7 @@ module harborFreightHugeFullHt(locations=[],inset=0) {
  */
 module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,filled=0,
                       locations=[],outlineScale=1.2,cornerRad=3.75,
-                      bottomThick=1.2)
+                      bottomThick=1.2,wallThick=1.6)
 {
    offsetFromTop = 0.1; /* amount of space to move the outline from the top of the form; helps keep model clean */
 
@@ -111,7 +132,7 @@ module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,filled=0,
        */
       roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
                      xDimBottom=xDim, yDimBottom=yDim,
-                     ht=ht, wallThick=1.6, cornerRad=cornerRad);
+                     ht=ht, wallThick=wallThick, cornerRad=cornerRad);
       translate([0,0,ht-bottomThick]) roundBoxBottom(xDim=xDim-inset,yDim=yDim-inset,
                                              ht=bottomThick, cornerRad=cornerRad);
 
@@ -120,16 +141,16 @@ module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,filled=0,
          union() {
             /* base form */
             if (filled) {
+               fillHtDiff = 2; // difference between top of box and top of fill
+
                /* Note: just fill with the same shape for the filled version */
-               hull() translate([0,0,bottomThick-0.1]) roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
+               hull() translate([0,0,bottomThick-0.1+fillHtDiff]) roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
                                      xDimBottom=xDim, yDimBottom=yDim,
-                                     ht=ht-bottomThick+0.1, wallThick=1.6, cornerRad=cornerRad);
+                                     ht=ht-bottomThick+0.1-fillHtDiff, wallThick=1.6, cornerRad=cornerRad);
             }
-            else {
-               for (loc = locations) {
+            for (loc = locations) {
                    translate([0,0,offsetFromTop]) translate(loc[0]) rotate(loc[1])
                       blankOutline(height=ht-offsetFromTop, outlineScale=outlineScale) children();
-               }
             }
          }
          union() {
