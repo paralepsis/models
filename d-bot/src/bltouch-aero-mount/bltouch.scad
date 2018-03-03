@@ -1,14 +1,56 @@
 $fn=50;
 
-translate([-7.25,52.8,-8]) rotate([90,0,0]) import("./Titan_Aero_Shroud_360_Left.stl");
+// translate([-7.25,52.8,-8]) rotate([90,0,0]) import("./Titan_Aero_Shroud_360_Left.stl");
 
 spacerThick = 4;
 
+/* funky outline */
 difference() {
    poly_path3401(spacerThick);
    cylinder(d=3.5,h=spacerThick+1);
    translate([-31,0,0]) cylinder(d=3.5,h=spacerThick+1);
 }
+
+% v0();
+v1();
+
+module v1() {
+   translate([-34.5,-15,0]) {
+      cube([37.75,5.5,10]);
+      if (1) translate([0,4+1.83,spacerThick+1.5]) difference() {
+         translate([0,-1.6,-1.6]) cube([37.75,1.6,1.6]);
+         translate([-0.5,0,0]) rotate([0,90,0]) cylinder(d=3,h=38.75);
+      }
+   }
+
+   translate([-21,-14.0,24]) rotate([0,90,0]) blTouchConn(h=6);
+}
+
+module v0() {
+   translate([-34.5,-15,0]) {
+      cube([37.75,4,10]);
+      translate([0,4+1.5,spacerThick+1.5]) difference() {
+         translate([0,-1.6,-1.6]) cube([37.75,1.6,1.6]);
+         translate([-0.5,0,0]) rotate([0,90,0]) cylinder(d=3,h=38.75);
+      }
+   }
+
+   translate([-37+21,-15.0,25]) rotate([0,90,0]) blTouchConn(h=3);
+}
+
+module blTouchConn(h=3) {
+   difference() {
+      hull() {
+         translate([-3,-11.5/2,0]) cube([6,8.5,h]);
+         translate([-3,-11.5/2+6.5,0]) cube([26,3.0,h]);
+         translate([9,0,0]) cylinder(d=8,h=h);
+         translate([-9,0,0]) cylinder(d=8,h=h);
+      }
+      translate([9,0,-1]) cylinder(d=3.2,h=h+2);
+      translate([-9,0,-1]) cylinder(d=3.2,h=h+2);
+   }
+}
+
 
 
 /*** openscad from inkscape, nasty. ***/

@@ -76,16 +76,16 @@ fan_pos=[encx/2-bsuppwid,ency/2,-0.1];                              //fan positi
 fan_rad = fan_width/2-2;		                                    //radius of blades
 rings = lookup(fan_width, [40,50,60,80], [4,5,6,8]);                //number of grill rings dependant on fan size
 
-if (0) difference() {
+if (1) difference() {
     myCase();
     translate([-1,-1,-1]) cube([200,ency/2+3.5+goofUp,99]);
 }
-if (0) intersection() {
+if (1) intersection() {
     myCase();
     translate([-1,-1,-1]) cube([200,ency/2+3.5+goofUp,99]);
 }
 
-rotate([180,0,0]) translate([21,0,-16]) color("red") myBrace();
+if (0) rotate([180,0,0]) translate([21,0,-16]) color("red") myBrace();
 
 module myBrace() {
    difference() {

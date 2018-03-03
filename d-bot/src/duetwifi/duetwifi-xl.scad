@@ -7,7 +7,7 @@ boards are bolted using M4 15mm bolts
 The mounting holes are located to fit to a 20 or 40 mm profile at a right hand corner but can easily be changed.
 */
 
-% translate([5,10,0]) import("../../products/duetwifi-full-orig.stl");
+// % translate([5,10,0]) import("../../products/duetwifi-full-orig.stl");
 
 //functions
 function lookup(v,var,lar,i=0) = (var[ i ]==v) ? lar[ i ] : ( i < len ( var ) ? lookup( v, var, lar, i + 1 ) : -1);
@@ -61,27 +61,54 @@ fan_pos=[encx/2-bsuppwid,ency/2,-0.1];                              //fan positi
 fan_rad = fan_width/2-2;		                                    //radius of blades
 rings = lookup(fan_width, [40,50,60,80], [4,5,6,8]);                //number of grill rings dependant on fan size
 
+// top();
 if (1) difference() {
-    myCase();
-    translate([-1,-1,-1]) cube([200,ency/2+3.5+goofUp,99]);
-}
-if (1) intersection() {
-    myCase();
-    translate([-1,-1,-1]) cube([200,ency/2+3.5+goofUp,99]);
+   union() {
+      top();
+      myCase();
+   }
+   split();
 }
 
-// rotate([180,0,0]) translate([21,0,-16]) color("red") myBrace();
+translate([0,0,1]) if (1) intersection() {
+   union() {
+      top();
+      myCase();
+   }
+   split();
+}
 
 
 /* rib to strengthen the overall structure */
 module buttress(y=ency/3) {
-    translate([0,y-5, 0]) cube([6,10,boxHt - wall]);
+    translate([0,y-5, 0]) cube([6,10,boxHt - wall-7]);
     translate([0,y-5, 0]) cube([encx,10,5]);
-    translate([encx-6,y-5, 0]) cube([6,10,boxHt-wall]);
+    translate([encx-6,y-5, 0]) cube([6,10,boxHt-wall-7]);
 
 }
 
 /* MY HACKING VERSION */
+module top() {
+   difference() {
+      translate ([wall,wall,boxHt-wall]) roundedcube (encx-2*wall,ency+airgap-2*wall,wall,erad);           
+
+      /* CORNER TOP MOUNTS */
+      translate ([2*wall,2*wall,boxHt-19.5]) cylinder (r=1.35, h=25);
+      translate ([2*wall,ency+airgap-2*wall,boxHt-19.5])cylinder (r=1.35, h=25);   
+      translate ([encx-2*wall,2*wall,boxHt-19.5])cylinder (r=1.35, h=25); 
+      translate ([encx-2*wall,ency+airgap-2*wall,boxHt-19.5]) cylinder(r=1.35,h=25);
+   }
+}
+
+module split() {
+   translate ([wall,0,boxHt-9]) roundedcube (encx-2*wall,ency+airgap,9,erad); 
+   hull() {
+      translate([32+0.1,ency-wall,boxHt-2*wall-5]) cube([91-0.2,13,5]);
+      translate([32+5+0.1,ency-wall+13, 9]) rotate([90,0,0]) cylinder(r=5,h=13);
+      translate([32+91-5-0.1,ency-wall+13, 9]) rotate([90,0,0]) cylinder(r=5,h=13);
+   }
+}
+
 module myCase() {
     difference() {
         union() {
@@ -107,34 +134,33 @@ module myCase() {
             buttress(3*ency/4+10);
 
             /* blocks supporting where wiring comes in */
-            translate([123,ency+fan_dist-11, 0]) cube([25,8,boxHt-wall]);
-            translate([58,ency+fan_dist-11, 0]) cube([20,8,26]);
-            translate([122,2, 0]) cube([26,8,boxHt-wall]);
+            translate([123,ency+fan_dist-15, 0]) cube([30,12,boxHt-wall]);
+            translate([2,ency+fan_dist-15, 0]) cube([30,12,boxHt-wall]);
+            translate([123,2, 0]) cube([30,12,boxHt-wall]);
 
         }
         
-
         /* ALL THE CUTOUTS */
-        /* zip tie for power */
-        // translate([68-11,ency+fan_dist-7.5, 23]) rotate([0,90,0]) cylinder(r=2,h=22);
-        translate([68,ency+fan_dist-7.5, 5]) cylinder(d=3,h=22);
         union() {
             /* FANS */
-            translate([50-15,ency+fan_dist,fan_width/2+base+4])
+            translate([56,ency+fan_dist,fan_width/2+base+4])
                 rotate([90,0,0]) fan_cutout();
-            translate([encx-34-20,ency+fan_dist,fan_width/2+base+4])
+            translate([encx-34-21,ency+fan_dist,fan_width/2+base+4])
                 rotate([90,0,0]) fan_cutout();
     
             /* CONDUIT */
             hull() { 
-               translate([135,ency+fan_dist, 14]) rotate([90,0,0]) cylinder(r=7,h=15);
-               translate([135,ency+fan_dist, 33]) rotate([90,0,0]) cylinder(r=7,h=15);
+               translate([19,ency+fan_dist-1, 17]) rotate([90,0,0]) cylinder(r=7,h=15);
+               translate([19,ency+fan_dist-1, 43]) rotate([90,0,0]) cylinder(r=7,h=15);
+            }
+            hull() { 
+               translate([135,ency+fan_dist-1, 17]) rotate([90,0,0]) cylinder(r=7,h=15);
+               translate([135,ency+fan_dist-1, 43]) rotate([90,0,0]) cylinder(r=7,h=15);
             }
 
-            translate([68,ency+fan_dist, 32]) rotate([90,0,0]) cylinder(r=7,h=15);
             hull() {
-               translate([135,20, 33]) rotate([90,0,0]) cylinder(r=7,h=20);
-               translate([135,20, 14]) rotate([90,0,0]) cylinder(r=7,h=20);
+               translate([135,20, 43]) rotate([90,0,0]) cylinder(r=7,h=20);
+               translate([135,20, 17]) rotate([90,0,0]) cylinder(r=7,h=20);
             }
 
             if (1) /* MOUNTS TO FRAME */ {
@@ -147,6 +173,13 @@ module myCase() {
                translate ([encx-7,2*ency/4+5,25]) rotate([0,90,0]) cylinder (d=6,h=10);
                translate ([encx-7,3*ency/4+10,25]) rotate([0,90,0]) cylinder (d=6,h=10);
             }
+
+            /* CORNER TOP MOUNTS */
+            translate ([2*wall,2*wall,boxHt-19.5]) cylinder (r=1.35, h=25);
+            translate ([2*wall,ency+airgap-2*wall,boxHt-19.5])cylinder (r=1.35, h=25);   
+            translate ([encx-2*wall,2*wall,boxHt-19.5])cylinder (r=1.35, h=25); 
+            translate ([encx-2*wall,ency+airgap-2*wall,boxHt-19.5]) cylinder(r=1.35,h=25);
+
 
             /* MOUNTS TO BOARD */
             for (i=[0:3]) {
@@ -175,10 +208,10 @@ module myGrillHole() {
 module myGrill() {
     for (j=[0:1]) {
         // for (i=[0:floor((encx-2*wall-32)/9)-1]) {
-        for (i=[-1,0,1,2,8,9]) {
+        for (i=[-2,-1,0,1,2,8,9]) {
             translate([wall+30+9.5*i,0,9+22*j]) hull() {
                 translate([0,10,0]) rotate([90,0,0]) cylinder(r=3,h=15);
-                translate([0,10,12]) rotate([90,0,0]) cylinder(r=3,h=15);
+                translate([0,10,11]) rotate([90,0,0]) cylinder(r=3,h=15);
             }
         }
     }
@@ -206,25 +239,13 @@ module base(){
     }   
 
     /* FOUR CORNERS */
-    difference(){
-        translate ([2*wall,2*wall,0]) cylinder (r=4,h=boxHt-wall);
-        translate ([2*wall,2*wall,boxHt-9.5]) cylinder (r=1.35, h=10);
-    }  
+    translate ([2*wall,2*wall,0]) cylinder (r=4,h=boxHt-wall);
 
-    difference(){   
+    if (0) {
         translate ([2*wall,ency+airgap-2*wall,0]) cylinder(r=4,h=boxHt-wall); 
-        translate ([2*wall,ency+airgap-2*wall,boxHt-9.5])cylinder (r=1.35, h=10);   
-    }
-
-    difference(){       
         translate ([encx-2*wall,2*wall,0])cylinder (r=4,h=boxHt-wall);       
-        translate ([encx-2*wall,2*wall,boxHt-9.5])cylinder (r=1.35, h=10); 
-    }
-
-    difference(){             
         translate ([encx-2*wall,ency+airgap-2*wall,0]) cylinder (r=4,h=boxHt-wall);
-        translate ([encx-2*wall,ency+airgap-2*wall,boxHt-9.5]) cylinder(r=1.35,h=10);
-    }   
+    }
 }     
 
 module roundedcube(xdim,ydim, zdim, rdim){
