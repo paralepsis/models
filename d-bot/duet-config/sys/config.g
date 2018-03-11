@@ -59,7 +59,7 @@ G10 P0 R0 S0 ; Set initial tool 0 active and standby temperatures to 0C
 M307 H3 A-1 C-1 D-1              ; reserve pin 8 (Heater 3 PWM) for BL Touch
 M558 P5 X0 Y0 Z1 H4 F200 T800 R1 ; type 5, use for Z, Feed rate 200 mm/min, 
                                  ; dive Height 4mm, Travel speed 800 mm/min, wait 1s (R) before dive
-G31 X-8 Y-41 Z1.46 C0 S0 P25.    ; this Z has me using a +0.15mm Z offset in Slic3r for PETG
+G31 X-8 Y-41 Z1.66 C0 S0 P25.    ; this Z has me using a +0.15mm Z offset in Slic3r for PETG
 M557 X30:240 Y20:240 S42         ; S35 is 7 points in each axis. S42 is 6 in each axis.
 M280 P3 S160 I1                  ; reset probe error state
 M280 P3 S90 I1                   ; retract
