@@ -30,7 +30,7 @@ fudge = 0.1;
 // poly_path4282(1);
 // poly_path3610(1);
 // poly_path3994(1);
-// poly_path4726(1);
+// poly_path4726(1); // screw hole
 // poly_path4454(1);
 // poly_path3430(1);
 // poly_path4598(1);
@@ -78,7 +78,7 @@ fudge = 0.1;
 // poly_path3838(1);
 // poly_path4134(1);
 // poly_path3942(1);
-// poly_path4290(1);
+// poly_path4290(1); // stopped passing through here.
 // poly_path3434(1);
 // poly_path4402(1);
 // poly_path3842(1);
@@ -195,7 +195,7 @@ fudge = 0.1;
 // poly_path3578(1);
 // poly_path4450(1);
 // poly_path4086(1);
-// poly_path4642(1);
+// poly_path4642(1); // started here
 // poly_path3582(1);
 // poly_path4354(1);
 // poly_path4058(1);
