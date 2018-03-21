@@ -1,1 +1,1 @@
-cylinder(r=10,h=0.6);
+cylinder(r=10,h=0.3);
