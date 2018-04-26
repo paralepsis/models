@@ -1,0 +1,82 @@
+#!BPY
+"""
+Name: 'HowToAddMesh002'
+Blender: 248
+Group: 'Examples'
+"""
+##########################################################3
+import Blender
+import bpy
+from Blender import *
+from Blender.Scene import Render
+
+##############################################################
+# Initialize a new scene
+#
+scene = Scene.New()
+# make this scene the active scene in the screen
+scene.makeCurrent()
+
+##############################################################
+# add a camera and set it up
+#
+camdata = Camera.New()
+cam = scene.objects.new(camdata)
+cam.setLocation(-2.0,-7.0,1.0)
+cam.setEuler(1.5,0.0,-0.15)
+
+##############################################################
+# add a lamp and set it up
+#
+lampdata = Lamp.New()
+lampdata.setEnergy(10.0)
+lampdata.setType('Hemi')
+lamp = scene.objects.new(lampdata)
+lamp.setLocation(-5.0,-6.0,5.0)
+lamp.setEuler(0.0,0.0,0.0)
+
+##############################################################
+# create the mesh and bind a material to it
+#
+coords = [ [-1,-1,-1],[-1,-1,1],[-1,1,-1],[-1,1,1],
+[ 1,-1,-1],[ 1,-1,1],[ 1,1,-1],[ 1,1,1]]
+faces = [ [0,1,3],[0,1,5],[0,3,5],[1,3,5] ]
+me = bpy.data.meshes.new('myMesh')
+me.verts.extend(coords)
+me.faces.extend(faces)
+ob = scene.objects.new(me,'myObj')
+ob.setEuler(0.2,0.2,0.1)
+#
+mat = Material.New('newMat') # create a new Material called 'newMat'
+mat.rgbCol = [0.8, 0.2, 0.2] # change its color
+#
+# attach the material to the mesh
+# note 1) a different technique is used for meshes
+# compared to how materials are attached to objects
+# note 2) we can attach the material to the mesh even after
+# the mesh was assigned to the object. This happens
+# because the mesh and the object really are pointers
+# to the same information in memory.
+me.materials += [mat]
+#
+Window.RedrawAll()
+#
+
+#######################################
+# render the image and save the image
+#
+context = scene.getRenderingContext()
+# enable seperate window for rendering
+Render.EnableDispWin()
+context.imageType = Render.JPEG
+# draw the image
+context.render()
+# save the image to disk
+# to the location specified by RenderPath
+# by default this will be a jpg file
+context.saveRenderedImage('MeshExample002.jpg')
+
+#######################################
+# Save the blender file
+#
+Blender.Save('MeshExample002.blend')
