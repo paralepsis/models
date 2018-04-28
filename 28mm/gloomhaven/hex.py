@@ -300,7 +300,7 @@ def hex_define(z1 = 1,
    prettyprint_coords_2d(hex_top_verts_2d)
 
    for i in range(0, mp_refine):
-      hex_top_verts_2d = midpt_disp(hex_top_verts_2d, st_refine+i, peturb_sd = peturb_sd / (i+1))
+      hex_top_verts_2d = midpt_disp(hex_top_verts_2d, st_refine+i, peturb_sd = peturb_sd / (2**i))
       if (st_refine + i + 1 > 3):
          hex_top_verts_2d = bevel_face(hex_top_verts_2d, refine=st_refine+i+1, div=1.5)
 
