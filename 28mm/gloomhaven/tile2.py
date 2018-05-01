@@ -22,7 +22,7 @@ ob.show_name = True
 
 bpy.context.scene.objects.link(ob)
 
-[verts, faces] = tile_base_define(example)
+[verts, faces] = tile_base_define(example, rad=38.1/2, z=2)
 tile.from_pydata(verts, [], faces)
 tile.update(calc_edges=True)
 
@@ -43,11 +43,11 @@ for i in range(0,len(hexes)):
 
       hex = bpy.data.meshes.new(name+"Mesh")
       ob  = bpy.data.objects.new(name, hex)
-      ob.location = position_on_tile(i, hexes[i][j], z=1)
+      ob.location = position_on_tile(i, hexes[i][j], z=2, rad=38.1/2)
       ob.show_name = True
 
       bpy.context.scene.objects.link(ob)
 
-      [coords, faces] = hex_define(st_refine = 2, mp_refine=3, peturb_sd=0.1)
+      [coords, faces] = simple_hex_define(z1=1.2, z0=0, rad1=37/2, rad0 = 38.1/2,refine = 2)
       hex.from_pydata(coords, [], faces)
       hex.update(calc_edges=True)

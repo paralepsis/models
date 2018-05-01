@@ -1,12 +1,10 @@
 import math
-# from hex import *
+from hex import *
 
-example = [[0,0], [1,0], [2,0], [3,0], [4,0],[5,0], [6,0], [7,0], [8,0],
-           [8,1], [7,1], [7,2], [8,2], [8,3], [7,3], [7,4], [6,4], [5,4],
-           [4,4], [3,4], [2,4], [1,4], [1,3], [0,3], [0,2], [1,2], [1,1],
-           [0,1]]
+ex_points = [[0,0], [1,0], [2,0], [3,0], [4,0],[4,1], [3,1],
+              [3,2], [2,2], [1,2], [1,1], [0,1]]
 
-example2 = [[0,0], [1,0], [0,1]]
+ex_hexes = [[0],[0],[0]]
 
 def position_on_tile(row, col, rad=15, z=1):
     # NOTE: assumes that we're moving a hex sitting at [0,0,0], also,
@@ -28,7 +26,7 @@ def position_on_tile(row, col, rad=15, z=1):
     
     return [x,y,z]
 
-def tile_define(desc, rad=15, z=1):
+def tile_base_define(desc, rad=15, z=1, top=True):
     # NOTE: coordinates in the desc are in [row, col] order, so x and y
     #       are swapped. This makes sense if you're used to staring at my
     #       hex code, but maybe not otherwise...
@@ -64,14 +62,21 @@ def tile_define(desc, rad=15, z=1):
     top_face = []
     bottom_face = []
     for i in range(0,len(desc)):
-        top_face.append(len(desc)-i-1)
+        if top:
+            top_face.append(len(desc)-i-1)
         bottom_face.append(i + len(desc))
             
     verts = top_verts + bottom_verts
     faces += [ top_face ] + [ bottom_face ]
     return [ verts, faces ]
 
-[ verts, faces ] = tile_define(example2)
+def tile_define(points, hexes, rad, z=0):
+
+    [ t_verts, t_faces ] = tile_base_define(points, rad, z, top=False)
+
+    return [verts, faces]
+
+[ verts, faces ] = tile_base_define(ex_points)
 
 print("verts: ")
 print(verts)

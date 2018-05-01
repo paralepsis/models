@@ -109,7 +109,7 @@ def vert_indices_1d(row, col, refine, flip = False, offset = 0):
    else:
       return [pt1 + offset, pt3 + offset, pt2 + offset]
 
-def vert_list_coords_2d(refine, rad=15, z=0):
+def vert_list_coords_2d(refine, rad=15, z=0, position=[0,0,0]):
    # ordered from bottom left to top right, row-major
    radxsin30 = rad * math.sin(30/180*math.pi)
    radxcos30 = rad * math.cos(30/180*math.pi)
@@ -123,7 +123,7 @@ def vert_list_coords_2d(refine, rad=15, z=0):
       for j in range(0,points_in_row(i, refine)):
          x = start_x + j * radxsin30 / (2**(refine-1))
          y = (i - int((rows_in_hex(refine)+1)/2))/ ((rows_in_hex(refine))/2) * radxcos30
-         row.append([x,y,z])
+         row.append([x + position[0] ,y + position[1], z + position[2]])
       verts_2d.append(row)
 
    return verts_2d
@@ -287,6 +287,27 @@ def faces_to_stitch_faces(refine):
    
    return faces
 
+def simple_hex_define(z1 = 1,
+                      z0 = 0,
+                      rad1 = 37/2,
+                      rad0 = 38.1/2,
+                      refine = 0,
+                      position = [0,0,0]):
+   hex_top_verts_2d = vert_list_coords_2d(refine=refine, z=z1, rad=rad1,
+                                          position=position)
+   hex_top_verts_1d = coords_2d_to_1d(hex_top_verts_2d, refine=refine)
+   hex_top_faces_1d = vert_list_faces_1d(refine=refine)
+
+   hex_bottom_verts_2d = vert_list_coords_2d(refine=refine, z=z0, rad=rad0)
+   hex_bottom_verts_1d = coords_2d_to_1d(hex_bottom_verts_2d, refine=refine)
+   hex_bottom_faces_1d = vert_list_faces_1d(refine=refine, flip = True, offset=len(hex_top_verts_1d))
+   hex_side_faces_1d = faces_to_stitch_faces(refine)
+
+   verts = hex_top_verts_1d + hex_bottom_verts_1d
+   faces = hex_top_faces_1d + hex_bottom_faces_1d + hex_side_faces_1d
+
+   return [verts, faces]
+
 def hex_define(z1 = 1,
                z0 = 0,
                rad = 15,
@@ -326,7 +347,7 @@ def hex_define(z1 = 1,
 
    return [verts, faces]
 
-[ coords, faces ] = hex_define(st_refine=0,mp_refine=2)
+[ coords, faces ] = simple_hex_define()
 
 # coords2d = random_face(0)
 # new2d=midpt_disp(coords2d, refine=0)
@@ -335,7 +356,7 @@ def hex_define(z1 = 1,
 # print("midpt:")
 # prettyprint_coords_2d(new2d)
 
-# print(faces)
-# prettyprint_coords_2d(coords)
+print(faces)
+prettyprint_coords_1d(coords)
 
 # prettyprint_coords_2d(beveled_face(refine=2))
