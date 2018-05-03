@@ -324,8 +324,8 @@ def hex_define(z1 = 1,
                peturb_mean = 0.0,
                peturb_sd = 0.1):
    hex_top_verts_2d = random_face(st_refine)
-   print("before: ")
-   prettyprint_coords_2d(hex_top_verts_2d)
+   # print("before: ")
+   # prettyprint_coords_2d(hex_top_verts_2d)
 
    for i in range(0, mp_refine):
       hex_top_verts_2d = midpt_disp(hex_top_verts_2d, st_refine+i, peturb_sd = peturb_sd / (2**i))
@@ -363,7 +363,7 @@ def hex_define(z1 = 1,
 # print("midpt:")
 # prettyprint_coords_2d(new2d)
 
-print(faces)
-prettyprint_coords_1d(coords)
+# print(faces)
+# prettyprint_coords_1d(coords)
 
 # prettyprint_coords_2d(beveled_face(refine=2))

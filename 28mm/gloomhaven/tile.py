@@ -90,6 +90,48 @@ def tile_base_define(desc, rad=15, z=1, top=True):
         faces += [ bottom_face ]
     return [ verts, faces ]
 
+def duplicate(v1, v2, e=0.0001):
+    if v1[0] > (v2[0]+e) or v1[0] < (v2[0]-e):
+        return False
+    elif v1[1] > (v2[1]+e) or v1[1] < (v2[1]-e):
+        return False
+    elif v1[2] > (v2[2]+e) or v1[2] < (v2[2]-e):
+        return False
+    else:
+        return True
+
+def remove_dup_vertices(verts, faces):
+    new_verts = []
+    new_faces = []
+    mapping = {}
+
+    for i in range(0,len(verts)):
+        deduped = False
+        for j in range(0,len(new_verts)):
+            if duplicate(verts[i], new_verts[j]):
+                # print("adding " + str(i) + " -> " + str(j))
+                mapping[str(i)] = j
+                # print("match: %s" % verts[i])
+                deduped = True
+                break
+        
+        if not deduped:
+            # print("no match: %s" % verts[i])
+            # print("adding " + str(i) + " -> " + str(len(new_verts)))
+            mapping[str(i)] = len(new_verts)
+            new_verts.append(verts[i])
+
+    for f in faces:
+        # replace indices in this face
+        new_face = []
+        for v in f:
+            new_face.append(mapping[str(v)])
+
+        # print(str(f) + " -> " + str(new_face))
+        new_faces.append(new_face)
+
+    return [ new_verts, new_faces ]
+
 def tile_define(points, hexes, rad, z=2):
     # This builds the base and some basic hex tops as a single whole.
     # NOTE: hexes is a list of lists. List per row containing columns where
@@ -102,12 +144,14 @@ def tile_define(points, hexes, rad, z=2):
             [ h_verts, h_faces ] = simple_hex_define(z1=1.2, z0=0, rad1=rad-0.5,
                                                      rad0=rad, position = loc,
                                                      bottom = False)
-            print("hex " + str(row) + str(j))
-            print(faces)
             [ verts, faces ] = append_verts_and_faces([verts, faces],
                                                       [h_verts, h_faces])
             
+    [ verts, faces ] = remove_dup_vertices(verts, faces)
     
     return [verts, faces]
 
-# [ verts, faces ] = tile_define(ex_points, ex_hexes, rad=38.1/2, z=2)
+
+[ verts, faces ] = tile_define(ex_points, ex_hexes, rad=38.1/2, z=2)
+
+print(faces)
