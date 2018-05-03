@@ -267,9 +267,8 @@ def faces_to_stitch_faces(refine, bottom=True):
    faces = []
 
    # bottom edge
-   if bottom:
-      for i in range(0, points_in_row(0, refine)-1):
-         faces += [[bf_st+i, bf_st+i+1, i], [bf_st+i+1, i+1, i]]
+   for i in range(0, points_in_row(0, refine)-1):
+      faces += [[bf_st+i, bf_st+i+1, i], [bf_st+i+1, i+1, i]]
 
    # top edge
    for i in range(verts_in_hex(refine) - points_in_row(0, refine), verts_in_hex(refine)-1):
@@ -303,11 +302,16 @@ def simple_hex_define(z1 = 1,
    hex_bottom_verts_2d = vert_list_coords_2d(refine=refine, z=z0, rad=rad0,
                                              position = position)
    hex_bottom_verts_1d = coords_2d_to_1d(hex_bottom_verts_2d, refine=refine)
-   hex_bottom_faces_1d = vert_list_faces_1d(refine=refine, flip = True, offset=len(hex_top_verts_1d))
    hex_side_faces_1d = faces_to_stitch_faces(refine, bottom)
 
    verts = hex_top_verts_1d + hex_bottom_verts_1d
-   faces = hex_top_faces_1d + hex_bottom_faces_1d + hex_side_faces_1d
+
+   if bottom:
+      hex_bottom_faces_1d = vert_list_faces_1d(refine=refine, flip = True,
+                                               offset=len(hex_top_verts_1d))
+      faces = hex_top_faces_1d + hex_bottom_faces_1d + hex_side_faces_1d
+   else:
+      faces = hex_top_faces_1d + hex_side_faces_1d
 
    return [verts, faces]
 
