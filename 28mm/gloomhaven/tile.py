@@ -26,6 +26,22 @@ def position_on_tile(row, col, rad=15, z=1):
     
     return [x,y,z]
 
+def append_verts_and_faces(vf1, vf2):
+    [ verts, faces ] = vf1
+    [ v2, f2 ] = vf2
+    offset = len(verts)
+
+    verts += v2
+    
+    for i in range(0,len(f2)):
+        new_face = []
+        for j in range(0,len(f2[i])):
+            new_face.append(f2[i][j]+offset)
+
+        faces.append(new_face)
+
+    return [ verts, faces ]
+
 def tile_base_define(desc, rad=15, z=1, top=True):
     # NOTE: coordinates in the desc are in [row, col] order, so x and y
     #       are swapped. This makes sense if you're used to staring at my
@@ -67,19 +83,31 @@ def tile_base_define(desc, rad=15, z=1, top=True):
         bottom_face.append(i + len(desc))
             
     verts = top_verts + bottom_verts
-    faces += [ top_face ] + [ bottom_face ]
+
+    if top:
+        faces += [ top_face ] + [ bottom_face ]
+    else:
+        faces += [ bottom_face ]
     return [ verts, faces ]
 
-def tile_define(points, hexes, rad, z=0):
+def tile_define(points, hexes, rad, z=2):
+    # This builds the base and some basic hex tops as a single whole.
+    # NOTE: hexes is a list of lists. List per row containing columns where
+    #       hexes belong.
+    [ verts, faces ] = tile_base_define(points, rad, z, top=False)
 
-    [ t_verts, t_faces ] = tile_base_define(points, rad, z, top=False)
-
+    for row in range(0,len(hexes)):
+        for j in range(0,len(hexes[row])):
+            loc = position_on_tile(row, hexes[row][j], z=2, rad=rad)
+            [ h_verts, h_faces ] = simple_hex_define(z1=1.2, z0=0, rad1=rad-0.5,
+                                                     rad0=rad, position = loc,
+                                                     bottom = False)
+            print("hex " + str(row) + str(j))
+            print(faces)
+            [ verts, faces ] = append_verts_and_faces([verts, faces],
+                                                      [h_verts, h_faces])
+            
+    
     return [verts, faces]
 
-[ verts, faces ] = tile_base_define(ex_points)
-
-print("verts: ")
-print(verts)
-print("faces: ")
-print(faces)
-
+# [ verts, faces ] = tile_define(ex_points, ex_hexes, rad=38.1/2, z=2)

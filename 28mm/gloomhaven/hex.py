@@ -262,13 +262,14 @@ def midpt_disp(orig_2d, refine, peturb_mean=0, peturb_sd=0.05, floor = 0.3):
 
    return new_2d
 
-def faces_to_stitch_faces(refine):
+def faces_to_stitch_faces(refine, bottom=True):
    bf_st = verts_in_hex(refine) # starting index for bottom verts
    faces = []
 
    # bottom edge
-   for i in range(0, points_in_row(0, refine)-1):
-      faces += [[bf_st+i, bf_st+i+1, i], [bf_st+i+1, i+1, i]]
+   if bottom:
+      for i in range(0, points_in_row(0, refine)-1):
+         faces += [[bf_st+i, bf_st+i+1, i], [bf_st+i+1, i+1, i]]
 
    # top edge
    for i in range(verts_in_hex(refine) - points_in_row(0, refine), verts_in_hex(refine)-1):
@@ -292,16 +293,18 @@ def simple_hex_define(z1 = 1,
                       rad1 = 37/2,
                       rad0 = 38.1/2,
                       refine = 0,
-                      position = [0,0,0]):
+                      position = [0,0,0],
+                      bottom=True):
    hex_top_verts_2d = vert_list_coords_2d(refine=refine, z=z1, rad=rad1,
                                           position=position)
    hex_top_verts_1d = coords_2d_to_1d(hex_top_verts_2d, refine=refine)
    hex_top_faces_1d = vert_list_faces_1d(refine=refine)
 
-   hex_bottom_verts_2d = vert_list_coords_2d(refine=refine, z=z0, rad=rad0)
+   hex_bottom_verts_2d = vert_list_coords_2d(refine=refine, z=z0, rad=rad0,
+                                             position = position)
    hex_bottom_verts_1d = coords_2d_to_1d(hex_bottom_verts_2d, refine=refine)
    hex_bottom_faces_1d = vert_list_faces_1d(refine=refine, flip = True, offset=len(hex_top_verts_1d))
-   hex_side_faces_1d = faces_to_stitch_faces(refine)
+   hex_side_faces_1d = faces_to_stitch_faces(refine, bottom)
 
    verts = hex_top_verts_1d + hex_bottom_verts_1d
    faces = hex_top_faces_1d + hex_bottom_faces_1d + hex_side_faces_1d
