@@ -132,16 +132,16 @@ def remove_dup_vertices(verts, faces):
 
     return [ new_verts, new_faces ]
 
-def tile_define(points, hexes, rad, z=2):
+def tile_define(points, hexes, rad, z=3.2):
     # This builds the base and some basic hex tops as a single whole.
     # NOTE: hexes is a list of lists. List per row containing columns where
     #       hexes belong.
-    [ verts, faces ] = tile_base_define(points, rad, z, top=False)
+    [ verts, faces ] = tile_base_define(points, rad, z=1, top=False)
 
     for row in range(0,len(hexes)):
         for j in range(0,len(hexes[row])):
-            loc = position_on_tile(row, hexes[row][j], z=2, rad=rad)
-            [ h_verts, h_faces ] = simple_hex_define(z1=1.2, z0=0, rad1=rad-0.5,
+            loc = position_on_tile(row, hexes[row][j], z=1, rad=rad)
+            [ h_verts, h_faces ] = simple_hex_define(z1=2.2, z0=0, rad1=rad-0.5,
                                                      rad0=rad, position = loc,
                                                      bottom = False)
             [ verts, faces ] = append_verts_and_faces([verts, faces],
