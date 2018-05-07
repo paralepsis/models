@@ -21,7 +21,8 @@ ob.show_name = True
 bpy.context.scene.objects.link(ob)
 
 [verts, faces] = tile_hexes_define(tilepoints, hexes, rad=38.1/2, z=3.2,
-                                   type="midpt")
+                                   type="midpt",
+                                   st_refine=3, mp_refine=3, perturb_sd=0.2)
 tile.from_pydata(verts, [], faces)
 tile.update(calc_edges=True)
 

@@ -189,14 +189,14 @@ def vert_list_faces_1d(refine, offset=0, flip = False):
    return faces
 
 def random_face(refine, rad, z=1, position = [0,0,0],
-                peturb_mean=0.0, peturb_sd=0.05, floor = 0.3):
+                perturb_mean=0.0, perturb_sd=0.05, floor = 0.3):
    # returns 2d vert list with beveled edge and some randomness thrown in
    verts_2d = vert_list_coords_2d(refine, rad = rad, z=1, position = position)
    
    for j in range(0,rows_in_hex(refine)+1):
       for k in range (0, points_in_row(refine=refine, row=j)):
 
-         verts_2d[j][k][2] = z + random.gauss(peturb_mean, peturb_sd)
+         verts_2d[j][k][2] = z + random.gauss(perturb_mean, perturb_sd)
          if verts_2d[j][k][2] < floor:
             verts_2d[j][k][2] = floor
 
@@ -218,7 +218,7 @@ def bevel_face(coords_2d, refine, floor = 0.3, div=2.0):
 
    return coords_2d
 
-def midpt_disp(orig_2d, refine, peturb_mean=0, peturb_sd=0.05, floor = 0.3):
+def midpt_disp(orig_2d, refine, perturb_mean=0, perturb_sd=0.05, floor = 0.3):
    # midpoint displacement algorithm -- adds points between vertices and averages with noise
    new_2d =[]
 
@@ -231,7 +231,7 @@ def midpt_disp(orig_2d, refine, peturb_mean=0, peturb_sd=0.05, floor = 0.3):
          new_row.append(orig_2d[i][j])
          new_row.append([(orig_2d[i][j][0] + orig_2d[i][j+1][0])/2,
                          (orig_2d[i][j][1] + orig_2d[i][j+1][1])/2,
-                         (orig_2d[i][j][2] + orig_2d[i][j+1][2] + random.gauss(peturb_mean, peturb_sd))/2])
+                         (orig_2d[i][j][2] + orig_2d[i][j+1][2] + random.gauss(perturb_mean, perturb_sd))/2])
 
       new_row.append(orig_2d[i][len(orig_2d[i])-1])
       new_2d.append(new_row)
@@ -239,26 +239,26 @@ def midpt_disp(orig_2d, refine, peturb_mean=0, peturb_sd=0.05, floor = 0.3):
       new_row = []
       if i < (len(orig_2d)-1)/2:
          for j in range(0,len(orig_2d[i])):
-            print("(1) adding for ",i)
+            # print("(1) adding for ",i)
             # new next row is bigger than current original row
             new_row.append([(orig_2d[i][j][0] + orig_2d[i+1][j][0])/2,
                             (orig_2d[i][j][1] + orig_2d[i+1][j][1])/2,
-                            (orig_2d[i][j][2] + orig_2d[i+1][j][2] + random.gauss(peturb_mean, peturb_sd))/2])
+                            (orig_2d[i][j][2] + orig_2d[i+1][j][2] + random.gauss(perturb_mean, perturb_sd))/2])
             new_row.append([(orig_2d[i][j][0] + orig_2d[i+1][j+1][0])/2,
                             (orig_2d[i][j][1] + orig_2d[i+1][j+1][1])/2,
-                            (orig_2d[i][j][2] + orig_2d[i+1][j+1][2] + random.gauss(peturb_mean, peturb_sd))/2])
+                            (orig_2d[i][j][2] + orig_2d[i+1][j+1][2] + random.gauss(perturb_mean, perturb_sd))/2])
          new_2d.append(new_row)
       elif i < (len(orig_2d)-1):
          for j in range(0,len(orig_2d[i])):
-            print("(2) adding for ", i)
+            # print("(2) adding for ", i)
             if j > 0:
                new_row.append([(orig_2d[i][j][0] + orig_2d[i+1][j-1][0])/2,
                                (orig_2d[i][j][1] + orig_2d[i+1][j-1][1])/2,
-                               (orig_2d[i][j][2] + orig_2d[i+1][j-1][2] + random.gauss(peturb_mean, peturb_sd))/2])
+                               (orig_2d[i][j][2] + orig_2d[i+1][j-1][2] + random.gauss(perturb_mean, perturb_sd))/2])
             if j < (len(orig_2d[i]) - 1):
                new_row.append([(orig_2d[i][j][0] + orig_2d[i+1][j][0])/2,
                                (orig_2d[i][j][1] + orig_2d[i+1][j][1])/2,
-                               (orig_2d[i][j][2] + orig_2d[i+1][j][2] + random.gauss(peturb_mean, peturb_sd))/2])
+                               (orig_2d[i][j][2] + orig_2d[i+1][j][2] + random.gauss(perturb_mean, perturb_sd))/2])
          new_2d.append(new_row)
 
    return new_2d
@@ -323,14 +323,14 @@ def hex_define(z1 = 1,
                st_refine = 3,
                mp_refine = 0,
                floor = 0.3,
-               peturb_mean = 0.0,
-               peturb_sd = 0.1):
+               perturb_mean = 0.0,
+               perturb_sd = 0.1):
    hex_top_verts_2d = random_face(st_refine, rad = rad, position=position)
    # print("before: ")
    # prettyprint_coords_2d(hex_top_verts_2d)
 
    for i in range(0, mp_refine):
-      hex_top_verts_2d = midpt_disp(hex_top_verts_2d, st_refine+i, peturb_sd = peturb_sd / (2**i))
+      hex_top_verts_2d = midpt_disp(hex_top_verts_2d, st_refine+i, perturb_sd = perturb_sd / (2**i))
       if (st_refine + i + 1 > 3):
          hex_top_verts_2d = bevel_face(hex_top_verts_2d, refine=st_refine+i+1, div=1.5)
 

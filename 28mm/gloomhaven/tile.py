@@ -151,7 +151,8 @@ def tile_define(points, hexes, rad, z=3.2,type="simple"):
     
     return [verts, faces]
 
-def tile_hexes_define(points, hexes, rad, z=3.1, type="simple"):
+def tile_hexes_define(points, hexes, rad, z=3.1, type="simple",
+                      st_refine=4, mp_refine=2, perturb_sd=0.1):
     # This builds some basic hex tops as a single whole.
     # NOTE: hexes is a list of lists. List per row containing columns where
     #       hexes belong.
@@ -172,11 +173,11 @@ def tile_hexes_define(points, hexes, rad, z=3.1, type="simple"):
                                                   z0 = 0,
                                                   rad = rad-0.5,
                                                   position = loc,
-                                                  st_refine = 4,
-                                                  mp_refine = 2,
+                                                  st_refine = st_refine,
+                                                  mp_refine = mp_refine,
                                                   floor = 0.15,
-                                                  peturb_mean = 0.0,
-                                                  peturb_sd = 0.1)
+                                                  perturb_mean = 0.0,
+                                                  perturb_sd = perturb_sd)
 
 
             [ verts, faces ] = append_verts_and_faces([verts, faces],
