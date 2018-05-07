@@ -70,10 +70,10 @@ def tile_base_define(desc, rad=15, z=1, top=True):
     bv_st = len(desc)
     for i in range(0,len(desc)):
         if i < len(desc)-1:
-            faces += [[bv_st+i, bv_st+i+1, i], [bv_st+i+1, i+1, i]]
+            faces += [[bv_st+i+1, bv_st+i, i], [bv_st+i+1, i, i+1]]
         else:
             # stitch start to end
-            faces += [[bv_st+i, bv_st, i], [bv_st, 0, i]]
+            faces += [[bv_st, bv_st+i, i], [bv_st, i, 0]]
 
     top_face = []
     bottom_face = []
@@ -132,7 +132,7 @@ def remove_dup_vertices(verts, faces):
 
     return [ new_verts, new_faces ]
 
-def tile_define(points, hexes, rad, z=3.2):
+def tile_define(points, hexes, rad, z=3.2,type="simple"):
     # This builds the base and some basic hex tops as a single whole.
     # NOTE: hexes is a list of lists. List per row containing columns where
     #       hexes belong.
@@ -151,7 +151,40 @@ def tile_define(points, hexes, rad, z=3.2):
     
     return [verts, faces]
 
+def tile_hexes_define(points, hexes, rad, z=3.1, type="simple"):
+    # This builds some basic hex tops as a single whole.
+    # NOTE: hexes is a list of lists. List per row containing columns where
+    #       hexes belong.
+    verts = []
+    faces = []
 
-[ verts, faces ] = tile_define(ex_points, ex_hexes, rad=38.1/2, z=2)
+    for row in range(0,len(hexes)):
+        for j in range(0,len(hexes[row])):
+            loc = position_on_tile(row, hexes[row][j], z=0.0, rad=rad)
+            if type == "simple":
+                [ h_verts, h_faces ] = simple_hex_define(z1=z, z0=0,
+                                                         rad1=rad-0.5,
+                                                         rad0=rad-0.5,
+                                                         position = loc,
+                                                         bottom = True)
+            elif type == "midpt":
+                [ h_verts, h_faces ] = hex_define(z1 = z,
+                                                  z0 = 0,
+                                                  rad = rad-0.5,
+                                                  position = loc,
+                                                  st_refine = 4,
+                                                  mp_refine = 2,
+                                                  floor = 0.15,
+                                                  peturb_mean = 0.0,
+                                                  peturb_sd = 0.1)
+
+
+            [ verts, faces ] = append_verts_and_faces([verts, faces],
+                                                      [h_verts, h_faces])
+            
+    return [verts, faces]
+
+
+[ verts, faces ] = tile_base_define(ex_points, rad=38.1/2, z=2)
 
 print(faces)

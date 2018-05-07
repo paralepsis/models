@@ -109,7 +109,7 @@ def vert_indices_1d(row, col, refine, flip = False, offset = 0):
    else:
       return [pt1 + offset, pt3 + offset, pt2 + offset]
 
-def vert_list_coords_2d(refine, rad=15, z=0, position=[0,0,0]):
+def vert_list_coords_2d(refine, rad, z=0, position=[0,0,0]):
    # ordered from bottom left to top right, row-major
    radxsin30 = rad * math.sin(30/180*math.pi)
    radxcos30 = rad * math.cos(30/180*math.pi)
@@ -188,9 +188,10 @@ def vert_list_faces_1d(refine, offset=0, flip = False):
 
    return faces
 
-def random_face(refine, z=1, peturb_mean=0.0, peturb_sd=0.05, floor = 0.3):
+def random_face(refine, rad, z=1, position = [0,0,0],
+                peturb_mean=0.0, peturb_sd=0.05, floor = 0.3):
    # returns 2d vert list with beveled edge and some randomness thrown in
-   verts_2d = vert_list_coords_2d(refine, z=1)
+   verts_2d = vert_list_coords_2d(refine, rad = rad, z=1, position = position)
    
    for j in range(0,rows_in_hex(refine)+1):
       for k in range (0, points_in_row(refine=refine, row=j)):
@@ -318,12 +319,13 @@ def simple_hex_define(z1 = 1,
 def hex_define(z1 = 1,
                z0 = 0,
                rad = 15,
+               position = [0,0,0],
                st_refine = 3,
                mp_refine = 0,
                floor = 0.3,
                peturb_mean = 0.0,
                peturb_sd = 0.1):
-   hex_top_verts_2d = random_face(st_refine)
+   hex_top_verts_2d = random_face(st_refine, rad = rad, position=position)
    # print("before: ")
    # prettyprint_coords_2d(hex_top_verts_2d)
 
@@ -333,18 +335,12 @@ def hex_define(z1 = 1,
          hex_top_verts_2d = bevel_face(hex_top_verts_2d, refine=st_refine+i+1, div=1.5)
 
 
-   # print("midpt: ")
-   # prettyprint_coords_2d(hex_top_verts_2d)
-
-   # hex_top_verts_2d = bevel_face(hex_top_verts_2d, refine=st_refine+mp_refine)
-
-   # print("bevel: ")
-   # prettyprint_coords_2d(hex_top_verts_2d)
-   
    hex_top_verts_1d = coords_2d_to_1d(hex_top_verts_2d, refine=st_refine+mp_refine)
    hex_top_faces_1d = vert_list_faces_1d(refine=st_refine+mp_refine)
 
-   hex_bottom_verts_2d = vert_list_coords_2d(refine=st_refine+mp_refine, z=0)
+   hex_bottom_verts_2d = vert_list_coords_2d(refine=st_refine+mp_refine, z=0,
+                                             rad = rad,
+                                             position = position)
    hex_bottom_verts_1d = coords_2d_to_1d(hex_bottom_verts_2d, refine=st_refine+mp_refine)
    hex_bottom_faces_1d = vert_list_faces_1d(refine=st_refine+mp_refine, flip = True, offset=len(hex_top_verts_1d))
    hex_side_faces_1d = faces_to_stitch_faces(st_refine+mp_refine)
