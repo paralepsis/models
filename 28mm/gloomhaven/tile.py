@@ -151,7 +151,7 @@ def tile_define(points, hexes, rad, z=3.2,type="simple"):
     
     return [verts, faces]
 
-def tile_hexes_define(points, hexes, rad, z=3.1, type="simple",
+def tile_hexes_define(points, hexes, rad, z1=3.1, z0=0, type="simple",
                       st_refine=4, mp_refine=2, perturb_sd=0.1):
     # This builds some basic hex tops as a single whole.
     # NOTE: hexes is a list of lists. List per row containing columns where
@@ -163,19 +163,19 @@ def tile_hexes_define(points, hexes, rad, z=3.1, type="simple",
         for j in range(0,len(hexes[row])):
             loc = position_on_tile(row, hexes[row][j], z=0.0, rad=rad)
             if type == "simple":
-                [ h_verts, h_faces ] = simple_hex_define(z1=z, z0=0,
+                [ h_verts, h_faces ] = simple_hex_define(z1=z1, z0=z0,
                                                          rad1=rad-0.5,
                                                          rad0=rad-0.5,
                                                          position = loc,
                                                          bottom = True)
             elif type == "midpt":
-                [ h_verts, h_faces ] = hex_define(z1 = z,
-                                                  z0 = 0,
-                                                  rad = rad-0.5,
+                [ h_verts, h_faces ] = hex_define(z1 = z1,
+                                                  z0 = z0,
+                                                  rad = rad-0.1,
                                                   position = loc,
                                                   st_refine = st_refine,
                                                   mp_refine = mp_refine,
-                                                  floor = 0.15,
+                                                  floor = 1.5,
                                                   perturb_mean = 0.0,
                                                   perturb_sd = perturb_sd)
 
@@ -184,8 +184,3 @@ def tile_hexes_define(points, hexes, rad, z=3.1, type="simple",
                                                       [h_verts, h_faces])
             
     return [verts, faces]
-
-
-[ verts, faces ] = tile_base_define(ex_points, rad=38.1/2, z=2)
-
-print(faces)

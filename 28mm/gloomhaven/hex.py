@@ -325,7 +325,7 @@ def hex_define(z1 = 1,
                floor = 0.3,
                perturb_mean = 0.0,
                perturb_sd = 0.1):
-   hex_top_verts_2d = random_face(st_refine, rad = rad, position=position)
+   hex_top_verts_2d = random_face(st_refine, z=z1, rad = rad, position=position)
    # print("before: ")
    # prettyprint_coords_2d(hex_top_verts_2d)
 

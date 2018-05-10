@@ -8,21 +8,87 @@ from hex import *
 tilepoints = [[0,0], [1,0], [2,0], [3,0], [4,0],[4,1], [3,1],
               [3,2], [2,2], [1,2], [1,1], [0,1]]
 
-hexes = [[0],[0],[0]]
+# hexes = [[0,1,2],[0,1,2],[0,1,2], [0,1,2],[0,1,2],[0,1,2], [0,1,2], [0,1,2],[0,1,2],[0,1,2], [0,1,2],[0,1,2],[0,1,2], [0,1,2]]
 
-# define the tile base
-name = "tile"
+hexes = [[0]]
 
-tile = bpy.data.meshes.new(name+"Mesh")
-ob  = bpy.data.objects.new(name, tile)
-ob.location = [0,0,0]
-ob.show_name = True
+def tile():
+    # define the tile base
+    name = "tile"
+    
+    tile = bpy.data.meshes.new(name+"Mesh")
+    ob  = bpy.data.objects.new(name, tile)
+    ob.location = [0,0,0]
+    ob.show_name = True
+    
+    bpy.context.scene.objects.link(ob)
+    
+    [verts, faces] = tile_base_define(tilepoints, rad=38.1/2, z=1.2)
+    tile.from_pydata(verts, [], faces)
+    tile.update(calc_edges=True)
 
-bpy.context.scene.objects.link(ob)
+def my_hexes():
+    # define the hexes
+    name = "hexes"
+    
+    tile = bpy.data.meshes.new(name+"Mesh")
+    ob  = bpy.data.objects.new(name, tile)
+    ob.location = [0,0,0]
+    ob.show_name = True
+    
+    bpy.context.scene.objects.link(ob)
+    
+    [verts, faces] = tile_hexes_define(points=tilepoints, hexes=hexes,
+                                       rad=38.1/2, z1=3.0, z0=1.2,
+                                       type="midpt",
+                                       st_refine=3, mp_refine=3, perturb_sd=0.2)
+    tile.from_pydata(verts, [], faces)
+    tile.update(calc_edges=True)
 
-[verts, faces] = tile_hexes_define(tilepoints, hexes, rad=38.1/2, z=3.2,
-                                   type="midpt",
-                                   st_refine=3, mp_refine=3, perturb_sd=0.2)
-tile.from_pydata(verts, [], faces)
-tile.update(calc_edges=True)
+def my_midpt_hexes_split():
+   for i in range(0,len(hexes)):
+      for j in range(0,len(hexes[i])):
+         name = "mhex"+"."+str(i)+"."+str(j)
+
+         hex = bpy.data.meshes.new(name+"Mesh")
+         ob  = bpy.data.objects.new(name, hex)
+         ob.location = position_on_tile(i, hexes[i][j], z=1.2, rad=38.1/2)
+         ob.show_name = True
+
+         bpy.context.scene.objects.link(ob)
+
+         [ coords, faces ] = hex_define(z1 = 2.0,
+                                        z0 = 0,
+                                        rad = 38.1/2-0.1,
+                                        position = [0,0,0],
+                                        st_refine = 3,
+                                        mp_refine = 3,
+                                        floor = 1.5,
+                                        perturb_mean = 0.0,
+                                        perturb_sd = 0.4)
+         hex.from_pydata(coords, [], faces)
+         hex.update(calc_edges=True)
+
+def my_simple_hexes_split():
+   for i in range(0,len(hexes)):
+      for j in range(0,len(hexes[i])):
+         name = "shex"+"."+str(i)+"."+str(j)
+
+         hex = bpy.data.meshes.new(name+"Mesh")
+         ob  = bpy.data.objects.new(name, hex)
+         ob.location = position_on_tile(i, hexes[i][j], z=1.2, rad=38.1/2)
+         ob.show_name = True
+
+         bpy.context.scene.objects.link(ob)
+
+         [coords, faces] = simple_hex_define(z1=1.2, z0=0, rad1=34/2, rad0 = 38.1/2,refine = 1)
+         hex.from_pydata(coords, [], faces)
+         hex.update(calc_edges=True)
+
+
+
+# tile()
+# my_hexes()
+my_midpt_hexes_split()
+my_simple_hexes_split()
 
