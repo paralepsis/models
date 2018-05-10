@@ -42,8 +42,8 @@ def append_verts_and_faces(vf1, vf2):
 
     return [ verts, faces ]
 
-def tile_base_define(desc, rad=15, z=1, top=True):
-    # NOTE: coordinates in the desc are in [row, col] order, so x and y
+def tile_point_xyz(coord, rad=15, z=0):
+    # NOTE: coordinates are in [row, col] order, so x and y
     #       are swapped. This makes sense if you're used to staring at my
     #       hex code, but maybe not otherwise...
     x_inc = rad * math.sin(30/180*math.pi)
@@ -51,19 +51,27 @@ def tile_base_define(desc, rad=15, z=1, top=True):
     x_long = 2*rad
     y_inc = rad * math.cos(30/180*math.pi)
 
+    if coord[0] % 2:
+        # x starts at zero and on long edge
+        x = int(coord[1]/2) * (x_short + x_long) + (coord[1]%2) * x_long
+    else:
+        # x starts at x_inc and on short edge
+        x = x_inc + int(coord[1]/2) * (x_short + x_long) + (coord[1]%2) * x_short
+        
+    y = coord[0] * y_inc
+
+    return [x,y,z]
+
+def tile_base_define(desc, rad=15, z=1, top=True):
+    # NOTE: coordinates in the desc are in [row, col] order, so x and y
+    #       are swapped. This makes sense if you're used to staring at my
+    #       hex code, but maybe not otherwise...
     top_verts = []
     bottom_verts = []
     faces = []
-    for xy in desc:
-        if xy[0] % 2:
-            # x starts at zero and on long edge
-            x = int(xy[1]/2) * (x_short + x_long) + (xy[1]%2) * x_long
-        else:
-            # x starts at x_inc and on short edge
-            x = x_inc + int(xy[1]/2) * (x_short + x_long) + (xy[1]%2) * x_short
-        
-        y = xy[0] * y_inc
 
+    for xy in desc:
+        [x,y,ignore] = tile_point_xyz(xy, rad=rad)
         top_verts.append([x,y,z])
         bottom_verts.append([x,y,0])
 
