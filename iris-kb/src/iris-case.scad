@@ -9,6 +9,7 @@
 /* NOTES:
  * - first cut at 1.01 scale in X and Y was a little loose.
  *   - going to try 1.005 next
+ *   - was a little tight, moved to 1.007
  * - height of 5mm was nearly perfect for reaching top of bottom plate when
  *   feet are attached (surface guard 13mm vinyl bumbers round)
  *   - going to try 6mm next
@@ -16,8 +17,28 @@
 
 $fn=60;
 
-blankCutout(height=6, outlineScale=2) translate([0,0,-0.5])
-   scale([1.005, 1.005, 1.0]) bottomOutline(h=10);
+yAngle = 5;
+xAngle = 7;
+
+difference() {
+   union() {
+      linear_extrude(height=30) outline(outlineScale=2) projection(cut=false)
+         rotate([xAngle, -1*yAngle, 0]) blankOutline(height=6, outlineScale=2) 
+         scale([1.007, 1.007, 1.0]) bottomOutline(h=7);
+   }
+   translate([0,0,10]) rotate([xAngle, -1*yAngle, 0])
+      scale([1.007, 1.007, 1.0]) bottomOutline(h=30);
+
+   rotate([xAngle, -1*yAngle, 0]) translate([-100,-100,16]) cube([200,200,50]);
+
+   hull() {
+      translate([-40,0,-0.5]) cylinder(r=10, h=50);
+      translate([10,0,-0.5]) cylinder(r=10, h=50);
+      translate([-40,25,-0.5]) cylinder(r=10, h=50);
+      translate([10,25,-0.5]) cylinder(r=10, h=50);
+   }
+}
+
 
 module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,filled=0,
                       locations=[],outlineScale=1.2,cornerRad=3.75,
@@ -93,7 +114,7 @@ module blankOutline(height=48.6) {
  * Note: This is intended to be used on a 2D shape, such as one created
  *       using the projection() operator.
  */
-module outline(outlineIterations = 120,outlineScale=1.4) {
+module outline(outlineIterations = 60,outlineScale=1.4) {
    for (i=[0:outlineIterations]) {
       translate([outlineScale*cos(360*i/outlineIterations),
                  outlineScale*sin(360*i/outlineIterations),0]) children();
