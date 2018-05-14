@@ -1,7 +1,8 @@
-Models derived from:
+Plank models derived from these models by Devon Jones:
   https://www.thingiverse.com/thing:2162087
 
-These files are released under the Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) license:
+These files are released under the Attribution-ShareAlike 3.0 Unported
+(CC BY-SA 3.0) license:
   https://creativecommons.org/licenses/by-sa/3.0/legalcode
 
 
