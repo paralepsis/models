@@ -13,78 +13,60 @@
  * - height of 5mm was nearly perfect for reaching top of bottom plate when
  *   feet are attached (surface guard 13mm vinyl bumbers round)
  *   - going to try 6mm next
+ * - had 2 degree in X and 10 in Y for a bit, accidentally (2nd print)
  */
 
 $fn=60;
 
 yAngle = 5;
-xAngle = 7;
+xAngle = 10;
 
-difference() {
-   union() {
-      linear_extrude(height=30) outline(outlineScale=2) projection(cut=false)
-         rotate([xAngle, -1*yAngle, 0]) blankOutline(height=6, outlineScale=2) 
-         scale([1.007, 1.007, 1.0]) bottomOutline(h=7);
-   }
-   translate([0,0,10]) rotate([xAngle, -1*yAngle, 0])
-      scale([1.007, 1.007, 1.0]) bottomOutline(h=30);
+tent();
 
-   rotate([xAngle, -1*yAngle, 0]) translate([-100,-100,16]) cube([200,200,50]);
+// bottomOutline(h=5, cutout=true);
 
-   hull() {
-      translate([-40,0,-0.5]) cylinder(r=10, h=50);
-      translate([10,0,-0.5]) cylinder(r=10, h=50);
-      translate([-40,25,-0.5]) cylinder(r=10, h=50);
-      translate([10,25,-0.5]) cylinder(r=10, h=50);
-   }
-}
+module tent() {
+   difference() {
+      union() {
+         linear_extrude(height=60) outline(outlineScale=1.5) projection(cut=false)
+            rotate([yAngle, -1*xAngle, 0]) blankOutline(height=6, outlineScale=2) 
+            scale([1.007, 1.007, 1.0]) bottomOutline(h=7);
+      }
+      translate([0,0,0]) rotate([yAngle, -1*xAngle, 0])
+         scale([1.007, 1.007, 1.0]) bottomOutline(h=30, cutout=true);
 
+      translate([-10,-40,-1]) rotate([yAngle, -1*xAngle, 0]) cube([200,200,100]);
 
-module solidBottomBox(xDim=10, yDim=10, ht=10, inset=0,filled=0,
-                      locations=[],outlineScale=1.2,cornerRad=3.75,
-                      bottomThick=1.2,wallThick=1.6)
-{
-   offsetFromTop = 0.1; /* amount of space to move the outline from the top of the form; helps keep model clean */
-
-   /* flip right-side up and place on XY plane */
-   translate([0,0,ht]) rotate([180,0,0]) {
-      /* parallel-sided box, complete bottom */
-      /* Note: because of the way we're building it, the "top" is the bottom
-       *       from the roundShapedBox perspective.
-       */
-      roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
-                     xDimBottom=xDim, yDimBottom=yDim,
-                     ht=ht, wallThick=wallThick, cornerRad=cornerRad);
-      translate([0,0,ht-bottomThick]) roundBoxBottom(xDim=xDim-inset,yDim=yDim-inset,
-                                             ht=bottomThick, cornerRad=cornerRad);
-
-      /* spaces to hold ships */
-      difference() {
-         union() {
-            /* base form */
-            if (filled) {
-               fillHtDiff = 2; // difference between top of box and top of fill
-
-               /* Note: just fill with the same shape for the filled version */
-               hull() translate([0,0,bottomThick-0.1+fillHtDiff]) roundShapedBox(xDimTop=xDim - inset, yDimTop=yDim - inset,
-                                     xDimBottom=xDim, yDimBottom=yDim,
-                                     ht=ht-bottomThick+0.1-fillHtDiff, wallThick=1.6, cornerRad=cornerRad);
-            }
-            for (loc = locations) {
-                   translate([0,0,offsetFromTop]) translate(loc[0]) rotate(loc[1])
-                      blankOutline(height=ht-offsetFromTop, outlineScale=outlineScale) children();
-            }
-         }
-         union() {
-            /* what will be differenced out */
-            for (loc = locations) {
-                translate(loc[0]) rotate(loc[1]) children();
-            }
-         }
+      translate([70,40,0]) hull() {
+         translate([-30,-5,-0.5]) cylinder(r=10, h=50);
+         translate([5,-5,-0.5]) cylinder(r=10, h=50);
+         translate([-30,30,-0.5]) cylinder(r=10, h=50);
+         translate([5,30,-0.5]) cylinder(r=10, h=50);
       }
    }
 }
 
+
+module oldVersion() {
+   difference() {
+      union() {
+         linear_extrude(height=30) outline(outlineScale=2) projection(cut=false)
+            rotate([xAngle, -1*yAngle, 0]) blankOutline(height=6, outlineScale=2) 
+            scale([1.007, 1.007, 1.0]) bottomOutline(h=7);
+      }
+      translate([0,0,10]) rotate([xAngle, -1*yAngle, 0])
+         scale([1.007, 1.007, 1.0]) bottomOutline(h=30);
+
+      rotate([xAngle, -1*yAngle, 0]) translate([-100,-100,16]) cube([200,200,50]);
+
+      hull() {
+         translate([-40,0,-0.5]) cylinder(r=10, h=50);
+         translate([10,0,-0.5]) cylinder(r=10, h=50);
+         translate([-40,25,-0.5]) cylinder(r=10, h=50);
+         translate([10,25,-0.5]) cylinder(r=10, h=50);
+      }
+   }
+}
 
 /* blankCutout() - extrudes an outline of children() to a given height
  *                 and then difference()s out the children(), leaving
@@ -132,7 +114,7 @@ module outline(outlineIterations = 60,outlineScale=1.4) {
 fudge = 0.1;
 
 module bottomShape() {
-   difference() {
+   translate([70,40,0]) difference() {
       poly_path3414(1); // main form
       translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3398(1); // hole (top left)
       translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3402(1); // hole (top right)
@@ -143,9 +125,32 @@ module bottomShape() {
    }
 }
 
-module bottomOutline(h) {
-   poly_path3414(h=h); // main form
+module bottomOutline(h, cutout=false) {
+   translate([70,40,0]) poly_path3414(h=h); // main form
+   if (cutout == true) {
+      translate([58,85,4]) cube([30,30,h]);
+      translate([108,25,4]) rotate([0,0,-30]) cube([20,30,h]);
+
+      /* bolts */
+      boltDep = 2.5;
+      translate([19.45,31.05,-1*boltDep]) cylinder(r=1.15, h=5);
+      translate([19.45,31.05,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+
+      translate([19.4,69.15,-1*boltDep]) cylinder(r=1.15, h=5);
+      translate([19.4,69.15,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+
+      translate([95.6,34.65,-1*boltDep]) cylinder(r=1.15, h=5);
+      translate([95.6,34.65,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+
+      translate([95.6,72.7,-1*boltDep]) cylinder(r=1.15, h=5);
+      translate([95.6,72.7,-3-25.3]) cylinder(r=2.5, h=25);
+
+      translate([112.3,7.8,-1*boltDep]) cylinder(r=1.15, h=5);
+      translate([112.3,7.8,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+   }
 }
+
+/**********************************************************/
 
 module poly_path3398(h)
 {
