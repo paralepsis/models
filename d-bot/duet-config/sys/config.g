@@ -32,7 +32,7 @@ M350 X16 Y16 Z16 E16 I1         ; Configure microstepping with interpolation
 M92 X100 Y100 Z400 E837         ; Set steps per mm
 M566 X600 Y600 Z12 E120         ; Set maximum instantaneous speed changes (mm/min)
 M201 X1000 Y1000 Z125 E1000       ; Normal (printing) accelerations (mm/s^2)
-M203 X18000 Y18000 Z365 E1200   ; Set maximum speeds (mm/min)
+M203 X18000 Y18000 Z365 E2400   ; Set maximum speeds (mm/min)
 M906 X1000 Y1000 Z1000 E800 I40 ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                         ; Set idle timeout (sec)
 
