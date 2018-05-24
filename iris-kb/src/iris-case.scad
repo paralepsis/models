@@ -21,11 +21,40 @@ $fn=60;
 yAngle = 5;
 xAngle = 10;
 
-tent();
+if (1) intersection() {
+   tent(cutout=true);
+   linear_extrude(height=50) projection(cut=true) translate([0,0,-2])
+      tent(cutout=false);
+}
 
 // bottomOutline(h=5, cutout=true);
+// tent();
 
-module tent() {
+module tent(cutout=true) {
+   difference() {
+      union() {
+         linear_extrude(height=30) projection(cut=false)
+            rotate([yAngle, -1*xAngle, 0])
+            translate([55, 50, 0]) scale([.98, 0.98, 1.0])
+            translate([-55, -50, 0]) bottomOutline(h=1);
+      }
+      /* +0.2 translate was near corner hitting */
+      translate([-0.0,0,-1.0]) rotate([yAngle, -1*xAngle, 0])
+         scale([1.00, 1.00, 1.0]) bottomOutline(h=30, cutout=cutout);
+
+       translate([-10,-40,-6.35]) rotate([yAngle, -1*xAngle, 0]) cube([200,200,100]);
+
+      /* center cutout */
+      if (1) translate([70,40,0]) hull() {
+         translate([-30,-5,-0.5]) cylinder(r=10, h=50);
+         translate([5,-5,-0.5]) cylinder(r=10, h=50);
+         translate([-30,30,-0.5]) cylinder(r=10, h=50);
+         translate([5,30,-0.5]) cylinder(r=10, h=50);
+      }
+   }
+}
+
+module oldVersion2() {
    difference() {
       union() {
          linear_extrude(height=60) outline(outlineScale=1.5) projection(cut=false)
@@ -128,25 +157,25 @@ module bottomShape() {
 module bottomOutline(h, cutout=false) {
    translate([70,40,0]) poly_path3414(h=h); // main form
    if (cutout == true) {
-      translate([58,85,4]) cube([30,30,h]);
+      translate([58,65,4]) cube([30,50,h]);
       translate([108,25,4]) rotate([0,0,-30]) cube([20,30,h]);
 
       /* bolts */
-      boltDep = 2.5;
+      boltDep = 3.0;
       translate([19.45,31.05,-1*boltDep]) cylinder(r=1.15, h=5);
-      translate([19.45,31.05,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+      translate([19.45,31.05,-1*boltDep-25.3+20]) cylinder(r=2.75, h=5);
 
       translate([19.4,69.15,-1*boltDep]) cylinder(r=1.15, h=5);
-      translate([19.4,69.15,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+      translate([19.4,69.15,-1*boltDep-25.3]) cylinder(r=2.75, h=25);
 
       translate([95.6,34.65,-1*boltDep]) cylinder(r=1.15, h=5);
-      translate([95.6,34.65,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+      translate([95.6,34.65,-1*boltDep-25.3]) cylinder(r=2.75, h=25);
 
       translate([95.6,72.7,-1*boltDep]) cylinder(r=1.15, h=5);
-      translate([95.6,72.7,-3-25.3]) cylinder(r=2.5, h=25);
+      translate([95.6,72.7,-3-25.3]) cylinder(r=2.75, h=25);
 
       translate([112.3,7.8,-1*boltDep]) cylinder(r=1.15, h=5);
-      translate([112.3,7.8,-1*boltDep-25.3]) cylinder(r=2.5, h=25);
+      translate([112.3,7.8,-1*boltDep-25.3]) cylinder(r=2.75, h=25);
    }
 }
 
