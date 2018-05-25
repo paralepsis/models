@@ -46,53 +46,10 @@ module tent(cutout=true) {
 
       /* center cutout */
       if (1) translate([70,40,0]) hull() {
-         translate([-30,-5,-0.5]) cylinder(r=10, h=50);
-         translate([5,-5,-0.5]) cylinder(r=10, h=50);
-         translate([-30,30,-0.5]) cylinder(r=10, h=50);
-         translate([5,30,-0.5]) cylinder(r=10, h=50);
-      }
-   }
-}
-
-module oldVersion2() {
-   difference() {
-      union() {
-         linear_extrude(height=60) outline(outlineScale=1.5) projection(cut=false)
-            rotate([yAngle, -1*xAngle, 0]) blankOutline(height=6, outlineScale=2) 
-            scale([1.007, 1.007, 1.0]) bottomOutline(h=7);
-      }
-      translate([0,0,0]) rotate([yAngle, -1*xAngle, 0])
-         scale([1.007, 1.007, 1.0]) bottomOutline(h=30, cutout=true);
-
-      translate([-10,-40,-1]) rotate([yAngle, -1*xAngle, 0]) cube([200,200,100]);
-
-      translate([70,40,0]) hull() {
-         translate([-30,-5,-0.5]) cylinder(r=10, h=50);
-         translate([5,-5,-0.5]) cylinder(r=10, h=50);
-         translate([-30,30,-0.5]) cylinder(r=10, h=50);
-         translate([5,30,-0.5]) cylinder(r=10, h=50);
-      }
-   }
-}
-
-
-module oldVersion() {
-   difference() {
-      union() {
-         linear_extrude(height=30) outline(outlineScale=2) projection(cut=false)
-            rotate([xAngle, -1*yAngle, 0]) blankOutline(height=6, outlineScale=2) 
-            scale([1.007, 1.007, 1.0]) bottomOutline(h=7);
-      }
-      translate([0,0,10]) rotate([xAngle, -1*yAngle, 0])
-         scale([1.007, 1.007, 1.0]) bottomOutline(h=30);
-
-      rotate([xAngle, -1*yAngle, 0]) translate([-100,-100,16]) cube([200,200,50]);
-
-      hull() {
-         translate([-40,0,-0.5]) cylinder(r=10, h=50);
-         translate([10,0,-0.5]) cylinder(r=10, h=50);
-         translate([-40,25,-0.5]) cylinder(r=10, h=50);
-         translate([10,25,-0.5]) cylinder(r=10, h=50);
+         translate([-20,5,-0.5]) cylinder(r=10, h=50);
+         translate([-5,5,-0.5]) cylinder(r=10, h=50);
+         translate([-20,20,-0.5]) cylinder(r=10, h=50);
+         translate([-5,20,-0.5]) cylinder(r=10, h=50);
       }
    }
 }
@@ -119,18 +76,6 @@ module blankOutline(height=48.6) {
    linear_extrude(height=height) outline() projection(cut=false) children();
 }
 
-
-/* outline() - generates an outline of an object
- *
- * Note: This is intended to be used on a 2D shape, such as one created
- *       using the projection() operator.
- */
-module outline(outlineIterations = 60,outlineScale=1.4) {
-   for (i=[0:outlineIterations]) {
-      translate([outlineScale*cos(360*i/outlineIterations),
-                 outlineScale*sin(360*i/outlineIterations),0]) children();
-   }
-}
 
 // Module names are of the form poly_<inkscape-path-id>().  As a result,
 // you can associate a polygon in this OpenSCAD program with the corresponding
