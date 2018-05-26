@@ -10,8 +10,8 @@ width=70.75;
 height=25;
 
 if (1) {
-   if (0) bottom();
-   top();
+   if (1) bottom();
+   else top();
    // % translate([0,0,3.0]) cube([length, width, height]);
 }
 else {

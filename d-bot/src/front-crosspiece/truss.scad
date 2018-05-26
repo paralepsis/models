@@ -9,7 +9,7 @@ w=30;
 n=floor(l/w);
 
 //Wall 
-wall=8;
+wall=12;
 //Beam
 beam=2.5;
 //Horizontal bars
@@ -27,33 +27,37 @@ h=wall;
 s=beam;
 echo(l,w,n,h,s);
 
+translate([0,20,0]) cylinder($fn=80,d=25,h=0.6);
+translate([0,-9,0]) cylinder($fn=80,d=25,h=0.6);
+translate([271,-9,0]) cylinder($fn=80,d=25,h=0.6);
+translate([271,20,0]) cylinder($fn=80,d=25,h=0.6);
 
 difference() {
    union() {
       /* THE TRUSS */
       translate([7.5,5,0]) t();
 
-      translate([0,-10,0]) cube([10,30,22]);
+      translate([0,-10,0]) cube([10,30,25]);
       translate([10,-10,8]) difference() {
         translate([-0.1,0,0]) cube([2.6,30,2.5]);
         translate([2.5,-0.5,2.5]) rotate([-90,0,0]) cylinder(d=5,h=31);
       }
-      translate([totLen-10,-10,0]) cube([10,30,22]);
+      translate([totLen-10,-10,0]) cube([10,30,25]);
       translate([totLen-10,20,8]) rotate([0,0,180]) difference() {
         translate([-0.1,0,0]) cube([2.6,30,2.5]);
         translate([2.5,-0.5,2.5]) rotate([-90,0,0]) cylinder(d=5,h=31);
       }
 
       translate([totLen,4.5,0]) rotate([0,0,-90])
-               linear_extrude(height=22)
+               linear_extrude(height=25)
                polygon(points=[[-0.1,0],[0,0],[1,1],[8,1],[9,0],[9,-0.1]]);
       translate([0,-4.5,0]) rotate([0,0,90])
-               linear_extrude(height=22)
+               linear_extrude(height=25)
                polygon(points=[[-0.1,0],[0,0],[1,1],[8,1],[9,0],[9,-0.1]]);
    }
 
    /* bolt holes */
-   translate([0,0,13.2]) rotate([90,0,-90]) {
+   translate([0,0,17.2]) rotate([90,0,-90]) {
       /* bolt holes */
       translate([0,0,-25+6.2]) cylinder(h=25,d=5.2);
 
@@ -61,7 +65,7 @@ difference() {
       translate([0,0,-15-4.2]) cylinder(h=15,d=9);
    }
 
-   translate([totLen,0,13.2]) rotate([90,0,90]) {
+   translate([totLen,0,17.2]) rotate([90,0,90]) {
       /* bolt holes */
       translate([0,0,-25+6.2]) cylinder(h=25,d=5.2);
 
