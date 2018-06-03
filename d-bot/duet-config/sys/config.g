@@ -27,6 +27,7 @@ M569 P3 S1 ; Drive 3 goes forwards
 M569 P4 S0 ; Drive 4 (3rd Z) goes backwards
 
 M584 X0 Y1 Z2:4 E3 ; Map drives (as above)
+M671 X160:160 Y35:357 ; approximate position in Y of the Z screws (6/2/2018)
 
 M350 X16 Y16 Z16 E16 I1         ; Configure microstepping with interpolation
 M92 X100 Y100 Z400 E837         ; Set steps per mm
@@ -62,7 +63,7 @@ G10 P0 R0 S0 ; Set initial tool 0 active and standby temperatures to 0C
 
 ; BL Touch
 M307 H3 A-1 C-1 D-1              ; reserve pin 8 (Heater 3 PWM) for BL Touch
-M558 P9 X0 Y0 Z1 H4 F200 T3600 R1 ; type 9 (was 5 prior to 1.21), use for Z, Feed rate 200 mm/min, 
+M558 P9 X0 Y0 Z1 H3 F200 T3600 R1 ; type 9 (was 5 prior to 1.21), use for Z, Feed rate 200 mm/min, 
                                  ; dive Height 4mm, Travel speed 3600 mm/min, wait 1s (R) before dive
 G31 X-8 Y-41 Z1.66 C0 S0 P25.    ; this Z has me using a +0.15mm Z offset in Slic3r for PETG
 M557 X30:240 Y30:240 S105        ; coarse 3x3
