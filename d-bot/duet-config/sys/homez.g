@@ -2,7 +2,7 @@
 ; called to home the Z axis
 ;
 
-M561               ; clear transform, same as G29 S2
+; M561               ; clear transform, same as G29 S2
 M280 P3 S160 I1    ; clear any alarm
 G91                ; relative mode
 G1 Z10 F300 S2     ; raise Z (S2 because Z probably isn't homed)
