@@ -21,6 +21,8 @@ $fn=60;
 yAngle = 5;
 xAngle = 10;
 
+cutouts = 1;
+
 truncatedTent();
 
 // flippedTruncatedTent();
@@ -50,10 +52,10 @@ module tent(cutout=true) {
             translate([-55, -50, 0]) bottomOutline(h=1);
       }
       /* +0.2 translate was near corner hitting */
-      translate([-0.0,0,-1.0+1.5]) rotate([yAngle, -1*xAngle, 0])
+      translate([-0.0,0,-1.0]) rotate([yAngle, -1*xAngle, 0])
          scale([1.00, 1.00, 1.0]) bottomOutline(h=30, cutout=cutout);
 
-       translate([-10,-40,-6.35+1.5]) rotate([yAngle, -1*xAngle, 0]) cube([200,200,100]);
+       translate([-10,-40,-6.35]) rotate([yAngle, -1*xAngle, 0]) cube([200,200,100]);
 
       if (0) translate([70,40,0]) hull() {
          /* center cutout */
@@ -63,13 +65,13 @@ module tent(cutout=true) {
          translate([-5,20,-0.5]) cylinder(r=10, h=50);
       }
 
-      if (1) hull() {
+      if (cutouts) hull() {
         /* left */
         translate([15,43,-0.5]) cylinder(r=4,h=50);
         translate([15,58,-0.5]) cylinder(r=4,h=50);
         translate([30,50,-0.5]) cylinder(r=4,h=50);
       }
-      if (1) hull() {
+      if (cutouts) hull() {
         /* top */
         translate([30,75,-0.5]) cylinder(r=4,h=50);
         translate([30,78,-0.5]) cylinder(r=4,h=50);
@@ -77,52 +79,29 @@ module tent(cutout=true) {
         translate([80,75,-0.5]) cylinder(r=4,h=50);
         translate([80,82,-0.5]) cylinder(r=4,h=50);
       }
-      if (1) hull() {
+      if (cutouts) hull() {
         /* right */
         translate([95,48,-0.5]) cylinder(r=4,h=50);
         translate([95,60,-0.5]) cylinder(r=4,h=50);
         translate([82,51,-0.5]) cylinder(r=4,h=50);
       }
-      if (1) hull() {
+      if (cutouts) hull() {
         /* bottom center */
         translate([30,25,-0.5]) cylinder(r=4,h=50);
         translate([55,37,-0.5]) cylinder(r=4,h=50);
         translate([80,25,-0.5]) cylinder(r=4,h=50);
       }
-      if (1) hull() {
+      if (cutouts) hull() {
         /* bottom right */
         translate([78,7,-0.5]) cylinder(r=4,h=50);
         translate([93,7,-0.5]) cylinder(r=4,h=50);
       }
-      if (1) {
+      if (cutouts) {
         // translate([124,12,-0.5]) cylinder(r=5,h=50);
         translate([114,-5,-0.5]) cylinder(r=5,h=50);
       }
    }
 }
-
-/* blankCutout() - extrudes an outline of children() to a given height
- *                 and then difference()s out the children(), leaving
- *                 only the outline.
- */
-module blankCutout(height=48.6, epsilon=0.1, outlineScale=1.4) {
-   difference() {
-      translate([0,0,epsilon]) linear_extrude(height=height-epsilon)
-         outline(outlineScale=outlineScale) projection(cut=false) children();
-      children();
-   }
-}
-
-/* blankOutline() - extrudes an outline (enclosing form) of children()
- *                  to a given height.
- *
- * Notes: Intended to allow for taking a form (the "blank") and create a
- *        supporting shape around it.
- */
-module blankOutline(height=48.6) {
-   linear_extrude(height=height) outline() projection(cut=false) children();
-}
-
 
 // Module names are of the form poly_<inkscape-path-id>().  As a result,
 // you can associate a polygon in this OpenSCAD program with the corresponding
@@ -149,8 +128,9 @@ module bottomShape() {
 module bottomOutline(h, cutout=false) {
    translate([70,40,0]) poly_path3414(h=h); // main form
    if (cutout == true) {
-      translate([58,65,-3]) cube([30,50,h+3]);
-      translate([108,25,4]) rotate([0,0,-30]) cube([20,30,h]);
+      /* cutouts for arduino and TRRS socket */
+      translate([55,65,-7]) cube([33,50,h+3]);
+      translate([104,20,-8]) rotate([0,0,-30]) cube([15,30,h]);
 
       /* bolts */
       boltDep = 2.5;
