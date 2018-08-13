@@ -1,0 +1,9 @@
+https://wiki.blender.org/index.php/Extensions:2.6/Py/Scripts/Object/CrackIt
+max crack: 13 -- maybe even lower?
+margin size: 0.5 -- maybe 0.4?
+
+NOTE: something about how I generate meshes isn't quite right for Crack it!,
+but if I select all the points (l), then partition into a new mesh (p), it
+works (even if I do this on a single hex (?)). So rather than dive further
+into what is wrong, I think this will be part of my workflow.
+
