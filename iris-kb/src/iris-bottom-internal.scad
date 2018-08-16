@@ -9,14 +9,20 @@
 // keep the resulting .stl file manifold.
 fudge = 0.1;
 
-difference() {
-   poly_path3414(1); // main form
-   translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3398(1); // hole (top left)
-   translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3402(1); // hole (top right)
+module bottomShape() {
+   difference() {
+      poly_path3414(1); // main form
+      translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3398(1); // hole (top left)
+      translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3402(1); // hole (top right)
    // poly_path3418(1); // main form (again?)
-   translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3394(1); // hole (bottom right thumb)
-   translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3410(1); // hole (bottom left)
-   translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3406(1); // hole (bottom right)
+      translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3394(1); // hole (bottom right thumb)
+      translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3410(1); // hole (bottom left)
+      translate([0,0,-0.1]) scale ([1,1,1.5]) poly_path3406(1); // hole (bottom right)
+   }
+}
+
+module bottomOutline() {
+   poly_path3414(1); // main form
 }
 
 module poly_path3398(h)
