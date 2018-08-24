@@ -31,7 +31,7 @@ mediumBin();
 
 module mediumBin() {
    harborFreightMediumHalfHt(locations=[],inset=0.5,filled=0,cornerRad=3.75,
-                             bottomThick=0.9);
+                             bottomThick=1.2);
    if (0) {
       roundShapedBox(xDimTop=54, yDimTop=80, xDimBottom=54,
                      yDimBottom=80, ht=46.5/2, wallThick=1.6);
