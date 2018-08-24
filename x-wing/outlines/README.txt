@@ -7,3 +7,5 @@ This is a reminder of how I got the font installed:
    cd xwing-miniatures-font/dist/
    cp *.ttf ~/Library/Fonts/
  
+Using this to get OpenSCAD from paths:
+  https://www.thingiverse.com/thing:25036
