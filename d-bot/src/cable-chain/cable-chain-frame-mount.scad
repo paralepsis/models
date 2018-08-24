@@ -13,20 +13,21 @@ difference() {
       translate([27,0,0]) rotate([90,0,90]) linear_extrude(height=5) polygon(points=[[20,0], [20,20],[56,5], [56,0]]);
    }
 
-   translate([18,28,-0.5]) cylinder(d=4.2,h=10);
-   translate([18,48,-0.5]) cylinder(d=4.2,h=10);
+   // translate([18,28,-0.5]) cylinder(d=4.4,h=10);
+   translate([18,29,-0.5]) cylinder(d=4.4,h=10);
+   translate([18,48,-0.5]) cylinder(d=4.4,h=10);
 
    /* TODO: MAKE SURE HOLES ARE CORRECT DEPTH. */
-   translate([18,15,10]) rotate([90,0,0]) {
+   translate([20,15,10]) rotate([90,0,0]) {
       /* bolt holes */
-      translate([0,0,14-4.8]) cylinder(h=15,d=5.2);
+      translate([0,0,14-4.8]) cylinder(h=15,d=5.5);
 
       /* cap holes (with a little gap to allow bridging */
       translate([0,0,-20]) cylinder(h=30,d=9);
    }
    translate([0,15,10]) rotate([90,0,0]) {
       /* bolt holes */
-      translate([0,0,14-4.8]) cylinder(h=15,d=5.2);
+      translate([0,0,14-4.8]) cylinder(h=15,d=5.5);
 
       /* cap holes (with a little gap to allow bridging */
       translate([0,0,-20]) cylinder(h=30,d=9);

@@ -323,6 +323,7 @@ def hex_define(z1 = 1,
                st_refine = 3,
                mp_refine = 0,
                floor = 0.3,
+               bevel = 1,
                perturb_mean = 0.0,
                perturb_sd = 0.1):
    hex_top_verts_2d = random_face(st_refine, z=z1, rad = rad, position=position)
@@ -331,7 +332,7 @@ def hex_define(z1 = 1,
 
    for i in range(0, mp_refine):
       hex_top_verts_2d = midpt_disp(hex_top_verts_2d, st_refine+i, perturb_sd = perturb_sd / (2**i))
-      if (st_refine + i + 1 > 3):
+      if (bevel == 1 and st_refine + i + 1 > 3):
          hex_top_verts_2d = bevel_face(hex_top_verts_2d, refine=st_refine+i+1, div=1.5)
 
 
