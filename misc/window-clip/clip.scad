@@ -1,38 +1,34 @@
-for (i=[0:5]) {
-   translate([20*i, 0, 0]) clip(clipThick=4+i, pincerWidth=20.8 - 1 + 0.25*i);
-}
+clip();
 
-module clip(clipThick=5, pincerWidth=20.8, notchWidth=4.4) {
+module clip(clipThick=9, pincerWidth=21.05, notchWidth=5) {
    linear_extrude(height=clipThick)
       shape(pincerWidth=pincerWidth, notchWidth=notchWidth);
 }
 
-module shape(pincerWidth = 20.8, notchWidth = 4.4) {
+module shape(pincerWidth = 21.05, notchWidth = 4.4, spineThick=3) {
    echo("pincerWidth = ", pincerWidth);
-   polygon(points=[[-notchWidth-4,0],
-                   [10,0],
-                   [10,5],
-                   [9.5,5], // bottom right clip corner
-                   [8,3],
-                   [7.5,3],
-                   [7.5,7],
-                   [4,8],
-                   [4,pincerWidth+2],
-                   [7.5,pincerWidth+3],
-                   [7.5,pincerWidth+7],
-                   [8,pincerWidth+7],
-                   [9.5,pincerWidth+5],
-                   [10,pincerWidth+5],
-                   [10,pincerWidth+10],
+   polygon(points=[[-notchWidth-3.5,0],
+                   [spineThick+6,0],
+                   [spineThick+6,5],
+                   [spineThick+5.5,5], // bottom right clip corner
+                   [spineThick+4,3],
+                   [spineThick+3.5,3],
+                   [spineThick+3.5,7],
+                   [spineThick,8],
+                   [spineThick,pincerWidth+2],
+                   [spineThick+3.5,pincerWidth+3],
+                   [spineThick+3.5,pincerWidth+7],
+                   [spineThick+4,pincerWidth+7],
+                   [spineThick+5.5,pincerWidth+5],
+                   [spineThick+6,pincerWidth+5],
+                   [spineThick+6,pincerWidth+10],
                    [3,pincerWidth+10],
                    [0,pincerWidth+7],
-                   [0,4],
-                   [-notchWidth-0.5,4],
-                   [-notchWidth-0.5,6],
-                   [-notchWidth-0.5,8],
-                   [-notchWidth,8], // LHS hook
-                   [-notchWidth,10],
-                   [-notchWidth-1,10],
-                   [-notchWidth-4,10]]);
+                   [0,3],
+                   [-notchWidth-0.5,3],
+                   [-notchWidth-0.5,9],
+                   [-notchWidth,9], // LHS hook
+                   [-notchWidth,11],
+                   [-notchWidth-3.5,11]]);
 }
               
