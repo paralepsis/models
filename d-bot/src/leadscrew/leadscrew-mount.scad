@@ -2,7 +2,8 @@
 
 $fn=80;
 backThick=6;
-disp=20.75; // original distance for the back.
+// disp=19.75; // original distance for the back, but also the new L/R
+disp=20.75; // new back (Misumi)
 // disp=20.75+15; // longer intended to move screw out of path of alt. carriage
 nutRad=15.65/2;
 nutTopRad=15.5;
@@ -31,7 +32,7 @@ module form() {
       // cylindrical front
       translate([disp+slop,27.5,0]) cylinder(r=nutTopRad+2,h=20);
       cube([backThick,55,25]);
-      if (1) translate([0,5,0]) cube([backThick,45,32]);
+      if (1) translate([0,5,0]) cube([backThick,45,28]);
    }
 
    if (0) hull() {
