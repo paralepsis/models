@@ -29,6 +29,10 @@ M569 P4 S0 ; Drive 4 (3rd Z) goes backwards
 M584 X0 Y1 Z2:4 E3 ; Map drives (as above)
 M671 X160:160 Y35:357 ; approximate position in Y of the Z screws (6/2/2018)
 
+
+; Note: new lead screws are 1.5mm rather than 8mm; new Z will be 2133.3333333
+; Note: will i need to speed up Z, or are Z units in mm/sec already?
+
 M350 X16 Y16 Z16 E16 I1         ; Configure microstepping with interpolation
 M92 X100 Y100 Z400 E837         ; Set steps per mm
 M566 X600 Y600 Z12 E120         ; Set maximum instantaneous speed changes (mm/min)
@@ -39,15 +43,15 @@ M84 S30                         ; Set idle timeout (sec)
 
 
 ; Stall Detection: R1 = just log
-M915 P0 F1 R1 H200 S6
-M915 P1 F1 R1 H200 S6
-M915 P2 F1 R1 H200 S6
+M915 P0 F1 R1 H200 S6 ; X
+M915 P1 F1 R1 H200 S6 ; Y
+M915 P2 F1 R1 H200 S6 ; Z
 M915 P3 F1 R1 H400 S7 ; extruder
-M915 P4 F1 R1 H200 S6
+M915 P4 F1 R1 H200 S6 ; Z
 
 
 ; Heaters
-M143 S270 ; Set maximum heater temperature to 260C
+M143 S270 ; Set maximum heater temperature to 270C
 
 M307 H0 A125.9 C793.8 D0.4 S0.80 B0 ; Set PID controls for heated bed (SSR version)
 M307 H1 A337.6 C147.4 D4.5 S1.00 B0 ; Set PID controls with new (M307) paramters, calculated for 100% PWM and 250C.
