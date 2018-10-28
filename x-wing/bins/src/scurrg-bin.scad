@@ -14,11 +14,21 @@ angle=0;
 
 /* locations is a pair of triples, translate : rotate pairs
  */
-locations = [[[26,0,0], [0,0,90]]];
+locations = [[[26.5,-31,0], [0,0,53]]];
 
-harborFreightMediumHalfHt(locations,inset=0.5,filled=1,bottomThick=0.9) scurrgBlank();
+if (0) harborFreightLargeHalfHt(locations,inset=0.5,filled=1,cornerRad=3.75,
+                          bottomThick=0.9) scurrgBlank();
+if (1) scurrgBlank();
 
-// scurrgBlank();
+if (0) {
+translate([-50,0,0]) harborFreightLargeHalfHt(locations,inset=0.5,filled=1,cornerRad=3.75,
+                          bottomThick=0.9) scurrgBlank();
+translate([50,0,0]) harborFreightLargeHalfHt(locations,inset=0.5,filled=0,cornerRad=3.75,
+                          bottomThick=0.9) scurrgBlank();
+
+translate([0,-120,0]) scurrgBlank();
+}
+
 // scurrgOutline();
 
 /* scurrgOutline() -- test piece for outline
@@ -46,8 +56,8 @@ module scurrgBlank(centerCutout=1, useProfile=1) {
 module scurrgShell() {
    for (j=[0:1]) mirror([j,0,0])
       polygon(points=[
-                     [-0.1,0], [8,0], [12,4.5], [24,14], [30,15], [33,15], 
-                     [33,13], [36,13], [37,15], [39.5,16], [39.5,40], 
+                     [-0.1,1], [8,1], [12,4.5], [24,14], [30,15], [34,15], 
+                     [35,13], [37,13], [38,15], [39.0,16], [39.0,40], 
                      [37,42], [37,53], [33.5,53], [33.5,49], [32,49],
                      [31,41], [14,49], [11,50.5], [8,50], [-0.1,50]
                      ]);
@@ -59,7 +69,7 @@ module scurrgProfile(h=100,w=200)
 {
    translate([-1*w/2,0,0]) rotate([90,0,90]) linear_extrude(height=w) {
       polygon(points=[
-                     [-1,0], [55,0], [55,16], [-1,11]
+                     [-1,0], [55,0], [55,17], [-1,7]
                      ]);
    }
 
@@ -72,7 +82,7 @@ module scurrgProfile(h=100,w=200)
 module scurrgCutoutPoly() {
    for (j=[0:1]) mirror([j,0,0])
       polygon(points=[
-                     [-0.1,0], [8,0], [12,4.5], [16,5.5], [16,48], [14,49],
+                     [-0.1,1], [8,1], [12,4.5], [16,5.5], [16,48], [14,49],
                      [11,50.5], [8,50], [-0.1,50]
                      ]);
 }

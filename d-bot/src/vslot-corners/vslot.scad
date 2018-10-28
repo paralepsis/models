@@ -1,21 +1,23 @@
 testPiece = false;
 xExtrusionWidthSections = 1;
 xExtrusionDepthSections = 1;
-xExtrusionLength = 70;
+xExtrusionLength = 60;
 xEndClosed = true;
 yExtrusionWidthSections = 1;
 yExtrusionDepthSections = 1;
-yExtrusionLength = 70;
+yExtrusionLength = 65;
 yEndClosed = true;
 zExtrusionWidthSections = 2;
 zExtrusionDepthSections = 1;
-zExtrusionLength = 70;
+zExtrusionLength = 80;
 zEndClosed = true;
-tolerance=0.55;
-lengthHoleSpacing=30;
+tolerance=0.03;
+lengthHoleSpacing=25;
 wallWidth=5;
 vslotIndentHeight=1;
 sectionWidth=20;
+
+
 
 if (testPiece) {
     difference() {
@@ -134,7 +136,7 @@ module VSlot2dProfile(
 
 module negativeSpaceHoles(
     largeHoleIndent = 1,
-    largeHoleRadius = 5,
+    largeHoleRadius = 6, // was 5 in original
     smallHoleRadius = 2.5,
     widthHoleSpacing = 20,
     lengthHoleSpacing,
