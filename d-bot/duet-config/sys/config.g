@@ -27,7 +27,7 @@ M569 P3 S1 ; Drive 3 goes forwards
 M569 P4 S0 ; Drive 4 (3rd Z) goes backwards
 
 M584 X0 Y1 Z2:4 E3 ; Map drives (as above)
-M671 X160:160 Y35:357 ; approximate position in Y of the Z screws (6/2/2018)
+M671 X160:160 Y40:357 ; approximate position in Y of the Z screws (6/2/2018)
 
 
 ; Note: new lead screws are 1.5mm rather than 8mm; new Z will be 2133.3333333
@@ -43,8 +43,8 @@ M84 S30                         ; Set idle timeout (sec)
 
 
 ; Stall Detection: R1 = just log
-M915 P0 F1 R1 H200 S6 ; X
-M915 P1 F1 R1 H200 S6 ; Y
+M915 P0 F1 R2 H200 S6 ; X
+M915 P1 F1 R2 H200 S6 ; Y
 M915 P2 F1 R1 H200 S6 ; Z
 M915 P3 F1 R1 H400 S7 ; extruder
 M915 P4 F1 R1 H200 S6 ; Z
