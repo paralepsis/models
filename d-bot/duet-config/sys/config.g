@@ -38,16 +38,16 @@ M92 X100 Y100 Z400 E837         ; Set steps per mm
 M566 X600 Y600 Z12 E120         ; Set maximum instantaneous speed changes (mm/min)
 M201 X1000 Y1000 Z125 E1000       ; Normal (printing) accelerations (mm/s^2)
 M203 X18000 Y18000 Z365 E2400   ; Set maximum speeds (mm/min)
-M906 X1000 Y1000 Z1000 E800 I40 ; Set motor currents (mA) and motor idle factor in per cent
+M906 X1000 Y1000 Z1200 E800 I40 ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                         ; Set idle timeout (sec)
 
 
 ; Stall Detection: R1 = just log
 M915 P0 F1 R2 H200 S6 ; X
 M915 P1 F1 R2 H200 S6 ; Y
-M915 P2 F1 R1 H200 S6 ; Z
+M915 P2 F1 R0 H200 S20 ; Z
 M915 P3 F1 R1 H400 S7 ; extruder
-M915 P4 F1 R1 H200 S6 ; Z
+M915 P4 F1 R0 H200 S20 ; Z
 
 
 ; Heaters
@@ -69,7 +69,7 @@ G10 P0 R0 S0 ; Set initial tool 0 active and standby temperatures to 0C
 M307 H3 A-1 C-1 D-1              ; reserve pin 8 (Heater 3 PWM) for BL Touch
 M558 P9 X0 Y0 Z1 H3 F200 T3600 R1 ; type 9 (was 5 prior to 1.21), use for Z, Feed rate 200 mm/min, 
                                  ; dive Height 4mm, Travel speed 3600 mm/min, wait 1s (R) before dive
-G31 X-8 Y-41 Z1.66 C0 S0 P25.    ; this Z has me using a +0.15mm Z offset in Slic3r for PETG
+G31 X-8 Y-41 Z1.83 C0 S0 P25.    ; this Z has me using a +0.15mm Z offset in Slic3r for PETG
 M557 X30:240 Y30:240 S105        ; coarse 3x3
 
 M280 P3 S160 I1                  ; reset probe error state
