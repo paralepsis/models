@@ -36,13 +36,21 @@ if (1) difference() {
    translate([28,-38.5,1.2]) rotate([0,0,-90]) roundSlot();
    translate([28,38.5,1.2]) rotate([0,0,-90]) roundSlot();
 
-   translate([1,42.5,1.2]) rotate([0,0,0]) chargeSlot();
-   translate([1,-42.5,1.2]) rotate([0,0,180]) chargeSlot();
+   // translate([1,42.5,1.2]) rotate([0,0,0]) chargeSlot();
+   // translate([1,-42.5,1.2]) rotate([0,0,180]) chargeSlot();
+   translate([0,43,1.2]) rotate([0,0,0]) roundSlot();
+   translate([0,-43,1.2]) rotate([0,0,180]) roundSlot();
 
-   translate([-27,13.5,1.2]) rotate([0,0,90]) tlSlot();
-   translate([-27,-13.5,1.2]) rotate([0,0,90]) tlSlot();
-   translate([-27,-40.5,1.2]) rotate([0,0,90]) tlSlot();
-   translate([-27,40.5,1.2]) rotate([0,0,90]) tlSlot();
+   translate([-27,14.5,1.2]) rotate([0,0,90]) tlSlot();
+   translate([-27,-12.5,1.2]) rotate([0,0,90]) tlSlot();
+   translate([-27,-39.5,1.2]) rotate([0,0,90]) tlSlot();
+   translate([-28,40.5,1.2]) rotate([0,0,90]) roundSlot();
+   // translate([-27,40.5,1.2]) rotate([0,0,90]) tlSlot();
+
+   translate([0,0,1.2]) hull() {
+      translate([2,-18,0]) cylinder(d=23,h=50);
+      translate([2,18,0]) cylinder(d=23,h=50);
+   }
 }
 
 // chargeSlot();
