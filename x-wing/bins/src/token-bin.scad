@@ -28,9 +28,10 @@ include <./bintools.scad>
 
 $fn=80;
 
-bin1();
+if (1) bin1();
 
-if (0) translate([0,0,3]) bin1Top();
+// largeBin();
+
 
 // top2();
 
