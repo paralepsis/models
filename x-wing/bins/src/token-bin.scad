@@ -28,28 +28,66 @@ include <./bintools.scad>
 
 $fn=80;
 
-if (1) difference() {
-   hull() largeBin();
+bin1();
 
-   translate([28,-13,1.2]) rotate([0,0,-90]) roundSlot();
-   translate([28,13,1.2]) rotate([0,0,-90]) roundSlot();
-   translate([28,-38.5,1.2]) rotate([0,0,-90]) roundSlot();
-   translate([28,38.5,1.2]) rotate([0,0,-90]) roundSlot();
+if (0) translate([0,0,3]) bin1Top();
 
-   // translate([1,42.5,1.2]) rotate([0,0,0]) chargeSlot();
-   // translate([1,-42.5,1.2]) rotate([0,0,180]) chargeSlot();
-   translate([0,43,1.2]) rotate([0,0,0]) roundSlot();
-   translate([0,-43,1.2]) rotate([0,0,180]) roundSlot();
+// top2();
 
-   translate([-27,14.5,1.2]) rotate([0,0,90]) tlSlot();
-   translate([-27,-12.5,1.2]) rotate([0,0,90]) tlSlot();
-   translate([-27,-39.5,1.2]) rotate([0,0,90]) tlSlot();
-   translate([-28,40.5,1.2]) rotate([0,0,90]) roundSlot();
-   // translate([-27,40.5,1.2]) rotate([0,0,90]) tlSlot();
+module top2(hole=0) {
+   difference() {
+      translate([-44,0,21.3]) rotate([90,0,90]) linear_extrude(height=88) polygon(points=[[-51,0],[-49.75,2],[49.75,2],[51,0]]);
 
-   translate([0,0,1.2]) hull() {
-      translate([2,-18,0]) cylinder(d=23,h=50);
-      translate([2,18,0]) cylinder(d=23,h=50);
+      if (hole == 1) {
+         cylinder(r=9,h=40);
+      }
+   }
+}
+
+module top(hole=0) {
+   difference() {
+      translate([0,65,21.3]) {
+         rotate([90,0,0]) linear_extrude(height=130)
+            polygon(points=[[-35,0],[-33.75,2],[33.75,2],[35,0]]);
+      }
+      if (hole == 1) {
+         cylinder(r=9,h=40);
+      }
+   }
+}
+
+module bin1Top() {
+   scale([1,0.99,1]) intersection() {
+      hull() largeBin();
+      top2(hole=1);
+   }
+}
+
+module bin1(top=0) {
+   difference() {
+      hull() largeBin();
+
+      translate([29,-13,0.9]) rotate([0,0,-90]) roundSlot();
+      translate([29,13,0.9]) rotate([0,0,-90]) roundSlot();
+      translate([29,-38.5,0.9]) rotate([0,0,-90]) roundSlot();
+      translate([29,38.5,0.9]) rotate([0,0,-90]) roundSlot();
+
+      // translate([1,42.5,0.9]) rotate([0,0,0]) chargeSlot();
+      // translate([1,-42.5,0.9]) rotate([0,0,180]) chargeSlot();
+      translate([0,44,0.9]) rotate([0,0,0]) roundSlot();
+      translate([0,-44,0.9]) rotate([0,0,180]) roundSlot();
+
+      translate([-29,14.25,0.9]) rotate([0,0,90]) tlSlot();
+      translate([-29,-11.85,0.9]) rotate([0,0,90]) tlSlot();
+      translate([-29,-38.25,0.9]) rotate([0,0,90]) tlSlot();
+      translate([-29,39.5,0.9]) rotate([0,0,90]) roundSlot();
+
+      translate([0,0,0.9]) hull() {
+         translate([0,-17,0]) cylinder(d=27,h=50);
+         translate([0,17,0]) cylinder(d=27,h=50);
+      }
+
+      if (top) top2();
    }
 }
 
@@ -58,11 +96,11 @@ if (1) difference() {
 // roundSlot();
 
 module roundSlot() {
-   cylinder(d=23,h=51);
+   cylinder(d=20.5,h=51);
    translate([0,10,25.5]) cube([15,20, 51],center=true);
 }
 
-module chargeSlot() {
+module oldChargeSlot() {
    cylinder(d=23.5,h=50);
    rotate([0,0,45]) translate([-17.5/2, -17.5/2, 0]) minkowski() {
       cube([17.5, 17.5, 50]);
@@ -71,9 +109,17 @@ module chargeSlot() {
    translate([0,10,25.5]) cube([15,20, 51],center=true);
 }
 
-module tlSlot() {
+module chargeSlot() {
    rotate([0,0,45]) translate([-15.5/2, -15.5/2,0]) minkowski() {
       cube([15.5, 15.5, 50]);
+      cylinder(r=2,h=1);
+   }
+   translate([0,10,25.5]) cube([15,20, 51],center=true);
+}
+
+module tlSlot() {
+   rotate([0,0,45]) translate([-13.5/2, -13.5/2,0]) minkowski() {
+      cube([13.5, 13.5, 50]);
       cylinder(r=2,h=1);
    }
    translate([0,10,25.5]) cube([15,20, 51],center=true);
