@@ -16,8 +16,8 @@ M208 X320 Y285 Z335 S0 ; Set axis maxima
 
 
 ; Endstops
-M574 X1 Y2 Z0 S0 ; Define active low and unused microswitches (Z1 if using that endstop!)
-
+M574 X1 Y2 S0 ; Define active low and unused microswitches (Z1 if using that endstop!)
+M574 Z2 S2    ; Z is a probe (1.20+)
 
 ; Drive Mapping
 M569 P0 S0 ; Drive 0 (X) goes backwards (1.19)
@@ -69,8 +69,8 @@ G10 P0 R0 S0 ; Set initial tool 0 active and standby temperatures to 0C
 
 ; BL Touch
 M307 H3 A-1 C-1 D-1              ; reserve pin 8 (Heater 3 PWM) for BL Touch
-M558 P9 X0 Y0 Z1 H3 F200 T3600 R1 ; type 9 (was 5 prior to 1.21), use for Z, Feed rate 200 mm/min, 
-                                 ; dive Height 4mm, Travel speed 3600 mm/min, wait 1s (R) before dive
+M558 P9 Z1 H3 F100 T3600 R1 A5   ; type 9 (was 5 prior to 1.21), use for Z, Feed rate 200 mm/min, 
+                                 ; dive Height 3mm, Travel speed 3600 mm/min, wait 1s (R) before dive
 G31 X-8 Y-41 Z1.83 C0 S0 P25.    ; this Z has me using a +0.15mm Z offset in Slic3r for PETG
 M557 X30:240 Y30:240 S105        ; coarse 3x3
 
