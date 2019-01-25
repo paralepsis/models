@@ -23,7 +23,6 @@ holediff=lkey-holesize;
 w=width*lkey;
 h=height*lkey;
 
-
 //poker keyboard layout layer
 pokerkeyboard = [
 //start ROW 0
@@ -139,7 +138,7 @@ module holematrix(holes,startx,starty){
 	}
 }
 
-module mountingholes(){
+module mountingholes(outsides=1, dzExtras=1){
 	translate([(1+1/3)*lkey,3.5*lkey,-0.1])
 	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
 
@@ -152,14 +151,28 @@ module mountingholes(){
 	translate([(6.75)*lkey,2.5*lkey,-0.1])
 	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
 
-	translate([(14.8)*lkey,2*lkey,-0.1])
-	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
-
-	translate([(.2)*lkey,2*lkey,-0.1])
-	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
-
 	translate([(10)*lkey,.5*lkey,-0.1])
 	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+
+	if (outsides) {
+		translate([(.2)*lkey,2*lkey,-0.1])
+		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+
+		translate([(14.8)*lkey,2*lkey,-0.1])
+		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+	}
+
+	if (dzExtras) {
+		translate([(1.25)*lkey,.5*lkey,-0.1])
+		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+
+		translate([(4)*lkey,4.5*lkey,-0.1])
+		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+
+		translate([(10)*lkey,4.5*lkey,-0.1])
+		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+		
+	}
 }
 
 module pokerplate(){
@@ -174,3 +187,6 @@ module pokerplate(){
 // translate([0,0,3]) import(file="swillkb.dxf");
 
 pokerplate();
+
+% translate([0,0,-1]) linear_extrude(height=plateThickness+2) polygon(points=[[-1,-1], [-1,100], [134,100], [134,76.5], [143,76.5], [143,57], [148,57], [148,38], [138,38], [138,-1]]);
+
