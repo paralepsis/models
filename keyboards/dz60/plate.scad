@@ -1,5 +1,5 @@
 //Thickness of entire plate
-plateThickness=3;
+plateThickness=2.4;
 //Unit square length, from Cherry MX data sheet
 lkey=19.05;
 //Hole size, from Cherry MX data sheet
@@ -9,7 +9,7 @@ width=15;
 //Height, in units, of board
 height=5;
 //Radius of mounting holes
-mountingholeradius=3;
+mountingholeradius=2;
 //height of switch clasp cutouts
 cutoutheight = 3;
 //width of switch clasp cutouts
@@ -22,6 +22,19 @@ cornerradius=3;
 holediff=lkey-holesize;
 w=width*lkey;
 h=height*lkey;
+
+//
+// THINGS TO PRINT
+//
+rotate([180,0,0]) intersection() {
+	pokerplate();
+	lhs();
+}
+
+module lhs() {
+	translate([0,0,-1]) linear_extrude(height=plateThickness+2) polygon(points=[[-1,-1], [-1,100], [134,100], [134,76.5], [143,76.5], [143,57], [148,57], [148,38], [138,38], [138,-1]]);
+}
+
 
 //poker keyboard layout layer
 pokerkeyboard = [
@@ -185,8 +198,4 @@ module pokerplate(){
 }
 
 // translate([0,0,3]) import(file="swillkb.dxf");
-
-pokerplate();
-
-% translate([0,0,-1]) linear_extrude(height=plateThickness+2) polygon(points=[[-1,-1], [-1,100], [134,100], [134,76.5], [143,76.5], [143,57], [148,57], [148,38], [138,38], [138,-1]]);
 
