@@ -1,5 +1,5 @@
 //Thickness of entire plate
-plateThickness=2.4;
+plateThickness=4.8;
 //Unit square length, from Cherry MX data sheet
 lkey=19.05;
 //Hole size, from Cherry MX data sheet
@@ -9,7 +9,7 @@ width=15;
 //Height, in units, of board
 height=5;
 //Radius of mounting holes
-mountingholeradius=2;
+mountingholeradius=2.5;
 //height of switch clasp cutouts
 cutoutheight = 3;
 //width of switch clasp cutouts
@@ -26,13 +26,25 @@ h=height*lkey;
 //
 // THINGS TO PRINT
 //
-rotate([180,0,0]) intersection() {
-	pokerplate();
-	lhs();
+if (1) {
+    translate([0,0,plateThickness]) rotate([180,0,0]) intersection() {
+        acrylicDZPlate();
+        lhs(slop=0.2);
+    }
+}
+if (1) {
+    translate([0,0,plateThickness]) rotate([180,0,0]) difference() {
+        acrylicDZPlate();
+        lhs(slop=-0.2);
+    }
 }
 
-module lhs() {
-	translate([0,0,-1]) linear_extrude(height=plateThickness+2) polygon(points=[[-1,-1], [-1,100], [134,100], [134,76.5], [143,76.5], [143,57], [148,57], [148,38], [138,38], [138,-1]]);
+module lhs(slop=0.2) {
+    translate([0,0,-1]) linear_extrude(height=plateThickness+2)
+        polygon(points=[[-2,-2], [-2,100], [134-slop,100], [134-slop,76.5-slop],
+                        [143-slop,76.5-slop], [143-slop,57-slop],
+                        [148-slop,57-slop], [148-slop,38+slop],
+                        [138-slop,38+slop], [138-slop,-2]]);
 }
 
 
@@ -52,8 +64,7 @@ pokerkeyboard = [
 [[10,0],1],
 [[11,0],1],
 [[12,0],1],
-[[13,0],1],
-[[14,0],1],
+[[13,0],2, "d"],
 //start ROW 1
 [[  0,1],1.5],
 [[1.5,1],1],
@@ -82,9 +93,9 @@ pokerkeyboard = [
 [[9.75,2],1],
 [[10.75,2],1],
 [[11.75,2],1],
-[[12.75,2],2.25],
+[[12.75,2],2.25,"u"],
 //start ROW 3
-[[   0,3],2.25],
+[[   0,3],2.25, "d"],
 [[2.25,3],1],
 [[3.25,3],1],
 [[4.25,3],1],
@@ -101,9 +112,9 @@ pokerkeyboard = [
 [[   0,4],1.25],
 [[1.25,4],1.25],
 [[2.5 ,4],1.25],
-[[3.75,4],2.25],
+[[3.75,4],2.25, "u"],
 [[6  ,4],1.25],
-[[7.25,4],2.75],
+[[7.25,4],2.75, "u"],
 [[10 ,4],1],
 [[11 ,4],1],
 [[12 ,4],1],
@@ -111,90 +122,118 @@ pokerkeyboard = [
 [[14,4],1],
 ];
 
-module plate(w,h){
+module plate(w,h,extraLeft=0,extraBottom=0,extraTop=0,extraRight=0){
         hull() {
-		translate([cornerradius,cornerradius]) cylinder(r=cornerradius,h=plateThickness);
-        	translate([w-cornerradius,cornerradius]) cylinder(r=cornerradius,h=plateThickness);
-        	translate([cornerradius,h-cornerradius]) cylinder(r=cornerradius,h=plateThickness);
-        	translate([w-cornerradius,h-cornerradius]) cylinder(r=cornerradius,h=plateThickness);
-	}
-	// cube([w,h,plateThickness]);
+        translate([cornerradius-extraLeft,cornerradius-extraBottom]) cylinder(r=cornerradius,h=plateThickness);
+            translate([w-cornerradius+extraRight,cornerradius-extraBottom]) cylinder(r=cornerradius,h=plateThickness);
+            translate([cornerradius-extraLeft,h-cornerradius+extraTop]) cylinder(r=cornerradius,h=plateThickness);
+            translate([w-cornerradius+extraRight,h-cornerradius+extraTop]) cylinder(r=cornerradius,h=plateThickness);
+    }
+    // cube([w,h,plateThickness]);
 }
 
 // note: +0.2 is to make for clean differences
 
-module switchhole(size=1,openable=0){
-	translate([0,0,-0.1]) union(){
-		cube([holesize,holesize,plateThickness+0.2]);
-                translate([holesize/2-3,-1,0]) cube([6,holesize+2,plateThickness+0.1 - 1.5]); // for clip to catch
+module switchhole(size=1,openable=0,up=1){
+    translate([0,0,-0.1]) union(){
+        cube([holesize,holesize,plateThickness+0.2]);
+                translate([holesize/2-2,-1,0]) cube([4,holesize+2,plateThickness+0.1 - 1.3]); // for clip to catch
 
                 if (openable) {
-			translate([-cutoutwidth,1,0])
-			cube([holesize+2*cutoutwidth,cutoutheight,plateThickness+0.2]);
+            translate([-cutoutwidth,1,0])
+            cube([holesize+2*cutoutwidth,cutoutheight,plateThickness+0.2]);
 
-			translate([-cutoutwidth,holesize-cutoutwidth-cutoutheight,0])
-			cube([holesize+2*cutoutwidth,cutoutheight,plateThickness+0.2]);
-		}
+            translate([-cutoutwidth,holesize-cutoutwidth-cutoutheight,0])
+            cube([holesize+2*cutoutwidth,cutoutheight,plateThickness+0.2]);
+        }
 
-		if (size >= 2) {
-			translate([-8.3,0,0]) cube([6.7,holesize,plateThickness+0.2]);
-			translate([holesize+1.6,0,0]) cube([6.7,holesize,plateThickness+0.2]);
-		}
-	}
+        if (size >= 2) {
+            translate([-8.4,-1*(18-holesize)/2,0])
+                cube([6.9,18,plateThickness+0.1-2]);
+            translate([holesize+1.5,-1*(18-holesize)/2,0])
+                cube([6.9,18,plateThickness+0.1-2]);
+
+            if (up) {
+                translate([-8.4,1,0])
+                    cube([6.9,holesize-1,plateThickness+0.2]);
+                translate([holesize+1.5,1,0])
+                    cube([6.9,holesize-1,plateThickness+0.2]);
+                translate([-8.4,holesize-0.1,0])
+                    cube([holesize + 16.8,3.1,plateThickness+0.1-1.5]);
+            }
+            else {
+                translate([-8.4,0,0])
+                    cube([6.9,holesize-1,plateThickness+0.2]);
+                translate([holesize+1.5,0,0])
+                    cube([6.9,holesize-1,plateThickness+0.2]);
+                translate([-8.4,-3,0])
+                    cube([holesize + 16.8,3.1,plateThickness+0.1-1.5]);
+            }
+        }
+    }
 }
 
 module holematrix(holes,startx,starty){
-	for (key = holes){
-		translate([startx+lkey*key[0][0], starty-lkey*key[0][1], 0])
-		translate([(lkey*key[1]-holesize)/2,(lkey - holesize)/2, 0])
-		switchhole(size=key[1]);
-	}
+    for (key = holes){
+        translate([startx+lkey*key[0][0], starty-lkey*key[0][1], 0])
+        translate([(lkey*key[1]-holesize)/2,(lkey - holesize)/2, 0])
+        switchhole(size=key[1],up=(key[2] == "u" ? 1 : 0));
+    }
 }
 
 module mountingholes(outsides=1, dzExtras=1){
-	translate([(1+1/3)*lkey,3.5*lkey,-0.1])
-	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+    translate([(1+1/3)*lkey,3.5*lkey,-0.1])
+    cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
 
-	translate([(13+2/3)*lkey,3.5*lkey,-0.1])
-	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
-	
-	translate([(6.75)*lkey,2.5*lkey,-0.1])
-	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+    translate([(13+2/3)*lkey,3.5*lkey,-0.1])
+    cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+    
+    translate([(6.75)*lkey,2.5*lkey,-0.1])
+    cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
 
-	translate([(6.75)*lkey,2.5*lkey,-0.1])
-	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+    translate([(6.75)*lkey,2.5*lkey,-0.1])
+    cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
 
-	translate([(10)*lkey,.5*lkey,-0.1])
-	cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+    translate([(10)*lkey,.5*lkey,-0.1])
+    cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
 
-	if (outsides) {
-		translate([(.2)*lkey,2*lkey,-0.1])
-		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+    if (outsides) {
+        hull() {
+            // note: the original offset in X was 0.2*lkey; modded for acrylic
+            // translate([(.2)*lkey,2*lkey,-0.1])
+            //
+            translate([(.2)*lkey-1,2*lkey,-0.1])
+            cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+            // added to extend LHS hole to edge
+            translate([-1,2*lkey,-0.1])
+            cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+        }
 
-		translate([(14.8)*lkey,2*lkey,-0.1])
-		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
-	}
+        translate([(14.8)*lkey,2*lkey,-0.1])
+        cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+    }
 
-	if (dzExtras) {
-		translate([(1.25)*lkey,.5*lkey,-0.1])
-		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+    if (dzExtras) {
+        translate([(1.25)*lkey,.5*lkey,-0.1])
+        cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
 
-		translate([(4)*lkey,4.5*lkey,-0.1])
-		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
+        translate([(4)*lkey,4.5*lkey,-0.1])
+        cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
 
-		translate([(10)*lkey,4.5*lkey,-0.1])
-		cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=12);
-		
-	}
+        translate([(10)*lkey,4.5*lkey,-0.1])
+        cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+        
+    }
 }
 
-module pokerplate(){
-	$fn=30;
-	difference(){
-		plate(w,h);
-		holematrix(pokerkeyboard,0,h-lkey);
-		mountingholes();
-	}
+module acrylicDZPlate(){
+    $fn=30;
+    difference(){
+        plate(w,h,extraLeft=1,extraBottom=1,extraRight=1);
+        // plate(w,h);
+        holematrix(pokerkeyboard,0,h-lkey);
+        mountingholes(dzExtras=0);
+    }
 }
 
 // translate([0,0,3]) import(file="swillkb.dxf");
