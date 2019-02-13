@@ -1,3 +1,9 @@
+// NOTE:
+// - I think that a little more tuning of the space around screw-in stabs is
+//   in order. Acrylic version was a bit of a tight fit when printed at 0.3mm.
+//   Maybe need a little more space in the Y?
+//
+
 //Thickness of entire plate
 plateThickness=4.8;
 //Unit square length, from Cherry MX data sheet
@@ -209,8 +215,13 @@ module mountingholes(outsides=1, dzExtras=1){
             cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
         }
 
-        translate([(14.8)*lkey,2*lkey,-0.1])
-        cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+        hull() {
+            translate([(14.8)*lkey,2*lkey,-0.1])
+            cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+
+            translate([(14.8)*lkey+10,2*lkey,-0.1])
+            cylinder(h=plateThickness+0.2,r=mountingholeradius, $fn=20);
+        }
     }
 
     if (dzExtras) {
@@ -229,7 +240,7 @@ module mountingholes(outsides=1, dzExtras=1){
 module acrylicDZPlate(){
     $fn=30;
     difference(){
-        plate(w,h,extraLeft=1,extraBottom=1,extraRight=1);
+        plate(w,h,extraLeft=1,extraBottom=1,extraRight=2);
         // plate(w,h);
         holematrix(pokerkeyboard,0,h-lkey);
         mountingholes(dzExtras=0);
