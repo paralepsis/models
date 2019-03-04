@@ -18,6 +18,7 @@ module bottom() {
       roughForm();
       translate([-50,-50,9.27057]) cube([100,100,20]);
    }
+   micro();
 }
 
 module roughForm() {
@@ -25,6 +26,13 @@ module roughForm() {
       outsideForm();
       translate([0,0,-10]) cube([200,200,20], center=true);
       interiorVolume();
+   }
+}
+
+module micro() {
+   difference() {
+      translate([-15,-21/2,2]) cube([30,21,3]);
+      translate([-14,-19/2,1.9]) cube([30,19,5]);
    }
 }
 
@@ -36,8 +44,9 @@ module outsideForm() {
 module interiorVolume() {
    translate([0,0,2]) cylinder($fn=120, r=28, h=9.4);
    translate([0,0,2]) cylinder($fn=120, r=30, h=7.27057);
-   translate([0,0,3]) cylinder($fn=120, r=10, h=12);
-   translate([18,-5,-0.1]) cube([20,10,6]);
+   translate([0,0,3]) cylinder($fn=120, r=15, h=10);
+   translate([0,0,3]) cylinder($fn=120, r=4, h=12);
+   translate([18,-6,-0.1]) cube([20,12,7]);
 }
 
 module interiorLip() {
