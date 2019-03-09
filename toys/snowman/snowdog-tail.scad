@@ -2,13 +2,13 @@ $fn = 50;
 
 difference() {
    union() {
-      translate([40,0,0]) cylinder(r=10,h=20);
+      cylinder(r=10,h=20);
       hull() {
-         translate([40,0,0]) cylinder(r=10,h=12);
-         form();
+         cylinder(r=10,h=12);
+         translate([-5,0,0]) form();
       }
    }
-   translate([40,0,3]) cylinder(d=7,h=30);
+   translate([0,0,3]) cylinder(d=7,h=30);
 }
 
 
