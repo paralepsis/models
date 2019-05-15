@@ -1,7 +1,8 @@
 % import("./quefrency-right-middle-65.stl");
 
 perimeter();
-bottom(thick=1.2);
+// lineCutBottom(thick=2.2);
+imperialCutBottom(thick=2.2);
 
 module perimeter() {
    difference() {
@@ -23,7 +24,13 @@ module partCutouts() {
    }
 }
 
-module bottom(thick=1) {
+module imperialCutBottom(thick=1) {
+   difference() {
+      linear_extrude(height=thick) projection() import("./q-r-65-slice-filled.stl");
+      translate([12,-5,-0.2]) scale([3,3,1]) linear_extrude(height=thick+0.4) projection() import("./imperial-symbol.stl");
+   }
+}
+module lineCutBottom(thick=1) {
    difference() {
       linear_extrude(height=thick) projection() import("./q-r-65-slice-filled.stl");
 
