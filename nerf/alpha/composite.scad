@@ -5,7 +5,36 @@ foxfireSemi();
 foxfireGrip();
 flywheelAssembly();
 triggerAssembly();
-% scifiGun();
+// % scifiGun();
+// % ext0();
+caliburnMagwell();
+
+function XY(pt) = [pt[0], pt[1]];
+
+module caliburnMagwell() {
+   color("red") {
+      translate([9,0,-79])
+      rotate([0,0,180]) 
+      import("./models/caliburn-monolithic-magwell/MagWell_monoT.stl");
+   }
+}
+
+module ext0() {
+   barrel = 5; // at least 5
+
+   mirror([0,1,0]) rotate([90,0,0]) linear_extrude(height=20)
+      polygon(points = [[-172,0],[-172,27],[-144,27], [-144,35], [-139,40],[27,40],
+         [32,45], [60,45], [65,40],
+         [70 + barrel,40],[80 + barrel,30],[80 + barrel,0]]);
+
+   mirror([0,1,0]) rotate([90,0,0]) linear_extrude(height=20)
+     polygon(points=[[80 + barrel,0],[-172,0],[-172,-10], [-144,-10],
+                     [-144,-16],[-134,-26],
+                     [-41,-26],[-33,-34],[-33,-55], [-43,-65], [-43,-75],
+                     [-38,-80],
+                     [55,-80], [55,-80], [75,-60], [75,-40], [80,-35], 
+                     [75 + barrel,-35], [80 + barrel,-30]]);
+}
 
 module scifiGun() {
    translate([-20,-1,-120]) scale([4,4,4]) import("./models/scifi-gun/scifi-gun-whole.stl");
