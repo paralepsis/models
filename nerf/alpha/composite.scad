@@ -1,19 +1,31 @@
 talonMag();
-foxfireMagwell();
-foxfireFront();
+// foxfireMagwell();
+// foxfireFront();
 foxfireSemi();
-foxfireGrip();
+// foxfireGrip();
+% ar15Grip();
+ar15Grip1911();
 flywheelAssembly();
 triggerAssembly();
 // % scifiGun();
 // % ext0();
-caliburnMagwell();
+// caliburnMagwell();
 
 function XY(pt) = [pt[0], pt[1]];
 
+module ar15Grip() {
+   // translate([-133,0,-26])
+   translate([-128,0,-26])
+   rotate([180,0,-90]) import("./models/AR-15_Grip/AR15_GRIP-rotated.STL");
+}
+
+module ar15Grip1911() {
+   translate([-170,-8,-147]) rotate([32,0,90]) import("./models/1911_AR_Grip/files/1911AS-V2.stl");
+}
+
 module caliburnMagwell() {
    color("red") {
-      translate([9,0,-79])
+      translate([9,0,-78])
       rotate([0,0,180]) 
       import("./models/caliburn-monolithic-magwell/MagWell_monoT.stl");
    }
@@ -72,7 +84,11 @@ module foxfireFront(cover=0) {
 
 module flywheelAssembly() {
    color("purple") {
-      translate([73.0,-13,37]) rotate([180,0,180]) import("./models/stryfe-rs-cage-43mm-morpheus.stl");
+      translate([73.0,-13,37]) {
+         rotate([180,0,180]) import("./models/stryfe-rs-cage-43mm-morpheus.stl");
+         translate([-26.25,0,-16]) rotate([90,0,0]) cylinder(r=11,h=19);
+         translate([-26.25,0,-59]) rotate([90,0,0]) cylinder(r=11,h=19);
+      }
    }
 }
 
