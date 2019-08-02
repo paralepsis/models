@@ -4,20 +4,20 @@ use <attach.scad>
 $fn=40;
 
 
-if (1) difference() {
+if (1) mirror([1,0,0]) difference() {
    union() {
-      linear_extrude(height=3.8) form();
+      linear_extrude(height=3.8+2.35) form();
 
       /* angled bit to fit in v-slot */
       translate([-4.5+35/2,-16,0]) rotate([-90,0,0]) {
          linear_extrude(height=90)
          polygon(points=[[-0.1,0],[0,0],[1,1],[8,1],[9,0],[9,-0.1]]);
       }
-      translate([0,0,3.8/2]) {
-         bevel(e1,n1,cr=1,cres=10,l=3.8);
-         bevel(e4,n4,cr=1,cres=10,l=3.8);
-         bevel(e7,n7,cr=1,cres=10,l=3.8);
-         bevel(e10,n10,cr=1,cres=10,l=3.8);
+      translate([0,0,(3.8+2.35)/2]) {
+         bevel(e1,n1,cr=1,cres=10,l=3.8+2.35);
+         bevel(e4,n4,cr=1,cres=10,l=3.8+2.35);
+         bevel(e7,n7,cr=1,cres=10,l=3.8+2.35);
+         bevel(e10,n10,cr=1,cres=10,l=3.8+2.35);
       }
    }
    cuts();
@@ -100,20 +100,38 @@ module form() {
 
 module cuts() {
    translate([0,0,-3]) {
-      translate([6,58,0]) cylinder(h=10,d=3.2);
-      translate([35/2,66,0]) cylinder(h=10,d=5.2);
-      translate([35-6,0,0]) cylinder(h=10,d=3.2);
-      translate([35/2,-8,0]) cylinder(h=10,d=5.2);
+      hull() {
+         translate([6,58.5,0]) cylinder(h=10,d=3.2);
+         translate([6,57.5,0]) cylinder(h=10,d=3.2);
+      }
+      hull() {
+         translate([6,58.5,0]) cylinder($fn=6,h=5.05,d=6.2);
+         translate([6,57.5,0]) cylinder($fn=6,h=5.05,d=6.2);
+      }
+      hull() {
+         translate([35-6,-0.5,0]) cylinder(h=10,d=3.2);
+         translate([35-6,0.5,0]) cylinder(h=10,d=3.2);
+      }
+      hull() {
+         translate([35-6,-0.5,0]) cylinder($fn=6,h=5.05,d=6.2);
+         translate([35-6,0.5,0]) cylinder($fn=6,h=5.05,d=6.2);
+      }
+      /* wonky -3 in the Z causes odd sizes here */
+      translate([35/2,66,0]) cylinder(h=6.5,d=5.2);
+      translate([35/2,66,6.8]) cylinder(h=10,d=9.4);
+      translate([35/2,-8,0]) cylinder(h=6.5,d=5.2);
+      translate([35/2,-8,6.8]) cylinder(h=10,d=9.4);
+
    }
 
    translate([0,0,1.9]) {
-      bevel(e0,n0,cr=1,cres=10,l=4);
-      bevel(e2,n2,cr=1,cres=10,l=4);
-      bevel(e3,n3,cr=1,cres=10,l=4);
-      bevel(e5,n5,cr=1,cres=10,l=4);
-      bevel(e6,n6,cr=1,cres=10,l=4);
-      bevel(e8,n8,cr=1,cres=10,l=4);
-      bevel(e9,n9,cr=1,cres=10,l=4);
-      bevel(e11,n11,cr=1,cres=10,l=4);
+      bevel(e0,n0,cr=1,cres=10,l=10);
+      bevel(e2,n2,cr=1,cres=10,l=10);
+      bevel(e3,n3,cr=1,cres=10,l=10);
+      bevel(e5,n5,cr=5,cres=10,l=10);
+      bevel(e6,n6,cr=1,cres=10,l=10);
+      bevel(e8,n8,cr=1,cres=10,l=10);
+      bevel(e9,n9,cr=1,cres=10,l=10);
+      bevel(e11,n11,cr=5,cres=10,l=10);
    }
 }
