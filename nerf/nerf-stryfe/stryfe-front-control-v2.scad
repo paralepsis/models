@@ -2,33 +2,61 @@ $fn=40;
 
 // % translate([0,-12.5,0]) import("./stryfe-bolter-grip2.stl");
 
-if (1) {
+if (0) {
    % translate([-11.5,0,0]) {
       rotate([00,90,90]) import("./Nerf_Stryfe_Foregrip/files//StryfeForeGripMK2-Plate.stl");
       rotate([0,90,90]) import("./Nerf_Stryfe_Foregrip/files//StryfeForeGripMK2.stl");
    }
 }
 
-translate([10,-35,12]) rotate([-50,0,0]) rotate([0,-90,90]) switch();
-
+translate([-10.2,-15,17]) rotate([0,-90,0]) button();
+translate([7,-17,10]) rotate([-15,0,0]) rotate([0,-90,90]) switch();
 
 if (1) difference() {
    newExterior();
    cutout();
 }
-//cutout();
+
+module button(cut=0) {
+   myHt = 6;
+
+   if (cut == 0) {
+      for(i=[0:2]) {
+         difference() {
+            cylinder(d=8-i*2,h=myHt+0.2*i);
+            translate([0,0,myHt-0.6+0.2*i]) cylinder(d=7-i*2,h=myHt);
+         }
+      }
+      cylinder(d=8-6,h=myHt+0.6);
+      cylinder(d=13,h=1.2);
+   }
+   else {
+      cylinder(d=8+0.2,h=myHt+0.6);
+      translate([0,0,-5]) cylinder(d=13+0.2,h=1.2+5);
+   }
+}
+
+% sideCut();
+
+module sideCut() {
+   translate([6.5,0,0]) union() {
+      rotate([90,0,-90])
+      translate([0,0,-12.5]) linear_extrude(height=25)
+      polygon(points=[[-7,-1],[-7,60],[9,60],
+                      [27,11], [27,-1],[10,-1]]);
+   }
+}
 
 module newExterior() {
-   // minkowski($fn=16) {
+   minkowski($fn=16) {
       union() {
          rotate([90,0,-90])
-         translate([0,0,-10]) linear_extrude(height=20)
-         polygon(points=[[-5,0],[-5,85],[10,108], [14,106],
-                      [7,90],[47,10],[70,10],
-                      [70,0],[10,0]]);
+         translate([0,0,-12.5]) linear_extrude(height=25)
+         polygon(points=[[-5,0],[-5,85],[10,85],
+                      [37,10], [37,0],[10,0]]);
       }
       sphere(r=2);
-  // }
+  }
 }
 
 module switch(cutout=1) {
@@ -66,20 +94,29 @@ module cutout() {
    translate([0,0,-0.01]) {
 //      translate([-13.49/2,-38+6.34,0]) cube([13.49, 38, 82-13.49/2]);
       hull() {
-         translate([0,0,78]) rotate([90,0,0]) cylinder(h=6,r=9.5);
-         translate([0,0,10]) rotate([90,0,0]) cylinder(h=40,r=9.5);
+         translate([0,0,70]) rotate([90,0,0]) cylinder(h=6,r=11.5);
+         translate([0,0,10]) rotate([90,0,0]) cylinder(h=25,r=11.5);
       }
       translate([-13.49/2,+6.34-4,0]) cube([13.49, 4, 100]);
-      translate([-18.6/2,-38+6.34,0]) cube([18.6, 38, 27.5]);
       translate([-18.6/2,0,0]) cube([18.6, 3.27, 100]);
+
+      /* this one gets the notch in the rail */
+      translate([-18.6/2,-20+6.34,0]) cube([18.6, 20, 35]);
    }
    outsideSlice();
+   translate([-10.75,-15,17]) rotate([0,-90,0]) button(cut=1);
 }
 
 module outsideSlice() {
-   translate([15,0,0]) rotate([90,0,-90]) linear_extrude(height=30)
-   polygon(points=[[-6,0],[-6,87],[0,93],[0,100],[-10,100],[-10,-5],
+   translate([20,0,0]) rotate([90,0,-90]) linear_extrude(height=40)
+   if (1) {
+      polygon(points=[[-6,0],[-6,87],[0,93],[0,100],[-10,100],[-10,-5],
+                   [80,-5],[80,0],[30,0],[27.6,7.4],[11,7.4],[8.6,0]]);
+   }
+   else /* old shape */ {
+      polygon(points=[[-6,0],[-6,87],[0,93],[0,100],[-10,100],[-10,-5],
                    [80,-5],[80,5],[28.37838,5],[27.6,7.4],[11,7.4],[8.6,0]]);
+   }
 }
 
 module exterior() {
