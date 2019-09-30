@@ -1,5 +1,8 @@
 $fn=40;
 
+//% import("./stryfe-front-control-v2-door.stl");
+//% import("./stryfe-front-control-v2-body.stl");
+
 if (0) {
    % translate([-11.5,0,0]) {
       rotate([00,90,90]) import("./Nerf_Stryfe_Foregrip/files//StryfeForeGripMK2-Plate.stl");
@@ -12,7 +15,7 @@ if (0) {
 // translate([0,23,0]) button();
 // screws(cut=1);
 
-// main();
+//main();
 door();
 
 module door() {
@@ -23,7 +26,7 @@ module door() {
          newExterior();
          cutout(side=0);
          screws(cut=1,mat=0);
-         translate([7,-17.5-3,10.4]) rotate([-20,0,0]) rotate([0,-90,90]) switch(cutout=0,body=0,screws=1);
+         translate([6,-17.5-3,10.4]) rotate([-20,0,0]) rotate([0,-90,90]) switch(cutout=0,body=0,screws=1);
       }
       translate([0.25,0.25,-0.25]) sideCut();
    }
@@ -39,7 +42,7 @@ module main() {
       newExterior();
       cutout(side=1);
       screws(cut=1,mat=0);
-      translate([7,-17.5-3,10.4]) rotate([-20,0,0]) rotate([0,-90,90]) switch(cutout=0,body=0,screws=1);
+      translate([6,-17.5-3,10.4]) rotate([-20,0,0]) rotate([0,-90,90]) switch(cutout=0,body=0,screws=1);
       translate([1.745+4,3.25,35.25]) cube([5,2.9,24.75]); /* leftover */
    }
 }
@@ -59,7 +62,7 @@ module button(cut=0) {
    }
    else {
       cylinder(d=8+0.2,h=myHt+0.6);
-      translate([0,0,-8]) cylinder(d=13+0.2,h=1.2+8);
+      translate([0,0,-7]) cylinder(d=13+0.2,h=1.2+8);
    }
 }
 
@@ -100,7 +103,7 @@ module newExterior() {
    minkowski($fn=16) {
       union() {
          rotate([90,0,-90])
-         translate([0,0,-12.5]) linear_extrude(height=25)
+         translate([0,0,-12.5]) linear_extrude(height=26)
          polygon(points=[[-5,0],[-5,91],[8,91],
                       [37,10], [37,0],[10,0]]);
       }
@@ -111,7 +114,7 @@ module newExterior() {
    minkowski($fn=16) {
       union() {
          rotate([90,0,-90])
-         translate([1,0,8.5]) linear_extrude(height=5)
+         translate([1,0,9]) linear_extrude(height=6)
          polygon(points=[[0,28],[0,80],[5,80], [23,28]]);
       }
       sphere(r=2);
@@ -139,8 +142,8 @@ module switch(body=1,cutout=1,screws=1) {
       }
    }
    if (screws) translate([0,0,-5]) {
-      translate([3.0,2.0,0]) cylinder(d=2.8,h=18);
-      translate([3.0,2.0,-25]) cylinder(d=5.5,h=25);
+      translate([5.0,1.25,0]) cylinder(d=2.8,h=18);
+      translate([5.0,1.25,-25]) cylinder(d=5.5,h=25);
       translate([27,12,0]) cylinder(d=2.8,h=18);
       translate([27,12,-8]) cylinder(d=5.5,h=8);
    }
@@ -157,8 +160,8 @@ module switch(body=1,cutout=1,screws=1) {
 module cutout(side=0) {
    translate([0,0,-0.01]) {
       hull() {
-         translate([-23/2,-7-3,53]) cube([23,13.5,0.6]) ;
-         translate([-23/2,-25.3,8.7]) cube([23,29.0,3.6]);
+         translate([-23/2-1,-7-3,53]) cube([23,13.5,0.6]) ;
+         translate([-23/2-1,-25.3,9.2]) cube([23,29.0,3.1]);
       }
       translate([-13.49/2,+6.34-4,0]) cube([13.49, 4, 100]);
       translate([-18.6/2,0,0]) cube([18.6, 3.27, 100]);
@@ -169,7 +172,6 @@ module cutout(side=0) {
    }
    outsideSlice();
    translate([-10.75,-18,17.5]) rotate([0,-90,0]) button(cut=1);
-
 
    if (side > 0) {
       sideCut();
