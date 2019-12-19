@@ -1,11 +1,14 @@
 % import("../orig/Accesory-Tray-25mm-HF.stl");
 
+inset = 0.5;
 cornerRad=3.75;
 trayHt=25;
 xDim = 160;
 yDim = 165;
 wallThick = 2.4;
 bottomThick = 1.5;
+
+bottomMagnets = 1;
 
 epsilon = 0.1;
 
@@ -37,19 +40,21 @@ module baseShape() {
 
    cornerPosts();
 
-   /* interior walls */
-   translate([92.4, 2.4-epsilon, 0]) cube([1.2, 101 - epsilon, trayHt]);
-   translate([2.4-epsilon, 37, 0]) cube([90+2*epsilon, 1.2, trayHt]);
+   /* interior walls (my cards need a 68x94mm space */
+   translate([95.4, 2.4-epsilon, 0]) cube([1.2, 105 - epsilon, trayHt]);
+   translate([2.4-epsilon, 37, 0]) cube([93+2*epsilon, 1.2, trayHt]);
+
+   /* fancy rounded wall */
+   translate([epsilon, 106.2,0]) cube([20,1.2,25]);
+   translate([epsilon, 106.2,0]) cube([30,1.2,15]);
+   translate([20+epsilon,106.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
+
+   translate([96.6-20, 106.2,0]) cube([20,1.2,25]);
+   translate([96.6-30, 106.2,0]) cube([30,1.2,15]);
+   translate([96.6-20,106.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
 }
 
 
-translate([epsilon, 102.2,0]) cube([20,1.2,25]);
-translate([epsilon, 102.2,0]) cube([30,1.2,15]);
-translate([20+epsilon,102.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
-
-translate([93.6-20, 102.2,0]) cube([20,1.2,25]);
-translate([93.6-30, 102.2,0]) cube([30,1.2,15]);
-translate([93.6-20,102.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
 
 /* corner rounded posts */
 module cornerPosts() {
@@ -69,14 +74,16 @@ module magnetHoles() {
    magnetRad = 3.25;
 
    /* bottom */
-   translate([magnetOffset+magnetRad, magnetOffset+magnetRad, -epsilon])
-      cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
-   translate([xDim - magnetOffset-magnetRad, magnetOffset+magnetRad, -epsilon])
-      cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
-   translate([magnetOffset+magnetRad, yDim - magnetOffset-magnetRad, -epsilon])
-      cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
-   translate([xDim -magnetOffset-magnetRad, yDim - magnetOffset-magnetRad, -epsilon])
-      cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
+   if (bottomMagnets) {
+      translate([magnetOffset+magnetRad, magnetOffset+magnetRad, -epsilon])
+         cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
+      translate([xDim - magnetOffset-magnetRad, magnetOffset+magnetRad, -epsilon])
+         cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
+      translate([magnetOffset+magnetRad, yDim - magnetOffset-magnetRad, -epsilon])
+         cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
+      translate([xDim -magnetOffset-magnetRad, yDim - magnetOffset-magnetRad, -epsilon])
+         cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
+   }
 
    /* top */
    translate([magnetOffset+magnetRad, magnetOffset+magnetRad, 21.75])
@@ -91,14 +98,26 @@ module magnetHoles() {
 
 /* trayHull() -- this is the hull of the thing */
 module trayHull() {
+   botRad = cornerRad - inset;
+
    hull() {
+      /* bottom may be smaller */
       translate([cornerRad, cornerRad, 0])
-         cylinder($fn=30, r=cornerRad,h=trayHt);
+         cylinder($fn=30, r=botRad,h=1);
       translate([xDim - cornerRad, cornerRad, 0]) 
-         cylinder($fn=30, r=cornerRad,h=trayHt);
+         cylinder($fn=30, r=botRad,h=1);
       translate([cornerRad, yDim - cornerRad, 0]) 
-         cylinder($fn=30, r=cornerRad,h=trayHt);
+         cylinder($fn=30, r=botRad,h=1);
       translate([xDim - cornerRad, yDim - cornerRad, 0]) 
-         cylinder($fn=30, r=cornerRad,h=trayHt);
+         cylinder($fn=30, r=botRad,h=1);
+
+      translate([cornerRad, cornerRad, trayHt-1])
+         cylinder($fn=30, r=cornerRad,h=1);
+      translate([xDim - cornerRad, cornerRad, trayHt-1]) 
+         cylinder($fn=30, r=cornerRad,h=1);
+      translate([cornerRad, yDim - cornerRad, trayHt-1]) 
+         cylinder($fn=30, r=cornerRad,h=1);
+      translate([xDim - cornerRad, yDim - cornerRad, trayHt-1]) 
+         cylinder($fn=30, r=cornerRad,h=1);
    }
 }
