@@ -1,13 +1,12 @@
 inWidth  = 64;
 inDepth  = 65;
-inHeight = 105;
+inHeight = 99; // was 105
 
 extThick = 2.0;
 
 screwX1  = 12;
 screwX2  = 52;
-// screwZ1  = 20;
-screwZ2  = 85;
+screwZ2  = 79;
 screwDepth = 54;
 
 cutHeight = 30;
@@ -52,29 +51,29 @@ difference() {
 
 module airCuts() {
    for (i=[0:2]) {
-      translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*i+10])
+      translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*i+7])
       rotate([90,40,0]) hull() {
-         cylinder(r=2,h=10);
-         translate([0,74,0]) cylinder(r=2,h=10);
+         cylinder(r=2.5,h=10);
+         translate([0,74,0]) cylinder(r=2.5,h=10);
       }
    }
 
-   translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*3+10])
+   translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*3+7])
    rotate([90,40,0]) hull() {
-      cylinder(r=2,h=10);
-      translate([0,54,0]) cylinder(r=2,h=10);
+      cylinder(r=2.5,h=10);
+      translate([0,54,0]) cylinder(r=2.5,h=10);
    }
 
-   translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*4+10])
+   translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*4+7])
    rotate([90,40,0]) hull() {
-      cylinder(r=2,h=10);
-      translate([0,34,0]) cylinder(r=2,h=10);
+      cylinder(r=2.5,h=10);
+      translate([0,34,0]) cylinder(r=2.5,h=10);
    }
 
-   translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*5+10])
+   translate([-0.5*inWidth + 8,-0.5*inDepth+epsilon,15*5+7])
    rotate([90,40,0]) hull() {
-      cylinder(r=2,h=10);
-      translate([0,14,0]) cylinder(r=2,h=10);
+      cylinder(r=2.5,h=10);
+      translate([0,14,0]) cylinder(r=2.5,h=10);
    }
 }
 
