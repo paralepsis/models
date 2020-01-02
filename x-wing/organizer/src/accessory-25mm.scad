@@ -41,17 +41,17 @@ module baseShape() {
    cornerPosts();
 
    /* interior walls (my cards need a 68x94mm space */
-   translate([95.4, 2.4-epsilon, 0]) cube([1.2, 105 - epsilon, trayHt]);
-   translate([2.4-epsilon, 37, 0]) cube([93+2*epsilon, 1.2, trayHt]);
+   translate([96.4, 2.4-epsilon, 0]) cube([1.2, 105 - epsilon, trayHt]);
+   translate([2.4-epsilon, 37, 0]) cube([94+2*epsilon, 1.2, trayHt]);
 
    /* fancy rounded wall */
    translate([epsilon, 106.2,0]) cube([20,1.2,25]);
    translate([epsilon, 106.2,0]) cube([30,1.2,15]);
    translate([20+epsilon,106.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
 
-   translate([96.6-20, 106.2,0]) cube([20,1.2,25]);
-   translate([96.6-30, 106.2,0]) cube([30,1.2,15]);
-   translate([96.6-20,106.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
+   translate([97.6-20, 106.2,0]) cube([20,1.2,25]);
+   translate([97.6-30, 106.2,0]) cube([30,1.2,15]);
+   translate([97.6-20,106.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
 }
 
 
@@ -99,6 +99,7 @@ module magnetHoles() {
 /* trayHull() -- this is the hull of the thing */
 module trayHull() {
    botRad = cornerRad - inset;
+   topInset = 0.75;
 
    hull() {
       /* bottom may be smaller */
@@ -111,13 +112,27 @@ module trayHull() {
       translate([xDim - cornerRad, yDim - cornerRad, 0]) 
          cylinder($fn=30, r=botRad,h=1);
 
+      /* THIS BIT MAKES NO SENSE TO ME -- RBR, 1/2/2020 */
+      if (0) {
+         /* near top */
+         translate([cornerRad, cornerRad, trayHt-1-topInset])
+            cylinder($fn=30, r=cornerRad,h=1);
+         translate([xDim - cornerRad, cornerRad, trayHt-1-topInset]) 
+            cylinder($fn=30, r=cornerRad,h=1);
+         translate([cornerRad, yDim - cornerRad, trayHt-1-topInset]) 
+            cylinder($fn=30, r=cornerRad,h=1);
+         translate([xDim - cornerRad, yDim - cornerRad, trayHt-1-topInset]) 
+            cylinder($fn=30, r=cornerRad,h=1);
+      }
+
+      /* top, slightly inset */
       translate([cornerRad, cornerRad, trayHt-1])
-         cylinder($fn=30, r=cornerRad,h=1);
+         cylinder($fn=30, r=cornerRad-topInset,h=1);
       translate([xDim - cornerRad, cornerRad, trayHt-1]) 
-         cylinder($fn=30, r=cornerRad,h=1);
+         cylinder($fn=30, r=cornerRad-topInset,h=1);
       translate([cornerRad, yDim - cornerRad, trayHt-1]) 
-         cylinder($fn=30, r=cornerRad,h=1);
+         cylinder($fn=30, r=cornerRad-topInset,h=1);
       translate([xDim - cornerRad, yDim - cornerRad, trayHt-1]) 
-         cylinder($fn=30, r=cornerRad,h=1);
+         cylinder($fn=30, r=cornerRad-topInset,h=1);
    }
 }
