@@ -2,7 +2,7 @@ $fn=40;
 
 // % translate([0,-12.5,0]) import("./stryfe-bolter-grip2.stl");
 
-if (0) {
+if (1) {
    % translate([-11.5,0,0]) {
       rotate([00,90,90]) import("./Nerf_Stryfe_Foregrip/files//StryfeForeGripMK2-Plate.stl");
       rotate([0,90,90]) import("./Nerf_Stryfe_Foregrip/files//StryfeForeGripMK2.stl");
