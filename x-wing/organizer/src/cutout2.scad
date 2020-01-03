@@ -1,5 +1,3 @@
-% import("../orig/Accesory-Tray-25mm-HF.stl");
-
 inset = 0.5;
 cornerRad=3.75;
 trayHt=25;
@@ -8,11 +6,12 @@ yDim = 165;
 
 epsilon = 0.1;
 
-translate([0,0,-0.1]) difference() {
-   translate([-1,-1,-1]) cube([xDim+2,yDim+2,trayHt+0.5]);
+translate([0,0,-1.1]) difference() {
+   translate([-1,-1,1]) cube([xDim+2,yDim+2,trayHt-2]);
    trayHull();
+   translate([cornerRad,-2,-0.1]) cube([xDim -2*cornerRad, yDim+4, trayHt+0.5]);
+   translate([-2,cornerRad,-0.1]) cube([xDim+4, yDim-2*cornerRad, trayHt+0.5]);
 }
-
 
 /* trayHull() -- this is the hull of the thing */
 module trayHull() {

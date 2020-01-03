@@ -1,5 +1,3 @@
-% import("../orig/Accesory-Tray-25mm-HF.stl");
-
 inset = 0.5;
 cornerRad=3.75;
 trayHt=25;
@@ -8,9 +6,13 @@ yDim = 165;
 
 epsilon = 0.1;
 
-translate([0,0,-0.1]) difference() {
-   translate([-1,-1,-1]) cube([xDim+2,yDim+2,trayHt+0.5]);
-   trayHull();
+difference() {
+   import("../orig/Template_Tray-6mm-BanksRange.stl");
+
+   translate([0,0,-0.1]) difference() {
+      translate([-1,-1,-1]) cube([xDim+2,yDim+2,trayHt+0.5]);
+      trayHull();
+   }
 }
 
 
