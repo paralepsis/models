@@ -1,8 +1,8 @@
-% import("../orig/Accesory-Tray-25mm-HF.stl");
+% import("../orig/Small_and_Medium_Base_Tray_-_10mm.stl");
 
-inset = 0.5;
+inset = 0.0;
 cornerRad=3.75;
-trayHt=25;
+trayHt=10;
 xDim = 160;
 yDim = 165;
 wallThick = 2.4;
@@ -34,26 +34,33 @@ module baseShape() {
       trayHull();
 
       /* cut out interior */
-      translate([wallThick, wallThick, bottomThick]) 
-         cube([xDim - 2*wallThick, yDim - 2*wallThick, trayHt]);
+      translate([wallThick,20,bottomThick]) smallSlot();
+      translate([wallThick,81,bottomThick]) mediumSlot();
    }
 
    cornerPosts();
-
-   /* interior walls (my cards need a 68x94mm space */
-   translate([96.4, 2.4-epsilon, 0]) cube([1.2, 105 - epsilon, trayHt]);
-   translate([2.4-epsilon, 37, 0]) cube([94+2*epsilon, 1.2, trayHt]);
-
-   /* fancy rounded wall */
-   translate([epsilon, 106.2,0]) cube([20,1.2,25]);
-   translate([epsilon, 106.2,0]) cube([30,1.2,15]);
-   translate([20+epsilon,106.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
-
-   translate([97.6-20, 106.2,0]) cube([20,1.2,25]);
-   translate([97.6-30, 106.2,0]) cube([30,1.2,15]);
-   translate([97.6-20,106.2,15]) rotate([-90,0,0]) cylinder(r=10,h=1.2);
 }
 
+module slot(slotWidth=44,topWidth=32) {
+   cube([xDim-wallThick,slotWidth,7]);
+   difference() {
+      translate([xDim-wallThick-5+epsilon,-5,0])
+         cube([5,slotWidth+10,7]);
+      translate([xDim-wallThick-5+epsilon,-5,-epsilon])
+         cylinder(r=5,h=7+2*epsilon);
+      translate([xDim-wallThick-5+epsilon,44+5,-epsilon]) // 42?
+         cylinder(r=5,h=7+2*epsilon);
+   }
+   translate([0,(slotWidth-topWidth)/2,0]) cube([xDim-wallThick+epsilon,topWidth,trayHt+epsilon]);
+}
+
+module mediumSlot() {
+   slot(slotWidth=64,topWidth=52);
+}
+
+module smallSlot() {
+   slot(slotWidth=44,topWidth=32);
+}
 
 
 /* corner rounded posts */
@@ -86,13 +93,13 @@ module magnetHoles() {
    }
 
    /* top */
-   translate([magnetOffset+magnetRad, magnetOffset+magnetRad, 21.75])
+   translate([magnetOffset+magnetRad, magnetOffset+magnetRad, trayHt-3.25])
       cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
-   translate([xDim - magnetOffset-magnetRad, magnetOffset+magnetRad, 21.75])
+   translate([xDim - magnetOffset-magnetRad, magnetOffset+magnetRad, trayHt-3.25])
       cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
-   translate([magnetOffset+magnetRad, yDim - magnetOffset-magnetRad, 21.75])
+   translate([magnetOffset+magnetRad, yDim - magnetOffset-magnetRad, trayHt-3.25])
       cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
-   translate([xDim -magnetOffset-magnetRad, yDim - magnetOffset-magnetRad, 21.75])
+   translate([xDim -magnetOffset-magnetRad, yDim - magnetOffset-magnetRad, trayHt-3.25])
       cylinder($fn=20, r=magnetRad, h=3.25+epsilon);
 }
 
@@ -112,7 +119,7 @@ module trayHull() {
       translate([xDim - cornerRad, yDim - cornerRad, 0]) 
          cylinder($fn=30, r=botRad,h=1);
 
-      /* this creates a slight inset around top edge */
+      /* this creates a slight inset on the top edge */
       if (1) {
          /* near top */
          translate([cornerRad, cornerRad, trayHt-1-topInset])
