@@ -6,7 +6,7 @@
 
 $fn=60;
 
-bridge=0;
+bridge=1;
 
 difference() {
    k31Piston();
@@ -21,11 +21,12 @@ module k31Piston() {
 }
 
 module cutout() {
-   cylinder(d1=23.0,d2=23.00,h=1.5); // bevel bottom edge
+   translate([0,0,-0.1]) cylinder(d1=24.0,d2=23.00,h=1.5); // bevel bottom edge
    translate([0,0,-1]) cylinder(d=23.00,h=15); // CS's is 22.22mm ID and my spring fits...
    // translate([0,0,12.5]) cylinder(d1=24,d2=22.22,h=2.5);
    if (bridge) {
-      translate([0,0,15.0+0.6]) cylinder(d=17,h=34-0.6);
+      translate([0,0,15.0+1.2]) cylinder(d=17,h=26-1.2);
+      translate([0,0,15.0+1.2+26]) sphere(d=17);
    }
    else {
       translate([0,0,15.0]) cylinder(d=17,h=34);
