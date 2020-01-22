@@ -1,12 +1,17 @@
 % import("./quefrency-right-middle-65.stl");
 
-perimeter();
+perimeter(height=8.5);
+difference() {
+   imperialCutBottom(thick=2.2);
+   // translate([0,0,0.6+0.2]) partCutouts(); // shift these to leave a little solid bottom
+   translate([0,0,0]) partCutouts();
+}
 // lineCutBottom(thick=2.2);
-imperialCutBottom(thick=2.2);
+// imperialCutBottom(thick=2.2);
 
-module perimeter() {
+module perimeter(height=13) {
    difference() {
-      linear_extrude(height=13) projection() import("./quefrency-right-middle-65.stl");
+      linear_extrude(height=height) projection() import("./quefrency-right-middle-65.stl");
       partCutouts();
    }
 }
@@ -18,7 +23,7 @@ module partCutouts() {
    if (1) {
       // Arduino Access
       translate([58,2,-0.2]) {
-         cube([40,22,13.4]);
+         translate([0,-1,-0]) cube([40,24,13.4]);
          translate([5,4,0]) cube([40,14,13.4]);
       }
    }
@@ -26,13 +31,14 @@ module partCutouts() {
 
 module imperialCutBottom(thick=1) {
    difference() {
-      linear_extrude(height=thick) projection() import("./q-r-65-slice-filled.stl");
-      translate([12,-5,-0.2]) scale([3,3,1]) linear_extrude(height=thick+0.4) projection() import("./imperial-symbol.stl");
+      bottom(thick=thick);
+      translate([12,-5,-0.2]) scale([2.5,2.5,1]) linear_extrude(height=thick+0.4) projection() import("./imperial-symbol.stl");
    }
 }
-module lineCutBottom(thick=1) {
+
+module lineCutBottom2(thick=1) {
    difference() {
-      linear_extrude(height=thick) projection() import("./q-r-65-slice-filled.stl");
+      bottom(thick=thick);
 
       translate([-71+4,-2,0]) lines(ct=6,odd=1, thick=thick);
       translate([-65+4,-45,0]) lines(ct=5, odd=0, thick=thick);
@@ -43,6 +49,25 @@ module lineCutBottom(thick=1) {
       // translate([-71,-2,0]) lines(ct=13,odd=1, thick=thick);
       // translate([-65,-45,0]) lines(ct=12, odd=0, thick=thick);
    }
+}
+
+module lineCutBottom(thick=1) {
+   difference() {
+      bottom(thick=thick);
+
+      translate([-71+4,-2,0]) lines(ct=6,odd=1, thick=thick);
+      translate([-65+4,-45,0]) lines(ct=5, odd=0, thick=thick);
+
+      translate([14+4,-2,0]) mirror([0,0,0]) lines(ct=5,odd=0, thick=thick);
+      translate([80+4,-45,0]) mirror([1,0,0]) lines(ct=5, odd=0, thick=thick);
+
+      // translate([-71,-2,0]) lines(ct=13,odd=1, thick=thick);
+      // translate([-65,-45,0]) lines(ct=12, odd=0, thick=thick);
+   }
+}
+
+module bottom(thick=1) {
+  linear_extrude(height=thick) projection() import("./q-r-65-slice-filled.stl");
 }
 
 module lines(ct,odd=0,thick=1) {
