@@ -2,7 +2,7 @@
 
 perimeter(height=8.5);
 difference() {
-   imperialCutBottom(thick=2.2);
+   imperialCutBottom(thick=1.8);
    // translate([0,0,0.6+0.2]) partCutouts(); // shift these to leave a little solid bottom
    translate([0,0,0]) partCutouts();
 }
