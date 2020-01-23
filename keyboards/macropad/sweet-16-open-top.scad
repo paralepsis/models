@@ -1,12 +1,11 @@
 $fn=30;
 
-
 translate([-50,0,0]) bottomPanel();
 translate([50,0,0]) topPanel();
 
 module topPanel() {
    postDia = 7;
-   postHt = 5.5 + 1.5;
+   postHt = 5.5 + 1.0;
 
    difference() {
       panel(thick=1.5);
@@ -15,28 +14,29 @@ module topPanel() {
 
 // % import("./sweet16-top-thinner.stl");
 
-   difference() {
+   if (1) difference() {
       union() {
          /* holes */
          translate([-42.5,32,0]) cylinder(d=postDia,h=postHt);
          translate([42.5,32,0]) cylinder(d=postDia,h=postHt);
          translate([-42.5,-36.25,0]) cylinder(d=postDia,h=postHt);
          translate([42.5,-36.25,0]) cylinder(d=postDia,h=postHt);
+         cylinder(d=6,h=postHt);
       }
 
       /* holes */
-      translate([-42.5,32,-1]) cylinder(d=3.2,h=postHt+2);
-      translate([42.5,32,-1]) cylinder(d=3.2,h=postHt+2);
-      translate([-42.5,-36.25,-1]) cylinder(d=3.2,h=postHt+2);
-      translate([42.5,-36.25,-1]) cylinder(d=3.2,h=postHt+2);
+      translate([-42.5,32,-1]) cylinder(d=2.2,h=postHt+2);
+      translate([42.5,32,-1]) cylinder(d=2.2,h=postHt+2);
+      translate([-42.5,-36.25,-1]) cylinder(d=2.2,h=postHt+2);
+      translate([42.5,-36.25,-1]) cylinder(d=2.2,h=postHt+2);
    }
 }
 
 module bottomPanel() {
    postDia = 7;
-   postHt = 6.5 + 1.5;
+   postHt = 8.5 + 2.1;
    difference() {
-      panel(thick=1.5);
+      panel(thick=2.1);
       translate([-11.75,8.5,-1]) cylinder(r=3.5,h=10);
    }
 
@@ -52,10 +52,16 @@ module bottomPanel() {
       }
 
       /* holes */
-      translate([-42.5,32,-1]) cylinder(d=3.2,h=postHt+2);
-      translate([42.5,32,-1]) cylinder(d=3.2,h=postHt+2);
-      translate([-42.5,-36.25,-1]) cylinder(d=3.2,h=postHt+2);
-      translate([42.5,-36.25,-1]) cylinder(d=3.2,h=postHt+2);
+      translate([-42.5,32,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([42.5,32,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([-42.5,-36.25,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([42.5,-36.25,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+
+      /* holes */
+      translate([-42.5,32,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([42.5,32,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([-42.5,-36.25,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([42.5,-36.25,-1]) cylinder(d=3.1,h=postHt+2);
    }
 }
 
@@ -66,10 +72,10 @@ module panel(thick=1.6) {
       translate([0,0,-0.1]) linear_extrude(height=5) projection(cut=true) translate([0,0,-13]) import("./sweet16-bottom-cut-hole.stl");
 
       /* holes */
-      translate([-42.5,32,-1]) cylinder(d=3.2,h=5);
-      translate([42.5,32,-1]) cylinder(d=3.2,h=5);
-      translate([-42.5,-36.25,-1]) cylinder(d=3.2,h=5);
-      translate([42.5,-36.25,-1]) cylinder(d=3.2,h=5);
+      translate([-42.5,32,-1]) cylinder(d=2.2,h=5);
+      translate([42.5,32,-1]) cylinder(d=2.2,h=5);
+      translate([-42.5,-36.25,-1]) cylinder(d=2.2,h=5);
+      translate([42.5,-36.25,-1]) cylinder(d=2.2,h=5);
 
       /* remove little extra bit */
       translate([-20,36.07,-0.1]) cube([90,10,4]);
