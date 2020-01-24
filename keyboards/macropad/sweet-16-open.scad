@@ -1,14 +1,15 @@
 $fn=30;
 
-translate([-50,0,0]) bottomPanel();
-translate([50,0,0]) topPanel();
+if (0) translate([-50,0,0]) bottomPanel();
+translate([-50,0,0]) topPanel(panelThick=1.8);
+translate([50,0,0]) topPanel(panelThick=1.5);
 
-module topPanel() {
+module topPanel(panelThick=1.5) {
    postDia = 7;
-   postHt = 5.5 + 1.0;
+   postHt = 5.4;
 
    difference() {
-      panel(thick=1.5);
+      panel(thick=panelThick);
       switchHoles();
    }
 
