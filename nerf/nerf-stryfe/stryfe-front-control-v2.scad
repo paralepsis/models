@@ -1,22 +1,24 @@
 $fn=40;
 
-//% import("./stryfe-front-control-v2-door.stl");
-//% import("./stryfe-front-control-v2-body.stl");
+// translate([-10.2,-15,17]) rotate([0,-90,0]) button();
+// translate([7,-17.5-3,10.4]) rotate([-20,0,0]) rotate([0,-90,90]) switch();
+translate([40,0,0]) button();
+// screws(cut=1);
 
-if (0) {
-   % translate([-11.5,0,0]) {
-      rotate([00,90,90]) import("./Nerf_Stryfe_Foregrip/files//StryfeForeGripMK2-Plate.stl");
-      rotate([0,90,90]) import("./Nerf_Stryfe_Foregrip/files//StryfeForeGripMK2.stl");
+main();
+translate([10,0,0]) door();
+translate([-15,-38,0]) base();
+
+// Just to deal with PrusaSlicer support deficiencies
+module base() {
+   hull() {
+      translate([0,0,0]) cylinder(r=4,h=0.3);
+      translate([0,42,0]) cylinder(r=4,h=0.3);
+      translate([42,0,0]) cylinder(r=4,h=0.3);
+      translate([42,42,0]) cylinder(r=4,h=0.3);
    }
 }
 
-// translate([-10.2,-15,17]) rotate([0,-90,0]) button();
-// translate([7,-17.5-3,10.4]) rotate([-20,0,0]) rotate([0,-90,90]) switch();
-// translate([0,23,0]) button();
-// screws(cut=1);
-
-//main();
-door();
 
 module door() {
    screws(cut=0,mat=1);
