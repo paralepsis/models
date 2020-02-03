@@ -3,8 +3,17 @@ rad = 25/2+0.0;
 ht  = 4.75;
 angle = 25;
 
-% eliteDDAS();
-translate([0,0,3.5]) ringLitko();
+//% eliteDDAS();
+//translate([0,0,3.5]) ringLitko();
+tool();
+
+module tool() {
+   translate([0,0,50]) rotate([0,180,0]) difference() {
+      cylinder(r=rad+3,h=50);
+      cube([50,8,6], center=true);
+      translate([0,0,-1]) cylinder(r=9,h=60);
+   }
+}
 
 module ringLitko() {
 
