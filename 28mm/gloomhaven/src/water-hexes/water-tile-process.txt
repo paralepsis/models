@@ -1,0 +1,15 @@
+here's what i tried the first time:
+
+- mesh --> vertices --> remove doubles
+- triangulate once or twice
+- subdivide once or twice
+bevel
+  ctrl-b
+  o 2
+  s 4
+
+triangulate corners
+select edge, shift in.
+
+note: this wasn't that satisfying. going to try drawing shapes in Inkscape and creating base in OpenSCAD, then importing and smoothing (because for some reason minkowski wasn't working?).
+
