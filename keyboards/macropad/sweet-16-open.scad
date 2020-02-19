@@ -1,31 +1,80 @@
 $fn=30;
 
-translate([0,0,0]) bottomPanel();
+// translate([0,0,0]) bottomPanel();
 //translate([-50,0,0]) topPanel(panelThick=1.8);
-translate([0,0,17]) rotate([0,180,0]) topPanel(panelThick=1.5);
+//translate([0,0,17]) rotate([0,180,0]) topPanel(panelThick=1.5);
 
 shell();
 
 module shell() {
-   shellHt = 18;
+   shellHt = 17.7;
    postDia = 9;
+   panelThick=2.1;
+   postHt = 8.5+panelThick;
+
 
    difference() {
       hull() {
-         translate([-47,40,0]) cylinder(d=2,h=shellHt);
-         translate([47,40,0]) cylinder(d=2,h=shellHt);
-         translate([-47,-42,0]) cylinder(d=2,h=shellHt);
-         translate([47,-42,0]) cylinder(d=2,h=shellHt);
+         translate([-46.5,39.5,0]) cylinder(d=3,h=shellHt);
+         translate([46.5,39.5,0]) cylinder(d=3,h=shellHt);
+         translate([-46.5,-41.5,0]) cylinder(d=3,h=shellHt);
+         translate([46.5,-41.5,0]) cylinder(d=3,h=shellHt);
       }
 
       /* cutouts */
       union() {
-         translate([-42.5,32,-1]) cylinder(d=postDia,h=shellHt+2);
-         translate([42.5,32,-1]) cylinder(d=postDia,h=shellHt+2);
-         translate([-42.5,-36.5,-1]) cylinder(d=postDia,h=shellHt+2);
-         translate([42.5,-36.5,-1]) cylinder(d=postDia,h=shellHt+2);
-         translate([0,-1.25,shellHt/2]) cube([84,80,shellHt+2], center=true);
+         zOff = postHt-0.1;
+
+         translate([-42.5,32,zOff]) cylinder(d=postDia,h=shellHt+2);
+         translate([42.5,32,zOff]) cylinder(d=postDia,h=shellHt+2);
+         translate([-42.5,-36.5,zOff]) cylinder(d=postDia,h=shellHt+2);
+         translate([42.5,-36.5,zOff]) cylinder(d=postDia,h=shellHt+2);
+         translate([0,-1.25,shellHt/2+1+panelThick]) cube([84,80,shellHt+2], center=true);
       }
+
+      /* holes */
+      translate([-42.5,32,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([42.5,32,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([-42.5,-36.25,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([42.5,-36.25,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+
+      /* holes */
+      translate([-42.5,32,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([42.5,32,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([-42.5,-36.25,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([42.5,-36.25,-1]) cylinder(d=3.1,h=postHt+2);
+
+      /* reset */
+      translate([-11.75,8.5,-1]) cylinder(r=3.5,h=10);
+
+      translate([-47+30,41-0.42,3.1]) rotate([90,0,0]) hull() {
+         translate([16,8,0]) cylinder(d=2,h=4);
+         translate([0,8,0]) cylinder(d=2,h=4);
+         translate([16,0,0]) cylinder(d=2,h=4);
+         translate([0,0,0]) cylinder(d=2,h=4);
+      }
+
+   }
+
+   difference() {
+      union() {
+         /* holes */
+         translate([-42.5,32,0]) cylinder(d=postDia,h=postHt);
+         translate([42.5,32,0]) cylinder(d=postDia,h=postHt);
+         translate([-42.5,-36.25,0]) cylinder(d=postDia,h=postHt);
+         translate([42.5,-36.25,0]) cylinder(d=postDia,h=postHt);
+      }
+      /* holes */
+      translate([-42.5,32,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([42.5,32,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([-42.5,-36.25,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+      translate([42.5,-36.25,postHt-1.5]) cylinder(d1=3.1,d2=3.6,h=1.6);
+
+      /* holes */
+      translate([-42.5,32,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([42.5,32,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([-42.5,-36.25,-1]) cylinder(d=3.1,h=postHt+2);
+      translate([42.5,-36.25,-1]) cylinder(d=3.1,h=postHt+2);
    }
 }
 
