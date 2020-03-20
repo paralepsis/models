@@ -1,6 +1,6 @@
-botPostDia = 3.2;
+botPostDia = 3.1;
 botPostHt  = 4;
-postDia = 5.25; // including space
+postDia = 5.20; // including space
 postHt  = 40;
 
 difference() {
@@ -14,16 +14,16 @@ module postHole() {
    translate([0,0,1.6+botPostHt-0.01])
       cylinder($fn=40, d=postDia, h=postHt-botPostHt);
 
-   translate([0,-1,1.6]) cube([postDia/2+2, 2, 5]);
-   rotate([0,0,120]) translate([0,-1,1.6]) cube([postDia/2+2, 2, 5]);
-   rotate([0,0,240]) translate([0,-1,1.6]) cube([postDia/2+2, 2, 5]);
+   // translate([0,-0.5,1.6]) cube([botPostDia/2+2, 1, 5]);
+   // rotate([0,0,120]) translate([0,-0.5,1.6]) cube([botPostDia/2+2, 1, 5]);
+   // rotate([0,0,240]) translate([0,-0.5,1.6]) cube([botPostDia/2+2, 1, 5]);
 }
 
 
 //          [ vert angle, dist. Z, rotation Z, ht, dia ]
 crystals = [[12.5,        5,       80,         32, 14],
             [13.5,          5,       220,        29, 14],
-            [21,          13,       0,        13, 5],
+            [21,          12.2,       0,        13, 6],
             [28,          10,       31,        13, 7],
             [19,          12,       60,        16, 8],
             [28,          10,       92,        15, 7],
@@ -33,7 +33,7 @@ crystals = [[12.5,        5,       80,         32, 14],
             [28,          10,       211,        11, 6],
             [17,          12,       247,        14, 7],
             [21,          11,       272,        8, 5],
-            [15,          14,       304,        15, 6],
+            [15,          13,       304,        12, 7],
             [28,          10,       331,        12, 7],
             [10,          8,        290,        21, 9],
             [12,          6,        350,        25, 12],
