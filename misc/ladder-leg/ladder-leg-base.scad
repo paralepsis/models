@@ -20,14 +20,14 @@ module body() {
    cylinder(d=hole+15, h=height);
 
    translate([-width/2,-width/2,0]) hull() {
-      translate([5,5,0]) cylinder(r=5,h=8);
-      translate([width-5,5,0]) cylinder(r=5,h=8);
-      translate([5,width-5,0]) cylinder(r=5,h=8);
-      translate([width-5,width-5,0]) cylinder(r=5,h=8);
+      translate([7,7,0]) cylinder(r=7,h=8);
+      translate([width-7,7,0]) cylinder(r=7,h=8);
+      translate([7,width-7,0]) cylinder(r=7,h=8);
+      translate([width-7,width-7,0]) cylinder(r=7,h=8);
    }
 
    translate([0,0,8]) rotate_extrude() translate([(hole+15)/2,0]) difference() {
-      square([4,4]);
-      translate([4,4]) circle(d=8);
+      square([6,6]);
+      translate([6,6]) circle(d=12);
    }
 }
