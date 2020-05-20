@@ -2,11 +2,12 @@
 
 xDim    = 263.62;
 yDim    = 92.14;
-zDimMax = 15;
+zDimMax = 15.6;
 cRad    = 4;
 
 angle   = 5;
-botThick= 2;
+botThickBack  = 2;
+botThickFront = 1.2;
 
 xIntDim = xDim-16;
 yIntDim = yDim-16;
@@ -38,19 +39,19 @@ if (1) {
 
 module testCutout() {
    hull() {
-      translate([-xDim/2+cRad+50,-yDim/2+cRad+20,-0.1]) cylinder(r=cRad,h=botThick+0.2);
-      translate([-xDim/2+cRad+50,yDim/2-cRad-20,-0.1]) cylinder(r=cRad,h=botThick+0.2);
-      translate([xDim/2-cRad-20,-yDim/2+cRad+20,-0.1]) cylinder(r=cRad,h=botThick+0.2);
-      translate([xDim/2-cRad-20,yDim/2-cRad-20,-0.1]) cylinder(r=cRad,h=botThick+0.2);
+      translate([-xDim/2+cRad+50,-yDim/2+cRad+20,-0.1]) cylinder(r=cRad,h=botThickBack+0.2);
+      translate([-xDim/2+cRad+50,yDim/2-cRad-20,-0.1]) cylinder(r=cRad,h=botThickBack+0.2);
+      translate([xDim/2-cRad-20,-yDim/2+cRad+20,-0.1]) cylinder(r=cRad,h=botThickBack+0.2);
+      translate([xDim/2-cRad-20,yDim/2-cRad-20,-0.1]) cylinder(r=cRad,h=botThickBack+0.2);
    }
 }
 
 module bot() {
    hull() {
-      translate([-xDim/2+cRad,-yDim/2+cRad+2,0]) cylinder(r=cRad,h=botThick);
-      translate([-xDim/2+cRad,yDim/2-cRad-2,0]) cylinder(r=cRad,h=botThick);
-      translate([xDim/2-cRad,-yDim/2+cRad+2,0]) cylinder(r=cRad,h=botThick);
-      translate([xDim/2-cRad,yDim/2-cRad-2,0]) cylinder(r=cRad,h=botThick);
+      translate([-xDim/2+cRad,-yDim/2+cRad+2,0]) cylinder(r=cRad,h=botThickFront);
+      translate([-xDim/2+cRad,yDim/2-cRad-2,0]) cylinder(r=cRad,h=botThickBack);
+      translate([xDim/2-cRad,-yDim/2+cRad+2,0]) cylinder(r=cRad,h=botThickFront);
+      translate([xDim/2-cRad,yDim/2-cRad-2,0]) cylinder(r=cRad,h=botThickBack);
    }
 }
 
