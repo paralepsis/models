@@ -14,15 +14,16 @@ yIntDim = yDim-16;
 zIntOff = 1.2;
 cIntRad = 2;
 
-insertDim = 3.0;
+insertDim = 3.1; // brass insert holes
 
 $fn=20;
 
 intersection() {
-   angled();
-   translate([-xDim/2-1, -yDim/2-1,-1]) cube([60,yDim+2,zDimMax+1]);
+   angled(); // complete form 
+   translate([-xDim/2-1, -yDim/2-1,-1]) cube([35,yDim+2,zDimMax+1]);
 }
 
+/* angled() -- complete form */
 module angled() {
    /* body */
    difference() {
@@ -89,15 +90,17 @@ module interior() {
 }
 
 module cutouts() {
-   translate([-xDim/2-0.01,3.92,zIntOff]) translate([0,0,zDimMax-12]) cube([10,12.1,12]); // USB
-   translate([-xDim/2-0.01,-8.6,zIntOff]) translate([0,0,zDimMax-11]) cube([10,7,11]); // reset
+   // translate([-xDim/2-0.01,3.92,zIntOff]) translate([0,0,zDimMax-12]) cube([10,12.1,12]); // USB
+   translate([-xDim/2-0.01,3.92,zIntOff]) translate([0,0,zDimMax-14]) cube([10,12.1,14]); // USB
+  // translate([-xDim/2-0.01,-8.6,zIntOff]) translate([0,0,zDimMax-11]) cube([10,7,11]); // reset
+   translate([-xDim/2-0.01,-8.6+4,zIntOff+9]) rotate([0,90,0]) cylinder(r=3,h=10); // reset, v2
    switch();
 }
 
 module switch() {
    translate([-xDim/2+15,yDim/2-19.9,3]) {
       translate([1,0,1]) cube([14,15.1,10.0]);
-      translate([0,15,0]) cube([16,5,12]);
+      translate([0,14,0]) cube([16,8,12]);
    }
 }
 
