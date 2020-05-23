@@ -1,5 +1,3 @@
-// NOTE: This is almost perfect for an Elite-C, needs just a little more space.
-
 // import("./orig/laplace-mid.stl");
 
 xDim    = 263.62;
