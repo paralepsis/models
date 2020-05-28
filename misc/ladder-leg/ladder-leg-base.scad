@@ -26,7 +26,7 @@ module body() {
       translate([width-7,width-7,0]) cylinder(r=7,h=8);
    }
 
-   translate([0,0,8]) rotate_extrude() translate([(hole+15)/2-0.1,0]) difference() {
+   translate([0,0,7.9]) rotate_extrude() translate([(hole+15)/2-0.1,0]) difference() {
       square([6,6]);
       translate([6,6]) circle(d=12);
    }
