@@ -1,0 +1,24 @@
+; SETUP AND HEAT
+
+M118 P0 S"** Starting FineMeshProbe **"
+
+G1 X182.5 Y150 F1800 ; roughly center of bed (for the probe) -- this is a point in the grid, accounting for probe offset
+G1 Z10 F300                    ; position over bed
+M190 S70                       ; heat to 70 degrees, wait to complete
+
+G29 S2                         ; clear current bed map (does it matter?)
+G1 Z10 F300                    ; position over bed, a little closer
+G30                            ; probe bed to establish Z=0
+
+; PROBE
+
+M557 X30:270 Y70:270 S30:25
+G29
+
+; STOP HEATING AND RAISE EXTRUDER (LOWER BED)
+
+M140 S0                        ; stop heating
+G1 Z10 F300                    ; just get the extruder sort of out of the way
+G1 X182.5 Y150 F1800           ; roughly center of bed (for the probe) -- this is a point in the grid, accounting for probe offset
+
+M118 P0 S"** Finished FineMeshProbe **"

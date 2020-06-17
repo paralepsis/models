@@ -56,7 +56,8 @@ M143 H0 S110 ; Set maximum bed heater temperature to 110C
 M143 H1 S270 ; Set maximum hotend heater temperature to 270C
 
 M307 H0 A125.9 C793.8 D0.4 S0.80 B0 ; Set PID controls for heated bed (SSR version)
-M307 H1 A479.9 C282.7 D5.8 V24.1 B0 ; Hotend
+; M307 H1 A634.8 C331.8 D5.2 V24.2 B0 ; Hotend 6/11/2020, 280C max.
+M307 H1 A543.7 C324.2 D4.5 V24.2 B0 ; Hotend 6/12/2020, 260C max.
 
 M305 P0 T100000 B4138 R4700 ; Set thermistor + ADC parameters for heater 0 (bed)
 M305 P1 T100000 B4725 C7.06e-8 R4700 L0 H0 ; Set thermistor + ADC parameters for heater 1 (hotend) (from E3D documentation for RepRap > 1.17)
