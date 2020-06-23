@@ -57,10 +57,8 @@ M574 Z1 S2                                              ; configure Z-probe ends
 ; - M558 had T6000 from configurator; my value is super low to allow heater to retain bed temp during mesh calc.
 ; - Had P25 for 2.x?
 ;
-;M950 S0 C"duex.pwm3"                                   ; create servo pin 0 for BLTouch
-M950 H3 C"nil"                                         ; Disable heaters h3 to free up pin
-M950 S0 C"duex.heater3"                                ; create servo pin 0 for BLTouch
-M558 P9 C"^zprobe.in" H3 F50 T350                      ; set Z probe type to bltouch and the dive height + speeds
+M950 S0 C"exp.heater3"                                 ; create servo pin 0 for BLTouch
+M558 P9 C"^zprobe.in" H3 F50 T350 A5 B1                ; set Z probe type to bltouch and the dive height + speeds
 G31 P500 X-30 Y32 Z2.2                                 ; set Z probe trigger value, offset and trigger height
 M557 X30:270 Y70:270 S30:25                            ; define mesh grid
 
