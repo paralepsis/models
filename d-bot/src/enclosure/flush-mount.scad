@@ -10,6 +10,9 @@ len = 30;
 /* note: need 4mm of thickness of form for 10mm bolts to work */
 /* note: this file is a total mess. not sure how it got to this point. */
 
+/* optional bottom lip */
+translate([-9,-16,0]) cube([18,26,4]);
+
 difference() {
    union() {
       translate([-15,-16,0]) {
