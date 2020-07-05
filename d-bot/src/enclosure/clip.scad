@@ -2,7 +2,7 @@ $fn=80;
 
 bottomLip = 0;
 thick = 4; /* minimum 4 */
-gap = 6.25;
+gap = 5.97;
 magnetDepth = 3;
 magnetDia = 8.25; /* include any slop */
 len = 25;

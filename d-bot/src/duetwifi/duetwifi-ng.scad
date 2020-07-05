@@ -1,3 +1,5 @@
+// Note: Modified to take McMaster-Carr 3mm heat set inserts for board and top
+
 include <MCAD/regular_shapes.scad>;
 use <MCAD/boxes.scad>
 
@@ -80,18 +82,12 @@ module myCase() {
             /* MOUNTS TO BOARD */
             for (i=[0:3]) {
                 translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],0]) {
-                    cylinder (r=4, h=14);
-                    cylinder (d=4, h=15);
+                    cylinder (r=4.25, h=14);
+                    cylinder (r1=6, r2=4.25, h=11);
+                    // cylinder (d=4, h=15); // little inside bit
                 }
             }
 
-            for (i=[0:3]) {
-                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],0]) {
-                    cylinder (r=4, h=14);
-                    cylinder (d=4, h=15);
-                }
-            }
- 
             /* rail */
             translate([135,5,15]) rotate([0,0,-90]) rotate([0,-90,0]) linear_extrude(height=167) {
             polygon(points=[[-4.5,-1],[-4.5,0],[-3.5,1],[3.5,1],[4.5,0],
@@ -108,7 +104,7 @@ module myCase() {
         }
 
         /* LED side */
-        translate([25,4,15]) rotate([90,0,0]) hull() {
+        translate([25,4,17]) rotate([90,0,0]) hull() {
            cylinder(r=10,h=5);
            translate([83,0,0]) cylinder(r=10,h=5);
            translate([0,50,0]) cylinder(r=10,h=5);
@@ -151,8 +147,8 @@ module myCase() {
     
             /* MOUNTS TO BOARD */
             for (i=[0:3]) {
-                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],5]) {
-                    cylinder (d=3, h=12);
+                translate ([boffset[0]+wall+(i%2)*bmount[0],boffset[1]-1+floor(i/2)*bmount[1],7.2]) {
+                    cylinder (d=5.2, h=6.9); // M3 inserts
                 }
             }
         }
@@ -182,23 +178,24 @@ module base(){
 
     /* FOUR CORNERS */
     difference(){
-        translate ([2*wall,2*wall,0]) cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
-        translate ([2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder (r=1.35, h=10);
+        translate ([2*wall,2*wall,0]) cylinder (r=5.5,h=fan_dist+airgap/2+bsize[2]+base+wall);
+        translate ([2*wall,2*wall,40.4]) cylinder (d=5.2, h=6.9);
     }  
 
     difference(){   
-        translate ([2*wall,ency+airgap-2*wall,0]) cylinder(r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2); 
-        translate ([2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=10);   
+        translate ([2*wall,ency+airgap-2*wall,0]) cylinder(r=5.5,h=fan_dist+airgap/2+bsize[2]+base+wall); 
+        translate ([2*wall,ency+airgap-2*wall,40.4])cylinder (d=5.2, h=10);   
     }
 
     difference(){       
-        translate ([encx-2*wall,2*wall,0])cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);       
-        translate ([encx-2*wall,2*wall,fan_dist+airgap/2+bsize[2]-wall])cylinder (r=1.35, h=10); 
+        translate ([encx-2*wall,2*wall,0])cylinder (r=5.5,h=fan_dist+airgap/2+bsize[2]+base+wall);       
+        translate ([encx-2*wall,2*wall,40.4])cylinder (d=5.2, h=10); 
     }
 
     difference(){             
-        translate ([encx-2*wall,ency+airgap-2*wall,0]) cylinder (r=4,h=fan_dist+airgap/2+bsize[2]+base+wall/2);
-        translate ([encx-2*wall,ency+airgap-2*wall,fan_dist+airgap/2+bsize[2]-wall]) cylinder(r=1.35,h=10);
+        // r=4 prior to june 29th changes
+        translate ([encx-2*wall,ency+airgap-2*wall,0]) cylinder (r=5.5,h=fan_dist+airgap/2+bsize[2]+base+wall);
+        translate ([encx-2*wall,ency+airgap-2*wall,40.4]) cylinder(d=5.2,h=10);
     }   
 }     
 
