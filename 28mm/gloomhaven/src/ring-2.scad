@@ -3,23 +3,13 @@ rad = 25/2+0.0;
 ht  = 4.75;
 angle = 25;
 
-% translate([0,0,2.2]) ring2();
+% translate([0,0,3.0]) ring2();
 elite();
 
 module elite() {
-   difference() {
-      union() {
-         cylinder(h=1.8,r=rad+1.6);
-         cylinder(h=2.2,r=rad);
-
-         intersection() {
-            union() for (i=[0,120,240]) {
-	         rotate([0,0,i]) translate([0,0,1.5]) rotate([90,0,0]) cylinder(r=2,h=15);
-            }
-            cylinder(h=3,r=rad-1.5);
-         }
-      }
-      translate([0,0,1.2]) cylinder(h=10,r=rad-2.5);
+   union() {
+      cylinder(h=3.0,r=rad+1.6);
+      translate([0,0,2.9]) cylinder(h=0.75,r1=rad-1.6, r2=rad-1.7);
    }
 }
 

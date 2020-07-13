@@ -13,6 +13,7 @@ fudge = 0.1;
 
 module water3(h)
 {
+  // translate([20,35,0]) scale([25.4/90, -25.4/90, 1]) union()
   scale([25.4/90, -25.4/90, 1]) union()
   {
     linear_extrude(height=h)

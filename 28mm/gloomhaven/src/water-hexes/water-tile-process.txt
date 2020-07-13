@@ -13,3 +13,6 @@ select edge, shift in.
 
 note: this wasn't that satisfying. going to try drawing shapes in Inkscape and creating base in OpenSCAD, then importing and smoothing (because for some reason minkowski wasn't working?).
 
+An idea on smoothing:
+  https://blender.stackexchange.com/questions/33509/smoothing-selected-parts-of-mesh
+

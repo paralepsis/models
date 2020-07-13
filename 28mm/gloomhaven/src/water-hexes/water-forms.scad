@@ -3,8 +3,6 @@
 
 include <water-outlines.scad>
 
-minkowski() {
-   water1(2);
-   sphere(r=1);
-}
-
+water1(2);
+water2(2);
+water3(2);
