@@ -5,14 +5,22 @@ litkoRad = 25.0/2; /* used a lot of places, probably should not tweak */
 
 /* parameters for tweaking fit */
 litkoSlop = 0.4; /* makes opening for Litko base slightly larger */
-postSlop  = 1; /* shifts little posts further from center */
+postSlop  = 0.8; /* shifts little posts further from center */
 magnetRad = 2.2/2;
 magnetHt  = 1.3;
+moreHt    = 0.15; /* add additional height on bottom of base (fit magnet) */
 
-for (i=[0:3]) {
+translate([0,0,moreHt]) ringLitko(myPostSlop=postSlop);
+linear_extrude(height=moreHt+0.001) projection(cut=true)
+   translate([0,0,-0.001]) ringLitko(myPostSlop=postSlop);
+
+/* search the parameter space */
+if (0) for (i=[0:3]) {
    slop = 0.5 + 0.15*i;
    translate([0,40*i,0]) {
-      ringLitko(myPostSlop=slop);
+      translate([0,0,moreHt]) ringLitko(myPostSlop=slop);
+      linear_extrude(height=moreHt+0.001) projection(cut=true)
+         translate([0,0,-0.001]) ringLitko(myPostSlop=slop);
       label(labelText=str(slop));
    }
 }
