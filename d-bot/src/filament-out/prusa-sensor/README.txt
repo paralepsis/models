@@ -1,3 +1,5 @@
+I wanted a filament out sensor that I thought would be reliable and easy to build from available parts. I didn't want the fancy features available in many such sensors because I didn't want to deal with configuration parameters, and simple versions that use just a switch didn't seem that robust, at least the ones I found.
+
 This is an IR filament sensor derived from the Prusa MK3S IR Filament
 Sensor, which relies on a sort of "beam cutter" approach that only
 catches filament out but ought to be quite reliable:
