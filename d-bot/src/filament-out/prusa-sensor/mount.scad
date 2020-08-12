@@ -3,7 +3,7 @@ $fn=30;
 thick=8;
 
 /* main body */
-difference() {
+if (0) difference() {
    union() {
       linear_extrude(height=thick)
          polygon(points=[[16.998,-0.002], [-7.718,-0.002], [-7.718, -4.738],
@@ -26,7 +26,10 @@ difference() {
 
    screwHoles();
 }
+else {
    // screwHoles();
+   translate([16.998-8.5,-20,-2]) cylinder(d=5.2,h=50);
+}
 
 module screwHoles() {
    translate([-20.0,-29.5,0]) {
