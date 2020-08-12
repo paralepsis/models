@@ -52,9 +52,6 @@ M574 X1 S1 P"!xstop"                                    ; configure active-low e
 M574 Y2 S1 P"!ystop"                                    ; configure active-low endstop for high end on Y via pin ystop
 M574 Z1 S2                                              ; configure Z-probe endstop for low end on Z
 
-; Filament Sensor (modified Prusa IR sensor design connected to E0 stop for extruder 0)
-M591 D0 P2 C"e0stop" S1
-
 ; Z-Probe
 ; Notes:
 ; - M558 had T6000 from configurator; my value is super low to allow heater to retain bed temp during mesh calc.
