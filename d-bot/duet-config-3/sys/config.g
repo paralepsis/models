@@ -6,7 +6,9 @@
 ; General preferences
 ; Notes:
 ; - Had M555 P2 "Marlin compatibility" for 2.x
+; - 10/10/2020: Shifting from 1A X/Y to 1.5A X/Y to see if this helps with stalls
 ;
+
 G90                                                    ; send absolute coordinates...
 M83                                                    ; ...but relative extruder moves
 M550 P"BigBoy"                                         ; set printer name
@@ -30,7 +32,7 @@ M92 X100.00 Y100.00 Z2133.33 E837.00                   ; set steps per mm
 M566 X960.00 Y960.00 Z48.00 E249.00                    ; set maximum instantaneous speed changes (mm/min)
 M203 X24000.00 Y24000.00 Z300.00 E450.00               ; set maximum speeds (mm/min)
 M201 X1500.00 Y1500.00 Z100.00 E1000.00                ; set accelerations (mm/s^2)
-M906 X1000 Y1000 Z1200 E900 I30                        ; set motor currents (mA) and motor idle factor in per cent
+M906 X1500 Y1500 Z1200 E900 I30                        ; set motor currents (mA) and motor idle factor in per cent
 M84 S30                                                ; Set idle timeout
 
 ; Stall Detection: R1 = just log
