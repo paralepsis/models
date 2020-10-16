@@ -6,7 +6,8 @@
 ; General preferences
 ; Notes:
 ; - Had M555 P2 "Marlin compatibility" for 2.x
-; - 10/10/2020: Shifting from 1A X/Y to 1.5A X/Y to see if this helps with stalls
+; - 10/10/2020: Shifting from 1A X/Y to 1.25A X/Y to see if this helps with stalls
+; - 10/16/2020: Shifting to 720 X/Y jerk from 960
 ;
 
 G90                                                    ; send absolute coordinates...
@@ -29,18 +30,17 @@ M569 P4 S0                                             ; physical drive 4 goes b
 M584 X0 Y1 Z2:4 E3                                       ; set drive mapping
 M350 X16 Y16 Z16 E16 I1                                ; configure microstepping with interpolation
 M92 X100.00 Y100.00 Z2133.33 E837.00                   ; set steps per mm
-M566 X960.00 Y960.00 Z48.00 E249.00                    ; set maximum instantaneous speed changes (mm/min)
+M566 X720.00 Y720.00 Z48.00 E249.00                    ; set maximum instantaneous speed changes (mm/min)
 M203 X24000.00 Y24000.00 Z300.00 E450.00               ; set maximum speeds (mm/min)
 M201 X1500.00 Y1500.00 Z100.00 E1000.00                ; set accelerations (mm/s^2)
-M906 X1500 Y1500 Z1200 E900 I30                        ; set motor currents (mA) and motor idle factor in per cent
+M906 X1250 Y1250 Z1200 E900 I30                        ; set motor currents (mA) and motor idle factor in per cent
 M84 S30                                                ; Set idle timeout
 
-; Stall Detection: R1 = just log
-M915 P0 F1 R2 H200 S6 ; X
-M915 P1 F1 R2 H200 S6 ; Y
-M915 P2 F1 R0 H200 S20 ; Z
-M915 P3 F1 R1 H400 S7 ; extruder
-M915 P4 F1 R0 H200 S20 ; Z
+; Stall Detection: R0 = ignore, R1 = just log, R2 = pause
+M915 X Y F1 R1 H200 S7
+M915 Z   F1 R0 H200 S20
+M915 P3  F1 R1 H400 S7 ; extruder
+
 
 ; Axis Limits
 M208 X0 Y0 Z0 S1                                       ; set axis minima
