@@ -10,4 +10,5 @@ translate([86.1,-8,0]) cylinder(r=1.2,h=5);
 
 translate([80,-5.5,-2.5]) cube([20,11,10.5]);
 
-	
+linear_extrude(height=7.5)
+   polygon(points=[[-16,-14],[-16,14],[92,14],[92,-14]]);
