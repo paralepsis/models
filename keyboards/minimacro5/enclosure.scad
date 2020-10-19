@@ -44,11 +44,11 @@ h=height*lkey;
 module miniHoles() {
    mm5 = [
          //start ROW 0
-         [[0,0],1,"r"],
-         [[1,0],1,"r"],
+         [[0,0],1,"s"],
+         [[1,0],1,"s"],
          [[2,0],1,"r"],
-         [[3,0],1,"s"],
-         [[4,0],1,"s"],
+         [[3,0],1,"r"],
+         [[4,0],1,"r"],
          ];
 
    holematrix(mm5,0,h-lkey);
@@ -92,9 +92,19 @@ module pcbPlus(height=1) {
 }
 
 module simpleBody() {
-   translate([0,0,-5]) linear_extrude(height=7.5)
-      polygon(points=[[-16,-14],[-16,14],[92,14],[92,-14]]);
-
+   if (0) {
+      translate([0,0,-5]) linear_extrude(height=7.5)
+         polygon(points=[[-16,-14],[-16,14],[92,14],[92,-14]]);
+   }
+   else {
+      translate([0,0,-5]) linear_extrude(height=7.5)
+         hull() {
+            translate([-15,-13,0]) circle(r=2);
+            translate([-15,13,0]) circle(r=2);
+            translate([91,-13,0]) circle(r=2);
+            translate([91,13,0]) circle(r=2);
+         }
+   }
 }
 
 module switchHoles() {
