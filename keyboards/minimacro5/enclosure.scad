@@ -78,11 +78,14 @@ module holematrix(holes,startx,starty){
 module pcbPlus(height=1) {
    translate([-12.987,-11.087,0]) cube([12.987+89.187,11.087*2,height]);
 
-   /* screws */
-   translate([-9.9,8,0]) cylinder(r=1.2,h=5);
-   translate([-9.9,-8,0]) cylinder(r=1.2,h=5);
-   translate([86.1,8,0]) cylinder(r=1.2,h=5);
-   translate([86.1,-8,0]) cylinder(r=1.2,h=5);
+   /* cutout to account for solder points for arduino riser */
+   translate([89.187-35-4,-11.087,-1.5]) cube([33,11.087*2,height+1.5]);
+
+   /* screws, heat set inserts */
+   translate([-9.9,8,-4]) cylinder(d=3.65,h=5);
+   translate([-9.9,-8,-4]) cylinder(d=3.65,h=5);
+   translate([86.1,8,-4]) cylinder(d=3.65,h=5);
+   translate([86.1,-8,-4]) cylinder(d=3.65,h=5);
 
    /* USB */
    translate([80,-5.5,-2.5]) cube([20,11,10.5]);
