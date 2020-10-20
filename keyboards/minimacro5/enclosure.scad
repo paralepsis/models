@@ -15,8 +15,8 @@ shape();
 
 module shape() {
    difference() {
-      simpleBody();
-      pcbPlus(height=20);
+      simpleBody(ht=12);
+      pcbPlus(ht=20);
       switchHoles();
    }
 }
@@ -57,12 +57,14 @@ module miniHoles() {
 module switchhole(size=1,openable=0,switch=1){
     translate([0,0,-0.1]) union(){
         if (switch) {
-           cube([holesize,holesize,plateThickness+0.4]);
-           translate([holesize/2-2,-1,1.3]) cube([4,holesize+2,plateThickness+0.4 - 1.3]); // for clip to catch
+           cube([holesize,holesize,plateThickness+0.4+0.65]);
+           translate([holesize/2-2,-1,1.3]) cube([4,holesize+2,plateThickness+0.4 - 1.3+0.65]); // for clip to catch
         }
-        else {
-           translate([0,(holesize-12.25)/2,0])
+        else /* encoder */ {
+           translate([0,(holesize-12.25)/2,0]) {
               cube([holesize, 12.25, plateThickness+0.4]);
+              translate([-0.5,0,1.8]) cube([holesize+1.5, 12.25, plateThickness+0.4]);
+           }
         }
     }
 }
@@ -75,11 +77,11 @@ module holematrix(holes,startx,starty){
     }
 }
 
-module pcbPlus(height=1) {
-   translate([-12.987,-11.087,0]) cube([12.987+89.187,11.087*2,height]);
+module pcbPlus(ht=1) {
+   translate([-12.987,-11.087,0]) cube([12.987+89.187,11.087*2,ht]);
 
    /* cutout to account for solder points for arduino riser */
-   translate([89.187-35-4,-11.087,-1.5]) cube([33,11.087*2,height+1.5]);
+   translate([89.187-35-3.75,-11.087,-1.5]) cube([32,11.087*2,ht+1.5]);
 
    /* screws, heat set inserts */
    translate([-9.9,8,-4]) cylinder(d=3.65,h=5);
@@ -87,26 +89,31 @@ module pcbPlus(height=1) {
    translate([86.1,8,-4]) cylinder(d=3.65,h=5);
    translate([86.1,-8,-4]) cylinder(d=3.65,h=5);
 
+   /* middle screw/heat set inserts */
+   translate([28.5,8,-4]) cylinder(d=1.65,h=5);
+   translate([28.5,-8,-4]) cylinder(d=1.65,h=5);
+
    /* USB */
-   translate([80,-5.5,-2.5]) cube([20,11,10.5]);
+   translate([80,-5.5,0.0]) cube([20,11,10.5]);
 }
 
-module simpleBody() {
+module simpleBody(ht=10.5) {
    if (0) {
-      translate([0,0,-5]) linear_extrude(height=7.5)
+      /* 5.65mm accounts for mill-max sockets */
+      translate([0,0,-5.65]) linear_extrude(height=ht)
          polygon(points=[[-16,-14],[-16,14],[92,14],[92,-14]]);
    }
    else {
-      translate([0,0,-5]) linear_extrude(height=7.5)
+      translate([0,0,-5.65]) linear_extrude(height=ht)
          hull() {
-            translate([-15,-13,0]) circle(r=2);
-            translate([-15,13,0]) circle(r=2);
-            translate([91,-13,0]) circle(r=2);
-            translate([91,13,0]) circle(r=2);
+            translate([-14,-13,0]) circle(r=2);
+            translate([-14,13,0]) circle(r=2);
+            translate([90,-13,0]) circle(r=2);
+            translate([90,13,0]) circle(r=2);
          }
    }
 }
 
 module switchHoles() {
-   translate([-7.15-2.525+0.15,-7.15-2.525+0.15,-5]) miniHoles();
+   translate([-7.15-2.525+0.15,-7.15-2.525+0.15,-5.65]) miniHoles();
 }
