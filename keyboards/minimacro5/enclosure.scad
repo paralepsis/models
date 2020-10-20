@@ -15,7 +15,7 @@ shape();
 
 module shape() {
    difference() {
-      simpleBody(ht=12);
+      simpleBody(ht=15);
       pcbPlus(ht=20);
       switchHoles();
    }
@@ -61,8 +61,8 @@ module switchhole(size=1,openable=0,switch=1){
            translate([holesize/2-2,-1,1.3]) cube([4,holesize+2,plateThickness+0.4 - 1.3+0.65]); // for clip to catch
         }
         else /* encoder */ {
-           translate([0,(holesize-12.25)/2,0]) {
-              cube([holesize, 12.25, plateThickness+0.4]);
+           translate([0,(holesize-12.15)/2,0]) {
+              cube([holesize, 12.15, plateThickness+0.4]);
               translate([-0.5,0,1.8]) cube([holesize+1.5, 12.25, plateThickness+0.4]);
            }
         }
@@ -84,14 +84,14 @@ module pcbPlus(ht=1) {
    translate([89.187-35-3.75,-11.087,-1.5]) cube([32,11.087*2,ht+1.5]);
 
    /* screws, heat set inserts */
-   translate([-9.9,8,-4]) cylinder(d=3.65,h=5);
-   translate([-9.9,-8,-4]) cylinder(d=3.65,h=5);
-   translate([86.1,8,-4]) cylinder(d=3.65,h=5);
-   translate([86.1,-8,-4]) cylinder(d=3.65,h=5);
+   translate([-9.9,8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
+   translate([-9.9,-8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
+   translate([86.1,8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
+   translate([86.1,-8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
 
    /* middle screw/heat set inserts */
-   translate([28.5,8,-4]) cylinder(d=1.65,h=5);
-   translate([28.5,-8,-4]) cylinder(d=1.65,h=5);
+   translate([28.5,8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
+   translate([28.5,-8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
 
    /* USB */
    translate([80,-5.5,0.0]) cube([20,11,10.5]);
