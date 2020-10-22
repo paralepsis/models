@@ -11,7 +11,8 @@
 $fn=30;
 
 // translate([0,0,-5]) import("./orig/miniMACRO5.stl");
-shape();
+% shape();
+translate([0,0,15-5-2]) bottomPlate();
 
 module shape() {
    difference() {
@@ -19,6 +20,7 @@ module shape() {
       pcbPlus(ht=20);
       switchHoles();
    }
+
 }
 
 //Thickness of entire plate
@@ -75,6 +77,63 @@ module holematrix(holes,startx,starty){
         translate([(lkey*key[1]-holesize)/2,(lkey - holesize)/2, 0])
         switchhole(size=key[1],switch=(key[2] == "s" ? 1 : 0));
     }
+}
+
+module bottomPlate() {
+   ht = 2;
+   gap = 0.2;
+   postHt = 6.25;
+   postDia = 5;
+
+   difference() { 
+      union() {
+         translate([-12.987+gap,-11.087+gap,0])
+            cube([12.987+89.187-2*gap,11.087*2-2*gap,ht]);
+
+         translate([-12.987+gap,-11.087+gap,-1*(5-ht)])
+            cube([62-gap,11.087*2-2*gap,5-ht+0.1]);
+
+         translate([84.5,-11.087+gap,-1*(postHt-ht)])
+            cube([89.187-gap-84.5,11.087*2-2*gap,postHt-ht+0.1]);
+
+         /* posts */
+         translate([-9.9,8,-1*(postHt-ht)]) cylinder(d=postDia,h=5.0);
+         translate([-9.9,-8,-1*(postHt-ht)]) cylinder(d=postDia,h=5.0);
+         // translate([86.1,8,-1*(postHt-ht)]) cylinder(d=postDia,h=5.0);
+         // translate([86.1,-8,-1*(postHt-ht)]) cylinder(d=postDia,h=5.0);
+         translate([28.5,8,-1*(postHt-ht)]) cylinder(d=postDia,h=5.0);
+         translate([28.5,-8,-1*(postHt-ht)]) cylinder(d=postDia,h=5.0);
+      }
+
+      /* USB */
+      translate([80,-5.5,-20.0]) cube([20,11,25.5]);
+
+      /* reset */
+      translate([-12.987+gap+20.5,11.087-5,-5+ht-0.1])
+         cube([5,5,10]);
+      translate([-12.987+gap+20.5+2.5,11.087-5,-5+ht-0.1])
+         cylinder(d=5,h=10);
+      translate([-12.987+gap+20.5-2.5,11.087-5-4,-5+ht-0.1])
+         cube([10,10,3]);
+
+      /* screw holes (make < -5.2 if needed to fill hole) */
+      translate([-9.9,8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([-9.9,8,0]) cylinder(d=4,h=2.1);
+
+      translate([-9.9,-8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([-9.9,-8,0]) cylinder(d=4,h=10);
+      translate([86.1,8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([86.1,8,0]) cylinder(d=4,h=10);
+      translate([86.1,-8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([86.1,-8,0]) cylinder(d=4,h=10);
+   
+      /* middle screw holes */
+      translate([28.5,8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([28.5,8,0]) cylinder(d=4,h=10);
+      translate([28.5,-8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([28.5,-8,0]) cylinder(d=4,h=10);
+
+   }
 }
 
 module pcbPlus(ht=1) {
