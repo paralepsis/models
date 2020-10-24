@@ -11,8 +11,8 @@
 $fn=30;
 
 // translate([0,0,-5]) import("./orig/miniMACRO5.stl");
-% shape();
-translate([0,0,15-5-2]) bottomPlate();
+// shape();
+rotate([180,0,0]) translate([0,0,15-5-2]) bottomPlate();
 
 module shape() {
    difference() {
@@ -80,9 +80,9 @@ module holematrix(holes,startx,starty){
 }
 
 module bottomPlate() {
-   ht = 2;
+   ht = 1.5; // was 2.0
    gap = 0.2;
-   postHt = 6.25;
+   postHt = 7.0;
    postDia = 5;
 
    difference() { 
@@ -106,31 +106,31 @@ module bottomPlate() {
       }
 
       /* USB */
-      translate([80,-5.5,-20.0]) cube([20,11,25.5]);
+      translate([83,-5.5,-20.0]) cube([20,11,25.5]);
 
       /* reset */
-      translate([-12.987+gap+20.5,11.087-5,-5+ht-0.1])
+      translate([-12.987+gap+20.0,11.087-5,-5+ht-0.1])
          cube([5,5,10]);
-      translate([-12.987+gap+20.5+2.5,11.087-5,-5+ht-0.1])
+      translate([-12.987+gap+20.0+2.5,11.087-5,-5+ht-0.1])
          cylinder(d=5,h=10);
-      translate([-12.987+gap+20.5-2.5,11.087-5-4,-5+ht-0.1])
+      translate([-12.987+gap+20.0-2.5,11.087-5-4,-5+ht-0.1])
          cube([10,10,3]);
 
       /* screw holes (make < -5.2 if needed to fill hole) */
-      translate([-9.9,8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([-9.9,8,-8.3]) cylinder(d=2.25,h=8.0);
       translate([-9.9,8,0]) cylinder(d=4,h=2.1);
 
-      translate([-9.9,-8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([-9.9,-8,-8.3]) cylinder(d=2.25,h=8.0);
       translate([-9.9,-8,0]) cylinder(d=4,h=10);
-      translate([86.1,8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([86.1,8,-8.3]) cylinder(d=2.25,h=8.0);
       translate([86.1,8,0]) cylinder(d=4,h=10);
-      translate([86.1,-8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([86.1,-8,-8.3]) cylinder(d=2.25,h=8.0);
       translate([86.1,-8,0]) cylinder(d=4,h=10);
    
       /* middle screw holes */
-      translate([28.5,8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([28.5,8,-8.3]) cylinder(d=2.25,h=8.0);
       translate([28.5,8,0]) cylinder(d=4,h=10);
-      translate([28.5,-8,-5.3]) cylinder(d=2.25,h=5.0);
+      translate([28.5,-8,-8.3]) cylinder(d=2.25,h=8.0);
       translate([28.5,-8,0]) cylinder(d=4,h=10);
 
    }
