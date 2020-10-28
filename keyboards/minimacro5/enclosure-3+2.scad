@@ -11,10 +11,10 @@
 $fn=30;
 
 // translate([0,0,-5]) import("./orig/miniMACRO5.stl");
-// shape();
-rotate([180,0,0]) translate([0,0,15-5-2]) bottomPlate();
+enclosure();
+// rotate([180,0,0]) translate([0,0,15-5-2]) bottomPlate();
 
-module shape() {
+module enclosure() {
    difference() {
       simpleBody(ht=15);
       pcbPlus(ht=20);
@@ -153,7 +153,7 @@ module pcbPlus(ht=1) {
    translate([28.5,-8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
 
    /* USB */
-   translate([80,-5.5,0.0]) cube([20,11,10.5]);
+   translate([80,-6,0.0]) cube([20,12,10.5]);
 }
 
 module simpleBody(ht=10.5) {
@@ -165,10 +165,10 @@ module simpleBody(ht=10.5) {
    else {
       translate([0,0,-5.65]) linear_extrude(height=ht)
          hull() {
-            translate([-14,-13,0]) circle(r=2);
-            translate([-14,13,0]) circle(r=2);
-            translate([90,-13,0]) circle(r=2);
-            translate([90,13,0]) circle(r=2);
+            translate([-13,-13,0]) circle(r=2);
+            translate([-13,13,0]) circle(r=2);
+            translate([89,-13,0]) circle(r=2);
+            translate([89,13,0]) circle(r=2);
          }
    }
 }
