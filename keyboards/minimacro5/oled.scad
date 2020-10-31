@@ -14,7 +14,7 @@ difference() {
    window();
 }
 
-module simpleForm(h=2.2) {
+module simpleForm(h=4) {
    hull() {
       translate([-2,-2,0]) cylinder(r=2,h=h);
       translate([-2,2+bodyWid,0]) cylinder(r=2,h=h);
@@ -24,9 +24,10 @@ module simpleForm(h=2.2) {
 }
 
 module window() {
-   translate([0,0,windowDep+1.2]) cube([bodyLen+5,bodyWid,bodyDep-windowDep]);
-   translate([0,0,windowDep]) cube([windowLen+5,bodyWid,bodyDep-windowDep]);
-   translate([windowLen+6,0,windowDep]) cube([bodyLen,bodyWid,bodyDep-windowDep]);
-   translate([5,0,-epsilon]) cube([windowLen,bodyWid,windowDep+epsilon]);
+   translate([-1,0,2.8]) cube([bodyLen+7,bodyWid,2.8]); /* space for PCB */
+   // translate([0,0,windowDep]) cube([windowLen+6.5,bodyWid,bodyDep-windowDep]);
+   translate([0,0,windowDep]) cube([windowLen+6.5,bodyWid,bodyDep-windowDep]);
+   translate([windowLen+7.5,0,windowDep]) cube([bodyLen,bodyWid,bodyDep-windowDep]);
+   translate([7,0,-epsilon]) cube([windowLen,bodyWid,windowDep+2*epsilon]); /* opening for viewing */
 }
 
