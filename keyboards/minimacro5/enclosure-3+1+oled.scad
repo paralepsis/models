@@ -17,10 +17,10 @@ enclosure();
 
 module enclosure() {
    difference() {
-      simpleBody(ht=9); // 15 is the production value
+      simpleBody(ht=15); // 15 is the production value
       pcbPlus(ht=20);
       switchHoles();
-      translate([-17,-14.75,-5.65]) oled12864();
+      translate([-17-1.2,-14.75,-5.65]) oled12864();
    }
 
 }
@@ -86,12 +86,12 @@ module simpleForm(h=3.5) {
 }
 
 module oled12864(extend=1) {
-   translate([0,0,1.5]) cube([bodyLen, bodyWid, bodyDep]);
-   if (extend) translate([-0.2,-0.2,3]) cube([bodyLen+0.4, bodyWid+1+0.4, 10.5]);
+   translate([0,0,1.7]) cube([bodyLen, bodyWid, bodyDep]);
+   if (extend) translate([-0.2,-0.2,3.2]) cube([bodyLen+0.4, bodyWid+1+0.4, 20]);
 
-   translate([0,1.5,0.5]) cube([bodyLen, 20.5, bodyDep]);
+   translate([0,1.5,0.7]) cube([bodyLen, 20.5, bodyDep]);
    translate([1,8.5,-0.1]) cube([bodyLen-2, 12.5, bodyDep]);
-   translate([0,23,0.5]) cube([bodyLen, bodyWid-22, bodyDep]);
+   translate([0,23,0.7]) cube([bodyLen, bodyWid-22, bodyDep]);
 }
 
 module switchhole(size=1,openable=0,switch=1){
@@ -168,10 +168,10 @@ module bottomPlate() {
       translate([86.1,-8,0]) cylinder(d=4,h=10);
 
       /* holes past oled */
-      translate([-9.9-10,8,-8.3]) cylinder(d=2.25,h=8.0);
-      translate([-9.9-10,8,0]) cylinder(d=4,h=2.1);
-      translate([-9.9-10,-8-2,-8.3]) cylinder(d=2.25,h=8.0);
-      translate([-9.9-10,-8-2,0]) cylinder(d=4,h=10);
+      translate([-9.9-10-1,8+1,-8.3]) cylinder(d=2.25,h=8.0);
+      translate([-9.9-10-1,8+1,0]) cylinder(d=4,h=2.1);
+      translate([-9.9-10-1,-8-2,-8.3]) cylinder(d=2.25,h=8.0);
+      translate([-9.9-10-1,-8-2,0]) cylinder(d=4,h=10);
    
       /* middle screw holes */
       translate([28.5,8,-8.3]) cylinder(d=2.25,h=8.0);
@@ -195,8 +195,8 @@ module pcbPlus(ht=1) {
    translate([86.1,-8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
 
    /* new ones past OLED */
-   translate([-9.9-10,8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
-   translate([-9.9-10,-8-2,-4]) cylinder(d2=3.65, d1=3.4,h=5);
+   translate([-9.9-10-1,8+1,-4]) cylinder(d2=3.65, d1=3.4,h=5);
+   translate([-9.9-10-1,-8-2,-4]) cylinder(d2=3.65, d1=3.4,h=5);
 
    /* middle screw/heat set inserts */
    translate([28.5,8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
@@ -217,9 +217,9 @@ module simpleBody(ht=10.5) {
       translate([0,0,-5.65]) linear_extrude(height=ht)
          hull() {
             translate([-23,-15,0]) circle(r=2); // changed here for OLED
-            translate([-23,13,0]) circle(r=2);
+            translate([-23,15,0]) circle(r=2);
             translate([89,-15,0]) circle(r=2);
-            translate([89,13,0]) circle(r=2);
+            translate([89,15,0]) circle(r=2);
          }
    }
 }

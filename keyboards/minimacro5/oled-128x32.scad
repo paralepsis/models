@@ -9,10 +9,21 @@ epsilon     = 0.1;
 
 $fn=20;
 
-difference() {
+oled128x32 =[[0,4], [0,2.8], [1,2.8], [1,0.5], [8,0.5], [8,0], [33.5, 0], [33.5,2.8], [34.5, 2.8], [34.5, 0.5], [43, 0.5], [43,4]];
+
+
+/* old version */
+if (0) difference() {
    simpleForm();
    window();
 }
+
+difference() {
+   simpleForm();
+   translate([-1,bodyWid,0]) rotate([90,0,0]) linear_extrude(height=bodyWid) polygon(points=oled128x32);
+}
+   
+// window();
 
 module simpleForm(h=4) {
    hull() {
