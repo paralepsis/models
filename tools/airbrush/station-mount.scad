@@ -10,13 +10,13 @@ r2 = 97/2;
 R = 85;
 th = 3.2;
 
-if (1) {
+if (0) {
    translate([0,0,-6]) gasket();
    mountBottom();
    translate([0,0,6]) mountTop();
 }
 else {
-   mount();
+   mountBottom();
 }
 
 // cutPlane() -- cut the top off this for easier printing
@@ -45,12 +45,15 @@ module mountTop() {
 
 // gasket() -- the "bottom" piece, also a template for a foam gasket
 //
-module gasket(ht=4.5) {
+module gasket(ht=1.2) {
    difference() {
       cylinder(d=170,h=ht);
       translate([0,0,-0.1]) cylinder(d=125,h=ht+0.2);
       for(i=[0:3]) {
          rotate([0,0,i*90+45]) boltGap(ht=ht);
+      }
+      for (i=[0:2]) {
+         rotate([0,0,120*i]) translate([170/2-1,-1,-0.1]) cube([3,2,6.2]);
       }
    }
 }
@@ -59,13 +62,16 @@ module mount() {
    translate([0,0,4.5]) {
       difference() {
          cylinder(d=170,h=3);
-         translate([0,0,-0.1]) cylinder(d=122-0.2,h=3.2);
+         translate([0,0,-0.1]) cylinder(d1=122-0.2,d2=120-0.2,h=3.2);
          for(i=[0:3]) {
-            rotate([0,0,i*90+45]) translate([148/2,0,0.1]) cylinder(d=10.9,h=7);
+            rotate([0,0,i*90+45]) translate([148.5/2,0,-0.1]) cylinder(d=6.5,h=7);
+         }
+         for (i=[0:2]) {
+            rotate([0,0,120*i]) translate([170/2-1,-1,-0.1]) cube([3,2,6.2]);
          }
       }
       for(i=[0:3]) {
-         rotate([0,0,i*90+45]) magnetSpot();
+         rotate([0,0,i*90+45]) screwSpot();
       }
       tube();
       cutRing();
@@ -88,17 +94,17 @@ module cutRing() {
    }
 }
 
-module magnetSpot(underMagnet=0.4) {
-   translate([148/2,0,0]) difference() {
-      cylinder(d=11,h=7);
-      translate([0,0,underMagnet]) cylinder(d=8.2,h=7);
+module screwSpot() {
+   translate([148.5/2,0,0]) difference() {
+      cylinder(d=13,h=5);
+      translate([0,0,-0.1]) cylinder(d=10.5,h=5.2);
    }
 }
 
 // boltGap -- used by gasket() 
 //
 module boltGap(ht=3) {
-   translate([148/2,0,-0.1]) {
+   translate([148.5/2,0,-0.1]) {
       hull() {
          cylinder(d=15,h=ht+0.2);
          translate([-13,-7.5,0]) cube([1,15,ht+0.2]);
