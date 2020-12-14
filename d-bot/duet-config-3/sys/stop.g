@@ -7,3 +7,5 @@ G90  ; absolute movement
 
 M104 S0   ; turn off extruder (set temp to 0 and don't wait)
 M140 S0	  ; turn off bed (set temp to 0 and don't wait)
+
+M107      ; turn off part fan

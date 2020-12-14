@@ -8,6 +8,8 @@
 ; - Had M555 P2 "Marlin compatibility" for 2.x
 ; - 10/10/2020: Shifting from 1A X/Y to 1.25A X/Y to see if this helps with stalls
 ; - 10/16/2020: Shifting to 720 X/Y jerk from 960
+; - 11/24/2020: Shifting to 600 X/Y jerk from 720, Shifting to 900 X/Y acceleration from 1500
+; - 12/09/2020: Back to 1200 X/Y acceleration from 900.
 ;
 
 G90                                                    ; send absolute coordinates...
@@ -30,13 +32,15 @@ M569 P4 S0                                             ; physical drive 4 goes b
 M584 X0 Y1 Z2:4 E3                                       ; set drive mapping
 M350 X16 Y16 Z16 E16 I1                                ; configure microstepping with interpolation
 M92 X100.00 Y100.00 Z2133.33 E837.00                   ; set steps per mm
-M566 X720.00 Y720.00 Z48.00 E249.00                    ; set maximum instantaneous speed changes (mm/min)
+M566 X600.00 Y600.00 Z48.00 E249.00                    ; set maximum instantaneous speed changes (mm/min)
 M203 X24000.00 Y24000.00 Z300.00 E450.00               ; set maximum speeds (mm/min)
-M201 X1500.00 Y1500.00 Z100.00 E1000.00                ; set accelerations (mm/s^2)
+M201 X1200.00 Y1200.00 Z100.00 E1000.00                ; set accelerations (mm/s^2)
 M906 X1250 Y1250 Z1200 E900 I30                        ; set motor currents (mA) and motor idle factor in per cent
 M84 S30                                                ; Set idle timeout
 
-; Stall Detection: R0 = ignore, R1 = just log, R2 = pause
+; Stall Detection: R0 = ignore, R1 = just log, R2 = pause, R3 = pause, run rehome.g, resume
+; Info here: https://duet3d.dozuki.com/Wiki/Stall_detection_and_sensorless_homing
+;
 M915 X Y F1 R1 H200 S7
 M915 Z   F1 R0 H200 S20
 M915 P3  F1 R1 H400 S7 ; extruder
@@ -62,9 +66,11 @@ M591 D0 P2 C"e0stop" S1
 ; - M558 had T6000 from configurator; my value is super low to allow heater to retain bed temp during mesh calc.
 ; - Had P25 for 2.x?
 ;
+; Note: re: G31 Z parameter, you want to *lower* the value to increase the spacing between nozzle and bed!
+;
 M950 S0 C"exp.heater3"                                 ; create servo pin 0 for BLTouch
 M558 P9 C"^zprobe.in" H3 F50 T350 A5 B1                ; set Z probe type to bltouch and the dive height + speeds
-G31 P500 X-30 Y32 Z2.2                                 ; set Z probe trigger value, offset and trigger height
+G31 P500 X-30 Y32 Z2.03                                ; set Z probe trigger value, offset and trigger height
 M557 X30:270 Y70:270 S30:25                            ; define mesh grid
 
 ; Heaters
