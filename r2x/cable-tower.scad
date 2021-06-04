@@ -1,3 +1,4 @@
+// Needs a 50mm M3 bolt.
 
 dia = 3.4 + 0.4*8;
 ht  = 42;
