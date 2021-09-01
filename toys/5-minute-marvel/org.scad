@@ -1,16 +1,52 @@
 % cube([258, 258, 64]);
 
-// cards are 62x90
+// cards are 62x93
 // cardboard is 63x102
 
 // 20mm of crisis cards
 // 30mm of door cards
 
+$fn=60;
 
-//translate([0,90,0]) tenCharBox();
 
+if (0) {
+translate([0,90,0]) tenCharBox();
 resourceBox();
+translate([0,45,0]) resourceBox();
+translate([143,0,0]) rotate([0,0,90]) villianBox();
+}
 
+translate([108+34,0,0]) misc1();
+
+module misc1() {
+   wid = 257-108-34;
+   len = 167;
+   rad = 45;
+
+   difference() {
+      cube([wid,len,63]);
+
+      translate([1.61,1.61,0.9]) cube([wid-2*1.61-rad,len-2*1.61,63]);
+      translate([1.61,1.61,rad+-.9]) cube([wid-2*1.61,len-2*1.61,63]);
+
+      translate([wid-1.61-rad,1.61,0.9+rad]) rotate([-90,0,0]) cylinder(r=rad,h=len-2*1.61);
+   }
+}
+
+
+// 34 x 257 x 63
+module villianBox() {
+   difference() {
+      cube([167+2*45,34,63]);
+
+      translate([(108-93)/2,1.61,0.9]) cube([93,34-2*1.61,64]);
+      translate([(108-68)/2,-1,40]) cube([68,180,60]);
+      translate([(108-93)/2+103.25,1.61,0.9]) cube([93,34-2*1.61,64]);
+      translate([(108-68)/2+103.25,-1,40]) cube([68,180,60]);
+   }
+}
+
+// 108 x 167 x 63
 module tenCharBox() {
    difference() {
       cube([108,167,63]);
@@ -29,13 +65,14 @@ module CharBoxCutout() {
    }
 }
 
+// 108 x 45 x 63
 module resourceBox() {
    difference() {
       thick = 45;
       // cube([93+2*1.61, 45+2*1.61, 63]);
       cube([108, 45, 63]);
 
-      translate([(108-93)/2,1.61,0.6]) cube([93,thick-2*1.61,64]);
+      translate([(108-93)/2,1.61,0.9]) cube([93,thick-2*1.61,64]);
       translate([(108-68)/2,-1,40]) cube([68,180,60]);
       translate([(108-68)/2+68/2,-1,42]) rotate([-90,0,0]) cylinder(d=68,h=10);
    }
