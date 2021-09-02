@@ -14,9 +14,25 @@ translate([0,90,0]) tenCharBox();
 resourceBox();
 translate([0,45,0]) resourceBox();
 translate([143,0,0]) rotate([0,0,90]) villianBox();
+translate([108+34,0,0]) misc1();
 }
 
-translate([108+34,0,0]) misc1();
+translate([108+34,167,0]) misc2();
+
+module misc2() {
+   wid = 257-108-34;
+   len = 257-167;
+   rad = 45;
+
+   difference() {
+      cube([wid,len,63]);
+
+      translate([1.61,1.61,0.9]) cube([wid-2*1.61-rad,len-2*1.61,63]);
+      translate([1.61,1.61,rad+-.9]) cube([wid-2*1.61,len-2*1.61,63]);
+
+      translate([wid-1.61-rad,1.61,0.9+rad]) rotate([-90,0,0]) cylinder(r=rad,h=len-2*1.61);
+   }
+}
 
 module misc1() {
    wid = 257-108-34;
