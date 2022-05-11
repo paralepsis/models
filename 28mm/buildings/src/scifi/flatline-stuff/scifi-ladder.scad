@@ -10,7 +10,14 @@
 fudge = 0.1;
 
 
-module ladder(mult=3) {
+hull() {
+   translate([-4,0,0]) cube([8,3,62]);
+   translate([-7,0,0]) cube([14,0.5,62]);
+}
+ladder();
+
+
+module ladder(mult=2) {
    for (i=[0:mult-1]) {
       translate([0,0,30*i]) {
          translate([-10,-3,20]) scale([1,1,2.5]) rotate([0,90,0]) difference() { 
@@ -26,8 +33,10 @@ module ladder(mult=3) {
             for (j=[0:6]) {
                translate([0,0.5,j*5 + 2.3]) rotate([90,0,0]) {
                   hull() {
-                     translate([-4,0,0]) cylinder(r=1.5,h=4);
-                     translate([4,0,0])  cylinder(r=1.5,h=4);
+                     translate([-4,0,3]) cylinder($fn=6,r=1.5,h=1);
+                     translate([4,0,3])  cylinder($fn=6,r=1.5,h=1);
+                     translate([-4,-0.8,0]) scale([1,0.3,1]) cylinder($fn=6,r=1.5,h=0.5);
+                     translate([4,-0.8,0])  scale([1,0.3,1]) cylinder($fn=6,r=1.5,h=0.5);
                   }
                }
             }
