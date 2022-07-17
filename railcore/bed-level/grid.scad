@@ -1,8 +1,8 @@
 $fn=80;
 
 /* magnet locations (I think!) */
-for (i=[45:125:295]) {
-   for (j=[40:125:290]) {
+for (i=[40:125:290]) {
+   for (j=[40:115:290]) {
       translate([i,j,0]) color("red") cylinder(d=35,h=0.1);
    }
 }
@@ -14,9 +14,9 @@ for (i=[45:125:295]) {
 // translate([275,45]) color("green") cylinder(d=2,h=2);
 
 /* revised bed.g points */
-translate([75,65]) color("green") cylinder(d=3,h=2);
-translate([75,265]) color("green") cylinder(d=3,h=2);
-translate([265,265]) color("green") cylinder(d=3,h=2);
+translate([10,65]) color("green") cylinder(d=3,h=2);
+translate([10,297]) color("green") cylinder(d=3,h=2);
+translate([265,297]) color("green") cylinder(d=3,h=2);
 translate([265,65]) color("green") cylinder(d=3,h=2);
 
 /* mesh probe points
@@ -38,8 +38,8 @@ X2 = [21:42:278]; // was 23:280
 Y2 = [50:30:280];
 
 /* Conservative */
-X3 = [21:42:278];
-Y3 = [57:42:280];
+X3 = [18:42:275];
+Y3 = [57:39:291];
 
 for (i=X3) {
    for (j=Y3) {
