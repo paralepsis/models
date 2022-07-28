@@ -11,17 +11,17 @@ module frameMount(depth=4) {
    difference() {
       hull() {
          translate([2,10,0]) cylinder(r=2,h=depth);
-         translate([2,-20,0]) cylinder(r=2,h=depth);
-         translate([20,-20,0]) cylinder(r=2,h=depth);
+         translate([2,-9,0]) cylinder(r=2,h=depth);
+         translate([20,-9,0]) cylinder(r=2,h=depth);
          translate([20,10,0]) cylinder(r=2,h=depth);
       }
       hull() {
-         translate([5,-3,-1]) cylinder(d=3.2, h=depth+2);
-         translate([5,-15,-1]) cylinder(d=3.2, h=depth+2);
+         translate([5,0,-1]) cylinder(d=3.3, h=depth+2);
+         translate([5,-4,-1]) cylinder(d=3.3, h=depth+2);
       }
       hull() {
-         translate([17,-3,-1]) cylinder(d=3.2, h=depth+2);
-         translate([17,-15,-1]) cylinder(d=3.2, h=depth+2);
+         translate([17,0,-1]) cylinder(d=3.3, h=depth+2);
+         translate([17,-4,-1]) cylinder(d=3.3, h=depth+2);
       }
    }
 
