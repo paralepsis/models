@@ -24,9 +24,9 @@ module original() {
 }
 
 difference() {
-   translate([-1.5,-1.5,0]) cube([21.5,3,mountSideHt]);
-   translate([13,3, mountSideHt - 5]) rotate([90,0,0]) cylinder(d=3.2,h=10);
-   translate([13,3, 5]) rotate([90,0,0]) cylinder(d=3.2,h=10);
+   translate([-1.5,-1.5,0]) cube([22.5,3,mountSideHt]);
+   translate([14,3, mountSideHt - 5]) rotate([90,0,0]) cylinder(d=3.2,h=10);
+   translate([14,3, 5]) rotate([90,0,0]) cylinder(d=3.2,h=10);
 }
 translate([-3,-1*drop,0]) cube([3,drop,mountSideHt]);
 translate([-1.5,0,0]) cylinder(d=3,h=mountSideHt);
