@@ -1,53 +1,63 @@
-totWid         = 91;
-totLen         = 150;
-sideThk        = 5;
-bearOpenDia    = 27;
+frontWid       = 93;
+backWid        = 89;
+totWid         = 89;
+totLen         = 146;
+sideThk        = 6;
+bearOpenDia    = 24;
 bearCenterDist = 100;
-bearCenterHt   = 50;
-cornerRad      = 3;
+bearCenterHt   = 48;
+cornerRad      = 5;
 botThk         = 12;
 
 $fn=40;
 
-if (0) difference() {
+if (1) difference() {
    hull() {
-      translate([-totWid/2+cornerRad,-totLen/2+cornerRad,0])
+      translate([-frontWid/2+cornerRad,-totLen/2+cornerRad,0])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2);
-      translate([-totWid/2+cornerRad,+totLen/2-cornerRad,0])
+      translate([-backWid/2+cornerRad,+totLen/2-cornerRad,0])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2);
-      translate([+totWid/2-cornerRad,-totLen/2+cornerRad,0])
+      translate([+frontWid/2-cornerRad,-totLen/2+cornerRad,0])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2);
-      translate([+totWid/2-cornerRad,+totLen/2-cornerRad,0])
+      translate([+backWid/2-cornerRad,+totLen/2-cornerRad,0])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2);
    }
 
-   translate([-(totWid-2*sideThk)/2, -(totLen+1)/2, botThk])
-      cube([totWid-2*sideThk,totLen+1, bearCenterHt + bearOpenDia]);
+   translate([0,0, botThk+5]) hull() {
+      rotate([90,0,0]) translate([-(totWid/2)+5+sideThk,0,-(totLen+1)/2])
+         cylinder(r=5,h=totLen+1);
+      rotate([90,0,0]) translate([(totWid/2)-5-sideThk,0,-(totLen+1)/2])
+         cylinder(r=5,h=totLen+1);
+      translate([-(totWid-2*sideThk)/2, -(totLen+1)/2, 5]) 
+         cube([totWid-2*sideThk,totLen+1, bearCenterHt + bearOpenDia-botThk-5]);
+   }
 
-   translate([0,bearCenterDist/2,bearCenterHt]) rotate([0,-90,0])
+   translate([0,bearCenterDist/2+3.5,bearCenterHt]) rotate([0,-90,0])
       translate([0,0,-(totWid+5)/2]) {
          cylinder(d=bearOpenDia,h=totWid+5);
          translate([0,-bearOpenDia/2,0]) cube([bearOpenDia,bearOpenDia, totWid+5]);
       }
-   translate([0,-bearCenterDist/2,bearCenterHt]) rotate([0,-90,0])
+   translate([0,-bearCenterDist/2+3.5,bearCenterHt]) rotate([0,-90,0])
       translate([0,0,-(totWid+5)/2]) {
          cylinder(d=bearOpenDia,h=totWid+5);
          translate([0,-bearOpenDia/2,0]) cube([bearOpenDia,bearOpenDia, totWid+5]);
       }
 
    hull() {
-      translate([-totWid/2+cornerRad+15,-totLen/2+cornerRad+10,-5])
+      translate([-totWid/2+cornerRad+20,-totLen/2+cornerRad+10,-5])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2+10);
-      translate([-totWid/2+cornerRad+15,+totLen/2-cornerRad-10,-5])
+      translate([-totWid/2+cornerRad+20,+totLen/2-cornerRad-10,-5])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2+10);
-      translate([+totWid/2-cornerRad-15,-totLen/2+cornerRad+10,-5])
+      translate([+totWid/2-cornerRad-20,-totLen/2+cornerRad+10,-5])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2+10);
-      translate([+totWid/2-cornerRad-15,+totLen/2-cornerRad-10,-5])
+      translate([+totWid/2-cornerRad-20,+totLen/2-cornerRad-10,-5])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2+10);
    }
    
-   translate([-totWid/2,0,0]) rotate([0,45,0]) cube([13,totLen+2,13],center=true);
-   translate([totWid/2,0,0]) rotate([0,45,0]) cube([13,totLen+2,13],center=true);
+   translate([-totWid/2,0,0]) rotate([0,-45,0]) cube([15,totLen+2,20],center=true);
+   translate([totWid/2,0,0]) rotate([0,45,0]) cube([15,totLen+2,20],center=true);
 }
 
-cylinder(d=7.75,h=totWid);
+if (0) cylinder(d=8.0,h=totWid+3);
+
+
