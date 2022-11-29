@@ -11,7 +11,7 @@ botThk         = 12;
 
 $fn=40;
 
-if (1) difference() {
+if (0) difference() {
    hull() {
       translate([-frontWid/2+cornerRad,-totLen/2+cornerRad,0])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2);
@@ -58,9 +58,21 @@ if (1) difference() {
    translate([totWid/2,0,0]) rotate([0,45,0]) cube([15,totLen+2,30],center=true);
 }
 
-if (0) {
-   cylinder(d=8.1,h=backWid+2);
-   translate([0,30,0]) cylinder(d=8.1,h=frontWid);
+if (1) {
+   translate([0,0,0]) roller(backWid+3);
+   translate([30,0,0]) roller(frontWid);
 }
 
+module roller(len) {
+   endDia   = 8.3;
+   midDia   = 9.5;
+   endLen   = 7;
+   taperLen = 1;
+  
+   translate([0,0,0]) cylinder(d=endDia,h=endLen+0.01);
+   translate([0,0,endLen]) cylinder(d1=endDia,d2=midDia,h=taperLen+0.01);
+   translate([0,0,endLen+taperLen]) cylinder(d=midDia,h=len - 2*endLen - 2*taperLen + 0.01);
+   translate([0,0,len-endLen-taperLen]) cylinder(d1=midDia,d2=endDia,h=taperLen+0.01);
+   translate([0,0,len-endLen]) cylinder(d=endDia,h=endLen);
+}
 
