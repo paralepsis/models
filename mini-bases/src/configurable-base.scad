@@ -11,7 +11,7 @@
 
 /* [Base] */
 // Width of base at the bottom (mm)
-base_width = 35; // [25:60]
+base_width = 22; // [25:60]
 // Total height of base (mm)
 base_height = 4; // [2:5]
 // Angle of sidewall (0 degrees is vertical)
@@ -27,10 +27,15 @@ have_inset = 1;
 translate([0,0, base_height]) rotate ([180,0,0]) 
 {
    difference() {
-	   base_exterior();
-           base_inset();
+      union() {
+         difference() {
+	    base_exterior();
+            base_inset();
+         }
+         dogbone();
+      }
+      translate([0,0,-1]) cylinder(h=10,d=2.2,$fn=40); // 2mm flying post
    }
-   dogbone();
 }
 
 // base_exterior() - angled sides and top of base
@@ -51,11 +56,12 @@ module base_inset() {
 module dogbone() {
    difference() {
       union() {
-         translate([-(base_width-10)/2,-1,0])  cube([base_width-10,2,base_height]);
+         // translate([-(base_width-10)/2,-1,0])  cube([base_width-10,2,base_height]);
+         translate([-(base_width-10)/2,-2,0])  cube([base_width-10,4,base_height]);
          translate([-(base_width-12)/2,0,0]) cylinder($fn=60,d=5,h=base_height);
          translate([(base_width-12)/2,0,0]) cylinder($fn=60,d=5,h=base_height);
       }
-      translate([-(base_width-12)/2,0,-0.1]) cylinder($fn=60,d=3,h=base_height+.1);
-      translate([(base_width-12)/2,0,-0.1]) cylinder($fn=60,d=3,h=base_height+.1);
+      translate([-(base_width-12)/2,0,-0.1]) cylinder($fn=60,d=3.2,h=base_height+.1);
+      translate([(base_width-12)/2,0,-0.1]) cylinder($fn=60,d=3.2,h=base_height+.1);
    }
 }

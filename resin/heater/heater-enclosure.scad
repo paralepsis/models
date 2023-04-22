@@ -2,7 +2,7 @@ include <polyround.scad>
 
 extWidth     = 93;
 extDepth     = 65;
-extHt        = 60;
+extHt        = 65;
 wallThk      = 2;
 
 pwrHoleDia   = 22.5;
@@ -21,30 +21,86 @@ intRadiiPoints = [
    [ -extWidth/2+wallThk,  extDepth/2-wallThk, 1.5]
 ];
 
+// electronics();
+
+heatIntDim = 80;
+heatExtDim = 88;
+
+extHeatPoints = [
+   [ -heatExtDim/2, -heatExtDim/2, 3 ],
+   [ -heatExtDim/2,  heatExtDim/2, 3 ],
+   [  heatExtDim/2,  heatExtDim/2, 3 ],
+   [  heatExtDim/2, -heatExtDim/2, 3 ]
+];
+
+intHeatPoints = [
+   [ -heatIntDim/2, -heatIntDim/2, 3 ],
+   [ -heatIntDim/2,  heatIntDim/2, 3 ],
+   [  heatIntDim/2,  heatIntDim/2, 3 ],
+   [  heatIntDim/2, -heatIntDim/2, 3 ]
+];
+
+
+heat();
+// electronics();
+
+module heat() {
+   difference() {
+      union() {
+         difference() {
+            linear_extrude(height=7) polygon(polyRound(extHeatPoints,20));
+            translate([0,0,-1]) linear_extrude(height=9) polygon(polyRound(intHeatPoints,20));
+         }
+         for (i=[-1,1]) translate([i*83/2,83/2,0]) cylinder($fn=30,h=35,d=8);
+         for (i=[-1,1]) translate([i*83/2,-83/2,0]) cylinder($fn=30,h=8,d=8);
+      }
+      heatMountHoles();
+   }
+}
 
 difference() {
-   box();
+   translate([-heatExtDim/2-8,-heatExtDim/2+8,0]) cube([9.5,heatExtDim-16,30]);
+   translate([-heatExtDim/2-6,-heatExtDim/2+10,-1]) cube([10,heatExtDim-20,40]);
+}
+
+
+
+module heatMountHoles() {
+   for (i=[-1,1]) translate([i*83/2,83/2,-1]) cylinder($fn=30,h=40,d=4.2);
+   for (i=[-1,1]) translate([i*83/2,-83/2,-1]) cylinder($fn=30,h=40,d=4.2);
+}
+
+
+
+// BUILDING BLOCKS BELOW
+
+module electronics() {
+   difference() {
+      box();
    
-   // MOUNTING POINT HOLES
-   mountPtHole();
-   mirror([1,0,0]) mountPtHole();
+      // MOUNTING POINT HOLES
+      mountPtHole();
+      mirror([1,0,0]) mountPtHole();
 
-   // VENTS
-   translate([6,extDepth/2, 10]) rotate([90,0,0])
-      grillHoles(width=extWidth-18, height=extHt-15);
+      // VENTS
+      translate([6,extDepth/2, 10]) rotate([90,0,0])
+         grillHoles(width=extWidth-18, height=extHt-15);
 
-   // POWER SWITCH HOLE
-   translate([extWidth/2 - 5,-15,pwrHoleDia/2+5]) rotate([0,90,0])
-      cylinder($fn=40,d=pwrHoleDia, h=10);
+      // POWER SWITCH HOLE
+      translate([extWidth/2 - 5,-15,pwrHoleDia/2+5]) rotate([0,90,0])
+         cylinder($fn=40,d=pwrHoleDia, h=10);
 
-   // POWER CABLE HOLE
-   translate([0,-extDepth/2-1,extHt/2-10]) rotate([-90,0,0]) cylinder(d=30,h=5);
+      // POWER CABLE HOLE
+      translate([0,-extDepth/2-1,extHt/2-10]) rotate([-90,0,0])
+         cylinder(d=30,h=5);
 
-   // CIRCUIT BOARD HOLE
-   translate([-extWidth/2+10, -extDepth/2+20,-1]) cylinder($fn=30,d=4.2,h=7);
+      // CIRCUIT BOARD HOLE
+      translate([-extWidth/2+10, -extDepth/2+20,-1]) cylinder($fn=30,d=2.85,h=20);
 
-   // LED HOLE
-   translate([-extWidth/2+8,extDepth/2-3,extHt-11.75]) rotate([-90,0,0]) cylinder($fn=30,d=5,h=5);
+      // LED HOLE
+      translate([-extWidth/2+8,extDepth/2-3,extHt-11.75]) rotate([-90,0,0])
+         cylinder($fn=30,d=5,h=5);
+   }
 }
 
 module box() {
@@ -60,7 +116,7 @@ module box() {
    mirror([1,0,0]) mountPt();
 
    // CIRCUIT BOARD
-   translate([-extWidth/2+10, -extDepth/2+20,0]) cylinder($fn=30,d=8,h=5);
+   translate([-extWidth/2+10, -extDepth/2+20,0]) cylinder($fn=30,d=8,h=10);
 
 }
 
