@@ -1,6 +1,6 @@
 include <./polyround.scad>
 
-id_X = 236.5;
+id_X = 237.5;
 id_Y = 141.5;
 
 in_wall_thick  = 3;
@@ -18,9 +18,9 @@ squarish_cutout_left = card_cutout_left+card_X+in_wall_thick;
 
 od_X = id_X + 2*out_wall_thick;
 od_Y = id_Y + 2*out_wall_thick;
-od_Z = 118;
+od_Z = 123; // was 118
 
-lip_Z = 61;
+lip_Z = 66; // was 61
 bot_Z = 1.7;
 
 
@@ -44,7 +44,7 @@ module main_box() {
 
       main_form();
    
-      translate([0,0,102]) linear_extrude(height=20)
+      translate([0,0,od_Z-16]) linear_extrude(height=20) // was 102, then 107, then modded to variable
          polygon(polyRound(v_top_cutout_points,3));
       translate([0,0,lip_Z+bot_Z]) linear_extrude(height=50)
          polygon(polyRound(top_cutout_points,3));
@@ -127,8 +127,8 @@ module token_cutout() {
       translate([0,0,bot_Z]) linear_extrude(height=160)
          polygon(polyRound(token_cutout_points,3));
 
-      for(i=[0:8]) {
-         off = (id_X/2 - squarish_cutout_left)/10 * (i+1);
+      for(i=[0:4]) {
+         off = (id_X/2 - squarish_cutout_left)/6 * (i+1);
 
          translate([squarish_cutout_left+off,-id_Y/2-1,bot_Z-0.1])
             cube([0.88, token_Y+2,10]);
