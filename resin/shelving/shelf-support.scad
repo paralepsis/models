@@ -11,7 +11,8 @@ difference() {
 
    translate([0,0,5]) linear_extrude(height=topThick) polygon(polyRound(cutoutPoints,30));
    translate([20/2-1,10,20/2+5]) rotate([90,0,0]) cylinder(d=20,h=150,$fn=50);
-   translate([9,-130,20/2+5]) cube([10,150,15]);
+   translate([-1,-130,20/2+5]) cube([10,150,15]);
+   translate([-6,-130,20/2+5+3]) cube([10,150,15]);
 
    translate([50,-10,10]) rotate([-90,0,0]) cylinder(d=3.2,h=20,$fn=30);
    translate([180,-10,10]) rotate([-90,0,0]) cylinder(d=3.2,h=20,$fn=30);
@@ -26,4 +27,5 @@ difference() {
       translate([0,0,-1]) cylinder(d=25,h=8,$fn=50);
    }
 }
+
 
