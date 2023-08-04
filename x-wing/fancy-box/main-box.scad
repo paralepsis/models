@@ -25,10 +25,10 @@ bot_Z = 1.7;
 
 
 main_box();
-translate([-od_X/2,-od_Y/2,0]) cylinder(r=10,h=0.3);
-translate([od_X/2,-od_Y/2,0]) cylinder(r=10,h=0.3);
-translate([od_X/2,od_Y/2,0]) cylinder(r=10,h=0.3);
-translate([-od_X/2,od_Y/2,0]) cylinder(r=10,h=0.3);
+translate([-od_X/2,-od_Y/2,0]) cylinder(r=15,h=0.3);
+translate([od_X/2,-od_Y/2,0]) cylinder(r=15,h=0.3);
+translate([od_X/2,od_Y/2,0]) cylinder(r=15,h=0.3);
+translate([-od_X/2,od_Y/2,0]) cylinder(r=15,h=0.3);
 
 module main_box() {
    difference() {
