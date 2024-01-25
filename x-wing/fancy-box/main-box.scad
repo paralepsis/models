@@ -18,9 +18,9 @@ squarish_cutout_left = card_cutout_left+card_X+in_wall_thick;
 
 od_X = id_X + 2*out_wall_thick;
 od_Y = id_Y + 2*out_wall_thick;
-od_Z = 123; // was 118
+od_Z = 126; // was 123
 
-lip_Z = 66; // was 61
+lip_Z = 69; // was 66
 bot_Z = 1.7;
 
 
