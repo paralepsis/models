@@ -1,5 +1,6 @@
 include <./polyround.scad>
 use <./mittelschrift.ttf>
+use <./postnobillscolombo-bold.ttf>
 
 cardWidth = 65;
 cardHeight = 90;
@@ -7,10 +8,23 @@ wallThick = 4.5;
 floorThick = 2.5;
 slotGap = 3;
 endGap = 8;
-spacing=0.6;
+spacing=0.3;
 magnetRad=3;
-magnetHeight=2;
+magnetHeight=2.1;
 
+
+module magnetTest(mr = magnetRad) {
+   difference() {
+      testPts = [[-15,-25,3], [-15,15,3], [15,15,3], [15,-25,3]];
+      linear_extrude(height=magnetHeight+0.4) polygon(polyRound(testPts,3));
+   
+      translate([0,0,0.41])
+         cylinder($fn=30,r1=mr+0.1,r2=mr+0.3,h=magnetHeight);
+
+      translate([0,-22,magnetHeight+0.11]) linear_extrude(height=0.4)
+         text(size=14,halign="center",font="Post No Bills Colombo", str(mr),$fn=50);
+   }
+}
 
 bottomComplete();
 
@@ -22,16 +36,16 @@ lengthToEnd = 3*cardWidth+2*slotGap+2*endGap+2*wallThick;
 // % translate([lengthToEnd-endGap-2,0,0]) cube([0.1,20,100]);
 // % translate([endGap+2,0,0]) cube([0.1,20,100]);
 
-veryTopPoints = [[2,2,2],[3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,2,2],
-                [3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,33+2*wallThick-2,2],
-                [2,33+2*wallThick-2,2]];
-topPoints = [[0,0,2],[3*cardWidth+2*slotGap+2*wallThick+2*endGap,0,2],
-                [3*cardWidth+2*slotGap+2*wallThick+2*endGap,33+2*wallThick,2],
-                [0,33+2*wallThick,2]];
+veryTopPoints = [[2,2,4],[3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,2,4],
+                [3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,33+2*wallThick-2,4],
+                [2,33+2*wallThick-2,4]];
+topPoints = [[0,0,4],[3*cardWidth+2*slotGap+2*wallThick+2*endGap,0,4],
+                [3*cardWidth+2*slotGap+2*wallThick+2*endGap,33+2*wallThick,4],
+                [0,33+2*wallThick,4]];
 module topForm() {
    hull() {
       translate([0,0,cardHeight+2*floorThick-4]) linear_extrude(height=5) {
-         polygon(polyRound(veryTopPoints,3));
+         polygon(polyRound(veryTopPoints,20));
       }
       translate([0,0,floorThick+55]) linear_extrude(height=cardHeight+floorThick-55-2+1) {
          polygon(polyRound(topPoints,20));
@@ -51,25 +65,25 @@ module topComplete() {
                   33+2*wallThick-4+spacing,
                   cardHeight+1]); */
       }
-      translate([12,15,cardHeight+2*floorThick+0.01-2+1])
+      translate([12,15,cardHeight+2*floorThick+0.01-2+1+1])
          linear_extrude(height=2)
          text(size=18,font="DIN Mittelschrift","RACE FOR THE GALAXY");
 
       /* magnet cutouts */
       translate([(endGap+2)/2,33/2+wallThick,55+magnetHeight-0.1])
-         cylinder($fn=30,r2=magnetRad+0.1,r1=magnetRad+0.3,h=magnetHeight);
+         cylinder($fn=30,r2=magnetRad+0.15,r1=magnetRad+0.3,h=magnetHeight);
       translate([lengthToEnd-(endGap+2)/2,33/2+wallThick,55+magnetHeight-0.1])
-         cylinder($fn=30,r2=magnetRad+0.1,r1=magnetRad+0.3,h=magnetHeight);
+         cylinder($fn=30,r2=magnetRad+0.15,r1=magnetRad+0.3,h=magnetHeight);
    }
 }
 
 
-veryBottomPoints = [[2,2,2],[3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,2,2],
-                [3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,33+2*wallThick-2,2],
-                [2,33+2*wallThick-2,2]];
-bottomPoints = [[0,0,2],[3*cardWidth+2*slotGap+2*wallThick+2*endGap,0,2],
-                [3*cardWidth+2*slotGap+2*wallThick+2*endGap,33+2*wallThick,2],
-                [0,33+2*wallThick,2]];
+veryBottomPoints = [[2,2,4],[3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,2,4],
+                [3*cardWidth+2*slotGap+2*wallThick-2+2*endGap,33+2*wallThick-2,4],
+                [2,33+2*wallThick-2,4]];
+bottomPoints = [[0,0,4],[3*cardWidth+2*slotGap+2*wallThick+2*endGap,0,4],
+                [3*cardWidth+2*slotGap+2*wallThick+2*endGap,33+2*wallThick,4],
+                [0,33+2*wallThick,4]];
 topBottomPoints = [[2+endGap,2,2],[3*cardWidth+2*slotGap+2*wallThick-2+endGap,2,2],
                   [3*cardWidth+2*slotGap+2*wallThick-2+endGap,33+2*wallThick-2,2],
                   [2+endGap,33+2*wallThick-2,2]];
@@ -104,9 +118,9 @@ module bottomComplete() {
 
       /* magnet cutouts */
       translate([(endGap+2)/2,33/2+wallThick,55+2-magnetHeight+0.1])
-         cylinder($fn=30,r1=magnetRad+0.1,r2=magnetRad+0.3,h=magnetHeight);
+         cylinder($fn=30,r1=magnetRad+0.15,r2=magnetRad+0.3,h=magnetHeight);
       translate([lengthToEnd-(endGap+2)/2,33/2+wallThick,55+2-magnetHeight+0.1])
-         cylinder($fn=30,r1=magnetRad+0.1,r2=magnetRad+0.3,h=magnetHeight);
+         cylinder($fn=30,r1=magnetRad+0.15,r2=magnetRad+0.3,h=magnetHeight);
    }
 }
 
