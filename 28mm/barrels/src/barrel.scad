@@ -2,6 +2,9 @@
 /* barrel()
  * - extend - if "1", extends cylinder downward to connect with terrain.
  */
+
+barrel();
+
 module barrel(mm=35,extend=0) {
         assign(relscale = mm / 30) // relative to 30mm
         {
