@@ -1,8 +1,8 @@
 include <./polyround.scad>
 
 // Individual light shape
-thick=1.25;
-width=2.5;
+thick=1.05;
+width=2.25;
 length=5;
 
 lightBar();
