@@ -11,7 +11,7 @@
 
 /* [Base] */
 // Width of base at the bottom (mm)
-base_width = 22; // [25:60]
+base_width = 40; // [25:60]
 // Total height of base (mm)
 base_height = 4; // [2:5]
 // Angle of sidewall (0 degrees is vertical)
@@ -34,7 +34,7 @@ translate([0,0, base_height]) rotate ([180,0,0])
          }
          dogbone();
       }
-      translate([0,0,-1]) cylinder(h=10,d=2.2,$fn=40); // 2mm flying post
+      translate([0,0,-1]) cylinder(h=10,d=3.2,$fn=40); // 3mm flying post
    }
 }
 
