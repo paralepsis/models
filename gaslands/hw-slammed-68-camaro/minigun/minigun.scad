@@ -1,6 +1,7 @@
 $fn=30;
 
-passSideArmor();
+// passSideArmor();
+driverSideArmor();
 
 module minigun() {
    cylinder(d=4,h=1);
@@ -8,6 +9,7 @@ module minigun() {
    translate([0,0,10]) cylinder(d=4,h=1);
    for(i=[0:5]) rotate([0,0,60*i]) translate([1.2,0,0]) cylinder(d=1,h=12);
 }
+
 module passSideArmor(hole=1) {
    pt1=[0,0,0];
    pt2=[5,6,0];
@@ -25,7 +27,7 @@ module passSideArmor(hole=1) {
 
    translate([-8,2.5,3]) rotate([0,91,0]) minigun();
 
-   translate([-13.,-0.5,1.25]) cube([4,2,3]);
+   translate([-13.,-0.5,1.25]) rotate([7,0,0]) cube([4,2,3]);
 
    scale([0.95,0.95,0.95]) minkowski() { 
       hull() {
