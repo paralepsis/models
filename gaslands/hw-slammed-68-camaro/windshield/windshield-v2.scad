@@ -4,15 +4,16 @@ pt2 = [-9+rad,7.5-rad,0];
 pt3 = [9-rad,7.5-rad,0];
 pt4 = [11-rad,0+rad,0];
 
-ipt1 = [-11+rad+1.5,0+rad+0.75,-0.1];
+ipt1 = [-11+rad+1.5,0+rad+0.5,-0.1];
 ipt2 = [-9+rad+1,7.5-rad-1.5,-0.1];
 ipt3 = [9-rad-1,7.5-rad-1.5,-0.1];
-ipt4 = [11-rad-1.5,0+rad+0.75,-0.1];
+ipt4 = [11-rad-1.5,0+rad+0.5,-0.1];
 
 difference() {
    flatForm();
-   scale([1,1,.04]) translate([0,-0.2,0]) rotate([-90,0,0]) cylinder($fn=30,r=11,h=8);
+   scale([1,1,.04]) translate([0,-2.2,0]) rotate([-90,0,0]) cylinder($fn=30,r=11,h=12);
 }
+
 
 
 module flatForm() {
@@ -22,6 +23,7 @@ module flatForm() {
          translate(pt2) cylinder(r=rad,h=1);
          translate(pt3) cylinder(r=rad,h=1);
          translate(pt4) cylinder(r=rad,h=1);
+         scale([1,1/11*1.3,1]) cylinder($fn=30,r=11,h=1);
       }
    
       hull() {

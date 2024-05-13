@@ -1,7 +1,7 @@
 $fn=30;
 
-// passSideArmor();
-driverSideArmor();
+passSideArmor();
+//driverSideArmor();
 
 module minigun() {
    cylinder(d=4,h=1);
@@ -18,12 +18,11 @@ module passSideArmor(hole=1) {
    pt5=[17,0,0];
    pthick=0.75;
 
-   rpt1=[1.5,0.5,0];
-   rpt2=[5.5,5,0];
-   rpt3=[17,5,0];
-   rpt4=[21,1.25,0];
-   rpt5=[16.5,0.5,0];
-   rthick = pthick+0.25;
+   rpt1=[1.5,0.5,pthick];
+   rpt2=[5.5,5,pthick];
+   rpt3=[17,5,pthick];
+   rpt4=[21,1.25,pthick];
+   rpt5=[16.5,0.5,pthick];
 
    translate([-8,2.5,3]) rotate([0,91,0]) minigun();
 
@@ -48,11 +47,11 @@ module passSideArmor(hole=1) {
       }
    
       /* rivets */
-      translate(rpt1) cylinder($fn=6,d=0.5,h=rthick);
-      translate(rpt2) cylinder($fn=6,d=0.5,h=rthick);
-      translate(rpt3) cylinder($fn=6,d=0.5,h=rthick);
-      translate(rpt4) cylinder($fn=6,d=0.5,h=rthick);
-      translate(rpt5) cylinder($fn=6,d=0.5,h=rthick);
+      translate(rpt1) sphere($fn=20,d=1);
+      translate(rpt2) sphere($fn=20,d=1);
+      translate(rpt3) sphere($fn=20,d=1);
+      translate(rpt4) sphere($fn=20,d=1);
+      translate(rpt5) sphere($fn=20,d=1);
    }
 }
 
@@ -64,12 +63,11 @@ module driverSideArmor(hole=1) {
    pt5=[17,0,0];
    pthick=0.75;
 
-   rpt1=[1.5,0.5,0];
-   rpt2=[5.5,5,0];
-   rpt3=[17,5,0];
-   rpt4=[21,1.25,0];
-   rpt5=[16.5,0.5,0];
-   rthick = pthick+0.25;
+   rpt1=[1.5,0.5,pthick];
+   rpt2=[5.5,5,pthick];
+   rpt3=[17,5,pthick];
+   rpt4=[21,1.25,pthick];
+   rpt5=[16.5,0.5,pthick];
 
    difference() {
       union() {
@@ -83,11 +81,11 @@ module driverSideArmor(hole=1) {
          }
       
          /* rivets */
-         translate(rpt1) cylinder($fn=6,d=0.5,h=rthick);
-         translate(rpt2) cylinder($fn=6,d=0.5,h=rthick);
-         translate(rpt3) cylinder($fn=6,d=0.5,h=rthick);
-         translate(rpt4) cylinder($fn=6,d=0.5,h=rthick);
-         translate(rpt5) cylinder($fn=6,d=0.5,h=rthick);
+         translate(rpt1) sphere($fn=20,d=1);
+         translate(rpt2) sphere($fn=20,d=1);
+         translate(rpt3) sphere($fn=20,d=1);
+         translate(rpt4) sphere($fn=20,d=1);
+         translate(rpt5) sphere($fn=20,d=1);
       
          if (hole) translate([3.75,1,0]) cube([8,3.5,pthick+0.4]);
       }

@@ -4,10 +4,10 @@
  */
 
 difference() {
-   rotate([0,90,0]) translate([0,0,-15/2]) barrel();
+   rotate([0,90,0]) translate([0,0,-15/2-0.2]) scale([1,1,1.1]) barrel();
 
-   translate([4.4,-4,-0.5]) cube([1.5,11,3],center=true);
-   translate([-4.4,-4,-0.5]) cube([1.5,11,3],center=true);
+   translate([6,-4,-0.5]) cube([2,11,3],center=true);
+   translate([-6,-4,-0.5]) cube([2,11,3],center=true);
    translate([0,1,-4]) rotate([-0,0,0]) translate([0,-5.8,0]) cube([20,12,5],center=true);
    translate([0,1,-4]) rotate([14,0,0]) translate([0,5.8,0]) cube([20,12,5],center=true);
 }
