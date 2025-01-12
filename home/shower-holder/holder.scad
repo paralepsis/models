@@ -47,7 +47,7 @@ module whole() {
 }
 
 module bottomShape() {
-   cylinder(d=mountDia+2*1.7,h=mountHt+1);
+   cylinder(d=mountDia+2*1.7+.9,h=mountHt+1);
 }
 
 module bottomHole() {
