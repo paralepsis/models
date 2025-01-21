@@ -1,7 +1,7 @@
-totHt   = 5; // 4.25 fits too nicely, loose
+totHt   = 4.25; // 4.25 fits too nicely, loose
 webHt   = 1.5;
 supDia  = 5.5;
-boltDia = 2.3;
+boltDia = 1.8;
 
 $fn=40;
 
