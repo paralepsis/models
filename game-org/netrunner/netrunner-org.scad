@@ -41,8 +41,11 @@ leftCardStackY = -1 * ((sleeveLen + sleeveLenGap + cardChipGap)/2);
 rightCardStackX = (sleeveWid + sleeveWidGap)/2 + cardStackGap + cardShiftX;
 rightCardStackY = -1 * ((sleeveLen + sleeveLenGap + cardChipGap)/2);
 
-difference() {
+if (0) difference() {
    orgBottom();
+   voids();
+}
+else {
    voids();
 }
 
