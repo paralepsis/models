@@ -5,7 +5,7 @@ slop = 0.001;
 bigSlop = 0.5;
 
 /* dimensions related to chips */
-chipDia    = 38.1;
+chipDia    = 40.0;
 chipDiaGap = 1.5; // total gap for both sides
 chipCt     = 55;
 chipHt     = 3.4;
