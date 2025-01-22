@@ -17,6 +17,9 @@ cardStackHtGap = 2; // total gap
 cardStackGap   = 1.5;
 cardChipGap    = 2;
 
+/* overall height */
+overallHt = max(cardStackHt+cardStackHtGap, chipDia+chipDiaGap);
+
 $fn=40;
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
@@ -30,7 +33,7 @@ cardShiftX    = max(0, (chipLen - cardStacksWid) / 2);
 dishWid    = chipLen - cardStacksWid;
 dishLen    = sleeveLen;
 dishLenGap = sleeveLenGap;
-dishHt     = cardStackHt + cardStackHtGap;
+dishHt     = overallHt;
 
 /* calculate position of chips */
 chipSpaceY = (chipDia + chipDiaGap + cardChipGap) / 2;
@@ -61,7 +64,7 @@ module voids() {
 
    /* Place "dish" */
    dishX = 0;
-   dishY = -1 * (dishLen + dishLenGap + cardChipGap)/2;
+   dishY = -1 * ((dishLen + dishLenGap + cardChipGap)/2);
    translate([dishX, dishY, 0]) dishSpace();
 }
 
@@ -75,23 +78,26 @@ minY = leftCardStackY - (sleeveLen + sleeveLenGap)/2;
 maxY = chipSpaceY + (chipDia + chipDiaGap)/2;
 bbWid = maxX - minX;
 bbLen = maxY - minY;
-bbHt = max(chipDia + chipDiaGap, cardStackHt + cardStackHtGap);
+bbHt = overallHt;
+
+echo("Interior dimensions: ", bbWid, " x ", bbLen, " x ", bbHt);
 
 /* draw a simple box to verify bounding box */
 % translate([minX+bbWid/2,minY+bbLen/2,bbHt/2]) cube([bbWid,bbLen,bbHt],center=true);
 
 module dishSpace() {
-   myRad = 7;
+   myRad = 10;
+   myLen = dishLen + dishLenGap;
 
    hull() {
-      translate([dishWid/2 - myRad, dishLen/2 - myRad, myRad]) sphere(r=myRad);
-      translate([dishWid/2 - myRad, dishLen/2 - myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
-      translate([-dishWid/2 + myRad, dishLen/2 - myRad, myRad]) sphere(r=myRad);
-      translate([-dishWid/2 + myRad, dishLen/2 - myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
-      translate([dishWid/2 - myRad, -dishLen/2 + myRad, myRad]) sphere(r=myRad);
-      translate([dishWid/2 - myRad, -dishLen/2 + myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
-      translate([-dishWid/2 + myRad,-dishLen/2 + myRad, myRad]) sphere(r=myRad);
-      translate([-dishWid/2 + myRad,-dishLen/2 + myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
+      translate([dishWid/2 - myRad, myLen/2 - myRad, myRad]) sphere(r=myRad);
+      translate([dishWid/2 - myRad, myLen/2 - myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
+      translate([-dishWid/2 + myRad, myLen/2 - myRad, myRad]) sphere(r=myRad);
+      translate([-dishWid/2 + myRad, myLen/2 - myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
+      translate([dishWid/2 - myRad, -myLen/2 + myRad, myRad]) sphere(r=myRad);
+      translate([dishWid/2 - myRad, -myLen/2 + myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
+      translate([-dishWid/2 + myRad,-myLen/2 + myRad, myRad]) sphere(r=myRad);
+      translate([-dishWid/2 + myRad,-myLen/2 + myRad, myRad]) cylinder(r=myRad,h=dishHt-myRad);
    }
 }
 
@@ -118,14 +124,18 @@ module chipSpace(len) {
    myLen = len;
    myDia = chipDia + chipDiaGap;
 
-   rotate([0,-90,0]) translate([myDia/2,0,-myLen/2]) cylinder($fn=90, h=myLen, d=myDia);
+   hull() {
+      rotate([0,-90,0]) translate([myDia/2,0,-myLen/2]) cylinder($fn=90, h=myLen, d=myDia);
+      translate([0,0,3*myDia/4]) cube([myLen,myDia,myDia/2], center=true);
+   }
 }
 
 /* volume for a single stack of cards */
 module cardSpace() {
    myWid = sleeveWid + sleeveWidGap;
    myLen = sleeveLen + sleeveLenGap;
-   myHt  = cardStackHt + cardStackHtGap;
+   // myHt  = cardStackHt + cardStackHtGap;
+   myHt  = overallHt;
   
    translate([0,0,myHt/2]) cube([myWid, myLen, myHt],center=true);
 }
