@@ -1,5 +1,9 @@
 include <./polyround.scad>
 
+/* fudge to get clean renders, to make things fit */
+slop = 0.001;
+bigSlop = 0.5;
+
 /* dimensions related to chips */
 chipDia    = 38.1;
 chipDiaGap = 1.5; // total gap for both sides
@@ -47,12 +51,41 @@ leftCardStackY = -1 * ((sleeveLen + sleeveLenGap + cardChipGap)/2);
 rightCardStackX = (sleeveWid + sleeveWidGap)/2 + cardStackGap + cardShiftX;
 rightCardStackY = -1 * ((sleeveLen + sleeveLenGap + cardChipGap)/2);
 
+/* Calculate bounding box */
+// minX = leftCardStackX - (sleeveWid + sleeveWidGap)/2;
+// maxX = rightCardStackX + (sleeveWid + sleeveWidGap)/2;
+minX = -chipLen/2;
+maxX = chipLen/2;
+minY = leftCardStackY - (sleeveLen + sleeveLenGap)/2;
+maxY = chipSpaceY + (chipDia + chipDiaGap)/2;
+bbWid = maxX - minX;
+bbLen = maxY - minY;
+bbHt = overallHt;
+
+echo("Void dimensions: ", bbWid, " x ", bbLen, " x ", bbHt);
+
+/* organizer calculations */
+orgWall  = 2.0;
+orgFloor = 1.6;
+orgWid   = chipLen + 2*orgWall;
+orgLen   = bbLen + 2*orgWall;
+
+intMinX = minX - orgWall;
+intMaxX = maxX + orgWall;
+intMinY = minY - orgWall;
+intMaxY = maxY + orgWall;
+
+extMinX = intMinX - orgWall;
+extMaxX = intMaxX + orgWall;
+extMinY = intMinY - orgWall;
+extMaxY = intMaxY + orgWall;
+
+
 if (1) difference() {
-   fancyBottom(ht=chipDia/2);
-   voids();
+   fancyBottom();
 }
 else {
-   fancyBottom();
+   // fancyBottom();
    voids();
 }
 
@@ -73,21 +106,8 @@ module voids() {
 }
 
 
-/* Calculate bounding box */
-// minX = leftCardStackX - (sleeveWid + sleeveWidGap)/2;
-// maxX = rightCardStackX + (sleeveWid + sleeveWidGap)/2;
-minX = -chipLen/2;
-maxX = chipLen/2;
-minY = leftCardStackY - (sleeveLen + sleeveLenGap)/2;
-maxY = chipSpaceY + (chipDia + chipDiaGap)/2;
-bbWid = maxX - minX;
-bbLen = maxY - minY;
-bbHt = overallHt;
-
-echo("Interior dimensions: ", bbWid, " x ", bbLen, " x ", bbHt);
-
 /* draw a simple box to verify bounding box */
-% translate([minX+bbWid/2,minY+bbLen/2,bbHt/2]) cube([bbWid,bbLen,bbHt],center=true);
+% translate([minX+bbWid/2,minY+bbLen/2,bbHt/2 + orgFloor]) cube([bbWid,bbLen,bbHt],center=true);
 
 module dishSpace() {
    myRad = 10;
@@ -105,10 +125,6 @@ module dishSpace() {
    }
 }
 
-orgWall  = 2.0;
-orgFloor = 1.6;
-orgWid   = chipLen + 2*orgWall;
-orgLen   = bbLen + 2*orgWall;
 
 /* enclosure volume: bottom */
 module orgBottom(ht) {
@@ -123,36 +139,64 @@ module orgBottom(ht) {
    }
 }
 
+/* fancyBottom() -- bottom with magnet holes plus interior walls to be cut with voids */
+module fancyBottom(ht=cardStackLift+orgFloor) {
+   myHt = ht;
 
-module fancyBottom(ht=2) {
-   myRad        = 5;
-   myHt         = ht;
-   cornerAdj    = 15;
-   cornerFlareX = 95;
-   cornerFlareY = 75;
+   difference() {
+      union() {
+         linear_extrude(height=myHt) fancyExterior();
+         intVolume();
+      }
+      translate([0,0,orgFloor]) voids();
+      translate([-(extMaxX-extMinX)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor])
+         cube([extMaxX-extMinX,chipDia+chipDiaGap+orgWall+slop,overallHt-chipDia/2]);
+   }
+
+   color("red") translate([minX-5,minY+1,0]) cylinder(d=5.5, h=ht+5);
+}
+
+module fancyExterior() {
+   myRad        = 50;
+   cornerAdjX   = 45;
+   cornerAdjY   = 35;
+   cornerFlareX = 12;
+   cornerFlareY = 05;
    cornerRad    = 10;
    
-   bottomPts = [
-                [minX-orgWall+cornerAdj,minY-orgWall,myRad],
-                [minX-orgWall-cornerFlareX,minY-orgWall-cornerFlareY,cornerRad],
-                [minX-orgWall,minY-orgWall+cornerAdj,myRad],
+   exteriorPts = [
+                  [extMinX+cornerAdjX,extMinY,myRad],
+                  [extMinX-cornerFlareX,extMinY-cornerFlareY,cornerRad],
+                  [extMinX,extMinY+cornerAdjY,myRad],
+  
+                  [extMinX,extMaxY-cornerAdjY,myRad],
+                  [extMinX-cornerFlareX,extMaxY+cornerFlareY,cornerRad],
+                  [extMinX+cornerAdjX,extMaxY,myRad],
+  
+                  [extMaxX-cornerAdjX,extMaxY,myRad],
+                  [extMaxX+cornerFlareX,extMaxY+cornerFlareY,cornerRad],
+                  [extMaxX,extMaxY-cornerAdjY,myRad],
 
-                [minX-orgWall,maxY+orgWall-cornerAdj,myRad],
-                [minX-orgWall-cornerFlareX,maxY+orgWall+cornerFlareY,cornerRad],
-                [minX-orgWall+cornerAdj,maxY+orgWall,myRad],
+                  [extMaxX,extMinY+cornerAdjY,myRad],
+                  [extMaxX+cornerFlareX,extMinY-cornerFlareY,cornerRad],
+                  [extMaxX-cornerAdjX,extMinY,myRad],
+                 ];
 
-                [maxX+orgWall-cornerAdj,maxY+orgWall,myRad],
-                [maxX+orgWall+cornerFlareX,maxY+orgWall+cornerFlareY,cornerRad],
-                [maxX+orgWall,maxY+orgWall-cornerAdj,myRad],
+  polygon(polyRound(exteriorPts,30));
+}
 
-                [maxX+orgWall,minY-orgWall+cornerAdj,myRad],
-                [maxX+orgWall+cornerFlareX,minY-orgWall-cornerFlareY,cornerRad],
-                [maxX+orgWall-cornerAdj,minY-orgWall,myRad],
-               ];
+module intVolume() {
+   intRad = 1;
+   intHt  = bbHt + orgFloor-slop;
 
-   linear_extrude(height=myHt) polygon(polyRound(bottomPts,30));
+   intPts = [
+               [intMinX, intMinY, intRad],
+               [intMinX, intMaxY, intRad],
+               [intMaxX, intMaxY, intRad],
+               [intMaxX, intMinY, intRad],
+            ];
 
-   translate([minX-4,minY-2,0]) cylinder(d=5.5, h=5);
+   linear_extrude(height=intHt) polygon(polyRound(intPts,10));
 }
 
 /* volume for holding stack of chips */
@@ -168,11 +212,15 @@ module chipSpace(len) {
 
 /* volume for a single stack of cards */
 module cardSpace() {
+   fingerRad =12;
    myWid = sleeveWid + sleeveWidGap;
    myLen = sleeveLen + sleeveLenGap;
    // myHt  = cardStackHt + cardStackHtGap;
    myHt  = overallHt - cardStackLift;
   
    translate([0,0,myHt/2 + cardStackLift]) cube([myWid, myLen, myHt],center=true);
+
+   translate([0,-myLen/2-4,fingerRad+cardStackLift]) rotate([-90,0,0]) cylinder(r=fingerRad,h=10);
+   translate([-fingerRad,-myLen/2-4,cardStackLift+fingerRad]) cube([fingerRad*2,10,myHt-fingerRad]);
 }
 
