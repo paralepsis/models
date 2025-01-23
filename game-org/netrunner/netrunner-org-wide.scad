@@ -12,11 +12,11 @@ chipHt     = 3.4;
 chipHtGap  = 2; // total gap for both sides
 
 /* dimensions related to cards */
-sleeveWid      = 67.0;
+sleeveWid      = 93.0;
 sleeveWidGap   = 2; // total gap for both sides
-sleeveLen      = 93.0;
+sleeveLen      = 67.0;
 sleeveLenGap   = 2; // total gap for both sides
-cardStackHt    = 30;
+cardStackHt    = 35;
 cardStackHtGap = 2; // total gap
 cardStackLift  = 4; // make the card stacks start higher -- facilitates magnets
 
@@ -91,7 +91,12 @@ else {
 
 module voids() {
    /* Place chip space */
-   translate([0,chipSpaceY,0]) chipSpace(len=chipLen);
+   if (1) {
+      translate([0,chipSpaceY,0]) chipSpace(len=chipLen);
+   } else {
+      /* don't expand chip space, just shift it */
+      translate([0,chipSpaceY,0]) chipSpace(len=minChipLen);
+   }
 
    /* Place left card stack space */
    translate([leftCardStackX,leftCardStackY,0]) cardSpace();
@@ -99,10 +104,12 @@ module voids() {
    /* Place right card stack space */
    translate([rightCardStackX,rightCardStackY,0]) cardSpace();
 
-   /* Place "dish" */
-   dishX = 0;
-   dishY = -1 * ((dishLen + dishLenGap + cardChipGap)/2);
-   translate([dishX, dishY, 0]) dishSpace();
+   if (0) {
+      /* Place "dish" */
+      dishX = 0;
+      dishY = -1 * ((dishLen + dishLenGap + cardChipGap)/2);
+      translate([dishX, dishY, 0]) dishSpace();
+   }
 }
 
 
@@ -158,9 +165,9 @@ module fancyBottom(ht=cardStackLift+orgFloor) {
 
 module fancyExterior() {
    myRad        = 50;
-   cornerAdjX   = 45;
+   cornerAdjX   = 10;
    cornerAdjY   = 35;
-   cornerFlareX = 12;
+   cornerFlareX = 15;
    cornerFlareY = 05;
    cornerRad    = 10;
    
