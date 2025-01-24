@@ -35,7 +35,8 @@ endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (0) chipCover();
+if (1) chipCover();
+
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
@@ -245,7 +246,7 @@ module corner() {
 module chipCover() {
    $fn=100;
 
-   myCoverDia = chipDia + chipDiaGap + chipCoverThick;
+   myCoverDia = chipDia + chipDiaGap + 2*chipCoverThick;
    myStartOff = -orgWid/2;
    greebleCt = 8;
 
@@ -266,8 +267,8 @@ module chipCover() {
 
 module endcap() {
 
-   myDia1 = chipDia + chipDiaGap + endcapExtra1;
-   myDia2 = chipDia + chipDiaGap + endcapExtra2;
+   myDia1 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra1;
+   myDia2 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra2;
    mySlantHt = myDia2 - myDia1;
 
    translate([endcapHt/2,0,0]) rotate([0,-90,0]) {
