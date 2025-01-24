@@ -22,8 +22,8 @@ cardStackLift  = 2; // make the card stacks start higher -- facilitates magnets
 rightStackOff  = 20; // shift right stack forward
 
 /* dimensions related to placement of things relative to one another */
-cardStackGap   = 1.;
-cardChipGap    = 2;
+cardStackGap   = 1.5;
+cardChipGap    = 4;
 
 /* overall height */
 overallHt = max(cardStackHt+cardStackHtGap+cardStackLift, chipDia+chipDiaGap);
@@ -35,30 +35,31 @@ endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (1) chipCover();
-if (1) fancyTop();
+if (0) chipCover();
+if (0) fancyTop();
+if (1) fancyBottom();
 
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
-cardStacksWid = 2*sleeveWid + 2*sleeveWidGap + 2*cardStackGap;
+cardStacksWid = 2*sleeveWid + 2*sleeveWidGap + cardStackGap;
 chipLen       = max(minChipLen, cardStacksWid);
 cardShiftX    = max(0, (chipLen - cardStacksWid) / 2);
 // echo("max. chips: ",floor(chipLen/chipHt));
 
 /* dimensions of "dish" between cards */
-dishWid    = chipLen - cardStacksWid;
-dishLen    = sleeveLen;
+dishLen    = rightStackOff - cardStackGap; // reusing cardStackGap as space between cards and dish
+dishWid    = sleeveWid + sleeveWidGap;
 dishLenGap = sleeveLenGap;
-dishHt     = overallHt;
+dishHt     = cardStackHt+cardStackHtGap+cardStackLift;
 
 /* calculate position of chips */
 chipSpaceY = (chipDia + chipDiaGap + cardChipGap) / 2;
 
 /* calculate positions of card spots */
-leftCardStackX = -1 * ((sleeveWid + sleeveWidGap)/2 + cardStackGap) - cardShiftX;
-leftCardStackY = -1 * ((sleeveLen + sleeveLenGap + cardChipGap)/2);
-rightCardStackX = (sleeveWid + sleeveWidGap)/2 + cardStackGap + cardShiftX;
+leftCardStackX = -1 * (sleeveWid + sleeveWidGap + cardStackGap)/2 - cardShiftX;
+leftCardStackY = -1 * (sleeveLen + sleeveLenGap + cardChipGap)/2;
+rightCardStackX = (sleeveWid + sleeveWidGap + cardStackGap)/2 + cardShiftX;
 rightCardStackY = -1 * ((sleeveLen + sleeveLenGap + cardChipGap)/2);
 
 /* Calculate bounding box */
@@ -91,9 +92,6 @@ extMinY = intMinY - orgWall;
 extMaxY = intMaxY + orgWall;
 
 
-if (1) difference() {
-   fancyBottom();
-}
 
 module voids(finger=true) {
    /* Place chip space */
@@ -112,7 +110,8 @@ module voids(finger=true) {
 
    /* Place "dish" */
    dishX = rightCardStackX;
-   dishY = -1*(rightStackOff-cardChipGap)/2-cardChipGap/2;
+   dishY = -(cardChipGap+dishLen)/2;
+   //dishY = -1*(rightStackOff)/2-cardChipGap/2;
    translate([dishX, dishY, 0]) dishSpace();
 }
 
@@ -120,8 +119,8 @@ module dishSpace() {
    $fn=100;
 
    myRad = 10;
-   myLen = rightStackOff-cardChipGap; // Y dim -- historical reasons
-   myWid = sleeveWid + sleeveWidGap;
+   myLen = dishLen;
+   myWid = dishWid;
    myHt = cardStackHt+cardStackHtGap+cardStackLift;
 
    hull() {
@@ -205,9 +204,12 @@ module OLDfancyExterior(inset=0) {
 module fancyTop() {
    myHt = cardStackHt+cardStackHtGap+cardStackLift;
 
-   translate([0,0,orgFloor+1]) {
-      linear_extrude(height=myHt) fancyTopShape(expand=orgWall);
-      translate([0,0,myHt]) minkowski() {linear_extrude(height=slop) fancyTopShape(expand=0); cylinder(r1=orgWall,r2=slop,h=orgWall);}
+   difference() {
+      translate([0,0,orgFloor]) {
+         linear_extrude(height=myHt) fancyTopShape(expand=orgWall);
+         translate([0,0,myHt]) minkowski() {linear_extrude(height=slop) fancyTopShape(expand=0); cylinder(r1=orgWall,r2=slop,h=orgWall);}
+      }
+      hull() chipCover();
    }
 }
 
