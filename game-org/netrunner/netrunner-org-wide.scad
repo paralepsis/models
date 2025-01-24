@@ -140,7 +140,7 @@ module fancyBottom(ht=cardStackLift) {
    difference() {
       union() {
          linear_extrude(height=myHt) fancyExterior();
-         linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(inset=orgWall);
+         linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(expand=0);
       }
       translate([0,0,orgFloor]) voids();
       translate([-(extMaxX-extMinX)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor])
@@ -153,9 +153,33 @@ module fancyBottom(ht=cardStackLift) {
 
 
 /* fancyExterior()
- * inset - a way to inset corners to help generate internal volume
+ * expand - a way to inset corners to help generate internal volume
  */
-module fancyExterior(inset=0) {
+module fancyExterior(expand=orgWall) {
+   myRad        = 2;
+   cornerAdjX   = rightStackOff+5;
+   cornerAdjY   = rightStackOff;
+   cornerRad    = 4;
+   
+   exteriorPts = [
+                  [0,intMinY-cornerAdjY,cornerRad],
+                  [-cornerAdjX/2,intMinY-cornerAdjY/2, cornerRad],
+                  [-cornerAdjX,intMinY,cornerRad],
+
+                  [intMinX,intMinY,myRad],
+                  [intMinX,intMaxY,myRad],
+                  [intMaxX,intMaxY,myRad],
+                  [intMaxX,intMinY-cornerAdjY,myRad],
+                 ];
+
+   if (expand > 0) {
+      minkowski() { polygon(polyRound(exteriorPts,30)); circle(r=expand); }
+   } else {
+      polygon(polyRound(exteriorPts,30));
+   }
+}
+
+module OLDfancyExterior(inset=0) {
    myRad        = 2;
    cornerAdjX   = rightStackOff+5;
    cornerAdjY   = rightStackOff;
@@ -179,31 +203,36 @@ module fancyExterior(inset=0) {
  * inset - a way to inset corners to help generate internal volume
  */
 module fancyTop() {
-  translate([0,0,0.5+orgFloor]) {
-     // linear_extrude(height=orgFloor+cardStackHt+cardStackHtGap+cardStackLift) fancyTopShape();
-     //linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyTopShape();
-     minkowski() {linear_extrude(height=slop) fancyTopShape(inset=orgWall); cylinder(r1=orgWall,r2=slop,h=orgWall);}
-  }
+   myHt = cardStackHt+cardStackHtGap+cardStackLift;
+
+   translate([0,0,orgFloor+1]) {
+      linear_extrude(height=myHt) fancyTopShape(expand=orgWall);
+      translate([0,0,myHt]) minkowski() {linear_extrude(height=slop) fancyTopShape(expand=0); cylinder(r1=orgWall,r2=slop,h=orgWall);}
+   }
 }
 
-module fancyTopShape(inset=0) {
+module fancyTopShape(expand=0) {
    myRad        = 2;
    cornerAdjX   = rightStackOff+5;
    cornerAdjY   = rightStackOff;
    cornerRad    = 4;
    
    exteriorPts = [
-                  [0,extMinY-cornerAdjY+inset,cornerRad],
-                  [-cornerAdjX/2,extMinY-cornerAdjY/2+inset, cornerRad],
-                  [-cornerAdjX,extMinY+inset,cornerRad],
+                  [0,intMinY-cornerAdjY,cornerRad],
+                  [-cornerAdjX/2,intMinY-cornerAdjY/2, cornerRad],
+                  [-cornerAdjX,intMinY,cornerRad],
 
-                  [extMinX+inset,extMinY+inset,myRad],
-                  [extMinX+inset,0-inset,myRad],
-                  [extMaxX-inset,0-inset,myRad],
-                  [extMaxX-inset,extMinY-cornerAdjY+inset,myRad],
+                  [intMinX,intMinY,myRad],
+                  [intMinX,0,myRad],
+                  [intMaxX,0,myRad],
+                  [intMaxX,intMinY-cornerAdjY,myRad],
                  ];
 
-  polygon(polyRound(exteriorPts,30));
+   if (expand > 0) {
+      minkowski() { polygon(polyRound(exteriorPts,30)); circle(r=expand); }
+   } else {
+      polygon(polyRound(exteriorPts,30));
+   }
 }
 
 module intVolume(ht) {
