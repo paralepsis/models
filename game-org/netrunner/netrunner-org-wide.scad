@@ -18,10 +18,10 @@ sleeveLen      = 67.0;
 sleeveLenGap   = 2; // total gap for both sides
 cardStackHt    = 35;
 cardStackHtGap = 2; // total gap
-cardStackLift  = 4; // make the card stacks start higher -- facilitates magnets
+cardStackLift  = 2; // make the card stacks start higher -- facilitates magnets
 
 /* dimensions related to placement of things relative to one another */
-cardStackGap   = 1.5;
+cardStackGap   = 1.;
 cardChipGap    = 2;
 
 /* overall height */
@@ -82,11 +82,7 @@ extMaxY = intMaxY + orgWall;
 
 
 if (1) difference() {
-   fancyBottom();
-}
-else {
-   // fancyBottom();
-   voids();
+   orgBottom();
 }
 
 module voids() {
@@ -98,11 +94,18 @@ module voids() {
       translate([0,chipSpaceY,0]) chipSpace(len=minChipLen);
    }
 
-   /* Place left card stack space */
-   translate([leftCardStackX,leftCardStackY,0]) cardSpace();
+   /* Place left and right card stack spaces */
+   if (1) {
+      myHt = cardStackHt+cardStackHtGap+cardStackLift;
 
-   /* Place right card stack space */
-   translate([rightCardStackX,rightCardStackY,0]) cardSpace();
+      translate([leftCardStackX,leftCardStackY,0]) cardSpace(ht=myHt);
+      translate([rightCardStackX,rightCardStackY,0]) cardSpace(ht=myHt);
+   } else {
+      myHt = overallHt;
+
+      translate([leftCardStackX,leftCardStackY,0]) cardSpace(ht=myHt);
+      translate([rightCardStackX,rightCardStackY,0]) cardSpace(ht=myHt);
+   }
 
    if (0) {
       /* Place "dish" */
@@ -134,15 +137,23 @@ module dishSpace() {
 
 
 /* enclosure volume: bottom */
-module orgBottom(ht) {
-   hull() {
-      myRad = 1.5;
-      myHt = ht;
+module orgBottom(ht=cardStackLift+orgFloor) {
+   difference() {
+      union() {
+         hull() {
+            myRad = 1.5;
+            myHt = ht;
 
-      translate([minX-orgWall+myRad, minY-orgWall+myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
-      translate([minX-orgWall+myRad, maxY+orgWall-myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
-      translate([maxX+orgWall-myRad, minY-orgWall+myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
-      translate([maxX+orgWall-myRad, maxY+orgWall-myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
+            translate([extMinX+myRad, extMinY+myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
+            translate([extMinX+myRad, extMaxY-myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
+            translate([extMaxX-myRad, extMinY+myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
+            translate([extMaxX-myRad, extMaxY-myRad, -orgFloor]) cylinder(r=myRad,h=myHt);
+         }
+         intVolume(ht=cardStackHt+cardStackHtGap+cardStackLift);
+      }
+      translate([0,0,orgFloor]) voids();
+      translate([-(extMaxX-extMinX)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor])
+         cube([extMaxX-extMinX,chipDia+chipDiaGap+orgWall+slop,overallHt-chipDia/2]);
    }
 }
 
@@ -153,7 +164,7 @@ module fancyBottom(ht=cardStackLift+orgFloor) {
    difference() {
       union() {
          linear_extrude(height=myHt) fancyExterior();
-         intVolume();
+         intVolume(ht=cardStackHt+cardStackHtGap+cardStackLift);
       }
       translate([0,0,orgFloor]) voids();
       translate([-(extMaxX-extMinX)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor])
@@ -192,9 +203,9 @@ module fancyExterior() {
   polygon(polyRound(exteriorPts,30));
 }
 
-module intVolume() {
+module intVolume(ht) {
    intRad = 1;
-   intHt  = bbHt + orgFloor-slop;
+   intHt  = ht + orgFloor-slop;
 
    intPts = [
                [intMinX, intMinY, intRad],
@@ -218,16 +229,36 @@ module chipSpace(len) {
 }
 
 /* volume for a single stack of cards */
-module cardSpace() {
+module cardSpace(ht=overallHt) {
    fingerRad =12;
    myWid = sleeveWid + sleeveWidGap;
    myLen = sleeveLen + sleeveLenGap;
    // myHt  = cardStackHt + cardStackHtGap;
-   myHt  = overallHt - cardStackLift;
+   myHt  = ht - cardStackLift;
   
    translate([0,0,myHt/2 + cardStackLift]) cube([myWid, myLen, myHt],center=true);
 
    translate([0,-myLen/2-4,fingerRad+cardStackLift]) rotate([-90,0,0]) cylinder(r=fingerRad,h=10);
    translate([-fingerRad,-myLen/2-4,cardStackLift+fingerRad]) cube([fingerRad*2,10,myHt-fingerRad]);
+}
+
+module corner() {
+   myLen = 25;
+   myRad = 1;
+   myDep = 2;
+   
+   pts = [
+            [0, 0, 0.01],
+            [0, myLen, 0.01],
+            [0.35*myLen, myLen, myRad],
+            [myLen, 0.35*myLen, myRad],
+            [myLen, 0, 0.01],
+         ];
+
+   linear_extrude(height=myDep) polygon(polyRound(pts,10));
+   translate([0,myDep,0]) rotate([90,0,0]) linear_extrude(height=myDep)
+      polygon(polyRound(pts,10));
+   translate([myDep,0,0]) rotate([0,-90,0]) linear_extrude(height=myDep)
+     polygon(polyRound(pts,10));
 }
 
