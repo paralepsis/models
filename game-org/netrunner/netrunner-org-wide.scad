@@ -36,6 +36,7 @@ endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
 if (1) chipCover();
+if (1) fancyTop();
 
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
@@ -133,13 +134,12 @@ module dishSpace() {
 }
 
 /* fancyBottom() -- bottom with magnet holes plus interior walls to be cut with voids */
-module fancyBottom(ht=cardStackLift+orgFloor) {
+module fancyBottom(ht=cardStackLift) {
    myHt = ht;
 
    difference() {
       union() {
          linear_extrude(height=myHt) fancyExterior();
-         // intVolume(ht=cardStackHt+cardStackHtGap+cardStackLift);
          linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(inset=orgWall);
       }
       translate([0,0,orgFloor]) voids();
@@ -175,26 +175,43 @@ module fancyExterior(inset=0) {
   polygon(polyRound(exteriorPts,30));
 }
 
+/* fancyTop()
+ * inset - a way to inset corners to help generate internal volume
+ */
+module fancyTop() {
+  translate([0,0,0.5+orgFloor]) {
+     // linear_extrude(height=orgFloor+cardStackHt+cardStackHtGap+cardStackLift) fancyTopShape();
+     //linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyTopShape();
+     minkowski() {linear_extrude(height=slop) fancyTopShape(inset=orgWall); cylinder(r1=orgWall,r2=slop,h=orgWall);}
+  }
+}
+
+module fancyTopShape(inset=0) {
+   myRad        = 2;
+   cornerAdjX   = rightStackOff+5;
+   cornerAdjY   = rightStackOff;
+   cornerRad    = 4;
+   
+   exteriorPts = [
+                  [0,extMinY-cornerAdjY+inset,cornerRad],
+                  [-cornerAdjX/2,extMinY-cornerAdjY/2+inset, cornerRad],
+                  [-cornerAdjX,extMinY+inset,cornerRad],
+
+                  [extMinX+inset,extMinY+inset,myRad],
+                  [extMinX+inset,0-inset,myRad],
+                  [extMaxX-inset,0-inset,myRad],
+                  [extMaxX-inset,extMinY-cornerAdjY+inset,myRad],
+                 ];
+
+  polygon(polyRound(exteriorPts,30));
+}
+
 module intVolume(ht) {
    intRad = 1;
    intHt  = ht + orgFloor-slop;
    // orgWall
 
    linear_extrude(height=intHt) minkowski() { projection() voids(finger=false); circle(r=orgWall); }
-}
-
-module OLDintVolume(ht) {
-   intRad = 1;
-   intHt  = ht + orgFloor-slop;
-
-   intPts = [
-               [intMinX, intMinY, intRad],
-               [intMinX, intMaxY, intRad],
-               [intMaxX, intMaxY, intRad],
-               [intMaxX, intMinY, intRad],
-            ];
-
-   linear_extrude(height=intHt) polygon(polyRound(intPts,10));
 }
 
 /* volume for holding stack of chips */
