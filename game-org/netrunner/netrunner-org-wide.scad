@@ -23,7 +23,7 @@ rightStackOff  = 20; // shift right stack forward
 
 /* dimensions related to placement of things relative to one another */
 cardStackGap   = 1.5;
-cardChipGap    = 8;
+cardChipGap    = 10;
 
 /* overall height */
 overallHt = max(cardStackHt+cardStackHtGap+cardStackLift, chipDia+chipDiaGap);
@@ -35,10 +35,9 @@ endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (1) chipCover();
-if (1) fancyTop();
+if (0) chipCover();
+if (0) translate([0,0,00]) fancyTop();
 if (1) fancyBottom();
-
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
@@ -79,7 +78,7 @@ echo("Void dimensions: ", bbWid, " x ", bbLen, " x ", bbHt);
 /* organizer calculations */
 orgWall  = 2.0;
 orgFloor = 1.6;
-orgWid   = chipLen + 2*orgWall;
+orgWid   = chipLen + 2*orgWall; // FIXME? no longer accurate
 orgLen   = bbLen + 2*orgWall;
 
 intMinX = minX - orgWall;
@@ -91,7 +90,6 @@ extMinX = intMinX - orgWall;
 extMaxX = intMaxX + orgWall;
 extMinY = intMinY - orgWall;
 extMaxY = intMaxY + orgWall;
-
 
 
 module voids(finger=true) {
@@ -144,7 +142,9 @@ module fancyBottom(ht=cardStackLift) {
       translate([0,0,orgFloor]) voids();
       translate([-(extMaxX-extMinX)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor])
          cube([extMaxX-extMinX,chipDia+chipDiaGap+orgWall+slop,overallHt-chipDia/2]);
-      translate([-(extMaxX-extMinX+slop)/2,0.9*chipDia,0]) rotate([-30,0,0]) cube([extMaxX-extMinX+slop,20,20]);
+
+      /* slant the back */
+      translate([-(extMaxX-extMinX+slop)/2,0.9*chipDia+0.5*cardChipGap,0]) rotate([-30,0,0]) cube([extMaxX-extMinX+slop,20,20]);
 
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
@@ -196,6 +196,12 @@ module fancyTop() {
 
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
+
+      /* note: fudging here b/c orgWid is no longer accurate */
+      translate([-(orgWid+10)/2,-30+cardChipGap/2,-slop]) {
+         cube([orgWid + 10, 30, cardStackHt], center = false);
+         rotate([0,90,0]) cylinder($fn=80,r=cardStackHt,h=orgWid+10);
+      }
    }
 }
 
