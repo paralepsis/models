@@ -5,18 +5,19 @@ slop = 0.001;
 bigSlop = 0.5;
 
 /* dimensions related to chips */
-chipDia    = 41.0;
-chipDiaGap = 1.5; // total gap for both sides
-chipCt     = 55;
-chipHt     = 3.4;
-chipHtGap  = 2; // total gap for both sides
+chipDia       = 41.0;
+chipDiaGap    = 1.5; // total gap for both sides
+chipCt        = 53;
+chipHt        = 3.4;
+chipHtGap     = 2; // total gap for both sides
+chipFillRight = 0;
 
 /* dimensions related to cards */
 sleeveWid      = 93.0;
 sleeveWidGap   = 2; // total gap for both sides
 sleeveLen      = 67.0;
 sleeveLenGap   = 2; // total gap for both sides
-cardStackHt    = 32;
+cardStackHt    = 35;
 cardStackHtGap = 2; // total gap
 cardStackLift  = 2; // make the card stacks start higher -- facilitates magnets
 rightStackOff  = 20; // shift right stack forward
@@ -42,16 +43,16 @@ if (1) fancyBottom();
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
 cardStacksWid = 2*sleeveWid + 2*sleeveWidGap + cardStackGap;
-chipLen       = max(minChipLen, cardStacksWid);
+chipLen       = max(minChipLen+chipFillRight, cardStacksWid);
 cardShiftX    = max(0, (chipLen - cardStacksWid) / 2);
-// echo("max. chips: ",floor(chipLen/chipHt));
 
 /* dimensions of "dish" between cards */
-dishWid     = sleeveWid + sleeveWidGap;
-dishLenGap  = sleeveLenGap;
-dishHt      = cardStackHt+cardStackHtGap+cardStackLift;
-dishChipGap = min(cardChipGap,4);
-dishLen     = rightStackOff - cardStackGap + (cardChipGap - 4)/2;
+dishRightGap = 7; /* leave some space on RHS (magnet) */
+dishWid      = sleeveWid + sleeveWidGap - dishRightGap;
+dishLenGap   = sleeveLenGap;
+dishHt       = cardStackHt+cardStackHtGap+cardStackLift;
+dishChipGap  = min(cardChipGap,4);
+dishLen      = rightStackOff - cardStackGap + (cardChipGap - 4)/2;
 
 /* calculate position of chips */
 chipSpaceY = (chipDia + chipDiaGap + cardChipGap) / 2;
@@ -92,13 +93,14 @@ extMinY = intMinY - orgWall;
 extMaxY = intMaxY + orgWall;
 
 
-module voids(finger=true) {
+module voids(finger=true,chipFill=false) {
    /* Place chip space */
-   if (1) {
-      translate([0,chipSpaceY,0]) chipSpace(len=chipLen);
+   if (chipFill) {
+      /* leave RHS filled in (magnet?) */
+      translate([-chipFillRight/2,chipSpaceY,0]) chipSpace(len=minChipLen);
    } else {
       /* don't expand chip space, just shift it */
-      translate([0,chipSpaceY,0]) chipSpace(len=minChipLen,finger);
+      translate([0,chipSpaceY,0]) chipSpace(len=chipLen);
    }
 
    /* Place left and right card stack spaces */
@@ -116,17 +118,17 @@ module voids(finger=true) {
 module dishSpace() {
    $fn=100;
 
-   myRad = 10;
+   myRad = 15;
    myLen = dishLen;
    myWid = dishWid;
    myHt = cardStackHt+cardStackHtGap+cardStackLift;
 
    hull() {
-      translate([-myWid/2 + myRad, 0, myRad]) rotate([90,0,0])
+      translate([-myWid/2 + myRad - dishRightGap/2, 0, myRad]) rotate([90,0,0])
          translate([0,0,-myLen/2]) cylinder(r=myRad,h=myLen);
-      translate([myWid/2 - myRad, 0, myRad]) rotate([90,0,0])
+      translate([myWid/2 - myRad - dishRightGap/2, 0, myRad]) rotate([90,0,0])
          translate([0,0,-myLen/2]) cylinder(r=myRad,h=myLen);
-      translate([0,0,(myHt-myRad)/2 + myRad]) cube([myWid,myLen,myHt-myRad], center=true);
+      translate([-dishRightGap/2,0,(myHt-myRad)/2 + myRad]) cube([myWid,myLen,myHt-myRad], center=true);
    }
 }
 
@@ -139,7 +141,7 @@ module fancyBottom(ht=cardStackLift) {
          linear_extrude(height=myHt) fancyExterior();
          linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(expand=0);
       }
-      translate([0,0,orgFloor]) voids();
+      translate([0,0,orgFloor]) voids(chipFill=false);
       translate([-(extMaxX-extMinX)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor])
          cube([extMaxX-extMinX,chipDia+chipDiaGap+orgWall+slop,overallHt-chipDia/2]);
 
@@ -238,7 +240,7 @@ module intVolume(ht) {
 }
 
 /* volume for holding stack of chips */
-module chipSpace(len) {
+module chipSpace(len,fill) {
    myLen = len;
    myDia = chipDia + chipDiaGap;
 
@@ -258,8 +260,8 @@ module cardSpace(ht=overallHt,finger=true) {
    translate([0,0,myHt/2 + cardStackLift]) cube([myWid, myLen, myHt],center=true);
 
    if (finger) {
-      translate([0,-myLen/2-4,fingerRad+cardStackLift]) rotate([-90,0,0]) cylinder(r=fingerRad,h=10);
-      translate([-fingerRad,-myLen/2-4,cardStackLift+fingerRad]) cube([fingerRad*2,10,myHt-fingerRad]);
+      translate([0,-myLen/2-4,fingerRad/2+cardStackLift]) rotate([-90,0,0]) scale([1,0.5,1]) cylinder(r=fingerRad,h=10);
+      translate([-fingerRad,-myLen/2-4,cardStackLift+fingerRad/2]) cube([fingerRad*2,10,myHt-fingerRad/2+slop]);
    }
 }
 
