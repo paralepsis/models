@@ -29,6 +29,10 @@ cardChipGap    = 10;
 /* overall height */
 overallHt = max(cardStackHt+cardStackHtGap+cardStackLift, chipDia+chipDiaGap);
 
+/* magnet dimensions */
+magHt = 2;
+magDia = 5;
+
 $fn=40;
 
 chipCoverThick = 2;
@@ -37,8 +41,13 @@ endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
 if (0) chipCover();
-if (0) translate([0,0,00]) fancyTop();
+if (1) translate([0,0,0]) fancyTop();
 if (1) fancyBottom();
+
+if (0) intersection() {
+   fancyTop();
+   fancyBottom();
+}
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
@@ -133,7 +142,8 @@ module dishSpace() {
 }
 
 /* fancyBottom() -- bottom with magnet holes plus interior walls to be cut with voids */
-module fancyBottom(ht=cardStackLift) {
+//module fancyBottom(ht=cardStackLift) {
+module fancyBottom(ht=orgFloor) {
    myHt = ht;
 
    difference() {
@@ -183,28 +193,68 @@ module fancyExterior(expand=orgWall) {
    }
 }
 
+module seamVoid(x=20,y=20,w=1) {
+   myRad = 3;
+   myHt  = 1;
+
+   difference() {
+      hull() {
+         translate([-x/2+myRad,-y/2+myRad,0]) cylinder(r=myRad,h=myHt);
+         translate([+x/2-myRad,-y/2+myRad,0]) cylinder(r=myRad,h=myHt);
+         translate([-x/2+myRad,+y/2-myRad,0]) cylinder(r=myRad,h=myHt);
+         translate([+x/2-myRad,+y/2-myRad,0]) cylinder(r=myRad,h=myHt);
+      }
+      translate([0,0,-slop]) hull() {
+         translate([-x/2+myRad,-y/2+myRad,0]) cylinder(r=myRad-w,h=myHt+2*slop);
+         translate([+x/2-myRad,-y/2+myRad,0]) cylinder(r=myRad-w,h=myHt+2*slop);
+         translate([-x/2+myRad,+y/2-myRad,0]) cylinder(r=myRad-w,h=myHt+2*slop);
+         translate([+x/2-myRad,+y/2-myRad,0]) cylinder(r=myRad-w,h=myHt+2*slop);
+      }
+   }
+}
+
 /* fancyTop()
  * inset - a way to inset corners to help generate internal volume
  */
 module fancyTop() {
-   myHt = cardStackHt+cardStackHtGap+cardStackLift;
+   myTopGap = 0.5; // space around the bottom walls and "ceiling" so top slides on/off
+   myHt = cardStackHt+cardStackHtGap+cardStackLift+myTopGap+magHt;
 
-   difference() {
-      translate([0,0,orgFloor]) {
-         linear_extrude(height=myHt) fancyTopShape(expand=orgWall);
-         translate([0,0,myHt]) minkowski() {linear_extrude(height=slop) fancyTopShape(expand=0); cylinder(r1=orgWall,r2=slop,h=orgWall);}
+   color("blue") difference() {
+      translate([0,0,orgFloor+slop]) {
+         linear_extrude(height=myHt) fancyTopShape(expand=orgWall+myTopGap);
+         translate([0,0,myHt]) minkowski() {
+            linear_extrude(height=slop) fancyTopShape(expand=0);
+            cylinder(r1=orgWall,r2=slop,h=orgWall);
+         }
       }
       hull() chipCover();
+      linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(expand=myTopGap);
 
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
 
       /* note: fudging here b/c orgWid is no longer accurate */
       translate([-(orgWid+10)/2,-30+cardChipGap/2,-slop]) {
-         cube([orgWid + 10, 30, cardStackHt], center = false);
-         rotate([0,90,0]) cylinder($fn=80,r=cardStackHt,h=orgWid+10);
+         cube([orgWid + 10, 30, cardStackHt-2], center = false);
+         rotate([0,90,0]) cylinder($fn=80,r=cardStackHt-2,h=orgWid+10);
       }
+
+      translate([leftCardStackX,leftCardStackY-sleeveLen/2,0]) holes(wid=10);
+      translate([rightCardStackX,rightCardStackY-sleeveLen/2-rightStackOff,0]) holes();
+
+      translate([leftCardStackX-14, leftCardStackY, myHt+3]) seamVoid(x=sleeveLen-4,y=sleeveLen-4);
+      translate([rightCardStackX, rightCardStackY-8, myHt+3]) seamVoid(x=sleeveWid-14,y=sleeveWid-20);
    }
+}
+
+
+module holes(wid=16) {
+   translate([-38,6,9]) rotate([90,0,0]) for (i=[0:2]) {
+      for (j=[0:wid-1]) {
+         translate([5*j+2.5*(i%2),5*i,0]) cylinder(r=1.5,h=14);
+      }
+   }	
 }
 
 module fancyTopShape(expand=0) {
@@ -292,7 +342,7 @@ module chipCover() {
    myStartOff = -orgWid/2;
    greebleCt = 8;
 
-   difference() {
+   color("green") difference() {
       union() {
          for (i=[0:greebleCt-1]) 
             translate([myStartOff + i*orgWid/(greebleCt-1), chipSpaceY, (chipDia + chipDiaGap)/2]) endcap();
