@@ -10,7 +10,6 @@ chipDiaGap    = 1.5; // total gap for both sides
 chipCt        = 53;
 chipHt        = 3.4;
 chipHtGap     = 2; // total gap for both sides
-chipFillRight = 0;
 
 /* dimensions related to cards */
 sleeveWid      = 93.0;
@@ -24,39 +23,38 @@ rightStackOff  = 20; // shift right stack forward
 
 /* dimensions related to placement of things relative to one another */
 cardStackGap   = 1.5;
-cardChipGap    = 10;
+cardChipGap    = 11;
+addChipCut = 3;
 
 /* overall height */
 overallHt = max(cardStackHt+cardStackHtGap+cardStackLift, chipDia+chipDiaGap);
 
-/* magnet dimensions */
-magHt = 2;
-magDia = 5;
+/* magnet dimensions (6mm dia x 3mm thick) */
+magHt = 3.2;
+magDia = 6.2;
 
 $fn=40;
 
-chipCoverThick = 2;
+chipCoverThick = 3;
 endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (0) chipCover();
-if (1) translate([0,0,0]) fancyTop();
-if (1) fancyBottom();
+if (1) translate([0,0,0]) chipCover();
+if (0) translate([0,0,0]) fancyTop();
 
-if (0) intersection() {
-   fancyTop();
-   fancyBottom();
+difference() {
+fancyBottom();
 }
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
 cardStacksWid = 2*sleeveWid + 2*sleeveWidGap + cardStackGap;
-chipLen       = max(minChipLen+chipFillRight, cardStacksWid);
+chipLen       = max(minChipLen, cardStacksWid);
 cardShiftX    = max(0, (chipLen - cardStacksWid) / 2);
 
 /* dimensions of "dish" between cards */
-dishRightGap = 7; /* leave some space on RHS (magnet) */
+dishRightGap = 8; /* leave some space on RHS (magnet) */
 dishWid      = sleeveWid + sleeveWidGap - dishRightGap;
 dishLenGap   = sleeveLenGap;
 dishHt       = cardStackHt+cardStackHtGap+cardStackLift;
@@ -101,16 +99,9 @@ extMaxX = intMaxX + orgWall;
 extMinY = intMinY - orgWall;
 extMaxY = intMaxY + orgWall;
 
-
-module voids(finger=true,chipFill=false) {
+module voids(finger=true,cLen=chipLen) {
    /* Place chip space */
-   if (chipFill) {
-      /* leave RHS filled in (magnet?) */
-      translate([-chipFillRight/2,chipSpaceY,0]) chipSpace(len=minChipLen);
-   } else {
-      /* don't expand chip space, just shift it */
-      translate([0,chipSpaceY,0]) chipSpace(len=chipLen);
-   }
+   translate([0,chipSpaceY,0]) chipSpace(len=cLen);
 
    /* Place left and right card stack spaces */
    myHt = cardStackHt+cardStackHtGap+cardStackLift;
@@ -122,6 +113,20 @@ module voids(finger=true,chipFill=false) {
    dishX = rightCardStackX;
    dishY = -(dishChipGap+dishLen)/2;
    translate([dishX, dishY, 0]) dishSpace();
+
+   /* magnet holes */
+   magnetHoles();
+}
+
+module magnetHoles() {
+   /* chips */
+   translate([-chipLen/2+5,cardChipGap/2+chipDia/2+1,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
+   translate([chipLen/2-5,cardChipGap/2+chipDia/2+1,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
+
+   /* cards */
+   translate([intMinX+magDia,-0.5,cardStackHt+cardStackHtGap+cardStackLift-magHt]) cylinder(d=magDia,h=magHt*2);
+   translate([intMaxX-magDia+1,-3,cardStackHt+cardStackHtGap+cardStackLift-magHt]) cylinder(d=magDia,h=magHt*2);
+   translate([-6,intMinY-6,cardStackHt+cardStackHtGap+cardStackLift-magHt]) cylinder(d=magDia,h=magHt*2);
 }
 
 module dishSpace() {
@@ -148,21 +153,90 @@ module fancyBottom(ht=orgFloor) {
 
    difference() {
       union() {
-         linear_extrude(height=myHt) fancyExterior();
-         linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(expand=0);
+         difference() {
+            union() {
+               linear_extrude(height=myHt) fancyExterior();
+               linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift)
+                  fancyExterior(expand=0);
+            }
+            /* slant the back */
+            translate([-(extMaxX-extMinX+slop)/2,0.88*chipDia+0.5*cardChipGap,0])
+               rotate([-30,0,0]) cube([extMaxX-extMinX+slop,20,20]);
+            chipCutBox(ugly=true,cover=false);
+         }
+         chipCover(cutout=false);
       }
-      translate([0,0,orgFloor]) voids(chipFill=false);
-      translate([-(extMaxX-extMinX)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor])
-         cube([extMaxX-extMinX,chipDia+chipDiaGap+orgWall+slop,overallHt-chipDia/2]);
+      translate([0,0,orgFloor]) voids(cLen=chipLen-20);
 
-      /* slant the back */
-      translate([-(extMaxX-extMinX+slop)/2,0.9*chipDia+0.5*cardChipGap,0]) rotate([-30,0,0]) cube([extMaxX-extMinX+slop,20,20]);
+      /* cut out top portion of chip area (chip cover goes there)
+       *
+       * Note: this is pretty sloppy
+       */
+      chipCutBox(ugly=false,cover=false);
+      magnetHoles();
 
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
    }
 
-   // color("red") translate([minX-5,minY+1,0]) cylinder(d=5.5, h=ht+5);
+   littleAngleBit();
+}
+
+module chipCover(cutout=true) {
+   $fn=100;
+
+   myCoverDia = chipDia + chipDiaGap + 2*chipCoverThick;
+   myStartOff = -orgWid/2;
+   myCoverGap = 0.5;
+   greebleCt = 8;
+
+   if (cutout) {
+      color("green") difference() {
+         intersection() {
+            chipForm();
+            chipCutBox(ugly=false,cover=true);
+         }
+         translate([0,chipSpaceY,0]) chipSpace(len=chipLen-20,cube=false);
+
+         /* cut out the thin bit near the Y axis */
+         translate([-1*(chipLen-20)/2,chipSpaceY-chipDia/2-1,chipDia/2]) cube([chipLen-20,5,12]);
+         
+         magnetHoles();
+      }
+   }
+   else {
+      chipForm();
+   }
+}
+
+
+/* chipCutBox() - cuts out the top of the space for the chip cover
+ *
+ * Notes:
+ * - this is ugly
+ * - ugly cuts a big mess and is meant to clean up some parts that otherwise hang around on 
+ *   the bottom
+ * - inset (without ugly) will allow for creating a little space to help with fitting the cover
+ */
+module chipCutBox(ugly=true,cover=false) {
+   myInset = 0.5;
+   myMagSpace = 10; /* soaking up space on either end for magnets */
+
+   if (ugly) {
+      /* this cleans up some corners that I don't want */
+      translate([-(intMaxX-intMinX+2*slop)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor-addChipCut])
+         cube([intMaxX-intMinX+2*slop,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+   } else if (!ugly && !cover) {
+      /* this cleanly cuts the interior for the cover */
+      if (0) translate([-(chipLen)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor-addChipCut])
+         cube([chipLen,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+      else translate([-(chipLen)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor-addChipCut])
+         cube([chipLen,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+   } else /* cover */ {
+      /* this cleanly cuts the cover leaving a gap (meant to intersection()) */
+      translate([-(chipLen-2*myInset)/2,cardChipGap/2+myInset,(chipDia+chipDiaGap)/2+orgFloor-addChipCut+myInset])
+         cube([chipLen-2*myInset,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+   }
 }
 
 
@@ -193,7 +267,7 @@ module fancyExterior(expand=orgWall) {
    }
 }
 
-module seamVoid(x=20,y=20,w=1) {
+module seamVoid(x=20,y=20,w=0.6) {
    myRad = 3;
    myHt  = 1;
 
@@ -218,27 +292,33 @@ module seamVoid(x=20,y=20,w=1) {
  */
 module fancyTop() {
    myTopGap = 0.5; // space around the bottom walls and "ceiling" so top slides on/off
-   myHt = cardStackHt+cardStackHtGap+cardStackLift+myTopGap+magHt;
+   myHt = cardStackHt+cardStackHtGap+cardStackLift+myTopGap+magHt-1;
 
    color("blue") difference() {
       translate([0,0,orgFloor+slop]) {
          linear_extrude(height=myHt) fancyTopShape(expand=orgWall+myTopGap);
          translate([0,0,myHt]) minkowski() {
-            linear_extrude(height=slop) fancyTopShape(expand=0);
+            linear_extrude(height=slop) fancyTopShape(expand=myTopGap);
             cylinder(r1=orgWall,r2=slop,h=orgWall);
          }
       }
-      hull() chipCover();
+      hull() chipCover(cutout=false);
       linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(expand=myTopGap);
 
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
 
+      /* this rounds out things on the sides */
       /* note: fudging here b/c orgWid is no longer accurate */
       translate([-(orgWid+10)/2,-30+cardChipGap/2,-slop]) {
          cube([orgWid + 10, 30, cardStackHt-2], center = false);
-         rotate([0,90,0]) cylinder($fn=80,r=cardStackHt-2,h=orgWid+10);
+         rotate([0,90,0]) cylinder($fn=160,r=cardStackHt-2,h=orgWid+10);
       }
+
+      magnetHoles();
+
+      randomCut();
+      littleAngleBit(cutout=true);
 
       translate([leftCardStackX,leftCardStackY-sleeveLen/2,0]) holes(wid=10);
       translate([rightCardStackX,rightCardStackY-sleeveLen/2-rightStackOff,0]) holes();
@@ -248,11 +328,22 @@ module fancyTop() {
    }
 }
 
+module randomCut(fudge=-1) {
+   myRad=6;
+
+   translate([-(orgWid+10)/2,cardChipGap/2-myRad+fudge,cardStackHt-2-2*slop]) {
+      difference() {
+         cube([orgWid + 20, myRad, myRad], center = false);
+         translate([0,0,myRad]) rotate([0,90,0]) cylinder($fn=80,r=myRad+slop,h=orgWid+20+slop);
+      }
+   }
+}
+
 
 module holes(wid=16) {
    translate([-38,6,9]) rotate([90,0,0]) for (i=[0:2]) {
       for (j=[0:wid-1]) {
-         translate([5*j+2.5*(i%2),5*i,0]) cylinder(r=1.5,h=14);
+         translate([5*j+2.5*(i%2),5*i,0]) cylinder(r=1.25,h=14);
       }
    }	
 }
@@ -290,13 +381,13 @@ module intVolume(ht) {
 }
 
 /* volume for holding stack of chips */
-module chipSpace(len,fill) {
+module chipSpace(len,cube=true) {
    myLen = len;
    myDia = chipDia + chipDiaGap;
 
    hull() {
       rotate([0,-90,0]) translate([myDia/2,0,-myLen/2]) cylinder($fn=90, h=myLen, d=myDia);
-      translate([0,0,3*myDia/4]) cube([myLen,myDia,myDia/2], center=true);
+      if (cube) translate([0,0,3*myDia/4]) cube([myLen,myDia,myDia/2], center=true);
    }
 }
 
@@ -335,36 +426,42 @@ module corner() {
      polygon(polyRound(pts,10));
 }
 
-module chipCover() {
-   $fn=100;
-
+module chipForm() {
    myCoverDia = chipDia + chipDiaGap + 2*chipCoverThick;
    myStartOff = -orgWid/2;
    greebleCt = 8;
 
-   color("green") difference() {
-      union() {
-         for (i=[0:greebleCt-1]) 
-            translate([myStartOff + i*orgWid/(greebleCt-1), chipSpaceY, (chipDia + chipDiaGap)/2]) endcap();
+   for (i=[0:greebleCt-1]) 
+      translate([myStartOff + i*orgWid/(greebleCt-1), chipSpaceY, (chipDia + chipDiaGap)/2]) endcap();
 
-         translate([0, chipSpaceY, (chipDia+chipDiaGap)/2]) rotate([0,90,0])
-            translate([0,0,-orgWid/2]) cylinder(d=myCoverDia, h=orgWid);
-      }
-      /* clean bottom surface */
-      translate([0,0,-10]) cube([300,300,20], center=true);
-   }
+   translate([0, chipSpaceY, (chipDia+chipDiaGap)/2]) rotate([0,90,0])
+      translate([0,0,-orgWid/2]) cylinder(d=myCoverDia, h=orgWid);
 }
 
 module endcap() {
-
    myDia1 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra1;
    myDia2 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra2;
    mySlantHt = myDia2 - myDia1;
+   myDia3 = 25; /* little cutout in the end */
+   myDia4 = myDia3 - mySlantHt;
+   cutoutHt = 1;
 
    translate([endcapHt/2,0,0]) rotate([0,-90,0]) {
-      cylinder(d1=myDia1, d2=myDia2, h = mySlantHt);
-      translate([0,0,mySlantHt-slop/2]) cylinder(d=myDia2, h = endcapHt - 2*mySlantHt + slop);
-      translate([0,0,endcapHt - mySlantHt]) cylinder(d2=myDia1, d1=myDia2, h = mySlantHt);
+      if (1) difference() {
+         union() {
+            cylinder(d1=myDia1, d2=myDia2, h = mySlantHt);
+            translate([0,0,mySlantHt-slop/2]) cylinder(d=myDia2, h=endcapHt-2*mySlantHt+slop);
+            translate([0,0,endcapHt - mySlantHt]) cylinder(d2=myDia1, d1=myDia2, h = mySlantHt);
+         }
+         translate([0,0,endcapHt - cutoutHt+slop]) cylinder(d2=myDia3, d1=myDia4, h = cutoutHt);
+         translate([0,0,-cutoutHt-2*slop]) cylinder(d1=myDia3, d2=myDia4, h = cutoutHt);
+         translate([0,0,-slop]) cylinder(d1=myDia3, d2=myDia4, h = cutoutHt);
+      }
    }
 }
 
+module littleAngleBit(cutout=false) {
+   myInset=0.25;
+
+   translate([0,2,cardStackHt+cardStackGap+cardStackLift+myInset]) rotate([45,0,0]) cube([orgWid-40+2*myInset,3,3],center=true);
+}
