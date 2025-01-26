@@ -1,3 +1,15 @@
+/*
+ * This code is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 
+ * International License (CC BY-NC-ND 4.0). See https://creativecommons.org/licenses/by-nc-nd/4.0/
+ *
+ * Copyright (C) Robert B. Ross
+ *
+ * Note: polyround.scad is released under a different licence, described at the top of 
+ *       the polyround.scad file. See https://github.com/Irev-Dev/Round-Anything/blob/master/polyround.scad
+ *
+ * NOTE: THIS IS OUT OF DATE.
+ */
+
 include <./polyround.scad>
 
 /* fudge to get clean renders, to make things fit */
