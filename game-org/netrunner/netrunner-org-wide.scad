@@ -50,12 +50,9 @@ endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (1) translate([0,0,0]) chipCover();
-if (0) translate([0,0,0]) fancyTop();
-
-difference() {
-fancyBottom();
-}
+if (1) translate([0,5,10]) chipCover();
+if (1) translate([0,-5,20]) fancyTop();
+if (1) fancyBottom();
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
