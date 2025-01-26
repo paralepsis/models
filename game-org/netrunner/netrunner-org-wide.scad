@@ -45,14 +45,28 @@ magDia = 6.2;
 
 $fn=40;
 
+
 chipCoverThick = 3;
 endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (1) translate([0,5,10]) chipCover();
-if (1) translate([0,-5,20]) fancyTop();
-if (1) fancyBottom();
+if (1) /* translate([0,15,15]) */  chipCover();
+if (1) /* translate([0,-5,20]) */ fancyTop();
+
+difference() {
+   fancyBottom();
+   // batteryVoid();
+   // translate([-50,-20,-5]) cube([100,100,100]);
+}
+
+module batteryVoid() {
+   translate([-90,2,0]) {
+     translate([0,0,7.5]) rotate([90,0,90]) cylinder(d=12,h=90);
+     translate([0,-6,-slop]) cube([90,12,7.5+slop]);
+     translate([0,-5,10-slop]) cube([90,4,12.5+slop]);
+   }
+}
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
