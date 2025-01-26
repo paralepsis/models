@@ -6,6 +6,10 @@
  *
  * Note: polyround.scad is released under a different licence, described at the top of 
  *       the polyround.scad file. See https://github.com/Irev-Dev/Round-Anything/blob/master/polyround.scad
+ *
+ *
+ * TODO:
+ * 20250126 -- layers of flipped top 1.3mm - 2.1mm were infill -- compress top?
  */
 
 include <./polyround.scad>
@@ -29,7 +33,7 @@ sleeveLenGap   = 2; // total gap for both sides
 cardStackHt    = 35;
 cardStackHtGap = 2; // total gap
 cardStackLift  = 2; // make the card stacks start higher -- facilitates magnets
-rightStackOff  = 20; // shift right stack forward
+rightStackOff  = 20; // shift right stack forward (20mm default)
 
 /* dimensions related to placement of things relative to one another */
 cardStackGap   = 1.5;
@@ -60,6 +64,12 @@ difference() {
    // translate([-50,-20,-5]) cube([100,100,100]);
 }
 
+
+/* play stuff */
+module display() {
+   translate([00,-26,40]) cube([40,39,4.6]);
+}
+
 module batteryVoid() {
    translate([-90,2,0]) {
      translate([0,0,7.5]) rotate([90,0,90]) cylinder(d=12,h=90);
@@ -67,6 +77,8 @@ module batteryVoid() {
      translate([0,-5,10-slop]) cube([90,4,12.5+slop]);
    }
 }
+
+/* end play stuff */
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
