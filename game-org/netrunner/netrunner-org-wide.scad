@@ -9,7 +9,27 @@
  *
  *
  * TODO:
- * 20250126 -- layers of flipped top 1.3mm - 2.1mm were infill -- compress top?
+ * 20250126:
+ *   - layers of flipped top 1.3mm - 2.1mm were infill (i.e., too thick a top) -- compress top?
+ *   - divot below cards at finger opening to help get them out
+ *   - add a rectangular form to the top, above cards and dish, to make sure things don't shift around
+ *   - clean up that little top corner where the cardChipSpace peeks out from under the card top
+ *   - something at the ends of the chip space to keep chips from getting in the way of the magnets
+ *     and also placing them.
+ *   - some sort of latching mechanism on the chip cover so it won't open?
+ *     - endcaps with pins through that magnetically attach? need to think more...
+ *     - double up magnets on chip cover
+ *     - alternatively, go to a "slide on" approach?
+ *       - shift chips towards cards to make more room for some sort of channel?
+ *       - will want to make a new version before doing this. chip space may have to grow.
+ *       - just glue on the end? some sort of cylindrical "link" with alignment holes?
+ *
+ *   - put in spots for M2 or M2.5 screws in the fake plates on top <defer>
+ *
+ *   - maybe reduce height of the ridge between cards and chips <DONE>
+ *   - reduce gap between chip cover and endcaps -- too wide @ current. <DONE>
+ *   - just cut the lip around the bottom, consider bevel. <DONE>
+ *   - a groove cut in the bottom allowing one to get a finger under the chip cover <DONE>
  */
 
 include <./polyround.scad>
@@ -55,11 +75,11 @@ endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (1) /* translate([0,15,15]) */  chipCover();
+if (0) /* translate([0,15,15]) */  chipCover();
 if (1) /* translate([0,-5,20]) */ fancyTop();
 
 difference() {
-   fancyBottom();
+   if (0) fancyBottom();
    // batteryVoid();
    // translate([-50,-20,-5]) cube([100,100,100]);
 }
@@ -153,8 +173,10 @@ module voids(finger=true,cLen=chipLen) {
 
 module magnetHoles() {
    /* chips */
-   translate([-chipLen/2+5,cardChipGap/2+chipDia/2+1,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
-   translate([chipLen/2-5,cardChipGap/2+chipDia/2+1,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
+   translate([-chipLen/2+5,cardChipGap/2+chipDia/2-8,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
+   translate([-chipLen/2+5,cardChipGap/2+chipDia/2+13,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
+   translate([chipLen/2-5,cardChipGap/2+chipDia/2-8,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
+   translate([chipLen/2-5,cardChipGap/2+chipDia/2+13,chipDia/2-magHt-0.5]) cylinder(d=magDia,h=magHt*2);
 
    /* cards */
    translate([intMinX+magDia,-0.5,cardStackHt+cardStackHtGap+cardStackLift-magHt]) cylinder(d=magDia,h=magHt*2);
@@ -188,7 +210,9 @@ module fancyBottom(ht=orgFloor) {
       union() {
          difference() {
             union() {
-               linear_extrude(height=myHt) fancyExterior();
+               /* lip around bottom */
+               if (0) linear_extrude(height=myHt) fancyExterior();
+
                linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift)
                   fancyExterior(expand=0);
             }
@@ -208,6 +232,10 @@ module fancyBottom(ht=orgFloor) {
       chipCutBox(ugly=false,cover=false);
       magnetHoles();
 
+      /* notch in back for removing chip cover -- NOT DONE */
+      translate([-(17)/2,0.88*chipDia+0.5*cardChipGap+7.2,0])
+         cube([17,20,20]);
+
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
    }
@@ -220,7 +248,6 @@ module chipCover(cutout=true) {
 
    myCoverDia = chipDia + chipDiaGap + 2*chipCoverThick;
    myStartOff = -orgWid/2;
-   myCoverGap = 0.5;
    greebleCt = 8;
 
    if (cutout) {
@@ -252,7 +279,7 @@ module chipCover(cutout=true) {
  * - inset (without ugly) will allow for creating a little space to help with fitting the cover
  */
 module chipCutBox(ugly=true,cover=false) {
-   myInset = 0.5;
+   myInset = 0.3; /* gap on L/R sides between cover and bottom */
    myMagSpace = 10; /* soaking up space on either end for magnets */
 
    if (ugly) {
@@ -494,7 +521,7 @@ module endcap() {
 }
 
 module littleAngleBit(cutout=false) {
-   myInset=0.25;
+   myInset = (cutout) ? 0.5: 0.25;
 
-   translate([0,2,cardStackHt+cardStackGap+cardStackLift+myInset]) rotate([45,0,0]) cube([orgWid-40+2*myInset,3,3],center=true);
+   translate([0,1.5,cardStackHt+cardStackGap+cardStackLift+0.25]) rotate([45,0,0]) cube([orgWid-40+2*myInset,2.75+myInset,2.75+myInset],center=true);
 }
