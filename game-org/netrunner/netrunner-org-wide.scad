@@ -12,7 +12,6 @@
  *
  * TODO:
  * 20250127:
- *   - "overallHt" is conditional and a mess. Clean that up!
  *
  * 20250126:
  *   - something at the ends of the chip space to keep chips from getting in the way of the magnets
@@ -37,12 +36,13 @@
  *   - a groove cut in the bottom allowing one to get a finger under the chip cover <DONE>
  *   - reduce thickness of top further (currently magHt+orgWall, I think) <DONE>
  *   - CRITICAL: magnet placement for cards is no longer accurate. <FIXED>
+ *   - "overallHt" is conditional and a mess. Clean that up! <FIXED>
  */
 
 /* common view/render options */
-showChipTop  = 1;
-showBottom   = 0;
-showCardTop  = 1;
+showChipTop  = 0;
+showBottom   = 1;
+showCardTop  = 0;
 showCardTopZ = 0.1;
 cutAway      = 0;
 
@@ -73,21 +73,15 @@ cardStackGap   = 1.5;
 cardChipGap    = 11;
 addChipCut = 3;
 
-/* overall height FIXME: THIS IS NOT GOOD */
-overallHt = max(cardStackHt+cardStackHtGap+cardStackLift, chipDia+chipDiaGap);
-
 /* magnet dimensions (6mm dia x 3mm thick) */
 magHt = 3.2;
 magDia = 6.2;
 
 $fn=40;
 
-
 chipCoverThick = 3;
 endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
-endcapHt     = 11;
-
 
 // difference() {
 intersection() {
@@ -290,21 +284,22 @@ module chipCover(cutout=true) {
 module chipCutBox(ugly=true,cover=false) {
    myInset = 0.3; /* gap on L/R sides between cover and bottom */
    myMagSpace = 10; /* soaking up space on either end for magnets */
+   myDia = chipDia + chipDiaGap;
 
    if (ugly) {
       /* this cleans up some corners that I don't want */
       translate([-(intMaxX-intMinX+2*slop)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor-addChipCut])
-         cube([intMaxX-intMinX+2*slop,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+         cube([intMaxX-intMinX+2*slop,chipDia+chipDiaGap+orgWall+slop+10,myDia-chipDia/2+addChipCut+10]);
    } else if (!ugly && !cover) {
       /* this cleanly cuts the interior for the cover */
       if (0) translate([-(chipLen)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor-addChipCut])
-         cube([chipLen,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+         cube([chipLen,chipDia+chipDiaGap+orgWall+slop+10,myDia-chipDia/2+addChipCut+10]);
       else translate([-(chipLen)/2,cardChipGap/2,(chipDia+chipDiaGap)/2+orgFloor-addChipCut])
-         cube([chipLen,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+         cube([chipLen,chipDia+chipDiaGap+orgWall+slop+10,myDia-chipDia/2+addChipCut+10]);
    } else /* cover */ {
       /* this cleanly cuts the cover leaving a gap (meant to intersection()) */
       translate([-(chipLen-2*myInset)/2,cardChipGap/2+myInset,(chipDia+chipDiaGap)/2+orgFloor-addChipCut+myInset])
-         cube([chipLen-2*myInset,chipDia+chipDiaGap+orgWall+slop+10,overallHt-chipDia/2+addChipCut+10]);
+         cube([chipLen-2*myInset,chipDia+chipDiaGap+orgWall+slop+10,myDia-chipDia/2+addChipCut+10]);
    }
 }
 
@@ -478,7 +473,7 @@ module fancyTopCardHolder(ht=1.0) {
 }
 
 /* volume for a single stack of cards, centered in XY, card bottoms at X plane */
-module cardSpace(ht=overallHt,finger=true) {
+module cardSpace(ht,finger=true) {
    fingerRad =12;
    myWid = sleeveWid + sleeveWidGap;
    myLen = sleeveLen + sleeveLenGap;
@@ -526,6 +521,8 @@ module chipForm() {
 }
 
 module endcap() {
+   myEndcapHt = 11;
+
    myDia1 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra1;
    myDia2 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra2;
    mySlantHt = myDia2 - myDia1;
@@ -533,14 +530,14 @@ module endcap() {
    myDia4 = myDia3 - mySlantHt;
    cutoutHt = 1;
 
-   translate([endcapHt/2,0,0]) rotate([0,-90,0]) {
+   translate([myEndcapHt/2,0,0]) rotate([0,-90,0]) {
       if (1) difference() {
          union() {
             cylinder(d1=myDia1, d2=myDia2, h = mySlantHt);
-            translate([0,0,mySlantHt-slop/2]) cylinder(d=myDia2, h=endcapHt-2*mySlantHt+slop);
-            translate([0,0,endcapHt - mySlantHt]) cylinder(d2=myDia1, d1=myDia2, h = mySlantHt);
+            translate([0,0,mySlantHt-slop/2]) cylinder(d=myDia2, h=myEndcapHt-2*mySlantHt+slop);
+            translate([0,0,myEndcapHt - mySlantHt]) cylinder(d2=myDia1, d1=myDia2, h = mySlantHt);
          }
-         translate([0,0,endcapHt - cutoutHt+slop]) cylinder(d2=myDia3, d1=myDia4, h = cutoutHt);
+         translate([0,0,myEndcapHt - cutoutHt+slop]) cylinder(d2=myDia3, d1=myDia4, h = cutoutHt);
          translate([0,0,-cutoutHt-2*slop]) cylinder(d1=myDia3, d2=myDia4, h = cutoutHt);
          translate([0,0,-slop]) cylinder(d1=myDia3, d2=myDia4, h = cutoutHt);
       }
