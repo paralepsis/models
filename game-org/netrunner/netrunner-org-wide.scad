@@ -10,9 +10,6 @@
  *
  * TODO:
  * 20250126:
- *   - layers of flipped top 1.3mm - 2.1mm were infill (i.e., too thick a top) -- compress top?
- *   - divot below cards at finger opening to help get them out
- *   - add a rectangular form to the top, above cards and dish, to make sure things don't shift around
  *   - clean up that little top corner where the cardChipSpace peeks out from under the card top
  *   - something at the ends of the chip space to keep chips from getting in the way of the magnets
  *     and also placing them.
@@ -26,11 +23,21 @@
  *
  *   - put in spots for M2 or M2.5 screws in the fake plates on top <defer>
  *
+ *   - divot below cards at finger opening to help get them out <DONE>
+ *   - add a rectangular form to the top, above cards and dish, to make sure things don't shift around <DONE>
+ *   - layers of flipped top 1.3mm - 2.1mm were infill (i.e., too thick a top) -- compress top? <DONE>
  *   - maybe reduce height of the ridge between cards and chips <DONE>
  *   - reduce gap between chip cover and endcaps -- too wide @ current. <DONE>
  *   - just cut the lip around the bottom, consider bevel. <DONE>
  *   - a groove cut in the bottom allowing one to get a finger under the chip cover <DONE>
  */
+
+/* common view/render options */
+showChipTop  = 1;
+showBottom   = 1;
+showCardTop  = 1;
+showCardTopZ = 0.1;
+cutAway      = 1;
 
 include <./polyround.scad>
 
@@ -50,9 +57,9 @@ sleeveWid      = 93.0;
 sleeveWidGap   = 2; // total gap for both sides
 sleeveLen      = 67.0;
 sleeveLenGap   = 2; // total gap for both sides
-cardStackHt    = 35;
+cardStackHt    = 34.5;
 cardStackHtGap = 2; // total gap
-cardStackLift  = 2; // make the card stacks start higher -- facilitates magnets
+cardStackLift  = 1.5; // make the card stacks start higher -- leave room for little gap underneath
 rightStackOff  = 20; // shift right stack forward (20mm default)
 
 /* dimensions related to placement of things relative to one another */
@@ -75,13 +82,16 @@ endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 endcapHt     = 11;
 
-if (0) /* translate([0,15,15]) */  chipCover();
-if (1) /* translate([0,-5,20]) */ fancyTop();
+% translate([0,0,orgFloor+cardStackHtGap+cardStackHt+cardStackLift]) cube([300,300,0.1],center=true);
 
-difference() {
-   if (0) fancyBottom();
-   // batteryVoid();
-   // translate([-50,-20,-5]) cube([100,100,100]);
+// difference() {
+intersection() {
+   union() {
+      if (showChipTop) /* translate([0,15,15]) */  chipCover();
+      if (showCardTop) translate([0,0,showCardTopZ]) fancyTop();
+      if (showBottom) fancyBottom();
+   }
+   if (cutAway) translate([30,-120,-5]) cube([150,200,100]);
 }
 
 
@@ -124,8 +134,6 @@ rightCardStackX = (sleeveWid + sleeveWidGap + cardStackGap)/2 + cardShiftX;
 rightCardStackY = -1 * ((sleeveLen + sleeveLenGap + cardChipGap)/2);
 
 /* Calculate bounding box */
-// minX = leftCardStackX - (sleeveWid + sleeveWidGap)/2;
-// maxX = rightCardStackX + (sleeveWid + sleeveWidGap)/2;
 minX = -chipLen/2;
 maxX = chipLen/2;
 minY = leftCardStackY - (sleeveLen + sleeveLenGap)/2;
@@ -202,7 +210,6 @@ module dishSpace() {
 }
 
 /* fancyBottom() -- bottom with magnet holes plus interior walls to be cut with voids */
-//module fancyBottom(ht=cardStackLift) {
 module fancyBottom(ht=orgFloor) {
    myHt = ht;
 
@@ -210,10 +217,7 @@ module fancyBottom(ht=orgFloor) {
       union() {
          difference() {
             union() {
-               /* lip around bottom */
-               if (0) linear_extrude(height=myHt) fancyExterior();
-
-               linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift)
+               linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift+orgFloor)
                   fancyExterior(expand=0);
             }
             /* slant the back */
@@ -347,6 +351,7 @@ module seamVoid(x=20,y=20,w=0.6) {
    }
 }
 
+
 /* fancyTop()
  * inset - a way to inset corners to help generate internal volume
  */
@@ -356,6 +361,7 @@ module fancyTop() {
 
    color("blue") difference() {
       translate([0,0,orgFloor+slop]) {
+      //translate([0,0,slop]) {
          linear_extrude(height=myHt) fancyTopShape(expand=orgWall+myTopGap);
          translate([0,0,myHt]) minkowski() {
             linear_extrude(height=slop) fancyTopShape(expand=myTopGap);
@@ -363,7 +369,7 @@ module fancyTop() {
          }
       }
       hull() chipCover(cutout=false);
-      linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(expand=myTopGap);
+      translate([0,0,orgFloor]) linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyExterior(expand=myTopGap);
 
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
@@ -386,6 +392,9 @@ module fancyTop() {
       translate([leftCardStackX-14, leftCardStackY, myHt+3]) seamVoid(x=sleeveLen-4,y=sleeveLen-4);
       translate([rightCardStackX, rightCardStackY-8, myHt+3]) seamVoid(x=sleeveWid-14,y=sleeveWid-20);
    }
+   /* add some bits back in */
+   // translate([leftCardStackX, leftCardStackY, cardStackHt+cardStackHtGap+cardStackLift+orgWall]) fancyTopCardHolder();
+   translate([rightCardStackX, rightCardStackY-rightStackOff, cardStackHt+cardStackHtGap+cardStackLift+orgWall]) fancyTopCardHolder();
 }
 
 module randomCut(fudge=-1) {
@@ -451,7 +460,19 @@ module chipSpace(len,cube=true) {
    }
 }
 
-/* volume for a single stack of cards */
+module fancyTopCardHolder(ht=1.5) {
+   fingerRad =12;
+   myWid = sleeveWid + sleeveWidGap-8;
+   myLen = sleeveLen + sleeveLenGap-8;
+   myHt  = ht - cardStackLift;
+  
+   hull() {
+      translate([0,0,0+slop]) minkowski() { cube([myWid, myLen, 0.1],center=true); cylinder(d=4,h=0.1); }
+      translate([0,0,-ht+slop]) minkowski() { cube([myWid-2*ht, myLen-2*ht, 0.1],center=true); cylinder(d=4,h=0.1); }
+   }
+}
+
+/* volume for a single stack of cards, centered in XY, card bottoms at X plane */
 module cardSpace(ht=overallHt,finger=true) {
    fingerRad =12;
    myWid = sleeveWid + sleeveWidGap;
@@ -460,9 +481,10 @@ module cardSpace(ht=overallHt,finger=true) {
   
    translate([0,0,myHt/2 + cardStackLift]) cube([myWid, myLen, myHt],center=true);
 
+   /* this cuts below bottom of cards to allow easier removal */
    if (finger) {
-      translate([0,-myLen/2-4,fingerRad/2+cardStackLift]) rotate([-90,0,0]) scale([1,0.5,1]) cylinder(r=fingerRad,h=10);
-      translate([-fingerRad,-myLen/2-4,cardStackLift+fingerRad/2]) cube([fingerRad*2,10,myHt-fingerRad/2+slop]);
+      translate([0,-myLen/2-4,fingerRad/2+cardStackLift/4]) rotate([-90,0,0]) scale([1,0.5,1]) cylinder(r=fingerRad,h=10);
+      translate([-fingerRad,-myLen/2-4,fingerRad/2+cardStackLift/4]) cube([fingerRad*2,10,myHt-fingerRad/2+slop+cardStackLift*.75]);
    }
 }
 
@@ -523,5 +545,5 @@ module endcap() {
 module littleAngleBit(cutout=false) {
    myInset = (cutout) ? 0.5: 0.25;
 
-   translate([0,1.5,cardStackHt+cardStackGap+cardStackLift+0.25]) rotate([45,0,0]) cube([orgWid-40+2*myInset,2.75+myInset,2.75+myInset],center=true);
+   translate([0,1.5,cardStackHt+cardStackGap+cardStackLift+orgFloor+0.25]) rotate([45,0,0]) cube([orgWid-40+2*myInset,2.75+myInset,2.75+myInset],center=true);
 }
