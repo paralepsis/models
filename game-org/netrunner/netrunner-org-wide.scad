@@ -7,8 +7,13 @@
  * Note: polyround.scad is released under a different licence, described at the top of 
  *       the polyround.scad file. See https://github.com/Irev-Dev/Round-Anything/blob/master/polyround.scad
  *
+ * Notes:
+ * - This gets uglier the longer that I work on it.
  *
  * TODO:
+ * 20250127:
+ *   - "overallHt" is conditional and a mess. Clean that up!
+ *
  * 20250126:
  *   - something at the ends of the chip space to keep chips from getting in the way of the magnets
  *     and also placing them.
@@ -45,7 +50,6 @@ include <./polyround.scad>
 
 /* fudge to get clean renders, to make things fit */
 slop = 0.001;
-bigSlop = 0.5;
 
 /* dimensions related to chips */
 chipDia       = 41.0;
@@ -69,7 +73,7 @@ cardStackGap   = 1.5;
 cardChipGap    = 11;
 addChipCut = 3;
 
-/* overall height */
+/* overall height FIXME: THIS IS NOT GOOD */
 overallHt = max(cardStackHt+cardStackHtGap+cardStackLift, chipDia+chipDiaGap);
 
 /* magnet dimensions (6mm dia x 3mm thick) */
@@ -123,7 +127,6 @@ cardShiftX    = max(0, (chipLen - cardStacksWid) / 2);
 /* dimensions of "dish" between cards */
 dishRightGap = 8; /* leave some space on RHS (magnet) */
 dishWid      = sleeveWid + sleeveWidGap - dishRightGap;
-dishLenGap   = sleeveLenGap;
 dishHt       = cardStackHt+cardStackHtGap+cardStackLift;
 dishChipGap  = min(cardChipGap,4);
 dishLen      = rightStackOff - cardStackGap + (cardChipGap - 4)/2;
