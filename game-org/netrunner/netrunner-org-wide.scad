@@ -134,7 +134,7 @@ extMaxX = intMaxX + orgWall;
 extMinY = intMinY - orgWall;
 extMaxY = intMaxY + orgWall;
 
-/* voids() - This generates all the voids 
+/* voids() - This generates all the voids for the bottom
  */
 module voids(finger=true,cLen=chipLen) {
    myHt = cardStackHt+cardStackHtGap+cardStackLift;
@@ -205,6 +205,7 @@ module fancyBottom(ht=orgFloor) {
       translate([0,0,-10]) cube([300,300,20], center=true);
    }
 
+   /* just a little alignment bit between cards and chips */
    littleAngleBit();
 }
 
@@ -258,7 +259,9 @@ module seamVoid(x=20,y=20,w=0.6) {
 }
 
 /* cardTop()
- * inset - a way to inset corners to help generate internal volume
+ *
+ * TODO:
+ * - THIS IS MESSY!
  */
 module cardTop() {
    myTopGap = 0.5; // space around the bottom walls and "ceiling" so top slides on/off
@@ -273,8 +276,11 @@ module cardTop() {
             cylinder(r1=orgWall,r2=slop,h=orgWall);
          }
       }
+
+      /* make sure we aren't bumping the chip holding area (could be more robust) */
       hull() chipForm();
 
+      /* cut out the interior, but not the "outsets" */
       difference() {
          translate([0,0,orgFloor]) linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyCardExterior(expand=myTopGap);
 
@@ -283,32 +289,36 @@ module cardTop() {
           translate([rightCardStackX,rightCardStackY-rightStackOff,myHt+slop-orgCeil-magHt]) topOutset();
       }
 
-      /* clean bottom surface */
-      translate([0,0,-10]) cube([300,300,20], center=true);
-
       /* this rounds out things on the sides */
       /* note: fudging here b/c orgWid is no longer accurate */
       translate([-(orgWid+10)/2,-30+cardChipGap/2,-slop]) {
          cube([orgWid + 10, 30, cardStackHt-2], center = false);
          rotate([0,90,0]) cylinder($fn=160,r=cardStackHt-2,h=orgWid+10);
       }
+      /* ... and this gets the bottom edge where cards and chips come together */
+      backEdgeBevel();
 
+      /* cut out magnet holes in top */
       magnetVoids();
 
-      randomCut();
+      /* just a little alignment bit between cards and chips */
       littleAngleBit(cutout=true);
 
       /* little holes in the front, kind of a "grill" */
       translate([leftCardStackX,leftCardStackY-sleeveLen/2,0]) holes(wid=10);
       translate([rightCardStackX,rightCardStackY-sleeveLen/2-rightStackOff,0]) holes();
 
+      /* add cosmetic seams on top surface */
       translate([leftCardStackX-14, leftCardStackY, myHt+1]) seamVoid(x=sleeveLen-4,y=sleeveLen-4);
       translate([rightCardStackX, rightCardStackY-8, myHt+1]) seamVoid(x=sleeveWid-14,y=sleeveWid-20);
    }
 
 }
 
-module randomCut(fudge=-1) {
+/* backEdgeBevel() - creates a shape to be used to bevel the edge between top and chips
+ *
+ */
+module backEdgeBevel(fudge=-1) {
    myRad=6;
 
    translate([-(orgWid+10)/2,cardChipGap/2-myRad+fudge,cardStackHt-2-2*slop]) {
@@ -320,6 +330,8 @@ module randomCut(fudge=-1) {
 }
 
 
+/* holes() - creates a pattern of 2.5mm holes for cosmetic "grill"
+ */
 module holes(wid=16) {
    translate([-38,6,9]) rotate([90,0,0]) for (i=[0:2]) {
       for (j=[0:wid-1]) {
