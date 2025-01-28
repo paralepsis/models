@@ -31,11 +31,11 @@
  */
 
 /* common view/render options */
-showChipTop  = 0;
-showBottom   = 0;
+showChipTop  = 1;
+showBottom   = 1;
 showCardTop  = 1;
 showCardTopZ = 0.1;
-cutAway      = 0;
+cutAway      = 1;
 
 include <./polyround.scad>
 
@@ -61,7 +61,7 @@ rightStackOff  = 20; // shift right stack forward (20mm default)
 
 /* dimensions related to placement of things relative to one another */
 cardStackGap   = 1.5;
-cardChipGap    = 11;
+cardChipGap    = 12;
 addChipCut = 3;
 
 /* magnet dimensions (6mm dia x 3mm thick) */
@@ -76,9 +76,11 @@ endcapExtra2 = endcapExtra1 + 2;
 
 //% translate([0,cardChipGap/2,0]) cube([200,.1,200],center=true);
 
+/* LOOK HERE */
+
 intersection() {
    union() {
-      //if (showChipTop) /* translate([0,15,15]) */  chipCover();
+      if (showChipTop) /* translate([0,15,15]) */  chipCover();
       if (showCardTop) translate([0,0,showCardTopZ]) cardTop();
       if (showBottom) fancyBottom();
    }
@@ -134,13 +136,26 @@ extMaxX = intMaxX + orgWall;
 extMinY = intMinY - orgWall;
 extMaxY = intMaxY + orgWall;
 
+
+module chipCover() {
+   difference() {
+      intersection() {
+         basicBottomForm();
+         chipSleeve(cutLen=0.8*chipLen-3,sleeveLen=chipLen,expand=0.0);
+      }
+      chipVoid(len=chipLen+1);
+   }
+}
+
 /* voids() - This generates all the voids for the bottom
  */
 module voids(finger=true,cLen=chipLen) {
    myHt = cardStackHt+cardStackHtGap+cardStackLift;
 
    /* Place chip void */
-   translate([0,chipSpaceY,0]) chipVoid(len=cLen);
+   chipVoid(len=cLen);
+   chipSleeve(cutLen=0.8*chipLen,sleeveLen=chipLen+30,expand=0.5);
+
 
    /* Place left and right card stack spaces */
    translate([leftCardStackX,leftCardStackY,0]) cardVoid(ht=myHt+slop,finger=finger);
@@ -185,19 +200,8 @@ module fancyBottom(ht=orgFloor) {
    myWid = extMaxX-extMinX-2*orgWall; // kind of the min/max of the card area including walls of bottom
 
    difference() {
-      union() {
-         difference() {
-            union() {
-               linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift+orgFloor)
-                  fancyCardExterior(expand=0);
-               translate([-myWid/2,cardChipGap/2-slop-orgWall,0]) cube([myWid,chipDia+orgWall,chipDia/2]);
-            }
-            /* slant the back */
-            translate([-(myWid+slop)/2,0.80*chipDia+0.5*cardChipGap,0])
-               rotate([-30,0,0]) cube([myWid+slop,20,20]);
-         }
-         chipForm();
-      }
+      basicBottomForm();
+
       /* cut out card and chip voids */
       translate([0,0,orgFloor]) voids(cLen=chipLen-20);
 
@@ -207,6 +211,23 @@ module fancyBottom(ht=orgFloor) {
 
    /* just a little alignment bit between cards and chips */
    littleAngleBit();
+}
+
+module basicBottomForm() {
+   myWid = extMaxX-extMinX-2*orgWall; // kind of the min/max of the card area including walls of bottom
+
+   difference() {
+      union() {
+         linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift+orgFloor)
+            fancyCardExterior(expand=0);
+         translate([-myWid/2,cardChipGap/2-slop-orgWall,0]) cube([myWid,chipDia+orgWall,chipDia/2]);
+      }
+
+      /* slant the back */
+      translate([-(myWid+slop)/2,0.80*chipDia+0.5*cardChipGap,0])
+         rotate([-30,0,0]) cube([myWid+slop,20,20]);
+   }
+   chipForm();
 }
 
 
@@ -367,11 +388,11 @@ module fancyTopShape(expand=0) {
 
 /* chipVoid() - volume for holding stack of chips
  */
-module chipVoid(len) {
+module chipVoid(len=chipLen) {
    myLen = len;
    myDia = chipDia + chipDiaGap;
 
-   rotate([0,-90,0]) translate([myDia/2,0,-myLen/2]) cylinder($fn=90, h=myLen, d=myDia);
+   translate([0,chipSpaceY,chipCoverThick]) rotate([0,-90,0]) translate([myDia/2,0,-myLen/2]) cylinder($fn=90, h=myLen, d=myDia);
 }
 
 /* topOutset() - creates a raised region under the top that slightly intrudes into the card space,
@@ -429,10 +450,10 @@ module corner() {
  *
  */
 module chipSleeve(cutLen=10, sleeveLen=20, expand=0) {
-   myIntRad     = (chipDia+chipDiaGap)/2;
+   myIntRad     = (chipDia+chipDiaGap)/2+chipCoverThick;
    myChannelDep = myIntRad/2;
    myArmThick   = 2.0;
-   offset       = 2.5;
+   offset       = 2.0;
    overshoot    = 40;
    bigDia       = chipDia+chipDiaGap+2*chipCoverThick+endcapExtra2;
 
@@ -442,15 +463,15 @@ module chipSleeve(cutLen=10, sleeveLen=20, expand=0) {
                      [-myIntRad-offset+expand+2, -myChannelDep-2+expand, 10],
                      [-myIntRad-offset+expand+1, -myChannelDep-6-3*expand, 10],
                      [-myIntRad-offset-expand-myArmThick, -myChannelDep-expand, 5],
-                     [-myIntRad-offset-expand-myArmThick, 5+expand, 1],
-                     [(-myIntRad)/2, myIntRad, .001],
+                     [-myIntRad-offset-expand-myArmThick, 5+expand, 2],
+                     [(-myIntRad)/2-5.3, myIntRad-4, .05],
                      [+slop, -expand, .001],
                   ];
 
    translate([0,chipSpaceY,myIntRad]) rotate([90,0,90]) translate([0,0,-sleeveLen/2]) linear_extrude(height=sleeveLen) {
       // circle($fn=40,d=chipDia+chipDiaGap+expand);
       intersection() {
-         translate([-bigDia/2,0,0]) square([bigDia+slop,bigDia+slop]);
+         translate([-bigDia/2,-expand,0]) square([bigDia+slop,bigDia+slop]);
          circle($fn=80,d=bigDia+slop);
       }
    }
