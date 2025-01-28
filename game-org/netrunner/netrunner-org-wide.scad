@@ -27,8 +27,6 @@
  *       - just glue on the end? some sort of cylindrical "link" with alignment holes?
  *
  *   - put in spots for M2 or M2.5 screws in the fake plates on top <defer>
- *
- *   - clean up that little top corner where the cardChipSpace peeks out from under the card top <DONE>
  */
 
 /* common view/render options */
@@ -63,7 +61,7 @@ rightStackOff  = 20; // shift right stack forward (20mm default)
 
 /* dimensions related to placement of things relative to one another */
 cardStackGap   = 1.5;
-cardChipGap    = 12;
+cardChipGap    = 11; // 12 is def. good.
 addChipCut = 3;
 
 /* magnet dimensions (6mm dia x 3mm thick) */
@@ -84,7 +82,7 @@ intersection() {
    union() {
       if (showChipCover) /* translate([0,15,15]) */  chipCover();
       if (showCardTop) translate([0,0,showCardTopZ]) cardTop();
-      if (showBottom) % fancyBottom();
+      if (showBottom) fancyBottom();
    }
    if (cutAway) translate([-25,-120,-5]) cube([150,200,100]);
 }
@@ -162,9 +160,17 @@ module voids(finger=true) {
    dishY = -(dishChipGap+dishLen)/2;
    translate([dishX, dishY, orgFloor]) dishVoid();
 
+   /* weird leftovers in chip tray */
+   myUglyOff = chipDia/2+chipDiaGap;
+   if (1) translate([-chipLen/2+.5,myUglyOff+cardChipGap/2,myUglyOff]) {
+      rotate([0,-90,0]) cylinder(d=chipDia+2*chipDiaGap+2*chipCoverThick,h=4);
+   }
+      translate([-chipLen/2-4,cardChipGap/2,0]) cube([4,chipDia+2*chipDiaGap+2*chipCoverThick,myUglyOff]);
+
    /* magnet holes */
    translate([0,0,0]) magnetVoids();
 }
+
 
 module magnetVoids() {
    myUnderTopHt = cardStackHt+cardStackHtGap+cardStackLift+orgFloor-magHt;
@@ -175,12 +181,12 @@ module magnetVoids() {
    translate([-6,intMinY-6,myUnderTopHt]) cylinder(d=magDia,h=magHt*2);
 
    /* endcap of chips */
-   translate([intMinX,cardChipGap+chipDia/2-15,chipDia/2+chipCoverThick]) rotate([0,90,0]) {
+   translate([intMinX,cardChipGap+chipDia/2-15,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
       translate([0,0,-magHt-2]) cylinder(d2=magDia,d1=2,h=2+slop);
       translate([0,0,-magHt]) cylinder(d=magDia,h=magHt*2);
       translate([0,0,+magHt-slop]) cylinder(d1=magDia,d2=2,h=2+slop);
    }
-   translate([intMinX,cardChipGap+chipDia/2+5,chipDia/2+chipCoverThick]) rotate([0,90,0]) {
+   translate([intMinX,cardChipGap+chipDia/2+5,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
       translate([0,0,-magHt-2]) cylinder(d2=magDia,d1=2,h=2+slop);
       translate([0,0,-magHt]) cylinder(d=magDia,h=magHt*2);
       translate([0,0,+magHt-slop]) cylinder(d1=magDia,d2=2,h=2+slop);
@@ -444,21 +450,25 @@ module cardVoid(ht,finger=true) {
 }
 
 module chipCover() {
-   translate ([0,0,1]) difference() {
+   myUglyOff = chipDia/2+chipDiaGap+chipCoverThick;
+
+   translate ([0,0,0]) difference() {
       intersection() {
          basicBottomForm(allGreebles=true);
          translate ([-1,0,0]) chipSleeve(cutLen=0.8*chipLen,sleeveLen=chipLen+.5,void=false);
       }
-      // translate ([myLen/2-2,0,0]) chipVoid(len=myLen-6,sloppy=true,center=false);
-      translate ([chipLen/2,0,0]) chipVoid(len=chipLen-4,sloppy=true,center=false);
+      translate ([chipLen/2,0,0]) chipVoid(len=chipLen-6,sloppy=true,center=false);
+      translate([-chipLen/2+.5,myUglyOff+cardChipGap/2,myUglyOff])
+         rotate([0,-90,0]) cylinder(d=chipDia+2*chipDiaGap+2*chipCoverThick+18,h=4);
    }
 }
+
 
 /* chipSleeve() -- generates a form for cutting a sleeve running in the X direction centered at 
  *              [0, chipSpaceY, (chipDia+chipDiaGap)/2].
  *
  */
-module chipSleeve(cutLen=10, sleeveLen=20, void) {
+module chipSleeve(cutLen=10, sleeveLen=20, void=false) {
    myIntRad     = (chipDia+chipDiaGap)/2+chipCoverThick;
    myArmThick   = 3;
    myOffset     = 0.3;
