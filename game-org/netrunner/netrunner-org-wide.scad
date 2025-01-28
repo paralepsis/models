@@ -41,7 +41,7 @@
 
 /* common view/render options */
 showChipTop  = 0;
-showBottom   = 1;
+showBottom   = 0;
 showCardTop  = 0;
 showCardTopZ = 0.1;
 cutAway      = 0;
@@ -125,7 +125,7 @@ dishHt       = cardStackHt+cardStackHtGap+cardStackLift;
 dishChipGap  = min(cardChipGap,4);
 dishLen      = rightStackOff - cardStackGap + (cardChipGap - 4)/2;
 
-/* calculate position of chips */
+/* calculate position of chips -- this puts chips basically right against the gap */
 chipSpaceY = (chipDia + chipDiaGap + cardChipGap) / 2;
 
 /* calculate positions of card spots */
@@ -147,7 +147,6 @@ orgWall  = 2.0;
 orgFloor = 1.6;
 orgCeil  = 1.0; /* exclusive of magHt */
 orgWid   = chipLen + 2*orgWall; // FIXME? no longer accurate
-orgLen   = bbLen + 2*orgWall;
 
 intMinX = minX - orgWall;
 intMaxX = maxX + orgWall;
@@ -508,7 +507,46 @@ module corner() {
      polygon(polyRound(pts,10));
 }
 
+% chipForm();
+
+sleeve(expand=0.5);
+
+
+/* sleeve() -- generates a form for cutting a sleeve running in the X direction centered at 
+ *              [0, chipSpaceY, (chipDia+chipDiaGap)/2].
+ *
+ */
+module sleeve(len=10, expand=0) {
+   myIntRad     = (chipDia+chipDiaGap)/2;
+   myChannelDep = myIntRad/2;
+   myArmThick   = 2.0;
+   offset       = 1.5;
+   overshoot    = 40;
+
+   sleeveCutPts = [
+                     [-myIntRad-offset+expand, -expand, 1],
+                     [-myIntRad-offset+expand, -myChannelDep+expand, 5],
+                     [-myIntRad-offset+expand+2, -myChannelDep-2+expand, 10],
+                     [-myIntRad-offset+expand+1, -myChannelDep-6-3*expand, 10],
+                     [-myIntRad-offset-expand-myArmThick, -myChannelDep-expand, 5],
+                     [-myIntRad-offset-expand-myArmThick, -expand, 1],
+                     [-myIntRad-overshoot/2, -expand, 1],
+                     [-myIntRad-overshoot/2, myIntRad+overshoot, 1],
+                     [+slop, myIntRad+overshoot, .001],
+                     [+slop, -expand, .001],
+                  ];
+
+   translate([0,chipSpaceY,myIntRad]) rotate([90,0,90]) translate([0,0,-len/2]) linear_extrude(height=len) union() {
+         for (i=[0:1]) mirror([i,0,0]) polygon(polyRound(sleeveCutPts,10));
+         circle($fn=40,d=chipDia+chipDiaGap+expand);
+      }
+}
+
+
+
 module chipForm() {
+   $fn=200;
+
    myCoverDia = chipDia + chipDiaGap + 2*chipCoverThick;
    myStartOff = -orgWid/2;
    greebleCt = 8;
