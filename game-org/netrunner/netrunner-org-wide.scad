@@ -32,7 +32,7 @@
  */
 
 /* common view/render options */
-showChipCover  = 0;
+showChipCover  = 1;
 showBottom     = 1;
 showCardTop    = 0;
 showCardTopZ   = 0.1;
@@ -84,7 +84,7 @@ intersection() {
    union() {
       if (showChipCover) /* translate([0,15,15]) */  chipCover();
       if (showCardTop) translate([0,0,showCardTopZ]) cardTop();
-      if (showBottom) fancyBottom();
+      if (showBottom) % fancyBottom();
    }
    if (cutAway) translate([-25,-120,-5]) cube([150,200,100]);
 }
@@ -187,8 +187,6 @@ module magnetVoids() {
    }
 }
 
-
-
 module dishVoid() {
    $fn=100;
 
@@ -223,7 +221,7 @@ module fancyBottom(ht=orgFloor) {
    littleAngleBit();
 }
 
-module basicBottomForm() {
+module basicBottomForm(allGreebles=false) {
    myWid = extMaxX-extMinX-2*orgWall; // kind of the min/max of the card area including walls of bottom
 
    difference() {
@@ -237,7 +235,11 @@ module basicBottomForm() {
       translate([-(myWid+slop)/2,0.80*chipDia+0.5*cardChipGap,0])
          rotate([-30,0,0]) cube([myWid+slop,20,20]);
    }
-   chipForm(start=1,end=7);
+   if (allGreebles) {
+      chipForm(start=0,end=7);
+   } else {
+      chipForm(start=1,end=7);
+   }
 }
 
 
@@ -442,12 +444,13 @@ module cardVoid(ht,finger=true) {
 }
 
 module chipCover() {
-   difference() {
+   translate ([0,0,1]) difference() {
       intersection() {
-         basicBottomForm();
-         chipSleeve(cutLen=0.8*chipLen-1,sleeveLen=chipLen-0.5,void=false);
+         basicBottomForm(allGreebles=true);
+         translate ([-1,0,0]) chipSleeve(cutLen=0.8*chipLen,sleeveLen=chipLen+.5,void=false);
       }
-      chipVoid(len=chipLen+1,sloppy=false);
+      // translate ([myLen/2-2,0,0]) chipVoid(len=myLen-6,sloppy=true,center=false);
+      translate ([chipLen/2,0,0]) chipVoid(len=chipLen-4,sloppy=true,center=false);
    }
 }
 
