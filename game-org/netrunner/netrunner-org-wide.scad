@@ -64,10 +64,10 @@ endcapCutoutSlant = endcapExtra2 - endcapExtra1;
 /* VIEWS HERE */
 
 /* common view/render options */
-showChipCover              = 1;
+showChipCover              = 0;
 showChipCoverGreeble       = 1;
-showChipCoverGreebleCenter = 1;
-showChipCoverGreebleBump   = 1;
+showChipCoverGreebleCenter = 0;
+showChipCoverGreebleBump   = 0;
 showBottom     = 0;
 showCardCover  = 0;
 showCardTopZ   = 0.1;
@@ -78,9 +78,9 @@ intersection() {
       if (showChipCover) translate([0,0,0])  chipCover();
       if (showCardCover) translate([0,0,showCardTopZ]) cardCover();
       if (showBottom) fancyBottom();
-      if (showChipCoverGreeble) translate([-20,0,0]) chipCoverGreeble();
-      if (showChipCoverGreebleCenter) translate([-10,0,0]) chipCoverGreebleCenter();
-      if (showChipCoverGreebleCenter) translate([-10,0,0]) chipCoverGreebleBump();
+      if (showChipCoverGreeble) translate([0,0,0]) chipCoverGreeble();
+      if (showChipCoverGreebleCenter) translate([0,0,0]) chipCoverGreebleCenter();
+      if (showChipCoverGreebleBump) translate([0,0,0]) chipCoverGreebleBump();
    }
    if (cutAway) translate([-25,-120,-5]) cube([150,200,100]);
 }
@@ -531,7 +531,7 @@ module chipCoverGreebleBumpCutout(expand=0) {
       translate([0,0,3+expand-slop]) cylinder($fn=60,d1=19+expand,d2=15+expand,h=2);
 
       /* key */
-      rotate([0,0,-60]) translate([-9.5,0,-8]) cylinder($fn=60,d=4+expand,h=3+8);
+      if (0) rotate([0,0,-60]) translate([-9.5,0,-8]) cylinder($fn=60,d=4+expand,h=3+8);
    }
 }
 
