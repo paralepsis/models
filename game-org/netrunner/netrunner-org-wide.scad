@@ -10,6 +10,8 @@
  * Notes:
  *
  * TODO:
+ * 20250129:
+ *
  * 20250128:
  *   - consider cutting back right greeble off for printing flat
  *
@@ -60,16 +62,16 @@ endcapExtra2 = endcapExtra1 + 2;
 /* VIEWS HERE */
 
 /* common view/render options */
-showChipCover  = 0;
+showChipCover  = 1;
 showBottom     = 1;
-showCardTop    = 0;
+showCardCover  = 0;
 showCardTopZ   = 0.1;
 cutAway        = 0;
 
 intersection() {
    union() {
       if (showChipCover) translate([0,0,0])  chipCover();
-      if (showCardTop) translate([0,0,showCardTopZ]) cardTop();
+      if (showCardCover) translate([0,0,showCardTopZ]) cardCover();
       if (showBottom) fancyBottom();
    }
    if (cutAway) translate([-25,-120,-5]) cube([150,200,100]);
@@ -156,7 +158,7 @@ module voids(finger=true) {
     *   - I'm not sure why I need the 0.8?
     */
    translate([0,0,0.8]) intersection() {
-      translate([-chipLen/2-3,chipDia/2+chipDiaGap+cardChipGap/2,chipDia/2+chipDiaGap]) {
+      translate([-chipLen/2-3,chipSpaceY,chipDia/2+chipDiaGap]) {
          rotate([0,90,0]) cylinder(d=chipDia+2*chipDiaGap+2*chipCoverThick,h=8+slop);
       }
       translate([-chipLen/2-3,cardChipGap/2,chipDia/2+chipCoverThick])
@@ -171,7 +173,7 @@ module voids(finger=true) {
  * 
  * Notes:
  *   - Called for card bottom by voids()
- *   - Called for card top directly from cardTop
+ *   - Called for card top directly from cardCover
  */
 module magnetVoids() {
    myUnderTopHt = cardStackHt+cardStackHtGap+cardStackLift+orgFloor-magHt;
@@ -182,12 +184,12 @@ module magnetVoids() {
    translate([-6,intMinY-6,myUnderTopHt]) cylinder(d=magDia,h=magHt*2);
 
    /* endcap of chips */
-   translate([intMinX,cardChipGap+chipDia/2-15,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
+   translate([intMinX,chipSpaceY-15,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
       translate([0,0,-magHt-2]) cylinder(d2=magDia,d1=2,h=2+slop);
       translate([0,0,-magHt]) cylinder(d=magDia,h=magHt*2);
       translate([0,0,+magHt-slop]) cylinder(d1=magDia,d2=2,h=2+slop);
    }
-   translate([intMinX,cardChipGap+chipDia/2+5,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
+   translate([intMinX,chipSpaceY+5,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
       translate([0,0,-magHt-2]) cylinder(d2=magDia,d1=2,h=2+slop);
       translate([0,0,-magHt]) cylinder(d=magDia,h=magHt*2);
       translate([0,0,+magHt-slop]) cylinder(d1=magDia,d2=2,h=2+slop);
@@ -225,7 +227,7 @@ module fancyBottom(ht=orgFloor) {
    }
 
    /* just a little alignment bit between cards and chips */
-   littleAngleBit();
+   // littleAngleBit();
 }
 
 module basicBottomForm(allGreebles=false) {
@@ -238,7 +240,7 @@ module basicBottomForm(allGreebles=false) {
          translate([-myWid/2,cardChipGap/2-slop-orgWall,0]) cube([myWid,chipDia+orgWall,chipDia/2]);
       }
 
-      /* slant the back */
+      /* slant the back -- FIXME ugly Y calc */
       translate([-(myWid+slop)/2,0.80*chipDia+0.5*cardChipGap,0])
          rotate([-30,0,0]) cube([myWid+slop,20,20]);
    }
@@ -298,12 +300,12 @@ module seamVoid(x=20,y=20,w=0.6) {
    }
 }
 
-/* cardTop()
+/* cardCover()
  *
  * TODO:
  * - THIS IS MESSY!
  */
-module cardTop() {
+module cardCover() {
    myTopGap = 0.5; // space around the bottom walls and "ceiling" so top slides on/off
    myHt = cardStackHt+cardStackHtGap+cardStackLift+myTopGap+magHt+orgCeil;
    fudge = 0.5; /* (partially) addresses alignment with bottom near chips */
@@ -331,7 +333,7 @@ module cardTop() {
       }
 
       /* this rounds out things on the sides */
-      /* note: fudging here b/c orgWid is no longer accurate */
+      /* note: FIXME fudging here b/c orgWid is no longer accurate */
       translate([-(orgWid+10)/2,-30+cardChipGap/2,-slop]) {
          cube([orgWid + 10, 30, cardStackHt-2], center = false);
          rotate([0,90,0]) cylinder($fn=160,r=cardStackHt-2,h=orgWid+10);
@@ -343,7 +345,7 @@ module cardTop() {
       magnetVoids();
 
       /* just a little alignment bit between cards and chips */
-      littleAngleBit(cutout=true);
+      // littleAngleBit(cutout=true);
 
       /* little holes in the front, kind of a "grill" */
       translate([leftCardStackX,leftCardStackY-sleeveLen/2,0]) holes(wid=10);
@@ -451,10 +453,7 @@ module cardVoid(ht,finger=true) {
    }
 }
 
-/* WORKING */
 module chipCover() {
-   myUglyOff = (chipDia+chipDiaGap)/2+chipCoverThick;
-
    translate ([0,0,0]) difference() {
       intersection() {
          basicBottomForm(allGreebles=true);
@@ -472,13 +471,18 @@ module chipCover() {
       }
 
       /* cut a bit off the LHS (IS THIS THE BEST WAY TO DO THIS?) */
-      translate([-chipLen/2+.5,myUglyOff+cardChipGap/2,myUglyOff])
+      translate([-chipLen/2+.5, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
          rotate([0,-90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+18,h=4);
 
       /* chamfer inside of RHS */
-      translate([chipLen/2-4,cardChipGap/2+chipDia/2+chipDiaGap/2,(chipDia+chipDiaGap)/2+chipCoverThick])
+      translate([chipLen/2-4,chipSpaceY,(chipDia+chipDiaGap)/2+chipCoverThick])
          rotate([0,90,0]) cylinder($fn=120,d1=chipDia+chipDiaGap, d2=chipDia+chipDiaGap+1.5,h=4);
    }
+}
+
+/* WORKING */
+module chipCoverGreeble() {
+   chipForm(start=0,end=0);
 }
 
 /* chipSleeve() -- generates a form for cutting a sleeve running in the X direction centered at 
@@ -520,6 +524,7 @@ module chipSleeve(cutLen=10, sleeveLen=20, void=false) {
       }
    }
 }
+
 
 module chipForm(start=0,end=7) {
    $fn=200;
@@ -565,5 +570,6 @@ module endcap(ht=10) {
 module littleAngleBit(cutout=false) {
    myInset = (cutout) ? 0.5: 0.25;
 
-   translate([0,1.5,cardStackHt+cardStackGap+cardStackLift+orgFloor+0.25]) rotate([45,0,0]) cube([orgWid-40+2*myInset,2.75+myInset,2.75+myInset],center=true);
+   translate([0,1.5,cardStackHt+cardStackGap+cardStackLift+orgFloor+0.25]) rotate([45,0,0])
+      cube([orgWid-40+2*myInset,2.75+myInset,2.75+myInset],center=true);
 }
