@@ -60,9 +60,9 @@ endcapExtra2 = endcapExtra1 + 2;
 /* VIEWS HERE */
 
 /* common view/render options */
-showChipCover  = 0;
-showBottom     = 1;
-showCardTop    = 1;
+showChipCover  = 1;
+showBottom     = 0;
+showCardTop    = 0;
 showCardTopZ   = 0.1;
 cutAway        = 0;
 
@@ -449,17 +449,29 @@ module cardVoid(ht,finger=true) {
    }
 }
 
+/* WORKING */
 module chipCover() {
-   myUglyOff = chipDia/2+chipDiaGap+chipCoverThick;
+   myUglyOff = (chipDia+chipDiaGap)/2+chipCoverThick;
 
    translate ([0,0,0]) difference() {
       intersection() {
          basicBottomForm(allGreebles=true);
          translate ([-1,0,0]) chipSleeve(cutLen=0.8*chipLen,sleeveLen=chipLen+.5,void=false);
       }
+
+      /* cut out space for chips underneath */
       translate ([chipLen/2,0,0]) chipVoid(len=chipLen-6,sloppy=true,center=false);
+
+      /* weird, but sort of a cutout to get the greebles back on the side near the chips */
+      translate([0,0,0]) difference() {
+         translate([-orgWid/2,-cardChipGap/2,(chipDia+chipDiaGap)/2+chipCoverThick+9.5])
+            cube([orgWid,chipDia,chipDia]);
+         chipForm(start=1,end=7);
+      }
+
+      /* cut a bit off the LHS (IS THIS THE BEST WAY TO DO THIS?) */
       translate([-chipLen/2+.5,myUglyOff+cardChipGap/2,myUglyOff])
-         rotate([0,-90,0]) cylinder(d=chipDia+2*chipDiaGap+2*chipCoverThick+18,h=4);
+         rotate([0,-90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+18,h=4);
    }
 }
 
