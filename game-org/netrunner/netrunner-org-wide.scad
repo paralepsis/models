@@ -8,15 +8,12 @@
  *       the polyround.scad file. See https://github.com/Irev-Dev/Round-Anything/blob/master/polyround.scad
  *
  * Notes:
- * - This gets uglier the longer that I work on it.
  *
  * TODO:
  * 20250128:
  *   - consider cutting back right greeble off for printing flat
  *
  * 20250127:
- *   - SANITY CHECK THAT WE'RE IN A DECENT STATE -- NOT SURE IF PARTS STILL FIT.
- *   - extend card top back a bit further?
  *   - need to look at back left. cover isn't complete.
  *
  *   - put in spots for M2 or M2.5 screws in the fake plates on top <defer>
@@ -64,7 +61,7 @@ endcapExtra2 = endcapExtra1 + 2;
 
 /* common view/render options */
 showChipCover  = 0;
-showBottom     = 0;
+showBottom     = 1;
 showCardTop    = 1;
 showCardTopZ   = 0.1;
 cutAway        = 0;
@@ -307,13 +304,14 @@ module seamVoid(x=20,y=20,w=0.6) {
 module cardTop() {
    myTopGap = 0.5; // space around the bottom walls and "ceiling" so top slides on/off
    myHt = cardStackHt+cardStackHtGap+cardStackLift+myTopGap+magHt+orgCeil;
+   fudge = 0.5; /* (partially) addresses alignment with bottom near chips */
 
    color("blue") difference() {
       /* note: this results in a top that is orgCeil+magHt thick, with a bevel orgWall tall */
       translate([0,0,orgFloor+slop]) {
-         linear_extrude(height=myHt-orgWall) fancyTopShape(expand=orgWall+myTopGap);
+         linear_extrude(height=myHt-orgWall) fancyTopShape(expand=orgWall+myTopGap, fudge=fudge);
          translate([0,0,myHt-orgWall]) minkowski() {
-            linear_extrude(height=slop) fancyTopShape(expand=myTopGap);
+            linear_extrude(height=slop) fancyTopShape(expand=myTopGap, fudge=fudge);
             cylinder(r1=orgWall,r2=slop,h=orgWall);
          }
       }
@@ -337,7 +335,7 @@ module cardTop() {
          rotate([0,90,0]) cylinder($fn=160,r=cardStackHt-2,h=orgWid+10);
       }
       /* ... and this gets the bottom edge where cards and chips come together */
-      backEdgeBevel();
+      translate([0,fudge,0]) backEdgeBevel();
 
       /* cut out magnet holes in top */
       magnetVoids();
@@ -381,20 +379,20 @@ module holes(wid=16) {
    }	
 }
 
-module fancyTopShape(expand=0) {
+module fancyTopShape(expand=0,fudge=0) {
    myRad        = 2;
    cornerAdjX   = rightStackOff+5;
    cornerAdjY   = rightStackOff;
    cornerRad    = 4;
-   
+
    exteriorPts = [
                   [0,intMinY-cornerAdjY,cornerRad],
                   [-cornerAdjX/2,intMinY-cornerAdjY/2, cornerRad],
                   [-cornerAdjX,intMinY,cornerRad],
 
                   [intMinX,intMinY,myRad],
-                  [intMinX,orgWall,myRad],
-                  [intMaxX,orgWall,myRad],
+                  [intMinX,orgWall+fudge,myRad],
+                  [intMaxX,orgWall+fudge,myRad],
                   [intMaxX,intMinY-cornerAdjY,myRad],
                  ];
 
