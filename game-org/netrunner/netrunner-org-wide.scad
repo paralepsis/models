@@ -55,14 +55,18 @@ magDia = 6.2;
 
 $fn=40;
 
-chipCoverThick = 2;
-endcapExtra1 = chipCoverThick;
-endcapExtra2 = endcapExtra1 + 2;
+chipCoverThick    = 2;
+endcapExtra1      = chipCoverThick;
+endcapExtra2      = endcapExtra1 + 2;
+endcapCutoutDia   = 25;
+endcapCutoutSlant = endcapExtra2 - endcapExtra1;
 
 /* VIEWS HERE */
 
 /* common view/render options */
-showChipCover  = 1;
+showChipCover              = 1;
+showChipCoverGreeble       = 1;
+showChipCoverGreebleCenter = 1;
 showBottom     = 1;
 showCardCover  = 0;
 showCardTopZ   = 0.1;
@@ -73,9 +77,13 @@ intersection() {
       if (showChipCover) translate([0,0,0])  chipCover();
       if (showCardCover) translate([0,0,showCardTopZ]) cardCover();
       if (showBottom) fancyBottom();
+      if (showChipCoverGreeble) translate([-18,0,0]) chipCoverGreeble();
+      if (showChipCoverGreebleCenter) translate([-10,0,0]) chipCoverGreebleCenter();
    }
    if (cutAway) translate([-25,-120,-5]) cube([150,200,100]);
 }
+
+
 
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
@@ -327,7 +335,7 @@ module cardCover() {
       difference() {
          translate([0,0,orgFloor]) linear_extrude(height=cardStackHt+cardStackHtGap+cardStackLift) fancyCardExterior(expand=myTopGap);
 
-          /* Place left and right card stack "outsets" (void insets...) */
+          /* Place left and right card stack "outsets" (void insets?...) */
           translate([leftCardStackX,leftCardStackY,myHt+slop-orgCeil-magHt]) topOutset();
           translate([rightCardStackX,rightCardStackY-rightStackOff,myHt+slop-orgCeil-magHt]) topOutset();
       }
@@ -480,12 +488,40 @@ module chipCover() {
    }
 }
 
-// chipCoverGreeble();
 
 /* WORKING */
 module chipCoverGreeble() {
    difference() {
       chipForm(start=0,end=0);
+
+      /* remove top half of cylinder to overhang bottom */
+      translate([-chipLen/2+0.5-slop, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
+         rotate([0,90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+8,h=chipLen+8);
+
+      /* remove bottom half to match with tray LHS back edge */
+      translate([-chipLen/2+2.75, chipSpaceY, ((chipDia+chipDiaGap)/2+chipCoverThick+0.5)/2])
+         cube([10,chipDia+chipDiaGap+2*chipCoverThick+10,(chipDia+chipDiaGap+2*chipCoverThick+1)/2],center=true);
+
+      /* remove below XY plane */
+      translate([-chipLen/2-10, chipSpaceY, -5+slop])
+         cube([30,chipDia+chipDiaGap+2*chipCoverThick+10,10],center=true);
+
+      /* remove center of endcap, will fill in with separate piece */
+      translate([-chipLen/2-20, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
+         rotate([0,90,0]) cylinder($fn=80,d=endcapCutoutDia-endcapCutoutSlant,h=30);
+      translate([-chipLen/2+2, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
+         rotate([0,-90,0]) cylinder(d=endcapCutoutDia+endcapCutoutSlant+4,h=9);
+   }
+}
+
+module chipCoverGreebleCenter() {
+   difference() {
+      translate([-chipLen/2-7.0+slop, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
+         rotate([0,90,0]) cylinder($fn=80,d=endcapCutoutDia+endcapCutoutSlant+4-0.7,h=7.5);
+
+      /* remove bottom half to match with tray LHS back edge */
+      if (1) translate([-chipLen/2+2.75, chipSpaceY, ((chipDia+chipDiaGap)/2+chipCoverThick+0.5)/2])
+         cube([10,chipDia+chipDiaGap+2*chipCoverThick+10,(chipDia+chipDiaGap+2*chipCoverThick+1)/2],center=true);
    }
 }
 
@@ -553,9 +589,10 @@ module endcap(ht=10) {
    myDia1 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra1;
    myDia2 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra2;
    mySlantHt = myDia2 - myDia1;
-   myDia3 = 25; /* little cutout in the end */
-   myDia4 = myDia3 - mySlantHt;
+   myDia3 = endcapCutoutDia;
+   myDia4 = myDia3 - endcapCutoutSlant;
    cutoutHt = 1;
+
 
    translate([myEndcapHt/2,0,0]) rotate([0,-90,0]) {
       if (1) difference() {
