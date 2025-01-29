@@ -60,15 +60,15 @@ endcapExtra2 = endcapExtra1 + 2;
 /* VIEWS HERE */
 
 /* common view/render options */
-showChipCover  = 1;
-showBottom     = 0;
+showChipCover  = 0;
+showBottom     = 1;
 showCardTop    = 0;
 showCardTopZ   = 0.1;
 cutAway        = 0;
 
 intersection() {
    union() {
-      if (showChipCover) /* translate([0,15,15]) */  chipCover();
+      if (showChipCover) translate([0,0,0])  chipCover();
       if (showCardTop) translate([0,0,showCardTopZ]) cardTop();
       if (showBottom) fancyBottom();
    }
@@ -125,10 +125,12 @@ extMinY = intMinY - orgWall;
 extMaxY = intMaxY + orgWall;
 
 
+
 /* voids() - This generates all the voids for the bottom, called from fancyBottom()
  * 
  * Note:
  * - I've been inconsistent about heights -- tried to pull all the orgFloor into here...
+ * - FIXME: Scope creep here -- probably the chip tray leftovers should be elsewhere
  */
 module voids(finger=true) {
    myHt  = orgFloor+cardStackHt+cardStackHtGap+cardStackLift;
@@ -136,7 +138,7 @@ module voids(finger=true) {
 
    /* Place chip void and cut space for sleeve */
    translate ([myLen/2-2,0,0]) chipVoid(len=myLen-6,sloppy=true,center=false);
-   translate ([-3,0,0]) chipSleeve(cutLen=0.8*chipLen+3,sleeveLen=chipLen+5,void=true);
+   translate ([-3,0,0]) chipSleeve(cutLen=0.8*chipLen+6,sleeveLen=chipLen+5,void=true);
 
 
    /* Place left and right card stack spaces */
@@ -472,9 +474,12 @@ module chipCover() {
       /* cut a bit off the LHS (IS THIS THE BEST WAY TO DO THIS?) */
       translate([-chipLen/2+.5,myUglyOff+cardChipGap/2,myUglyOff])
          rotate([0,-90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+18,h=4);
+
+      /* chamfer inside of RHS */
+      translate([chipLen/2-4,cardChipGap/2+chipDia/2+chipDiaGap/2,(chipDia+chipDiaGap)/2+chipCoverThick])
+         rotate([0,90,0]) cylinder($fn=120,d1=chipDia+chipDiaGap, d2=chipDia+chipDiaGap+1.5,h=4);
    }
 }
-
 
 /* chipSleeve() -- generates a form for cutting a sleeve running in the X direction centered at 
  *              [0, chipSpaceY, (chipDia+chipDiaGap)/2].
