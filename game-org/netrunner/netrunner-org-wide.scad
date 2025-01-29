@@ -67,7 +67,8 @@ endcapCutoutSlant = endcapExtra2 - endcapExtra1;
 showChipCover              = 1;
 showChipCoverGreeble       = 1;
 showChipCoverGreebleCenter = 1;
-showBottom     = 1;
+showChipCoverGreebleBump   = 1;
+showBottom     = 0;
 showCardCover  = 0;
 showCardTopZ   = 0.1;
 cutAway        = 0;
@@ -77,14 +78,12 @@ intersection() {
       if (showChipCover) translate([0,0,0])  chipCover();
       if (showCardCover) translate([0,0,showCardTopZ]) cardCover();
       if (showBottom) fancyBottom();
-      if (showChipCoverGreeble) translate([-18,0,0]) chipCoverGreeble();
+      if (showChipCoverGreeble) translate([-20,0,0]) chipCoverGreeble();
       if (showChipCoverGreebleCenter) translate([-10,0,0]) chipCoverGreebleCenter();
+      if (showChipCoverGreebleCenter) translate([-10,0,0]) chipCoverGreebleBump();
    }
    if (cutAway) translate([-25,-120,-5]) cube([150,200,100]);
 }
-
-
-
 
 /* Expand chip space to width of cards, calculate max. chips, shift cards left */
 minChipLen    = chipHt * chipCt + chipHtGap;
@@ -100,6 +99,7 @@ dishLen      = rightStackOff - cardStackGap + (cardChipGap - 4)/2;
 
 /* calculate position of chips -- this puts chips basically right against the gap */
 chipSpaceY = (chipDia + chipDiaGap + cardChipGap) / 2;
+chipSpaceZ = (chipDia+chipDiaGap)/2+chipCoverThick;
 
 /* calculate positions of card spots */
 leftCardStackX = -1 * (sleeveWid + sleeveWidGap + cardStackGap)/2;
@@ -192,12 +192,12 @@ module magnetVoids() {
    translate([-6,intMinY-6,myUnderTopHt]) cylinder(d=magDia,h=magHt*2);
 
    /* endcap of chips */
-   translate([intMinX,chipSpaceY-15,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
-      translate([0,0,-magHt-2]) cylinder(d2=magDia,d1=2,h=2+slop);
+   translate([intMinX,chipSpaceY,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
+      //translate([0,0,-magHt-2]) cylinder(d2=magDia,d1=2,h=1);
       translate([0,0,-magHt]) cylinder(d=magDia,h=magHt*2);
       translate([0,0,+magHt-slop]) cylinder(d1=magDia,d2=2,h=2+slop);
    }
-   translate([intMinX,chipSpaceY+5,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
+   if (0) translate([intMinX,chipSpaceY+17.5,chipDia/3+chipCoverThick]) rotate([0,90,0]) {
       translate([0,0,-magHt-2]) cylinder(d2=magDia,d1=2,h=2+slop);
       translate([0,0,-magHt]) cylinder(d=magDia,h=magHt*2);
       translate([0,0,+magHt-slop]) cylinder(d1=magDia,d2=2,h=2+slop);
@@ -473,64 +473,118 @@ module chipCover() {
 
       /* weird, but sort of a cutout to get the greebles back on the side near the chips */
       translate([0,0,0]) difference() {
-         translate([-orgWid/2,-cardChipGap/2,(chipDia+chipDiaGap)/2+chipCoverThick+9.5])
+         translate([-orgWid/2,-cardChipGap/2,chipSpaceZ+9.5])
             cube([orgWid,chipDia,chipDia]);
          chipForm(start=1,end=7);
       }
 
       /* cut a bit off the LHS (IS THIS THE BEST WAY TO DO THIS?) */
-      translate([-chipLen/2+.5, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
+      translate([-chipLen/2+.5, chipSpaceY, chipSpaceZ])
          rotate([0,-90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+18,h=4);
 
       /* chamfer inside of RHS */
-      translate([chipLen/2-4,chipSpaceY,(chipDia+chipDiaGap)/2+chipCoverThick])
+      translate([chipLen/2-4,chipSpaceY,chipSpaceZ])
          rotate([0,90,0]) cylinder($fn=120,d1=chipDia+chipDiaGap, d2=chipDia+chipDiaGap+1.5,h=4);
    }
 }
 
 
 /* WORKING */
+
+/* chipCoverGreeble() - this is the back LHS greeble, with a cutout in the middle so it may be printed flat
+ */
 module chipCoverGreeble() {
    difference() {
-      chipForm(start=0,end=0);
+      chipCoverGreebleForm();
 
-      /* remove top half of cylinder to overhang bottom */
-      translate([-chipLen/2+0.5-slop, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
-         rotate([0,90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+8,h=chipLen+8);
-
-      /* remove bottom half to match with tray LHS back edge */
-      translate([-chipLen/2+2.75, chipSpaceY, ((chipDia+chipDiaGap)/2+chipCoverThick+0.5)/2])
-         cube([10,chipDia+chipDiaGap+2*chipCoverThick+10,(chipDia+chipDiaGap+2*chipCoverThick+1)/2],center=true);
-
-      /* remove below XY plane */
-      translate([-chipLen/2-10, chipSpaceY, -5+slop])
-         cube([30,chipDia+chipDiaGap+2*chipCoverThick+10,10],center=true);
-
-      /* remove center of endcap, will fill in with separate piece */
-      translate([-chipLen/2-20, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
-         rotate([0,90,0]) cylinder($fn=80,d=endcapCutoutDia-endcapCutoutSlant,h=30);
-      translate([-chipLen/2+2, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
-         rotate([0,-90,0]) cylinder(d=endcapCutoutDia+endcapCutoutSlant+4,h=9);
+      /* do the cutout, difference()'ing in this case */
+      chipCoverGreebleCutout();
+      chipCoverGreebleBumpCutout(expand=0.01);
    }
 }
 
 module chipCoverGreebleCenter() {
+   intersection() {
+      chipCoverGreebleForm();
+
+      /* do the cutout, intersection()'ing in this case */
+      chipCoverGreebleCutout(expand=-0.2);
+   }
+}
+
+/* chipCoverGreebleBump() - little bump that covers the channel hole
+ */
+module chipCoverGreebleBump() {
+   intersection() {
+      chipCoverGreebleForm();
+
+      /* do the cutout, intersection()'ing in this case */
+      chipCoverGreebleBumpCutout(expand=-0.2);
+   }
+}
+
+module chipCoverGreebleBumpCutout(expand=0) {
+
+   /* little rounded bit off to side to cover channel hole */
+   translate([-chipLen/2-2.25-expand,chipSpaceY-23, chipSpaceZ-7]) rotate([0,-90,0]) {
+      translate([0,0,-8]) cylinder($fn=60,d=19+expand,h=3+8+expand);
+      translate([0,0,3+expand-slop]) cylinder($fn=60,d1=19+expand,d2=15+expand,h=2);
+
+      /* key */
+      rotate([0,0,-60]) translate([-9.5,0,-8]) cylinder($fn=60,d=4+expand,h=3+8);
+   }
+}
+
+module chipCoverGreebleForm() {
    difference() {
-      translate([-chipLen/2-7.0+slop, chipSpaceY, (chipDia+chipDiaGap)/2+chipCoverThick])
-         rotate([0,90,0]) cylinder($fn=80,d=endcapCutoutDia+endcapCutoutSlant+4-0.7,h=7.5);
+      /* basic form, although it starts off too long */
+      union() {
+         chipForm(start=0,end=0);
+
+         /* little rounded bit off to side to cover channel hole */
+         translate([-chipLen/2-2.25,chipSpaceY-23, chipSpaceZ-7]) rotate([0,-90,0]) {
+            cylinder($fn=60,d=19,h=3);
+            translate([0,0,3-slop]) cylinder($fn=60,d1=19,d2=15,h=2);
+         }
+      }
+
+      /* remove top half of cylinder at right location to overhang bottom */
+      translate([-chipLen/2+0.5-slop, chipSpaceY, chipSpaceZ])
+         rotate([0,90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+8,h=chipLen+8);
 
       /* remove bottom half to match with tray LHS back edge */
-      if (1) translate([-chipLen/2+2.75, chipSpaceY, ((chipDia+chipDiaGap)/2+chipCoverThick+0.5)/2])
+      translate([-chipLen/2+2.75, chipSpaceY, (chipSpaceZ+0.5)/2])
          cube([10,chipDia+chipDiaGap+2*chipCoverThick+10,(chipDia+chipDiaGap+2*chipCoverThick+1)/2],center=true);
+
+      /* remove below XY plane to match rest of organizer */
+      translate([-chipLen/2-10, chipSpaceY, -5+slop])
+         cube([30,chipDia+chipDiaGap+2*chipCoverThick+10,10],center=true);
+
+      /* cut out magnet */
+      magnetVoids();
+   }
+}
+
+module chipCoverGreebleCutout(expand=0) {
+   myDia = endcapCutoutDia-endcapCutoutSlant;
+
+   /* remove center of endcap, will fill in with separate piece (chipCoverGreebleCenter()) */
+   translate([-chipLen/2-15+expand, chipSpaceY, chipSpaceZ])
+      rotate([0,90,0]) cylinder($fn=80,d=myDia+expand,h=16);
+
+   /* chamfer cutout on the interior where the center goes */
+   translate([-chipLen/2-8+expand, chipSpaceY, chipSpaceZ]) rotate([0,90,0])  {
+      cylinder(d1=myDia+expand,d2=myDia+4+expand,h=2);
+      translate([0,0,2-slop]) cylinder(d=myDia+4+expand,h=8);
    }
 }
 
 /* chipSleeve() -- generates a form for cutting a sleeve running in the X direction centered at 
- *              [0, chipSpaceY, (chipDia+chipDiaGap)/2].
+ *              [0, chipSpaceY, chipSpaceZ].
  *
  */
 module chipSleeve(cutLen=10, sleeveLen=20, void=false) {
-   myIntRad     = (chipDia+chipDiaGap)/2+chipCoverThick;
+   myIntRad     = chipSpaceZ; // FIXME remove this var
    myArmThick   = 3;
    myOffset     = 0.3;
    overshoot    = 40;
