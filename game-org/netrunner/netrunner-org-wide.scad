@@ -11,30 +11,16 @@
  * - This gets uglier the longer that I work on it.
  *
  * TODO:
+ * 20250128:
+ *   - consider cutting back right greeble off for printing flat
+ *
  * 20250127:
  *   - SANITY CHECK THAT WE'RE IN A DECENT STATE -- NOT SURE IF PARTS STILL FIT.
  *   - extend card top back a bit further?
- *
- * 20250126:
- *   - something at the ends of the chip space to keep chips from getting in the way of the magnets
- *     and also placing them.
- *   - some sort of latching mechanism on the chip cover so it won't open?
- *     - endcaps with pins through that magnetically attach? need to think more...
- *     - double up magnets on chip cover
- *     - alternatively, go to a "slide on" approach?
- *       - shift chips towards cards to make more room for some sort of channel?
- *       - will want to make a new version before doing this. chip space may have to grow.
- *       - just glue on the end? some sort of cylindrical "link" with alignment holes?
+ *   - need to look at back left. cover isn't complete.
  *
  *   - put in spots for M2 or M2.5 screws in the fake plates on top <defer>
  */
-
-/* common view/render options */
-showChipCover  = 1;
-showBottom     = 1;
-showCardTop    = 0;
-showCardTopZ   = 0.1;
-cutAway        = 0;
 
 include <./polyround.scad>
 
@@ -74,9 +60,14 @@ chipCoverThick = 2;
 endcapExtra1 = chipCoverThick;
 endcapExtra2 = endcapExtra1 + 2;
 
-//% translate([0,cardChipGap/2,0]) cube([200,.1,200],center=true);
+/* VIEWS HERE */
 
-/* LOOK HERE */
+/* common view/render options */
+showChipCover  = 0;
+showBottom     = 0;
+showCardTop    = 1;
+showCardTopZ   = 0.1;
+cutAway        = 0;
 
 intersection() {
    union() {
@@ -120,7 +111,7 @@ bbLen = maxY - minY;
 /* organizer calculations */
 orgWall  = 2.0;
 orgFloor = 1.6;
-orgCeil  = 1.0; /* exclusive of magHt */
+orgCeil  = 0.4; /* exclusive of magHt. This leaves ~1.3mm of space between top and 3mm magnets. */
 
 orgWid   = chipLen + 2*orgWall; // FIXME? no longer accurate
 
@@ -160,18 +151,29 @@ module voids(finger=true) {
    dishY = -(dishChipGap+dishLen)/2;
    translate([dishX, dishY, orgFloor]) dishVoid();
 
-   /* weird leftovers in chip tray */
-   myUglyOff = chipDia/2+chipDiaGap;
-   if (1) translate([-chipLen/2+.5,myUglyOff+cardChipGap/2,myUglyOff]) {
-      rotate([0,-90,0]) cylinder(d=chipDia+2*chipDiaGap+2*chipCoverThick,h=4);
+   /* weird leftovers in chip tray 
+    * Notes:
+    *   - orgFloor is ignored in that part of the organizer 
+    *   - I'm not sure why I need the 0.8?
+    */
+   translate([0,0,0.8]) intersection() {
+      translate([-chipLen/2-3,chipDia/2+chipDiaGap+cardChipGap/2,chipDia/2+chipDiaGap]) {
+         rotate([0,90,0]) cylinder(d=chipDia+2*chipDiaGap+2*chipCoverThick,h=8+slop);
+      }
+      translate([-chipLen/2-3,cardChipGap/2,chipDia/2+chipCoverThick])
+         cube([8+slop,chipDia+2*chipDiaGap+2*chipCoverThick,chipDia/2+chipDiaGap]);
    }
-      translate([-chipLen/2-4,cardChipGap/2,0]) cube([4,chipDia+2*chipDiaGap+2*chipCoverThick,myUglyOff]);
 
    /* magnet holes */
    translate([0,0,0]) magnetVoids();
 }
 
-
+/* magnetVoids()
+ * 
+ * Notes:
+ *   - Called for card bottom by voids()
+ *   - Called for card top directly from cardTop
+ */
 module magnetVoids() {
    myUnderTopHt = cardStackHt+cardStackHtGap+cardStackLift+orgFloor-magHt;
 
