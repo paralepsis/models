@@ -227,7 +227,7 @@ module fancyBottom(ht=orgFloor) {
    }
 
    /* just a little alignment bit between cards and chips */
-   // littleAngleBit();
+   littleAngleBit();
 }
 
 module basicBottomForm(allGreebles=false) {
@@ -345,7 +345,7 @@ module cardCover() {
       magnetVoids();
 
       /* just a little alignment bit between cards and chips */
-      // littleAngleBit(cutout=true);
+      littleAngleBit(cutout=true);
 
       /* little holes in the front, kind of a "grill" */
       translate([leftCardStackX,leftCardStackY-sleeveLen/2,0]) holes(wid=10);
@@ -480,9 +480,13 @@ module chipCover() {
    }
 }
 
+// chipCoverGreeble();
+
 /* WORKING */
 module chipCoverGreeble() {
-   chipForm(start=0,end=0);
+   difference() {
+      chipForm(start=0,end=0);
+   }
 }
 
 /* chipSleeve() -- generates a form for cutting a sleeve running in the X direction centered at 
