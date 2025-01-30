@@ -27,12 +27,13 @@ include <./polyround.scad>
 slop = 0.001;
 
 /* dimensions related to chips */
-chipDia       = 41.0;
-chipDiaGap    = 1.5; // total gap for both sides
-chipCt        = 53;
-chipHt        = 3.4;
-chipHtGap     = 2; // total gap for both sides
-chipGreebleCt = 8;
+chipDia        = 41.0;
+chipDiaGap     = 1.5; // total gap for both sides
+chipCt         = 53;
+chipHt         = 3.4;
+chipHtGap      = 2; // total gap for both sides
+chipGreebleCt  = 8;
+chipGreebleLen = 11;
 
 /* dimensions related to cards */
 sleeveWid      = 93.0;
@@ -65,10 +66,11 @@ endcapCutoutSlant = endcapExtra2 - endcapExtra1;
 
 /* common view/render options */
 showChipCover              = 0;
-showChipCoverGreeble       = 1;
+showChipCoverGreeble       = 0;
 showChipCoverGreebleCenter = 0;
 showChipCoverGreebleBump   = 0;
-showBottom     = 0;
+showRightGreeble           = 0;
+showBottom     = 1;
 showCardCover  = 0;
 showCardTopZ   = 0.1;
 cutAway        = 0;
@@ -77,10 +79,11 @@ intersection() {
    union() {
       if (showChipCover) translate([0,0,0])  chipCover();
       if (showCardCover) translate([0,0,showCardTopZ]) cardCover();
-      if (showBottom) fancyBottom();
+      if (showBottom) fancyBottom(rightGreeble=true);
       if (showChipCoverGreeble) translate([0,0,0]) chipCoverGreeble();
       if (showChipCoverGreebleCenter) translate([0,0,0]) chipCoverGreebleCenter();
       if (showChipCoverGreebleBump) translate([0,0,0]) chipCoverGreebleBump();
+      if (showRightGreeble) rightGreeble();
    }
    if (cutAway) translate([-25,-120,-5]) cube([150,200,100]);
 }
@@ -94,8 +97,8 @@ chipLen       = max(minChipLen, cardStacksWid);
 dishRightGap = 8; /* leave some space on RHS (magnet) */
 dishWid      = sleeveWid + sleeveWidGap - dishRightGap;
 dishHt       = cardStackHt+cardStackHtGap+cardStackLift;
-dishChipGap  = min(cardChipGap,4);
-dishLen      = rightStackOff - cardStackGap + (cardChipGap - 4)/2;
+dishChipGap  = min(cardChipGap,5);
+dishLen      = rightStackOff - cardStackGap + (cardChipGap - 5)/2;
 
 /* calculate position of chips -- this puts chips basically right against the gap */
 chipSpaceY = (chipDia + chipDiaGap + cardChipGap) / 2;
@@ -219,26 +222,40 @@ module dishVoid() {
    }
 }
 
-/* fancyBottom() -- bottom with magnet holes plus interior walls to be cut with voids */
-module fancyBottom(ht=orgFloor) {
+/* fancyBottom() -- bottom with magnet holes plus interior walls to be cut with voids 
+ *
+ * Notes:
+ * - rightGreeble=false is used to cut the right greeble for producing final version of bottom
+ */
+module fancyBottom(ht=orgFloor,rightGreeble=true) {
    myHt = ht;
    myWid = extMaxX-extMinX-2*orgWall; // kind of the min/max of the card area including walls of bottom
 
    difference() {
-      basicBottomForm();
+      basicBottomForm(rightGreeble=rightGreeble);
 
       /* cut out card and chip voids */
       voids();
 
       /* clean bottom surface */
       translate([0,0,-10]) cube([300,300,20], center=true);
+
+      /* remove right greeble? */
+      if (rightGreeble==false) {
+         rightGreebleForm(expand=0.03);
+         /* something weird is going on */
+         if (0) translate([chipLen/2+1,chipSpaceY,chipSpaceZ]) rotate([0,90,0])
+            cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+slop,h=3);
+      }
    }
+
 
    /* just a little alignment bit between cards and chips */
    littleAngleBit();
 }
 
-module basicBottomForm(allGreebles=false) {
+
+module basicBottomForm(leftGreeble=false, rightGreeble=true) {
    myWid = extMaxX-extMinX-2*orgWall; // kind of the min/max of the card area including walls of bottom
 
    difference() {
@@ -252,10 +269,12 @@ module basicBottomForm(allGreebles=false) {
       translate([-(myWid+slop)/2,0.80*chipDia+0.5*cardChipGap,0])
          rotate([-30,0,0]) cube([myWid+slop,20,20]);
    }
-   if (allGreebles) {
+   if (leftGreeble && rightGreeble) {
       chipForm(start=0,end=7);
-   } else {
+   } else if (!leftGreeble && rightGreeble) {
       chipForm(start=1,end=7);
+   } else {
+      chipForm(start=1,end=6);
    }
 }
 
@@ -464,7 +483,7 @@ module cardVoid(ht,finger=true) {
 module chipCover() {
    translate ([0,0,0]) difference() {
       intersection() {
-         basicBottomForm(allGreebles=true);
+         basicBottomForm(leftGreeble=true);
          translate ([-1,0,0]) chipSleeve(cutLen=0.8*chipLen,sleeveLen=chipLen+.5,void=false);
       }
 
@@ -488,8 +507,6 @@ module chipCover() {
    }
 }
 
-
-/* WORKING */
 
 /* chipCoverGreeble() - this is the back LHS greeble, with a cutout in the middle so it may be printed flat
  */
@@ -539,7 +556,7 @@ module chipCoverGreebleForm() {
    difference() {
       /* basic form, although it starts off too long */
       union() {
-         chipForm(start=0,end=0);
+         chipForm(start=0,end=0,center=false);
 
          /* little rounded bit off to side to cover channel hole */
          translate([-chipLen/2-2.25,chipSpaceY-23, chipSpaceZ-7]) rotate([0,-90,0]) {
@@ -549,7 +566,8 @@ module chipCoverGreebleForm() {
       }
 
       /* remove top half of cylinder at right location to overhang bottom */
-      translate([-chipLen/2+0.5-slop, chipSpaceY, chipSpaceZ])
+      /* FIXME: I don't think this is needed any more. */
+      if (0) translate([-chipLen/2+0.5-slop, chipSpaceY, chipSpaceZ])
          rotate([0,90,0]) cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+8,h=chipLen+8);
 
       /* remove bottom half to match with tray LHS back edge */
@@ -619,32 +637,48 @@ module chipSleeve(cutLen=10, sleeveLen=20, void=false) {
    }
 }
 
-
-module chipForm(start=0,end=7) {
+module chipForm(start=0,end=7,center=true,expand=0) {
    $fn=200;
 
    myCoverDia = chipDia + chipDiaGap + 2*chipCoverThick;
-   myEndcapHt = 11;
+   myEndcapHt = chipGreebleLen;
    myStartOff = -orgWid/2-myEndcapHt/2-0.5+3;
    myTotWid   = -2*myStartOff;
    greebleCt  = chipGreebleCt; /* numbered [ 0 .. greebleCt-1 ] */
 
    for (i=[start:end]) 
-      translate([myStartOff + i*myTotWid/(greebleCt-1), chipSpaceY, myCoverDia/2]) endcap(ht=myEndcapHt);
+      translate([myStartOff + i*myTotWid/(greebleCt-1), chipSpaceY, myCoverDia/2]) endcap(ht=myEndcapHt,expand=expand);
 
-   translate([0, chipSpaceY, myCoverDia/2]) rotate([0,90,0])
+   if (center) translate([0, chipSpaceY, myCoverDia/2]) rotate([0,90,0])
       translate([0,0,-(myTotWid-myEndcapHt/2)/2]) cylinder(d=myCoverDia, h=myTotWid-myEndcapHt/2);
 }
 
-module endcap(ht=10) {
-   myEndcapHt = ht;
+/* WORKING */
+module rightGreeble() {
+   intersection() {
+      fancyBottom(rightGreeble=true);
+      rightGreebleForm(expand=0.01);
+   }
+}
+
+module rightGreebleForm(expand=0) {
+   difference() {
+      translate([chipLen/2+chipGreebleLen/2,chipSpaceY,chipSpaceZ])
+      translate([-chipLen/2-chipGreebleLen/2,-chipSpaceY,-chipSpaceZ]) chipForm(start=7,end=7,center=false,expand=expand);
+      translate([orgWid/2+chipGreebleLen/2-8,chipSpaceY, chipSpaceZ]) rotate([0,90,0])
+         cylinder($fn=120, d1=endcapCutoutDia+1,d2=endcapCutoutDia-5, h=4);
+   }
+}
+
+module endcap(ht=10,expand=0) {
+   myEndcapHt = ht+expand;
    myCoverDia = chipDia + chipDiaGap + 2*chipCoverThick;
 
-   myDia1 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra1;
-   myDia2 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra2;
+   myDia1 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra1+expand;
+   myDia2 = chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra2+expand;
    mySlantHt = myDia2 - myDia1;
-   myDia3 = endcapCutoutDia;
-   myDia4 = myDia3 - endcapCutoutSlant;
+   myDia3 = endcapCutoutDia-expand;
+   myDia4 = myDia3 - endcapCutoutSlant-expand;
    cutoutHt = 1;
 
 
@@ -652,7 +686,7 @@ module endcap(ht=10) {
       if (1) difference() {
          union() {
             cylinder(d1=myCoverDia, d2=myDia2, h = mySlantHt);
-            translate([0,0,mySlantHt-slop/2]) cylinder(d=myDia2, h=myEndcapHt-2*mySlantHt+slop);
+            translate([0,0,mySlantHt-slop/2-expand/2]) cylinder(d=myDia2, h=myEndcapHt-2*mySlantHt+slop);
             translate([0,0,myEndcapHt - mySlantHt]) cylinder(d2=myCoverDia, d1=myDia2, h = mySlantHt);
          }
          translate([0,0,myEndcapHt - cutoutHt+slop]) cylinder(d2=myDia3, d1=myDia4, h = cutoutHt);
