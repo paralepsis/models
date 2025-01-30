@@ -77,6 +77,18 @@ showCardCover  = 0;
 showCardTopZ   = 0.1;
 cutAway        = 0;
 
+if (0) explodedView();
+
+module explodedView() {
+   translate([-120,0,0])  chipCover();
+   translate([0,0,50]) cardCover();
+   fancyBottom(rightGreeble=false);
+   translate([-140,0,0]) chipCoverGreeble();
+   translate([-130,0,0]) chipCoverGreebleCenter();
+   translate([-130,0,0]) chipCoverGreebleBump();
+   translate([20,0,0]) rightGreeble();
+}
+
 intersection() {
    union() {
       if (showChipCover) translate([0,0,0])  chipCover();
