@@ -11,6 +11,7 @@
  *
  * TODO:
  * 20250129:
+ *   - convert "endcap" stuff to greeble language
  *
  * 20250128:
  *   - consider cutting back right greeble off for printing flat
@@ -35,6 +36,12 @@ chipHtGap      = 2; // total gap for both sides
 chipGreebleCt  = 8;
 chipGreebleLen = 11;
 
+chipCoverThick    = 2;
+endcapExtra1      = chipCoverThick;
+endcapExtra2      = endcapExtra1 + 2;
+endcapCutoutDia   = 25;
+endcapCutoutSlant = endcapExtra2 - endcapExtra1;
+
 /* dimensions related to cards */
 sleeveWid      = 93.0;
 sleeveWidGap   = 2; // total gap for both sides
@@ -56,11 +63,6 @@ magDia = 6.2;
 
 $fn=40;
 
-chipCoverThick    = 2;
-endcapExtra1      = chipCoverThick;
-endcapExtra2      = endcapExtra1 + 2;
-endcapCutoutDia   = 25;
-endcapCutoutSlant = endcapExtra2 - endcapExtra1;
 
 /* VIEWS HERE */
 
@@ -79,7 +81,7 @@ intersection() {
    union() {
       if (showChipCover) translate([0,0,0])  chipCover();
       if (showCardCover) translate([0,0,showCardTopZ]) cardCover();
-      if (showBottom) fancyBottom(rightGreeble=true);
+      if (showBottom) fancyBottom(rightGreeble=false);
       if (showChipCoverGreeble) translate([0,0,0]) chipCoverGreeble();
       if (showChipCoverGreebleCenter) translate([0,0,0]) chipCoverGreebleCenter();
       if (showChipCoverGreebleBump) translate([0,0,0]) chipCoverGreebleBump();
@@ -242,18 +244,18 @@ module fancyBottom(ht=orgFloor,rightGreeble=true) {
 
       /* remove right greeble? */
       if (rightGreeble==false) {
-         rightGreebleForm(expand=0.03);
          /* something weird is going on */
-         if (0) translate([chipLen/2+1,chipSpaceY,chipSpaceZ]) rotate([0,90,0])
-            cylinder(d=chipDia+chipDiaGap+2*chipCoverThick+slop,h=3);
+         translate([-slop,0,0]) rightGreebleForm(flatBack=true);
+         /* cut off the tiny back bottom right bit -- not going to print right anyway */
+         if (1) translate([chipLen/2-.50,chipSpaceY-10,-5]) cube([10,30,10]); 
       }
    }
+
 
 
    /* just a little alignment bit between cards and chips */
    littleAngleBit();
 }
-
 
 module basicBottomForm(leftGreeble=false, rightGreeble=true) {
    myWid = extMaxX-extMinX-2*orgWall; // kind of the min/max of the card area including walls of bottom
@@ -661,14 +663,18 @@ module rightGreeble() {
    }
 }
 
-module rightGreebleForm(expand=0) {
+module rightGreebleForm(expand=0,flatBack=false) {
    difference() {
-      translate([chipLen/2+chipGreebleLen/2,chipSpaceY,chipSpaceZ])
-      translate([-chipLen/2-chipGreebleLen/2,-chipSpaceY,-chipSpaceZ]) chipForm(start=7,end=7,center=false,expand=expand);
+      union() {
+         chipForm(start=7,end=7,center=false,expand=expand);
+         if (flatBack) translate([chipLen/2-0.5, chipSpaceY, chipSpaceZ]) rotate([0,90,0])
+            cylinder($fn=120,h=3,d=chipDia + chipDiaGap + 2*chipCoverThick + endcapExtra2);
+      }
       translate([orgWid/2+chipGreebleLen/2-8,chipSpaceY, chipSpaceZ]) rotate([0,90,0])
          cylinder($fn=120, d1=endcapCutoutDia+1,d2=endcapCutoutDia-5, h=4);
    }
 }
+
 
 module endcap(ht=10,expand=0) {
    myEndcapHt = ht+expand;
