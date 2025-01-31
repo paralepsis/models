@@ -5,5 +5,6 @@ Slicing notes:
 - check seams! some get placed in unfortunate spots.
   - use bottoms of chip cover, greebles.
   - use inside corners of cover and bottom.
+- 0.3mm layers seems ok
 
 - might need elephant foot comp on some parts?
