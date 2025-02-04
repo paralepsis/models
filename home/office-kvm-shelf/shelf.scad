@@ -7,13 +7,15 @@ dishExtra=40;
 dishWall = 2;
 dishRad  = 10;
 
+topThk=4;
 botThk=1;
 
 slop = 0.01;
+$fn=80;
 
 module top() {
    difference() {
-      translate([0,0,2]) cube([200,depth,4], center=true);
+      translate([0,0,2]) cube([overallWid-2*sideThk,depth,4], center=true);
    
       translate([0,0,-.1]) for (i=[0:1]) {
          mirror([i%2,0,0]) hull() {
@@ -30,12 +32,30 @@ module top() {
       translate([0,depth/2,4.5]) cube([100,10,10],center=true);
       translate([0,-depth/2,4.5]) cube([100,10,10],center=true);
    }
+   mirror([1,0,0]) translate([-overallWid/2+sideThk,-depth/2+4.75,0]) rotate([0,90,0])cylinder(r=3.5,h=5);
+   mirror([1,0,0]) translate([-overallWid/2+sideThk,depth/2-5.25,0]) rotate([0,90,0])cylinder(r=3.5,h=5);
+   translate([-overallWid/2+sideThk,-depth/2+4.75,0]) rotate([0,90,0])cylinder(r=3.5,h=5);
+   translate([-overallWid/2+sideThk,depth/2-5.25,0]) rotate([0,90,0])cylinder(r=3.5,h=5);
 }
 
-translate([0,0,sideHt]) top();
+translate([-110+3,depth/2-3,sideHt-5]) rotate([0,90,0]) m3();
+translate([-110+3,-depth/2+7,sideHt-5]) rotate([0,90,0]) m3();
+mirror([1,0,0]) translate([-110+3,depth/2-3,sideHt-5]) rotate([0,90,0]) m3();
+mirror([1,0,0]) translate([-110+3,-depth/2+7,sideHt-5]) rotate([0,90,0]) m3();
+translate([-110+3,0,4]) rotate([0,90,0]) m3();
+mirror([1,0,0]) translate([-110+3,0,4]) rotate([0,90,0]) m3();
 
-translate([-(overallWid-2*sideThk)/2,0,sideHt/2]) side();
-translate([(overallWid-2*sideThk)/2,0,sideHt/2]) side();
+module m3() {
+   translate([0,0,-4]) {
+      cylinder(d=6,h=4);
+      translate([0,0,3.9]) cylinder(d=3.2,h=13);
+   }
+}
+
+translate([0,dishWall,sideHt-topThk]) top();
+
+translate([-(overallWid-2*sideThk)/2-sideThk/2,0+dishWall,sideHt/2]) side();
+translate([(overallWid-2*sideThk)/2+sideThk/2,0+dishWall,sideHt/2]) side();
 
 module side() {
    difference() {
@@ -46,9 +66,9 @@ module side() {
          myYZThk = 8;
          myXThk  = sideThk;
       
-         translate([(myHt-2*myYZThk-myDia)/2,(depth-myDia)/2-myYZThk, -myXThk/2-slop])
+         translate([(myHt-2*myYZThk-myDia)/2-3.5,(depth-myDia)/2-myYZThk, -myXThk/2-slop])
             cylinder(d=myDia,h=myXThk+2*slop);
-         translate([(myHt-2*myYZThk-myDia)/2,-(depth-myDia)/2+myYZThk, -myXThk/2-slop])
+         translate([(myHt-2*myYZThk-myDia)/2-3.5,-(depth-myDia)/2+myYZThk, -myXThk/2-slop])
             cylinder(d=myDia,h=myXThk+2*slop);
          translate([-(myHt-2*myYZThk-myDia)/2,(depth-myDia)/2-myYZThk, -myXThk/2-slop])
             cylinder(d=myDia,h=myXThk+2*slop);
@@ -61,17 +81,24 @@ module side() {
 bottom();
 
 module bottom() {
+   gap = 4;
+   myDia = 8;
+
    difference() {
-      translate([0,-dishExtra/2,(dishRad+botThk)/2])
-         cube([overallWid, depth+dishExtra+2*dishWall, dishRad+botThk],center=true);
       hull() {
-         translate([-overallWid/2+dishRad+sideThk,depth/2-dishRad,dishRad+botThk])
+         translate([0,-dishExtra/2+myDia/2,(dishRad+botThk)/2])
+            cube([overallWid, depth+dishExtra+2*dishWall-myDia, dishRad+botThk],center=true);
+         translate([-(overallWid-myDia)/2,-(depth-myDia)/2-dishExtra-dishWall,0]) cylinder(d=myDia,h=dishRad+botThk);
+         translate([(overallWid-myDia)/2,-(depth-myDia)/2-dishExtra-dishWall,0]) cylinder(d=myDia,h=dishRad+botThk);
+      }
+      if (1) hull() {
+         translate([-overallWid/2+dishRad+sideThk+gap,depth/2-dishRad,dishRad+botThk])
             sphere(r=10);
-         translate([-overallWid/2+dishRad+sideThk,-depth/2-dishExtra+dishRad,dishRad+botThk])
+         translate([-overallWid/2+dishRad+sideThk+gap,-depth/2-dishExtra+dishRad,dishRad+botThk])
             sphere(r=10);
-         translate([overallWid/2-dishRad-sideThk,depth/2-dishRad,dishRad+botThk])
+         translate([overallWid/2-dishRad-sideThk-gap,depth/2-dishRad,dishRad+botThk])
             sphere(r=10);
-         translate([overallWid/2-dishRad-sideThk,-depth/2-dishExtra+dishRad,dishRad+botThk])
+         translate([overallWid/2-dishRad-sideThk-gap,-depth/2-dishExtra+dishRad,dishRad+botThk])
             sphere(r=10);
       }
    }
