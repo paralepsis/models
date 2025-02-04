@@ -13,6 +13,37 @@ botThk=1;
 slop = 0.01;
 $fn=80;
 
+difference() {
+   translate([0,dishWall,sideHt-topThk]) top();
+
+   translate([-(overallWid-2*sideThk)/2-sideThk/2,0+dishWall,sideHt/2]) sideCut();
+   translate([(overallWid-2*sideThk)/2+sideThk/2,0+dishWall,sideHt/2]) sideCut();
+   boltHoles();
+}
+
+translate([-5,0,0]) difference() {
+   intersection() {
+      translate([-(overallWid-2*sideThk)/2-sideThk/2,0+dishWall,sideHt/2]) side();
+      translate([-(overallWid-2*sideThk)/2-sideThk/2,0+dishWall,sideHt/2]) sideCut();
+   }
+   boltHoles();
+}
+translate([5,0,0]) difference() {
+   intersection() {
+      translate([(overallWid-2*sideThk)/2+sideThk/2,0+dishWall,sideHt/2]) side();
+      translate([(overallWid-2*sideThk)/2+sideThk/2,0+dishWall,sideHt/2]) sideCut();
+   }
+   boltHoles();
+}
+
+difference() {
+   bottom();
+
+   translate([-(overallWid-2*sideThk)/2-sideThk/2,0+dishWall,sideHt/2]) sideCut();
+   translate([(overallWid-2*sideThk)/2+sideThk/2,0+dishWall,sideHt/2]) sideCut();
+   boltHoles();
+}
+
 module top() {
    difference() {
       translate([0,0,2]) cube([overallWid-2*sideThk,depth,4], center=true);
@@ -38,12 +69,14 @@ module top() {
    translate([-overallWid/2+sideThk,depth/2-5.25,0]) rotate([0,90,0])cylinder(r=3.5,h=5);
 }
 
-translate([-110+3,depth/2-3,sideHt-5]) rotate([0,90,0]) m3();
-translate([-110+3,-depth/2+7,sideHt-5]) rotate([0,90,0]) m3();
-mirror([1,0,0]) translate([-110+3,depth/2-3,sideHt-5]) rotate([0,90,0]) m3();
-mirror([1,0,0]) translate([-110+3,-depth/2+7,sideHt-5]) rotate([0,90,0]) m3();
-translate([-110+3,0,4]) rotate([0,90,0]) m3();
-mirror([1,0,0]) translate([-110+3,0,4]) rotate([0,90,0]) m3();
+module boltHoles() {
+   translate([-110+3,depth/2-3,sideHt-5]) rotate([0,90,0]) m3();
+   translate([-110+3,-depth/2+7,sideHt-5]) rotate([0,90,0]) m3();
+   mirror([1,0,0]) translate([-110+3,depth/2-3,sideHt-5]) rotate([0,90,0]) m3();
+   mirror([1,0,0]) translate([-110+3,-depth/2+7,sideHt-5]) rotate([0,90,0]) m3();
+   translate([-110+3,0,4]) rotate([0,90,0]) m3();
+   mirror([1,0,0]) translate([-110+3,0,4]) rotate([0,90,0]) m3();
+}
 
 module m3() {
    translate([0,0,-4]) {
@@ -52,10 +85,12 @@ module m3() {
    }
 }
 
-translate([0,dishWall,sideHt-topThk]) top();
+module sideCut() {
+   difference() {
+      cube([sideThk+.1, depth+.1, sideHt+1],center=true);
+   }
+}
 
-translate([-(overallWid-2*sideThk)/2-sideThk/2,0+dishWall,sideHt/2]) side();
-translate([(overallWid-2*sideThk)/2+sideThk/2,0+dishWall,sideHt/2]) side();
 
 module side() {
    difference() {
@@ -78,7 +113,6 @@ module side() {
    }
 }
 
-bottom();
 
 module bottom() {
    gap = 4;
