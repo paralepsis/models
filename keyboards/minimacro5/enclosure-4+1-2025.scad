@@ -11,13 +11,13 @@
 $fn=30;
 
 // translate([0,0,-5]) import("./orig/miniMACRO5.stl");
-// enclosure();
-bottomPlate();
+enclosure();
+// bottomPlate();
 // rotate([180,0,0]) translate([0,0,15-5-2]) bottomPlate();
 
 module enclosure() {
    difference() {
-      simpleBody(ht=15);
+      simpleBody(ht=15.5);
       pcbPlus(ht=20);
       switchHoles();
    }
@@ -162,7 +162,7 @@ module pcbPlus(ht=1) {
    translate([-12.987,-11.087,0]) cube([12.987+89.187,11.087*2,ht]);
 
    /* cutout to account for solder points for arduino riser */
-   translate([89.187-35-3.75,-11.087,-1.5]) cube([32,11.087*2,ht+1.5]);
+   translate([89.187-35-3.75,-11.087,-2.0]) cube([32,11.087*2,ht+1.5]);
 
    /* screws, heat set inserts */
    translate([-9.9,8,-4]) cylinder(d2=3.65, d1=3.4,h=5);
