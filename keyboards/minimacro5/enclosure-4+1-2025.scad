@@ -11,8 +11,8 @@
 $fn=30;
 
 // translate([0,0,-5]) import("./orig/miniMACRO5.stl");
-enclosure();
-// bottomPlate();
+// enclosure();
+bottomPlate();
 // rotate([180,0,0]) translate([0,0,15-5-2]) bottomPlate();
 
 module enclosure() {
@@ -84,7 +84,7 @@ module holematrix(holes,startx,starty){
 module bottomPlate() {
    ht = 1.5; // was 2.0
    gap = 0.2;
-   postHt = 7.0;
+   postHt = 7.5;
    postDia = 5.5;
 
    difference() { 
