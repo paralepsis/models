@@ -4,14 +4,14 @@ if (1) difference() {
    union() {
       horizontal_form();
       vertical_form();
+
+      if (1) translate([1.5,0,-5.4]) rotate([0,-90,0]) difference() {
+         fan_mount();
+         rotate([00,90,0]) translate([0,0,-15]) cylinder(d=26,h=30);
+         translate([0,0,-8]) rotate([0,15,0]) cube([60,60,20],center=true);
+      }
    }
    cutouts();
-}
-
-translate([0.8,0,-4.4]) rotate([0,-90,0]) difference() {
-   fan_mount();
-   rotate([00,90,0]) translate([0,0,-15]) cylinder(d=26,h=30);
-   translate([0,0,-8]) rotate([0,15,0]) cube([60,60,20],center=true);
 }
 
 
@@ -32,8 +32,8 @@ module fan_block() {
  * sd - screw hole diameter
  * in - inset of screw holes from center of corner "circle"
  */
-module fan_mount(fd=28,cd=5,id=23.5,sd=3.25, in=1.5) {
-//module fan(fd=25,cd=5,id=22,sd=3.25, in=0.0) {
+// module fan_mount(fd=28,cd=5,id=23.5,sd=2.5, in=1.5) {
+module fan_mount(fd=30,cd=5,id=27.5,sd=2.5, in=0) {
    ht=14.5;
 
    difference() {
@@ -94,9 +94,15 @@ module vertical_form() {
 
 module cutouts() {
    // center hole
-   cylinder(d=4.5,h=11);
+   cylinder(d=4.5,h=41);
    translate([0,0,5.075]) cylinder(d1=5.5,d2=4.5,h=.5);
    translate([0,0,9.61]) cylinder(d2=5.5,d1=4.5,h=.5);
+
+   // TK body
+   translate([0,0,-40+5.1]) cylinder(d=26,h=40);
+
+   // cut bottom out of fan mount?
+   translate([-18,-5,-22]) cube([10,10,10]);
 
    // hotend mounting holes
    for (i=[0:3]) {
