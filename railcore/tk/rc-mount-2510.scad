@@ -8,7 +8,7 @@ if (1) difference() {
    cutouts();
 }
 
-if (0) translate([0.8,0,-4.4]) rotate([0,-90,0]) difference() {
+translate([0.8,0,-4.4]) rotate([0,-90,0]) difference() {
    fan_mount();
    rotate([00,90,0]) translate([0,0,-15]) cylinder(d=26,h=30);
    translate([0,0,-8]) rotate([0,15,0]) cube([60,60,20],center=true);
