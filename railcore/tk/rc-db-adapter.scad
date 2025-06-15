@@ -29,7 +29,7 @@ module base() {
       translate(top) cylinder(d=10,h=6);
 
       // DB mount holes
-      translate(dbLeft) cylinder(d=13,h=6);
+      translate(dbLeft) cylinder(d=11,h=6);
       translate(dbRight) cylinder(d=9,h=6);
 
       // extend for y endstop
@@ -38,7 +38,7 @@ module base() {
    }
    if (1) hull() {
       translate(top) cylinder(d=10,h=6);
-      translate([24.88,-16,0]) cube([1,32,6]);
+      translate([24.88,-16,0]) cube([1,30,6]);
 
       // bottom carriage mount holes (used to be Y endstop)
       translate(botRight) cylinder(d=10,h=6); // orig 5.1, that was wrong
@@ -83,9 +83,9 @@ module cutouts() {
 
    // endstop mount holes
    translate([0,0,-slop]) translate(endTop) cylinder(d=2.5,h=6+2*slop);
-   translate([0,0,4.5]) translate(endTop) rotate([0,0,30]) cylinder($fn=6,d=5.0,h=1.5+slop);
+   translate([0,0,4.5]) translate(endTop) rotate([0,0,30]) cylinder($fn=6,d=4.9,h=1.5+slop);
    translate([0,0,-slop]) translate(endBot) cylinder(d=2.5,h=6+2*slop);
-   translate([0,0,4.5]) translate(endBot) rotate([0,0,30]) cylinder($fn=6,d=5.0,h=1.5+slop);
+   translate([0,0,4.5]) translate(endBot) rotate([0,0,30]) cylinder($fn=6,d=4.9,h=1.5+slop);
 
    translate([0,-13/2, backThick]) hull() {
       cube([15.5,13,5+slop]);
