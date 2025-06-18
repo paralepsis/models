@@ -37,15 +37,17 @@ module base() {
       translate([22,-25-hOffset,0]) cylinder(d=2,h=6);
    }
    if (1) hull() {
-      translate(top) cylinder(d=10,h=6);
-      translate([24.88,-16,0]) cube([1,30,6]);
+      // just a little something to fix the RHS inside corner in a good spot
+      translate([20,-15,0]) cube([1,2,6]);
 
-      // bottom carriage mount holes (used to be Y endstop)
+      // bottom carriage mount holes (used to be Y endstop screws on Y carriage)
       translate(botRight) cylinder(d=10,h=6); // orig 5.1, that was wrong
       translate(botLeft) cylinder(d=10,h=6);
 
    }
+   translate(botRight) translate([0,-5,0]) cube([20,22.5,6]);
 }
+
 
 
 module cutouts() {
@@ -87,6 +89,7 @@ module cutouts() {
    translate([0,0,-slop]) translate(endBot) cylinder(d=2.5,h=6+2*slop);
    translate([0,0,4.5]) translate(endBot) rotate([0,0,30]) cylinder($fn=6,d=4.9,h=1.5+slop);
 
+   // space for tk
    translate([0,-13/2, backThick]) hull() {
       cube([15.5,13,5+slop]);
       translate([0,1.5,0]) cube([16.8,10,5+slop]);
