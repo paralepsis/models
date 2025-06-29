@@ -11,7 +11,7 @@ botThk         = 12;
 
 $fn=40;
 
-if (0) difference() {
+if (1) difference() {
    hull() {
       translate([-frontWid/2+cornerRad,-totLen/2+cornerRad,0])
          cylinder(r=cornerRad,h=bearCenterHt+bearOpenDia/2);
@@ -58,7 +58,7 @@ if (0) difference() {
    translate([totWid/2,0,0]) rotate([0,45,0]) cube([15,totLen+2,30],center=true);
 }
 
-if (1) {
+if (0) {
    translate([0,0,0]) roller(backWid+3);
    translate([30,0,0]) roller(frontWid);
 }
