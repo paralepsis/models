@@ -2,7 +2,7 @@ use <BOSL2/std.scad>
 
 $fn=40;
 
-totHt   = 92;
+totHt   = 88;
 botThk  =  1;
 innerOD = 233.5; // with a little room
 cardLen = 97; // with a little room, after sleeving
@@ -14,9 +14,9 @@ shortLen = innerOD - 2 - (cardLen+2*wallThk);
 cornerWid = innerOD - .75 - (cardLen+2*wallThk);
 
 if (0) for (i=[0:3]) rotate ([0,0,90*i]) outsideQuarter();
-if (0) outsideQuarter();
-if (0) back(innerOD/2-(cardLen+2*wallThk)/2-0.75) longCards(ht=80);
-if (1) fwd(innerOD/2-shortLen/2) left(innerOD/2-(cardLen+4+2*wallThk)/2) shortCards(len=shortLen);
+if (1) outsideQuarter(hole=0);
+if (0) back(innerOD/2-(cardLen+2*wallThk)/2-0.75) longCards(ht=80-4);
+if (0) fwd(innerOD/2-shortLen/2) left(innerOD/2-(cardLen+4+2*wallThk)/2) shortCards(len=shortLen);
 
 if (0) fwd(innerOD/2-shortLen/2) right(innerOD/2-(cornerWid)/2) cornerBox(len=shortLen,wid=cornerWid,ht=82);
 if (0) fwd(innerOD/2-shortLen/2) right(innerOD/2-(cornerWid)/2) cornerBoxInsert(len=shortLen,wid=cornerWid,ht=cornerBoxInsertHt);
@@ -76,15 +76,16 @@ module longCards(ht=cardOrgHt) {
 
 }
 
-module box() {
+module box(hole=0) {
    difference() {
       // basic shape, no bevel on bottom surface
       up((totHt+1)/2-1) cuboid([289,289,totHt+1],rounding=1);
       down(1.1/2) cube([290,290,1.1],center=true);
    
-      up(92-10+11/2) cuboid([255,255,11],rounding=1);
+      up(totHt-10+11/2) cuboid([255,255,11],rounding=1);
       up((totHt+2)/2-1) cuboid([235,235,totHt+2],rounding=0.2);
    
+      if (hole) right(40) back(60) up(totHt+3) scale([1,1,1.0]) rotate([0,90,0]) down((innerOD-10)/2) cylinder(h=innerOD-10, d=35);
    }
 }
 
@@ -95,12 +96,12 @@ module key(xtra=0,ht=30) {
    }
 }
 
-module outsideQuarter() {
+module outsideQuarter(hole=0) {
    rotate([0,0,90]) key();
    
    intersection() {
       difference() {
-         box();
+         box(hole);
          down(1) key(ht=33,xtra=0.5);
       }
       cube([150,150,100]);
