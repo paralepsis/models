@@ -1,20 +1,13 @@
-hOffset   = 1;
+hOffset   = 1.0;
 backThick = 3;
 top       = [37,0+hOffset,0];
 botLeft   = [6.1,7.5+hOffset,0];
 botRight  = [6.1,-7.5+hOffset,0];
 dbLeft    = [24.88,12.5,0];
 dbRight   = [24.88,-12.5,0];
-endTop    = [29.5,-23.5+hOffset,0];
-endBot    = [23,-23.5+hOffset,0];
+endTop    = [29.5,-22.5,0];
+endBot    = [23,-22.5,0];
 $fn       = 80;
-
-module shape() {
-   //projection(cut=true)
-   translate([0.7,-0.05,-1]) import("./dragonburner-railcore-slice-flat.stl");
-}
-
-// shape();
 
 difference() {
    base();
@@ -33,8 +26,8 @@ module base() {
       translate(dbRight) cylinder(d=9,h=6);
 
       // extend for y endstop
-      translate([31,-25-hOffset,0]) cylinder(d=2,h=6);
-      translate([22,-25-hOffset,0]) cylinder(d=2,h=6);
+      translate([31,-26,0]) cylinder(d=2,h=6);
+      translate([22,-26,0]) cylinder(d=2,h=6);
    }
    if (1) hull() {
       // just a little something to fix the RHS inside corner in a good spot
