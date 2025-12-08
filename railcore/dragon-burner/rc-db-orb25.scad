@@ -29,7 +29,7 @@ xzRad  = [0.1,    2, 0.1, 0.1, 2, 5,   .1,     0.1];
 xzCut2  = [[-1,backThick+1],[15.5,backThick+1],[15.5,6-xOffset],[32-0.02,6-xOffset],[49.5,6-xOffset],[49.5,35],[-1,35]];
 xzRad2 = [0.1,              2,                 0.1,             0.1,                15,   .1,     0.1];
 
-yzCut  = [[-29-0.2,23], [-29+15+yOffset,29], [40-29+yOffset, 34.75], [51-29+yOffset, 27], [41+0.2, 23], [41+0.2,-1],[-29-0.2,-1]];
+yzCut  = [[-29-0.2,23], [-29+15+yOffset,29], [40-29+yOffset, 34.75], [51-29+yOffset, 27], [41+0.2, 13], [41+0.2,-1],[-29-0.2,-1]];
 yzRad  = [3,3,3,3,3,0.1,0.1];
 
 
@@ -50,8 +50,8 @@ for (i=[0,10]) translate([15,20+i,0]) difference() {
 /* EARS */
 // translate([56.5,41,0]) cylinder(d=6,h=0.3);
 translate([56.5,-29,0]) cylinder(d=6,h=0.3);
-translate([56.5+43,42,0]) cylinder(d=6,h=0.3);
-translate([56.5+43,41-8,0]) cylinder(d=6,h=0.3);
+translate([56.5+58,42,0]) cylinder(d=6,h=0.3);
+translate([56.5+58,41-8,0]) cylinder(d=6,h=0.3);
 translate([21,-26.5,0]) cylinder(d=6,h=0.3);
 
 cableGuide();
@@ -72,14 +72,9 @@ if (1) difference() {
    translate([0,-13+yOffset,0]) rotate([90,0,0]) linear_extrude(height=20) polygon(round_corners(xzCut,radius=xzRad,$fn=64));
 }
 
-if (0) {
-   translate([15.5,-90,-59.8]) rotate([90,0,90]) import("/Volumes/HomeX/rbross/Desktop/DragonBurner-TeaKettle-Mount.stl");
-   translate([19,-2.1,42.5]) rotate([0,0,180]) translate([150,-150,0]) rotate([0,180,-90]) import("/Volumes/HomeX/rbross/Downloads/Cowl_NoProbe.stl");
-}
-
 module cableGuide() {
    wid = 7;
-   ht  = 45;
+   ht  = 60;
    guidePts = [[-1,0], [-1,0-wid-6], [0.95,-wid-6], [0.95,-wid], [0+ht,0-wid], [ht,0]];
    guideRad = [  0.1,         0.1,           0.1,           2,            2,          2];
 
@@ -93,9 +88,9 @@ module cableGuide() {
          rotate([90,0,0]) linear_extrude(height=10) polygon(round_corners(guideXZ, radius=XZRad, $fn=64));
       }
 
-      for (i=[0:3]) {
+      for (i=[0:4]) {
          hull() {
-            translate([8+10*i,-4,-1]) scale([1,0.3,1]) cylinder(d=6,h=10);
+            translate([12+10*i,-4,-1]) scale([1,0.3,1]) cylinder(d=6,h=10);
          }
       }
    }
