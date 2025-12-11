@@ -121,9 +121,9 @@ module insert()
 {
    slop = 0.02;
 
-   translate([0,0,-slop]) cylinder(d2=4.7,d1=5.5,h=0.6+2*slop);
-   translate([0,0,0]) cylinder(d=4.7,h=3.5);
-   translate([0,0,3.5-slop]) cylinder(d1=4.75,d2=3.4,h=0.5+2*slop);
+   translate([0,0,-slop]) cylinder(d2=4.4,d1=5.3,h=0.6+2*slop);
+   translate([0,0,0]) cylinder(d=4.4,h=3.5);
+   translate([0,0,3.5-slop]) cylinder(d1=4.4,d2=3.4,h=0.5+2*slop);
    translate([0,0,-slop]) cylinder(d=3.4,h=10); // all the way through
 }
 
