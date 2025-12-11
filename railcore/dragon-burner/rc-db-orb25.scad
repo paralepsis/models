@@ -50,6 +50,8 @@ for (i=[0,10]) translate([15,20+i,0]) difference() {
 /* EARS */
 // translate([56.5,41,0]) cylinder(d=6,h=0.3);
 translate([56.5,-29,0]) cylinder(d=6,h=0.3);
+translate([48.5,-29,0]) cylinder(d=6,h=0.3);
+translate([41.5,-25,0]) cylinder(d=6,h=0.3);
 translate([56.5+58,42,0]) cylinder(d=6,h=0.3);
 translate([56.5+58,41-8,0]) cylinder(d=6,h=0.3);
 translate([21,-26.5,0]) cylinder(d=6,h=0.3);
